@@ -1,0 +1,128 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           01/Feb/2018  15:20:07
+# Copyright 1996-2017 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\Project_04\init.c
+#    Command line  =  
+#        -f C:\Users\shmes\AppData\Local\Temp\EWF5F1.tmp
+#        ("C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\Project_04\init.c" -lC
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\Project_04\Debug\List" -o
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\Project_04\Debug\Obj" --no_cse --no_unroll
+#        --no_inline --no_code_motion --no_tbaa --debug -D__MSP430FR5994__ -e
+#        --double=32 --dlib_config "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.0\430\lib\dlib\dl430xlsfn.h" --core=430X
+#        --data_model=small -On --multiplier=32 --hw_workaround=CPU40
+#        --code_model=large)
+#    Locale        =  Spanish_USA.1252
+#    List file     =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\Project_04\Debug\List\init.lst
+#    Object file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\Project_04\Debug\Obj\init.r43
+#
+###############################################################################
+
+C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\Project_04\init.c
+      1          //===============================================================
+      2          //  File Name: init.c
+      3          //  Description: This file contains the Initialization of all
+      4          //                    display values and enables interrupts
+      5          //
+      6          //  Author: Sam Messick
+      7          //  Date Jan. 2018
+      8          //  Compiler Build with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      9          //===============================================================
+     10          
+     11          #include "init.h"
+     12          
+
+   \                                 In  segment CODE, align 2
+     13          void Init_Conditions(void){
+   \                     Init_Conditions:
+   \   000000   0A12         PUSH.W  R10
+     14          //------------------------------------------------------------------------------
+     15            // Sets initial conditions
+     16            int i;
+     17          
+     18            for(i=COLUMN1;i<=COLUMN_NUM_COLUMNS;i++){
+   \   000002   0A43         MOV.W   #0x0, R10
+   \                     ??Init_Conditions_0:
+   \   000004   3A900C00     CMP.W   #0xc, R10
+   \   000008   0A34         JGE     ??Init_Conditions_2
+     19              display_line[LINE1][i] = false;
+   \   00000A   CA43....     MOV.B   #0x0, display_line(R10)
+     20              display_line[LINE2][i] = false;
+   \   00000E   CA43....     MOV.B   #0x0, display_line + 11(R10)
+     21              display_line[LINE3][i] = LCD_RESET_STATE;
+   \   000012   CA43....     MOV.B   #0x0, display_line + 22(R10)
+     22              display_line[LINE4][i] = LCD_RESET_STATE;
+   \   000016   CA43....     MOV.B   #0x0, display_line + 33(R10)
+     23            }
+   \   00001A   1A53         ADD.W   #0x1, R10
+   \   00001C   F33F         JMP     ??Init_Conditions_0
+     24            for(i=LINE1;i<=LINE_NUM_LINES;i++){
+   \                     ??Init_Conditions_2:
+   \   00001E   0A43         MOV.W   #0x0, R10
+   \                     ??Init_Conditions_1:
+   \   000020   3A900500     CMP.W   #0x5, R10
+   \   000024   0934         JGE     ??Init_Conditions_3
+     25              display[LINE1] = &display_line[i][COLUMN1];
+   \   000026   0F4A         MOV.W   R10, R15
+   \   000028                RPT     #0xa
+   \   000028   49180F5A     ADDX.W  R10, R15
+   \   00002C   3F50....     ADD.W   #display_line, R15
+   \   000030   824F....     MOV.W   R15, &display
+     26            }
+   \   000034   1A53         ADD.W   #0x1, R10
+   \   000036   F43F         JMP     ??Init_Conditions_1
+     27            update_display = LCD_RESET_STATE;
+   \                     ??Init_Conditions_3:
+   \   000038   C243....     MOV.B   #0x0, &update_display
+     28            update_display_count = LCD_RESET_STATE;
+   \   00003C   8243....     MOV.W   #0x0, &update_display_count
+     29          
+     30          // Interrupts are disabled by default, enable them.
+     31            enable_interrupts();
+   \   000040   ........     CALLA   #enable_interrupts
+     32          //------------------------------------------------------------------------------
+     33          }
+   \   000044   3A41         POP.W   R10
+   \   000046   1001         RETA
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      6   Init_Conditions
+        6   -> enable_interrupts
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      72  Init_Conditions
+
+ 
+ 72 bytes in segment CODE
+ 
+ 72 bytes of CODE memory
+
+Errors: none
+Warnings: none

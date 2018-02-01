@@ -1,0 +1,1010 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           01/Feb/2018  15:20:07
+# Copyright 1996-2017 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\Project_04\ports.c
+#    Command line  =  
+#        -f C:\Users\shmes\AppData\Local\Temp\EWF77B.tmp
+#        ("C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\Project_04\ports.c" -lC
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\Project_04\Debug\List" -o
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\Project_04\Debug\Obj" --no_cse --no_unroll
+#        --no_inline --no_code_motion --no_tbaa --debug -D__MSP430FR5994__ -e
+#        --double=32 --dlib_config "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.0\430\lib\dlib\dl430xlsfn.h" --core=430X
+#        --data_model=small -On --multiplier=32 --hw_workaround=CPU40
+#        --code_model=large)
+#    Locale        =  Spanish_USA.1252
+#    List file     =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\Project_04\Debug\List\ports.lst
+#    Object file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\Project_04\Debug\Obj\ports.r43
+#
+###############################################################################
+
+C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\Project_04\ports.c
+      1          //===============================================================
+      2          //  File Name: ports.c
+      3          //  Description: This file contains the Initialization of all
+      4          //                    port pins
+      5          //
+      6          //  Author: Sam Messick
+      7          //  Date Jan. 2018
+      8          //  Compiler Build with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      9          //===============================================================
+     10          
+     11          #include "ports.h"
+
+   \                                 In  segment DATA16_AN, at 0x202
+   \   union <unnamed> _A_PAOUT_L
+   \                     _A_PAOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x204
+   \   union <unnamed> _A_PADIR_L
+   \                     _A_PADIR_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x20a
+   \   union <unnamed> _A_PASEL0_L
+   \                     _A_PASEL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x20c
+   \   union <unnamed> _A_PASEL1_L
+   \                     _A_PASEL1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x222
+   \   union <unnamed> _A_PBOUT_L
+   \                     _A_PBOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x224
+   \   union <unnamed> _A_PBDIR_L
+   \                     _A_PBDIR_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x22a
+   \   union <unnamed> _A_PBSEL0_L
+   \                     _A_PBSEL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x22c
+   \   union <unnamed> _A_PBSEL1_L
+   \                     _A_PBSEL1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x242
+   \   union <unnamed> _A_PCOUT_L
+   \                     _A_PCOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x244
+   \   union <unnamed> _A_PCDIR_L
+   \                     _A_PCDIR_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x246
+   \   union <unnamed> _A_PCREN_L
+   \                     _A_PCREN_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x24a
+   \   union <unnamed> _A_PCSEL0_L
+   \                     _A_PCSEL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x24c
+   \   union <unnamed> _A_PCSEL1_L
+   \                     _A_PCSEL1_L:
+   \   000000                DS8 2
+     12          
+
+   \                                 In  segment CODE, align 2
+     13          void Init_Port1(void){  // Initlizes all pins on Port 1
+   \                     Init_Port1:
+     14          //=========================================================================
+     15          // RED_LED              (0x01) // RED LED 0
+     16          // GRN_LED              (0x02) // GREEN LED 1
+     17          // V_THUMB              (0x04) // ADC for Thumb Wheel
+     18          // TEST_PROBE           (0x08) // GP I/O Pin to use to check code operation
+     19          // V_DETECT_R           (0x10) // ADC for Right Detector
+     20          // V_DETECT_L           (0x20) // ADC for Left Detector
+     21          // SD_UCB0SIMO          (0x40) // SPI mode - slave in/master out for SD Card
+     22          // SD_UC0SOMI           (0x80) // SPI mode - slave out/master in for SD Card
+     23          //=========================================================================
+     24            
+     25            // Configure Port 1
+     26            // P1_0
+     27            P1SEL0 &= ~RED_LED;                   // RED_LED as GP I/O
+   \   000000   D2C30A02     BIC.B   #0x1, &0x20a
+     28            P1SEL1 &= ~RED_LED;                   // RED_LED as GP I/O
+   \   000004   D2C30C02     BIC.B   #0x1, &0x20c
+     29            P1OUT  |= RED_LED;                    // Set Red LED On
+   \   000008   D2D30202     BIS.B   #0x1, &0x202
+     30            P1DIR  |= RED_LED;                    // Set Red LED direction to output
+   \   00000C   D2D30402     BIS.B   #0x1, &0x204
+     31            // P1_1
+     32            P1SEL0 &= ~GRN_LED;                   // GRN_LED as GP I/O
+   \   000010   E2C30A02     BIC.B   #0x2, &0x20a
+     33            P1SEL1 &= ~GRN_LED;                   // GRN_LED as GP I/O
+   \   000014   E2C30C02     BIC.B   #0x2, &0x20c
+     34            P1OUT  |= GRN_LED;                    // Set Green LED On
+   \   000018   E2D30202     BIS.B   #0x2, &0x202
+     35            P1DIR  |= GRN_LED;                    // Set Green LED direction to output
+   \   00001C   E2D30402     BIS.B   #0x2, &0x204
+     36            // P1_2
+     37            P1SEL0 |= V_THUMB;                    // ADC input for Thumbwheel
+   \   000020   E2D20A02     BIS.B   #0x4, &0x20a
+     38            P1SEL1 |= V_THUMB;                    // ADC input for Thumbwheel
+   \   000024   E2D20C02     BIS.B   #0x4, &0x20c
+     39            P1DIR  |= V_THUMB;
+   \   000028   E2D20402     BIS.B   #0x4, &0x204
+     40            // P1_3
+     41            P1SEL0 &= ~TEST_PROBE;                // TEST_PROBE as GP I/O
+   \   00002C   F2C20A02     BIC.B   #0x8, &0x20a
+     42            P1SEL1 &= ~TEST_PROBE;                // TEST_PROBE as GP I/O
+   \   000030   F2C20C02     BIC.B   #0x8, &0x20c
+     43            P1OUT  &= ~TEST_PROBE;                // Set TEST_PROBE Off
+   \   000034   F2C20202     BIC.B   #0x8, &0x202
+     44            P1DIR  |=  TEST_PROBE;                // Set TEST_PROBE direction to output
+   \   000038   F2D20402     BIS.B   #0x8, &0x204
+     45            // P1_4
+     46            P1SEL0 |= V_DETECT_R;                 // ADC input for Right Detector
+   \   00003C   F2D010000A02 BIS.B   #0x10, &0x20a
+     47            P1SEL1 |= V_DETECT_R;                 // ADC input for Right Detector
+   \   000042   F2D010000C02 BIS.B   #0x10, &0x20c
+     48            // P1_5
+     49            P1SEL0 |= V_DETECT_L;                 // ADC input for Left Detector
+   \   000048   F2D020000A02 BIS.B   #0x20, &0x20a
+     50            P1SEL1 |= V_DETECT_L;                 // ADC input for Left Detector
+   \   00004E   F2D020000C02 BIS.B   #0x20, &0x20c
+     51            // P1_6
+     52            P1SEL0 &= ~SD_UCB0SIMO;               // USCI_B1 MOSI pin
+   \   000054   F2C040000A02 BIC.B   #0x40, &0x20a
+     53            P1SEL1 |= SD_UCB0SIMO;                // USCI_B1 MOSI pin
+   \   00005A   F2D040000C02 BIS.B   #0x40, &0x20c
+     54            // P1_7
+     55            P1SEL0 &= ~SD_UC0SOMI;                // USCI_B1 MISO pin
+   \   000060   F2C080000A02 BIC.B   #0x80, &0x20a
+     56            P1SEL1 |= SD_UC0SOMI;                 // USCI_B1 MISO pin
+   \   000066   F2D080000C02 BIS.B   #0x80, &0x20c
+     57          }
+   \   00006C   1001         RETA
+   \   00006E                REQUIRE _A_PASEL0_L
+   \   00006E                REQUIRE _A_PASEL1_L
+   \   00006E                REQUIRE _A_PAOUT_L
+   \   00006E                REQUIRE _A_PADIR_L
+     58          ////////////////////////////////////////////////////////////////////////
+
+   \                                 In  segment CODE, align 2
+     59          void Init_Port2(void) { // Initlizes all pins on Port 2
+   \                     Init_Port2:
+     60          //=========================================================================
+     61          // BCLUART_TXD          (0x01)
+     62          // BCLUART_RXD          (0x02)
+     63          // SD_SPICLK            (0x04)
+     64          // P2_3                 (0x08) // Port 2 Pin 3
+     65          // P2_4                 (0x10) // Port 2 Pin 4
+     66          // J4_34                (0x20)
+     67          // J4_35                (0x40)
+     68          // P2_7                 (0x80) // Port 2 Pin 7
+     69          //=========================================================================
+     70            // Configure Port 2
+     71            // P2_0
+     72            P4SEL0 &= ~BCLUART_TXD;                // Set to GP I/O
+   \   000000   D2C32B02     BIC.B   #0x1, &0x22b
+     73            P4SEL1 &= ~BCLUART_TXD;                // Set to GP I/O
+   \   000004   D2C32D02     BIC.B   #0x1, &0x22d
+     74            P4OUT  &= ~BCLUART_TXD;                // Set out value Low [off]
+   \   000008   D2C32302     BIC.B   #0x1, &0x223
+     75            P4DIR  |= BCLUART_TXD;                 // Set direction to output
+   \   00000C   D2D32502     BIS.B   #0x1, &0x225
+     76            // P2_1
+     77            P4SEL0 &= ~BCLUART_RXD;                // Set to GP I/O
+   \   000010   E2C32B02     BIC.B   #0x2, &0x22b
+     78            P4SEL1 &= ~BCLUART_RXD;                // Set to GP I/O
+   \   000014   E2C32D02     BIC.B   #0x2, &0x22d
+     79            P4OUT  &= ~BCLUART_RXD;                // Set out value Low [off]
+   \   000018   E2C32302     BIC.B   #0x2, &0x223
+     80            P4DIR  |= BCLUART_RXD;                 // Set direction to output
+   \   00001C   E2D32502     BIS.B   #0x2, &0x225
+     81            // P2_2
+     82            P4SEL0 &= ~SD_SPICLK;                  // Set to GP I/O
+   \   000020   E2C22B02     BIC.B   #0x4, &0x22b
+     83            P4SEL1 &= ~SD_SPICLK;                  // Set to GP I/O
+   \   000024   E2C22D02     BIC.B   #0x4, &0x22d
+     84            P4OUT  &= ~SD_SPICLK;                  // Set out value Low [off]
+   \   000028   E2C22302     BIC.B   #0x4, &0x223
+     85            P4DIR  |= SD_SPICLK;                   // Set direction to output
+   \   00002C   E2D22502     BIS.B   #0x4, &0x225
+     86            // P2_3
+     87            P4SEL0 &= ~P2_3;                       // Set to GP I/O
+   \   000030   F2C22B02     BIC.B   #0x8, &0x22b
+     88            P4SEL1 &= ~P2_3;                       // Set to GP I/O
+   \   000034   F2C22D02     BIC.B   #0x8, &0x22d
+     89            P4OUT  &= ~P2_3;                       // Set out value Low [off]
+   \   000038   F2C22302     BIC.B   #0x8, &0x223
+     90            P4DIR  |= P2_3;                        // Set direction to output
+   \   00003C   F2D22502     BIS.B   #0x8, &0x225
+     91            // P2_4
+     92            P4SEL0 &= ~P2_4;                       // Set to GP I/O
+   \   000040   F2C010002B02 BIC.B   #0x10, &0x22b
+     93            P4SEL1 &= ~P2_4;                       // Set to GP I/O
+   \   000046   F2C010002D02 BIC.B   #0x10, &0x22d
+     94            P4OUT  &= ~P2_4;                       // Set out value Low [on]
+   \   00004C   F2C010002302 BIC.B   #0x10, &0x223
+     95            P4DIR  |= P2_4;                        // Set direction to output
+   \   000052   F2D010002502 BIS.B   #0x10, &0x225
+     96            // P2_5
+     97            P4SEL0 &= ~J4_34;                      // Set to GP I/O
+   \   000058   F2C020002B02 BIC.B   #0x20, &0x22b
+     98            P4SEL1 &= ~J4_34;                      // Set to GP I/O
+   \   00005E   F2C020002D02 BIC.B   #0x20, &0x22d
+     99            P4OUT  &= ~J4_34;                      // Set out value Low [off]
+   \   000064   F2C020002302 BIC.B   #0x20, &0x223
+    100            P4DIR  |= J4_34;                       // Set direction to output
+   \   00006A   F2D020002502 BIS.B   #0x20, &0x225
+    101            // P2_6
+    102            P4SEL0 &= ~J4_35;                      // Set to GP I/O
+   \   000070   F2C040002B02 BIC.B   #0x40, &0x22b
+    103            P4SEL1 &= ~J4_35;                      // Set to GP I/O
+   \   000076   F2C040002D02 BIC.B   #0x40, &0x22d
+    104            P4OUT  &= ~J4_35;                      // Set out value Low [off]
+   \   00007C   F2C040002302 BIC.B   #0x40, &0x223
+    105            P4DIR  |= J4_35;                       // Set direction to output
+   \   000082   F2D040002502 BIS.B   #0x40, &0x225
+    106            // P2_7
+    107            P4SEL0 &= ~P2_7;                       // Set to GP I/O
+   \   000088   F2C080002B02 BIC.B   #0x80, &0x22b
+    108            P4SEL1 &= ~P2_7;                       // Set to GP I/O
+   \   00008E   F2C080002D02 BIC.B   #0x80, &0x22d
+    109            P4OUT  &= ~P2_7;                       // Set out value Low [off]
+   \   000094   F2C080002302 BIC.B   #0x80, &0x223
+    110            P4DIR  |= P2_7;                        // Set direction to output
+   \   00009A   F2D080002502 BIS.B   #0x80, &0x225
+    111          }
+   \   0000A0   1001         RETA
+   \   0000A2                REQUIRE _A_PBSEL0_L
+   \   0000A2                REQUIRE _A_PBSEL1_L
+   \   0000A2                REQUIRE _A_PBOUT_L
+   \   0000A2                REQUIRE _A_PBDIR_L
+    112          ////////////////////////////////////////////////////////////////////////
+
+   \                                 In  segment CODE, align 2
+    113          void Init_Port3(char use_smclk) { // Initlizes all pins on Port 3
+   \                     Init_Port3:
+    114          //=========================================================================
+    115          // IOT_RESET            (0x01) // RESET
+    116          // IOT_STA_MINIAP       (0x02) // IOT_STA_MINIAP
+    117          // IOT_FACTORY          (0x04) // IOT_FACTORY
+    118          // IOT_WAKEUP           (0x08) // IOT_WAKEUP
+    119          // L_REVERSE            (0x10) // Left Reverse
+    120          // L_FORWARD            (0x20) // Left Forward
+    121          // R_REVERSE            (0x40) // Right Reverse
+    122          // R_FORWARD            (0x80) // Right Forward
+    123          //=========================================================================
+    124            // Configure Port 3
+    125            // P3_0
+    126            P3SEL0 &= ~IOT_RESET;                 // Set to GP I/O
+   \   000000   D2C32A02     BIC.B   #0x1, &0x22a
+    127            P3SEL1 &= ~IOT_RESET;                 // Set to Gp I/Ovsa1
+   \   000004   D2C32C02     BIC.B   #0x1, &0x22c
+    128            P3OUT  &= ~IOT_RESET;                 // Set out value Low [active]
+   \   000008   D2C32202     BIC.B   #0x1, &0x222
+    129            P3DIR  |= IOT_RESET;                  // Set direction to output
+   \   00000C   D2D32402     BIS.B   #0x1, &0x224
+    130            // P3_1
+    131            P3SEL0 &= ~IOT_STA_MINIAP;            // Set to GP I/O
+   \   000010   E2C32A02     BIC.B   #0x2, &0x22a
+    132            P3SEL1 &= ~IOT_STA_MINIAP;            // Set to GP I/O
+   \   000014   E2C32C02     BIC.B   #0x2, &0x22c
+    133            P3OUT  |=  IOT_STA_MINIAP;            // Set out value no Mini AP
+   \   000018   E2D32202     BIS.B   #0x2, &0x222
+    134            P3DIR  |=  IOT_STA_MINIAP;            // Set direction to output
+   \   00001C   E2D32402     BIS.B   #0x2, &0x224
+    135            // P3_2
+    136            P3SEL0 &= ~IOT_FACTORY;               // Set to GP I/O
+   \   000020   E2C22A02     BIC.B   #0x4, &0x22a
+    137            P3SEL1 &= ~IOT_FACTORY;               // Set to GP I/O
+   \   000024   E2C22C02     BIC.B   #0x4, &0x22c
+    138            P3OUT  &= ~IOT_FACTORY;               // Set out value Low [off]
+   \   000028   E2C22202     BIC.B   #0x4, &0x222
+    139            P3DIR  |= IOT_FACTORY;                // Set direction to output
+   \   00002C   E2D22402     BIS.B   #0x4, &0x224
+    140            // P3_3
+    141            P3SEL0 &= ~IOT_WAKEUP;                // Set to GP I/O
+   \   000030   F2C22A02     BIC.B   #0x8, &0x22a
+    142            P3SEL1 &= ~IOT_WAKEUP;                // Set to GP I/O
+   \   000034   F2C22C02     BIC.B   #0x8, &0x22c
+    143            P3OUT  &= ~IOT_WAKEUP;                // Set out value Low [off]
+   \   000038   F2C22202     BIC.B   #0x8, &0x222
+    144            P3DIR  |= IOT_WAKEUP;                 // Set direction to output
+   \   00003C   F2D22402     BIS.B   #0x8, &0x224
+    145            // P3_4 
+    146            if(use_smclk) // Determine whether clock or motor setup
+   \   000040   4C93         CMP.B   #0x0, R12
+   \   000042   0A24         JEQ     ??Init_Port3_1
+    147            {
+    148              P3SEL0 &= ~SMCLK_OUT;               // SMCLK_OUT SMCLK Function selected
+   \   000044   F2C010002A02 BIC.B   #0x10, &0x22a
+    149              P3SEL1 |=  SMCLK_OUT;               // SMCLK_OUT SMCLK Function selected
+   \   00004A   F2D010002C02 BIS.B   #0x10, &0x22c
+    150              P3DIR  |=  SMCLK_OUT;               // SMCLK_OUT direction to output
+   \   000050   F2D010002402 BIS.B   #0x10, &0x224
+   \   000056   0C3C         JMP     ??Init_Port3_0
+    151            } else
+    152            {
+    153              P3SEL0 &= ~L_REVERSE;                 // Set to GP I/O
+   \                     ??Init_Port3_1:
+   \   000058   F2C010002A02 BIC.B   #0x10, &0x22a
+    154              P3SEL1 &= ~L_REVERSE;                 // Set to GP I/O
+   \   00005E   F2C010002C02 BIC.B   #0x10, &0x22c
+    155              P3OUT  &= ~L_REVERSE;                 // Set out value Low [off]
+   \   000064   F2C010002202 BIC.B   #0x10, &0x222
+    156              P3DIR  |= L_REVERSE;                  // Set direction to output
+   \   00006A   F2D010002402 BIS.B   #0x10, &0x224
+    157            }
+    158            
+    159            // P3_5
+    160            P3SEL0 &= ~L_FORWARD;                 // Set to GP I/O
+   \                     ??Init_Port3_0:
+   \   000070   F2C020002A02 BIC.B   #0x20, &0x22a
+    161            P3SEL1 &= ~L_FORWARD;                 // Set to GP I/O
+   \   000076   F2C020002C02 BIC.B   #0x20, &0x22c
+    162            P3OUT  &= ~L_FORWARD;                 // Set out value High [on]
+   \   00007C   F2C020002202 BIC.B   #0x20, &0x222
+    163            P3DIR  |= L_FORWARD;                  // Set direction to output
+   \   000082   F2D020002402 BIS.B   #0x20, &0x224
+    164            // P3_6
+    165            P3SEL0 &= ~R_REVERSE;                 // Set to GP I/O
+   \   000088   F2C040002A02 BIC.B   #0x40, &0x22a
+    166            P3SEL1 &= ~R_REVERSE;                 // Set to GP I/O
+   \   00008E   F2C040002C02 BIC.B   #0x40, &0x22c
+    167            P3OUT  &= ~R_REVERSE;                 // Set out value Low [off]
+   \   000094   F2C040002202 BIC.B   #0x40, &0x222
+    168            P3DIR  |= R_REVERSE;                  // Set direction to output
+   \   00009A   F2D040002402 BIS.B   #0x40, &0x224
+    169            // P3_7
+    170            P3SEL0 &= ~R_FORWARD;                 // Set to GP I/O
+   \   0000A0   F2C080002A02 BIC.B   #0x80, &0x22a
+    171            P3SEL1 &= ~R_FORWARD;                 // Set to GP I/O
+   \   0000A6   F2C080002C02 BIC.B   #0x80, &0x22c
+    172            P3OUT  &= ~R_FORWARD;                 // Set out value High [on]
+   \   0000AC   F2C080002202 BIC.B   #0x80, &0x222
+    173            P3DIR  |= R_FORWARD;                  // Set direction to output
+   \   0000B2   F2D080002402 BIS.B   #0x80, &0x224
+    174          }
+   \   0000B8   1001         RETA
+   \   0000BA                REQUIRE _A_PBSEL0_L
+   \   0000BA                REQUIRE _A_PBSEL1_L
+   \   0000BA                REQUIRE _A_PBOUT_L
+   \   0000BA                REQUIRE _A_PBDIR_L
+    175          ////////////////////////////////////////////////////////////////////////
+
+   \                                 In  segment CODE, align 2
+    176          void Init_Port4(void) { // Initlizes all pins on Port 4
+   \                     Init_Port4:
+    177          //=========================================================================
+    178          // SD_CS                (0x01) // SD card clock signal
+    179          // J4_31                (0x02) //
+    180          // J4_32                (0x04) //
+    181          // J4_33                (0x08) //
+    182          // UCB1_CS_LCD          (0x10) //
+    183          // P4_5                 (0x20) // UNUSED
+    184          // P4_6                 (0x40) // UNUSED
+    185          // J3_29                (0x80) //
+    186          //=========================================================================
+    187            // Configure Port 4
+    188            // P4_0
+    189            P4SEL0 &= ~SD_CS;                      // Set to GP I/O
+   \   000000   D2C32B02     BIC.B   #0x1, &0x22b
+    190            P4SEL1 &= ~SD_CS;                      // Set to GP I/O
+   \   000004   D2C32D02     BIC.B   #0x1, &0x22d
+    191            P4OUT  &= ~SD_CS;                      // Set out value Low [off]
+   \   000008   D2C32302     BIC.B   #0x1, &0x223
+    192            P4DIR  |= SD_CS;                       // Set direction to output
+   \   00000C   D2D32502     BIS.B   #0x1, &0x225
+    193            // P4_1
+    194            P4SEL0 &= ~J4_31;                      // Set to GP I/O
+   \   000010   E2C32B02     BIC.B   #0x2, &0x22b
+    195            P4SEL1 &= ~J4_31;                      // Set to GP I/O
+   \   000014   E2C32D02     BIC.B   #0x2, &0x22d
+    196            P4OUT  &= ~J4_31;                      // Set out value Low [off]
+   \   000018   E2C32302     BIC.B   #0x2, &0x223
+    197            P4DIR  |= J4_31;                       // Set direction to output
+   \   00001C   E2D32502     BIS.B   #0x2, &0x225
+    198            // P4_2
+    199            P4SEL0 &= ~J4_32;                      // Set to GP I/O
+   \   000020   E2C22B02     BIC.B   #0x4, &0x22b
+    200            P4SEL1 &= ~J4_32;                      // Set to GP I/O
+   \   000024   E2C22D02     BIC.B   #0x4, &0x22d
+    201            P4OUT  &= ~J4_32;                      // Set out value Low [off]
+   \   000028   E2C22302     BIC.B   #0x4, &0x223
+    202            P4DIR  |= J4_32;                       // Set direction to output
+   \   00002C   E2D22502     BIS.B   #0x4, &0x225
+    203            // P4_3
+    204            P4SEL0 &= ~J4_33;                      // Set to GP I/O
+   \   000030   F2C22B02     BIC.B   #0x8, &0x22b
+    205            P4SEL1 &= ~J4_33;                      // Set to GP I/O
+   \   000034   F2C22D02     BIC.B   #0x8, &0x22d
+    206            P4OUT  &= ~J4_33;                      // Set out value Low [off]
+   \   000038   F2C22302     BIC.B   #0x8, &0x223
+    207            P4DIR  |= J4_33;                       // Set direction to output
+   \   00003C   F2D22502     BIS.B   #0x8, &0x225
+    208            // P4_4
+    209            P4SEL0 &= ~UCB1_CS_LCD;                // Set to GP I/O
+   \   000040   F2C010002B02 BIC.B   #0x10, &0x22b
+    210            P4SEL1 &= ~UCB1_CS_LCD;                // Set to GP I/O
+   \   000046   F2C010002D02 BIC.B   #0x10, &0x22d
+    211            P4OUT  |= UCB1_CS_LCD;                 // Set out value High [on]
+   \   00004C   F2D010002302 BIS.B   #0x10, &0x223
+    212            P4DIR  |= UCB1_CS_LCD;                 // Set direction to output
+   \   000052   F2D010002502 BIS.B   #0x10, &0x225
+    213            // P4_5
+    214            P4SEL0 &= ~P4_5;                       // Set to GP I/O
+   \   000058   F2C020002B02 BIC.B   #0x20, &0x22b
+    215            P4SEL1 &= ~P4_5;                       // Set to GP I/O
+   \   00005E   F2C020002D02 BIC.B   #0x20, &0x22d
+    216            P4OUT  &= ~P4_5;                       // Set out value Low [off]
+   \   000064   F2C020002302 BIC.B   #0x20, &0x223
+    217            P4DIR  |= P4_5;                        // Set direction to output
+   \   00006A   F2D020002502 BIS.B   #0x20, &0x225
+    218            // P4_6
+    219            P4SEL0 &= ~P4_6;                       // Set to GP I/O
+   \   000070   F2C040002B02 BIC.B   #0x40, &0x22b
+    220            P4SEL1 &= ~P4_6;                       // Set to GP I/O
+   \   000076   F2C040002D02 BIC.B   #0x40, &0x22d
+    221            P4OUT  &= ~P4_6;                       // Set out value Low [off]
+   \   00007C   F2C040002302 BIC.B   #0x40, &0x223
+    222            P4DIR  |= P4_6;                        // Set direction to output
+   \   000082   F2D040002502 BIS.B   #0x40, &0x225
+    223            // P4_7
+    224            P4SEL0 &= ~J3_29;                      // Set to GP I/O
+   \   000088   F2C080002B02 BIC.B   #0x80, &0x22b
+    225            P4SEL1 &= ~J3_29;                      // Set to GP I/O
+   \   00008E   F2C080002D02 BIC.B   #0x80, &0x22d
+    226            P4OUT  &= ~J3_29;                      // Set out value Low [off]
+   \   000094   F2C080002302 BIC.B   #0x80, &0x223
+    227            P4DIR  |= J3_29;                       // Set direction to output
+   \   00009A   F2D080002502 BIS.B   #0x80, &0x225
+    228          }
+   \   0000A0   1001         RETA
+   \   0000A2                REQUIRE _A_PBSEL0_L
+   \   0000A2                REQUIRE _A_PBSEL1_L
+   \   0000A2                REQUIRE _A_PBOUT_L
+   \   0000A2                REQUIRE _A_PBDIR_L
+    229          ////////////////////////////////////////////////////////////////////////
+
+   \                                 In  segment CODE, align 2
+    230          void Init_Port5(void) { // Initializes all pins on Port 5
+   \                     Init_Port5:
+    231          //=========================================================================
+    232          // UCB1SIMO             (0x01) // UCB1SIMO
+    233          // UCB1SOMI             (0x02) // UBC1SIMO
+    234          // UCB1SCK              (0x04) // SPI mode - clock output - UCB1CLK
+    235          // RESET_LCD            (0x08) // LCD Reset
+    236          // P5_4                 (0x10) // UNUSED
+    237          // BUTTON2              (0x20) // Button 2
+    238          // BUTTON1              (0x40) // Button 1
+    239          // LCD_BACKLITE         (0x80) // LCD Backlite
+    240          //=========================================================================
+    241            // Configure Port 5
+    242            // P5_0
+    243            P5SEL0 |= UCB1SIMO;                   // USCI_B1 SIMO pin
+   \   000000   D2D34A02     BIS.B   #0x1, &0x24a
+    244            P5SEL1 &= ~UCB1SIMO;                  // USCI_B1 SIMO pin
+   \   000004   D2C34C02     BIC.B   #0x1, &0x24c
+    245            P5OUT  &= ~UCB1SIMO;
+   \   000008   D2C34202     BIC.B   #0x1, &0x242
+    246            // P5_1
+    247            P5SEL0 |= UCB1SOMI;                   // USCI_B1 SOMI pin
+   \   00000C   E2D34A02     BIS.B   #0x2, &0x24a
+    248            P5SEL1 &= ~UCB1SOMI;                  // USCI_B1 SOMI pin
+   \   000010   E2C34C02     BIC.B   #0x2, &0x24c
+    249            P5OUT  &= ~UCB1SOMI;
+   \   000014   E2C34202     BIC.B   #0x2, &0x242
+    250            // P5_2
+    251            P5SEL0 |= UCB1SCK;                    // USCI_B1 SCLK pin
+   \   000018   E2D24A02     BIS.B   #0x4, &0x24a
+    252            P5SEL1 &= ~UCB1SCK;                   // USCI_B1 SCLK pin
+   \   00001C   E2C24C02     BIC.B   #0x4, &0x24c
+    253            P5OUT  &= ~UCB1SCK;
+   \   000020   E2C24202     BIC.B   #0x4, &0x242
+    254            // P5_3
+    255            P5SEL0 &= ~RESET_LCD;                 // Set to GP I/O
+   \   000024   F2C24A02     BIC.B   #0x8, &0x24a
+    256            P5SEL1 &= ~RESET_LCD;                 // Set to GP I/O
+   \   000028   F2C24C02     BIC.B   #0x8, &0x24c
+    257            P5OUT  |= RESET_LCD;                  // Set out value High [off]
+   \   00002C   F2D24202     BIS.B   #0x8, &0x242
+    258            P5DIR  |= RESET_LCD;                  // Set direction to output
+   \   000030   F2D24402     BIS.B   #0x8, &0x244
+    259            // P5_4
+    260            P5SEL0 &= ~P5_4 ;                     // Set to GP I/O
+   \   000034   F2C010004A02 BIC.B   #0x10, &0x24a
+    261            P5SEL1 &= ~P5_4 ;                     // Set to GP I/O
+   \   00003A   F2C010004C02 BIC.B   #0x10, &0x24c
+    262            P5OUT  |= P5_4;
+   \   000040   F2D010004202 BIS.B   #0x10, &0x242
+    263            P5DIR  &= ~P5_4;                      // Set direction to output
+   \   000046   F2C010004402 BIC.B   #0x10, &0x244
+    264            // P5_5
+    265            P5SEL0 &= ~BUTTON2;                   // Set to GP I/O
+   \   00004C   F2C020004A02 BIC.B   #0x20, &0x24a
+    266            P5SEL1 &= ~BUTTON2;                   // Set to GP I/O
+   \   000052   F2C020004C02 BIC.B   #0x20, &0x24c
+    267            P5OUT  |= BUTTON2;                    // Configure pullup resistor
+   \   000058   F2D020004202 BIS.B   #0x20, &0x242
+    268            P5DIR  &= ~BUTTON2;                   // Set direction to input
+   \   00005E   F2C020004402 BIC.B   #0x20, &0x244
+    269            P5REN  |= BUTTON2;                    // Enable pullup resistor
+   \   000064   F2D020004602 BIS.B   #0x20, &0x246
+    270            // P5_6
+    271            P5SEL0 &= ~BUTTON1;                   // Set to GP I/O
+   \   00006A   F2C040004A02 BIC.B   #0x40, &0x24a
+    272            P5SEL1 &= ~BUTTON1;                   // Set to GP I/O
+   \   000070   F2C040004C02 BIC.B   #0x40, &0x24c
+    273            P5OUT  |= BUTTON1;                    // Configure pullup resistor
+   \   000076   F2D040004202 BIS.B   #0x40, &0x242
+    274            P5DIR  &= ~BUTTON1;                   // Set direction to input
+   \   00007C   F2C040004402 BIC.B   #0x40, &0x244
+    275            P5REN  |= BUTTON1;                    // Enable pullup resistor
+   \   000082   F2D040004602 BIS.B   #0x40, &0x246
+    276            // P5_7
+    277            P5SEL0 &= ~LCD_BACKLITE;              // Set to GP I/O
+   \   000088   F2C080004A02 BIC.B   #0x80, &0x24a
+    278            P5SEL1 &= ~LCD_BACKLITE;              // Set to GP I/O
+   \   00008E   F2C080004C02 BIC.B   #0x80, &0x24c
+    279            P5OUT  |= LCD_BACKLITE;               // Set out value High [on]
+   \   000094   F2D080004202 BIS.B   #0x80, &0x242
+    280            P5DIR  |= LCD_BACKLITE;               // Set direction to output
+   \   00009A   F2D080004402 BIS.B   #0x80, &0x244
+    281          }
+   \   0000A0   1001         RETA
+   \   0000A2                REQUIRE _A_PCSEL0_L
+   \   0000A2                REQUIRE _A_PCSEL1_L
+   \   0000A2                REQUIRE _A_PCOUT_L
+   \   0000A2                REQUIRE _A_PCDIR_L
+   \   0000A2                REQUIRE _A_PCREN_L
+    282          ////////////////////////////////////////////////////////////////////////
+
+   \                                 In  segment CODE, align 2
+    283          void Init_Port6(void) { // Initializes all pins on Port 6
+   \                     Init_Port6:
+    284          //=========================================================================
+    285          // UCA3TXD              (0x01) // 
+    286          // UCA3RXD              (0x02) //
+    287          // J1_5                 (0x04) //
+    288          // MAG_INT              (0x08) //
+    289          // P6_4                 (0x10) // UNUSED
+    290          // P6_5                 (0x20) // UNUSED
+    291          // P6_6                 (0x40) // UNUSED
+    292          // P6_7                 (0x80) // UNUSED
+    293          //=========================================================================
+    294            // Configure Port 6
+    295            // P6_0
+    296            P4SEL0 |=  UCA3TXD;                   // Set to GP I/O
+   \   000000   D2D32B02     BIS.B   #0x1, &0x22b
+    297            P4SEL1 &= ~UCA3TXD;                   // Set to GP I/O
+   \   000004   D2C32D02     BIC.B   #0x1, &0x22d
+    298            P4OUT  &= ~UCA3TXD;                   // Set out value Low [off]
+   \   000008   D2C32302     BIC.B   #0x1, &0x223
+    299            P4DIR  |= UCA3TXD;                    // Set direction to output
+   \   00000C   D2D32502     BIS.B   #0x1, &0x225
+    300            // P6_1
+    301            P4SEL0 |=  UCA3RXD;                   // Set to GP I/O
+   \   000010   E2D32B02     BIS.B   #0x2, &0x22b
+    302            P4SEL1 &= ~UCA3RXD;                   // Set to GP I/O
+   \   000014   E2C32D02     BIC.B   #0x2, &0x22d
+    303            P4OUT  &= ~UCA3RXD;                   // Set out value Low [off]
+   \   000018   E2C32302     BIC.B   #0x2, &0x223
+    304            P4DIR  |= UCA3RXD;                    // Set direction to output
+   \   00001C   E2D32502     BIS.B   #0x2, &0x225
+    305            // P6_2
+    306            P4SEL0 &= ~J1_5;                      // Set to GP I/O
+   \   000020   E2C22B02     BIC.B   #0x4, &0x22b
+    307            P4SEL1 &= ~J1_5;                      // Set to GP I/O
+   \   000024   E2C22D02     BIC.B   #0x4, &0x22d
+    308            P4OUT  &= ~J1_5;                      // Set out value Low [off]
+   \   000028   E2C22302     BIC.B   #0x4, &0x223
+    309            P4DIR  |= J1_5;                       // Set direction to output
+   \   00002C   E2D22502     BIS.B   #0x4, &0x225
+    310            // P6_3
+    311            P4SEL0 &= ~MAG_INT;                   // Set to GP I/O
+   \   000030   F2C22B02     BIC.B   #0x8, &0x22b
+    312            P4SEL1 &= ~MAG_INT;                   // Set to GP I/O
+   \   000034   F2C22D02     BIC.B   #0x8, &0x22d
+    313            P4OUT  &= ~MAG_INT;                   // Set out value Low [off]
+   \   000038   F2C22302     BIC.B   #0x8, &0x223
+    314            P4DIR  |= MAG_INT;                    // Set direction to output
+   \   00003C   F2D22502     BIS.B   #0x8, &0x225
+    315            // P6_4
+    316            P4SEL0 &= ~P6_4;                      // Set to GP I/O
+   \   000040   F2C010002B02 BIC.B   #0x10, &0x22b
+    317            P4SEL1 &= ~P6_4;                      // Set to GP I/O
+   \   000046   F2C010002D02 BIC.B   #0x10, &0x22d
+    318            P4OUT  &= ~P6_4;                      // Set out value Low [off]
+   \   00004C   F2C010002302 BIC.B   #0x10, &0x223
+    319            P4DIR  |= P6_4;                       // Set direction to output
+   \   000052   F2D010002502 BIS.B   #0x10, &0x225
+    320            // P6_5
+    321            P4SEL0 &= ~P6_5;                      // Set to GP I/O
+   \   000058   F2C020002B02 BIC.B   #0x20, &0x22b
+    322            P4SEL1 &= ~P6_5;                      // Set to GP I/O
+   \   00005E   F2C020002D02 BIC.B   #0x20, &0x22d
+    323            P4OUT  &= ~P6_5;                      // Set out value Low [off]
+   \   000064   F2C020002302 BIC.B   #0x20, &0x223
+    324            P4DIR  |= P6_5;                       // Set direction to output
+   \   00006A   F2D020002502 BIS.B   #0x20, &0x225
+    325            // P6_6
+    326            P4SEL0 &= ~P6_6;                      // Set to GP I/O
+   \   000070   F2C040002B02 BIC.B   #0x40, &0x22b
+    327            P4SEL1 &= ~P6_6;                      // Set to GP I/O
+   \   000076   F2C040002D02 BIC.B   #0x40, &0x22d
+    328            P4OUT  &= ~P6_6;                      // Set out value Low [off]
+   \   00007C   F2C040002302 BIC.B   #0x40, &0x223
+    329            P4DIR  |= P6_6;                       // Set direction to output
+   \   000082   F2D040002502 BIS.B   #0x40, &0x225
+    330            // P6_7
+    331            P4SEL0 &= ~P6_7;                      // Set to GP I/O
+   \   000088   F2C080002B02 BIC.B   #0x80, &0x22b
+    332            P4SEL1 &= ~P6_7;                      // Set to GP I/O
+   \   00008E   F2C080002D02 BIC.B   #0x80, &0x22d
+    333            P4OUT  &= ~P6_7;                      // Set out value Low [off]
+   \   000094   F2C080002302 BIC.B   #0x80, &0x223
+    334            P4DIR  |= P6_7;                       // Set direction to output
+   \   00009A   F2D080002502 BIS.B   #0x80, &0x225
+    335          }
+   \   0000A0   1001         RETA
+   \   0000A2                REQUIRE _A_PBSEL0_L
+   \   0000A2                REQUIRE _A_PBSEL1_L
+   \   0000A2                REQUIRE _A_PBOUT_L
+   \   0000A2                REQUIRE _A_PBDIR_L
+    336          ////////////////////////////////////////////////////////////////////////
+
+   \                                 In  segment CODE, align 2
+    337          void Init_Port7(void) { // Initializes all pins on Port 7
+   \                     Init_Port7:
+    338          //=========================================================================
+    339          // I2CSDA               (0x01) //
+    340          // I2CSCL               (0x02) //
+    341          // SD_DETECT            (0x04) //
+    342          // J4_36                (0x08) // 
+    343          // P7_4                 (0x10) // UNUSED
+    344          // P7_5                 (0x20) // UNUSED
+    345          // P7_6                 (0x40) // UNUSED
+    346          // P7_7                 (0x80) // UNUSED
+    347          //=========================================================================
+    348            // Configure Port 7
+    349            // P7_0
+    350            P4SEL0 &= ~I2CSDA;                    // Set to GP I/O
+   \   000000   D2C32B02     BIC.B   #0x1, &0x22b
+    351            P4SEL1 &= ~I2CSDA;                    // Set to GP I/O
+   \   000004   D2C32D02     BIC.B   #0x1, &0x22d
+    352            P4OUT  &= ~I2CSDA;                    // Set out value Low [off]
+   \   000008   D2C32302     BIC.B   #0x1, &0x223
+    353            P4DIR  |= I2CSDA;                     // Set direction to output
+   \   00000C   D2D32502     BIS.B   #0x1, &0x225
+    354            // P7_1
+    355            P4SEL0 &= ~I2CSCL;                    // Set to GP I/O
+   \   000010   E2C32B02     BIC.B   #0x2, &0x22b
+    356            P4SEL1 &= ~I2CSCL;                    // Set to GP I/O
+   \   000014   E2C32D02     BIC.B   #0x2, &0x22d
+    357            P4OUT  &= ~I2CSCL;                    // Set out value Low [off]
+   \   000018   E2C32302     BIC.B   #0x2, &0x223
+    358            P4DIR  |= I2CSCL;                     // Set direction to output
+   \   00001C   E2D32502     BIS.B   #0x2, &0x225
+    359            // P7_2
+    360            P4SEL0 &= ~SD_DETECT;                 // Set to GP I/O
+   \   000020   E2C22B02     BIC.B   #0x4, &0x22b
+    361            P4SEL1 &= ~SD_DETECT;                 // Set to GP I/O
+   \   000024   E2C22D02     BIC.B   #0x4, &0x22d
+    362            P4OUT  &= ~SD_DETECT;                 // Set out value Low [off]
+   \   000028   E2C22302     BIC.B   #0x4, &0x223
+    363            P4DIR  |= SD_DETECT;                  // Set direction to output
+   \   00002C   E2D22502     BIS.B   #0x4, &0x225
+    364            // P7_3
+    365            P4SEL0 &= ~J4_36;                     // Set to GP I/O
+   \   000030   F2C22B02     BIC.B   #0x8, &0x22b
+    366            P4SEL1 &= ~J4_36;                     // Set to GP I/O
+   \   000034   F2C22D02     BIC.B   #0x8, &0x22d
+    367            P4OUT  &= ~J4_36;                     // Set out value Low [off]
+   \   000038   F2C22302     BIC.B   #0x8, &0x223
+    368            P4DIR  |= J4_36;                      // Set direction to output
+   \   00003C   F2D22502     BIS.B   #0x8, &0x225
+    369            // P7_4
+    370            P4SEL0 &= ~P7_4;                      // Set to GP I/O
+   \   000040   F2C010002B02 BIC.B   #0x10, &0x22b
+    371            P4SEL1 &= ~P7_4;                      // Set to GP I/O
+   \   000046   F2C010002D02 BIC.B   #0x10, &0x22d
+    372            P4OUT  &= ~P7_4;                      // Set out value Low [off]
+   \   00004C   F2C010002302 BIC.B   #0x10, &0x223
+    373            P4DIR  |= P7_4;                       // Set direction to output
+   \   000052   F2D010002502 BIS.B   #0x10, &0x225
+    374            // P7_5
+    375            P4SEL0 &= ~P7_5;                      // Set to GP I/O
+   \   000058   F2C020002B02 BIC.B   #0x20, &0x22b
+    376            P4SEL1 &= ~P7_5;                      // Set to GP I/O
+   \   00005E   F2C020002D02 BIC.B   #0x20, &0x22d
+    377            P4OUT  &= ~P7_5;                      // Set out value Low [off]
+   \   000064   F2C020002302 BIC.B   #0x20, &0x223
+    378            P4DIR  |= P7_5;                       // Set direction to output
+   \   00006A   F2D020002502 BIS.B   #0x20, &0x225
+    379            // P7_6
+    380            P4SEL0 &= ~P7_6;                      // Set to GP I/O
+   \   000070   F2C040002B02 BIC.B   #0x40, &0x22b
+    381            P4SEL1 &= ~P7_6;                      // Set to GP I/O
+   \   000076   F2C040002D02 BIC.B   #0x40, &0x22d
+    382            P4OUT  &= ~P7_6;                      // Set out value Low [off]
+   \   00007C   F2C040002302 BIC.B   #0x40, &0x223
+    383            P4DIR  |= P7_6;                       // Set direction to output
+   \   000082   F2D040002502 BIS.B   #0x40, &0x225
+    384            // P7_7
+    385            P4SEL0 &= ~P7_7;                      // Set to GP I/O
+   \   000088   F2C080002B02 BIC.B   #0x80, &0x22b
+    386            P4SEL1 &= ~P7_7;                      // Set to GP I/O
+   \   00008E   F2C080002D02 BIC.B   #0x80, &0x22d
+    387            P4OUT  &= ~P7_7;                      // Set out value Low [off]
+   \   000094   F2C080002302 BIC.B   #0x80, &0x223
+    388            P4DIR  |= P7_7;                       // Set direction to output
+   \   00009A   F2D080002502 BIS.B   #0x80, &0x225
+    389          }
+   \   0000A0   1001         RETA
+   \   0000A2                REQUIRE _A_PBSEL0_L
+   \   0000A2                REQUIRE _A_PBSEL1_L
+   \   0000A2                REQUIRE _A_PBOUT_L
+   \   0000A2                REQUIRE _A_PBDIR_L
+    390          ////////////////////////////////////////////////////////////////////////
+
+   \                                 In  segment CODE, align 2
+    391          void Init_Port8(void) { // Initializes all pins on Port 8
+   \                     Init_Port8:
+    392          //=========================================================================
+    393          // IR_LED               (0x01) // Infrared LED
+    394          // OPT_INT              (0x02) // Optical INT
+    395          // TMP_INT              (0x04) // Temporary INT
+    396          // INT2                 (0x08) // INT2
+    397          //=========================================================================
+    398            // Configure Port 8
+    399            // P8_0
+    400            P4SEL0 &= ~IR_LED;                     // Set to GP I/O
+   \   000000   D2C32B02     BIC.B   #0x1, &0x22b
+    401            P4SEL1 &= ~IR_LED;                     // Set to GP I/O
+   \   000004   D2C32D02     BIC.B   #0x1, &0x22d
+    402            P4OUT  &= ~IR_LED;                     // Set out value Low [off]
+   \   000008   D2C32302     BIC.B   #0x1, &0x223
+    403            P4DIR  |= IR_LED;                      // Set direction to output
+   \   00000C   D2D32502     BIS.B   #0x1, &0x225
+    404            // P8_1
+    405            P4SEL0 &= ~OPT_INT;                    // Set to GP I/O
+   \   000010   E2C32B02     BIC.B   #0x2, &0x22b
+    406            P4SEL1 &= ~OPT_INT;                    // Set to GP I/O
+   \   000014   E2C32D02     BIC.B   #0x2, &0x22d
+    407            P4OUT  &= ~OPT_INT;                    // Set out value Low [off]
+   \   000018   E2C32302     BIC.B   #0x2, &0x223
+    408            P4DIR  |= OPT_INT;                     // Set direction to output
+   \   00001C   E2D32502     BIS.B   #0x2, &0x225
+    409            // P8_2
+    410            P4SEL0 &= ~TMP_INT;                    // Set to GP I/O
+   \   000020   E2C22B02     BIC.B   #0x4, &0x22b
+    411            P4SEL1 &= ~TMP_INT;                    // Set to GP I/O
+   \   000024   E2C22D02     BIC.B   #0x4, &0x22d
+    412            P4OUT  &= ~TMP_INT;                    // Set out value Low [off]
+   \   000028   E2C22302     BIC.B   #0x4, &0x223
+    413            P4DIR  |= TMP_INT;                     // Set direction to output
+   \   00002C   E2D22502     BIS.B   #0x4, &0x225
+    414            // P8_3
+    415            P4SEL0 &= ~INT2;                       // Set to GP I/O
+   \   000030   F2C22B02     BIC.B   #0x8, &0x22b
+    416            P4SEL1 &= ~INT2;                       // Set to GP I/O
+   \   000034   F2C22D02     BIC.B   #0x8, &0x22d
+    417            P4OUT  &= ~INT2;                       // Set out value Low [off]
+   \   000038   F2C22302     BIC.B   #0x8, &0x223
+    418            P4DIR  |= INT2;                        // Set direction to output
+   \   00003C   F2D22502     BIS.B   #0x8, &0x225
+    419          }
+   \   000040   1001         RETA
+   \   000042                REQUIRE _A_PBSEL0_L
+   \   000042                REQUIRE _A_PBSEL1_L
+   \   000042                REQUIRE _A_PBOUT_L
+   \   000042                REQUIRE _A_PBDIR_L
+    420          /////////////////////////////////////////////////////////////////////////
+
+   \                                 In  segment CODE, align 2
+    421          void Init_PortJ(void) { // Initializes all pins on Port J
+   \                     Init_PortJ:
+    422          //=========================================================================
+    423          // PJ_0                 (0x01) // UNUSED
+    424          // PJ_1                 (0x02) // UNUSED
+    425          // PJ_2                 (0x04) // UNUSED
+    426          // PJ_3                 (0x08) // UNUSED
+    427          // LFXIN                (0x10) // LFX Input
+    428          // LFXOUT               (0x20) // LFX Output
+    429          // HFXIN                (0x40) // HFX Input
+    430          // HFXOUT               (0x80) // HFX Output
+    431          //=========================================================================
+    432            // Configure Port J
+    433            // PJ_0
+    434            P4SEL0 &= ~PJ_0;                      // Set to GP I/O
+   \   000000   D2C32B02     BIC.B   #0x1, &0x22b
+    435            P4SEL1 &= ~PJ_0;                      // Set to GP I/O
+   \   000004   D2C32D02     BIC.B   #0x1, &0x22d
+    436            P4OUT  &= ~PJ_0;                      // Set out value Low [off]
+   \   000008   D2C32302     BIC.B   #0x1, &0x223
+    437            P4DIR  |= PJ_0;                       // Set direction to output
+   \   00000C   D2D32502     BIS.B   #0x1, &0x225
+    438            // PJ_1
+    439            P4SEL0 &= ~PJ_1;                      // Set to GP I/O
+   \   000010   E2C32B02     BIC.B   #0x2, &0x22b
+    440            P4SEL1 &= ~PJ_1;                      // Set to GP I/O
+   \   000014   E2C32D02     BIC.B   #0x2, &0x22d
+    441            P4OUT  &= ~PJ_1;                      // Set out value Low [off]
+   \   000018   E2C32302     BIC.B   #0x2, &0x223
+    442            P4DIR  |= PJ_1;                       // Set direction to output
+   \   00001C   E2D32502     BIS.B   #0x2, &0x225
+    443            // PJ_2 
+    444            P4SEL0 &= ~PJ_2;                      // Set to GP I/O
+   \   000020   E2C22B02     BIC.B   #0x4, &0x22b
+    445            P4SEL1 &= ~PJ_2;                      // Set to GP I/O
+   \   000024   E2C22D02     BIC.B   #0x4, &0x22d
+    446            P4OUT  &= ~PJ_2;                      // Set out value Low [off]
+   \   000028   E2C22302     BIC.B   #0x4, &0x223
+    447            P4DIR  |= PJ_2;                       // Set direction to output
+   \   00002C   E2D22502     BIS.B   #0x4, &0x225
+    448            // PJ_3
+    449            P4SEL0 &= ~PJ_3;                      // Set to GP I/O
+   \   000030   F2C22B02     BIC.B   #0x8, &0x22b
+    450            P4SEL1 &= ~PJ_3;                      // Set to GP I/O
+   \   000034   F2C22D02     BIC.B   #0x8, &0x22d
+    451            P4OUT  &= ~PJ_3;                      // Set out value Low [off]
+   \   000038   F2C22302     BIC.B   #0x8, &0x223
+    452            P4DIR  |= PJ_3;                       // Set direction to output
+   \   00003C   F2D22502     BIS.B   #0x8, &0x225
+    453            // PJ_4
+    454            P4SEL0 |= LFXIN;                      // Primary function selected
+   \   000040   F2D010002B02 BIS.B   #0x10, &0x22b
+    455            P4SEL1 &= ~LFXIN;                     // Primary function selected
+   \   000046   F2C010002D02 BIC.B   #0x10, &0x22d
+    456            P4OUT  &= ~LFXIN;                     // Set out value Low [off]
+   \   00004C   F2C010002302 BIC.B   #0x10, &0x223
+    457            P4DIR  |= LFXIN;                      // Set direction to output
+   \   000052   F2D010002502 BIS.B   #0x10, &0x225
+    458            // PJ_5
+    459            P4SEL0 |=  LFXOUT;                    // Primary function selected
+   \   000058   F2D020002B02 BIS.B   #0x20, &0x22b
+    460            P4SEL1 &= ~LFXOUT;                    // Primary function selected
+   \   00005E   F2C020002D02 BIC.B   #0x20, &0x22d
+    461            P4OUT  &= ~LFXOUT;                    // Set out value Low [off]
+   \   000064   F2C020002302 BIC.B   #0x20, &0x223
+    462            P4DIR  |= LFXOUT;                     // Set direction to output
+   \   00006A   F2D020002502 BIS.B   #0x20, &0x225
+    463            // PJ_6
+    464            P4SEL0 &= ~HFXIN;                     // Set to GP I/O
+   \   000070   F2C040002B02 BIC.B   #0x40, &0x22b
+    465            P4SEL1 &= ~HFXIN;                     // Set to GP I/O
+   \   000076   F2C040002D02 BIC.B   #0x40, &0x22d
+    466            P4OUT  &= ~HFXIN;                     // Set out value Low [off]
+   \   00007C   F2C040002302 BIC.B   #0x40, &0x223
+    467            P4DIR  |= HFXIN;                      // Set direction to output
+   \   000082   F2D040002502 BIS.B   #0x40, &0x225
+    468            // PJ_7
+    469            P4SEL0 &= ~HFXOUT;                    // Set to GP I/O
+   \   000088   F2C080002B02 BIC.B   #0x80, &0x22b
+    470            P4SEL1 &= ~HFXOUT;                    // Set to GP I/O
+   \   00008E   F2C080002D02 BIC.B   #0x80, &0x22d
+    471            P4OUT  &= ~HFXOUT;                    // Set out value Low [off]
+   \   000094   F2C080002302 BIC.B   #0x80, &0x223
+    472            P4DIR  |= HFXOUT;                     // Set direction to output
+   \   00009A   F2D080002502 BIS.B   #0x80, &0x225
+    473          }
+   \   0000A0   1001         RETA
+   \   0000A2                REQUIRE _A_PBSEL0_L
+   \   0000A2                REQUIRE _A_PBSEL1_L
+   \   0000A2                REQUIRE _A_PBOUT_L
+   \   0000A2                REQUIRE _A_PBDIR_L
+    474          
+
+   \                                 In  segment CODE, align 2
+    475          void Init_Ports(void){ // Calls all port initialization functions
+   \                     Init_Ports:
+    476            Init_Port1();
+   \   000000   ........     CALLA   #Init_Port1
+    477            Init_Port2();
+   \   000004   ........     CALLA   #Init_Port2
+    478            Init_Port3(false);
+   \   000008   4C43         MOV.B   #0x0, R12
+   \   00000A   ........     CALLA   #Init_Port3
+    479            Init_Port4();
+   \   00000E   ........     CALLA   #Init_Port4
+    480            Init_Port5();
+   \   000012   ........     CALLA   #Init_Port5
+    481            Init_Port6();
+   \   000016   ........     CALLA   #Init_Port6
+    482            Init_Port7();
+   \   00001A   ........     CALLA   #Init_Port7
+    483            Init_Port8();
+   \   00001E   ........     CALLA   #Init_Port8
+    484            Init_PortJ();
+   \   000022   ........     BRA     #Init_PortJ
+    485          }
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Init_Port1
+      4   Init_Port2
+      4   Init_Port3
+      4   Init_Port4
+      4   Init_Port5
+      4   Init_Port6
+      4   Init_Port7
+      4   Init_Port8
+      4   Init_PortJ
+      4   Init_Ports
+        4   -> Init_Port1
+        4   -> Init_Port2
+        4   -> Init_Port3
+        4   -> Init_Port4
+        4   -> Init_Port5
+        4   -> Init_Port6
+        4   -> Init_Port7
+        4   -> Init_Port8
+        0   -> Init_PortJ
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+     110  Init_Port1
+     162  Init_Port2
+     186  Init_Port3
+     162  Init_Port4
+     162  Init_Port5
+     162  Init_Port6
+     162  Init_Port7
+      66  Init_Port8
+     162  Init_PortJ
+      38  Init_Ports
+       2  _A_PADIR_L
+       2  _A_PAOUT_L
+       2  _A_PASEL0_L
+       2  _A_PASEL1_L
+       2  _A_PBDIR_L
+       2  _A_PBOUT_L
+       2  _A_PBSEL0_L
+       2  _A_PBSEL1_L
+       2  _A_PCDIR_L
+       2  _A_PCOUT_L
+       2  _A_PCREN_L
+       2  _A_PCSEL0_L
+       2  _A_PCSEL1_L
+
+ 
+ 1 372 bytes in segment CODE
+    26 bytes in segment DATA16_AN
+ 
+ 1 372 bytes of CODE memory
+     0 bytes of DATA memory (+ 26 bytes shared)
+
+Errors: none
+Warnings: none

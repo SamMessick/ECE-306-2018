@@ -1,0 +1,135 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           01/Feb/2018  15:20:07
+# Copyright 1996-2017 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\Project_04\led.c
+#    Command line  =  
+#        -f C:\Users\shmes\AppData\Local\Temp\EWF67F.tmp
+#        ("C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\Project_04\led.c" -lC
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\Project_04\Debug\List" -o
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\Project_04\Debug\Obj" --no_cse --no_unroll
+#        --no_inline --no_code_motion --no_tbaa --debug -D__MSP430FR5994__ -e
+#        --double=32 --dlib_config "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.0\430\lib\dlib\dl430xlsfn.h" --core=430X
+#        --data_model=small -On --multiplier=32 --hw_workaround=CPU40
+#        --code_model=large)
+#    Locale        =  Spanish_USA.1252
+#    List file     =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\Project_04\Debug\List\led.lst
+#    Object file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\Project_04\Debug\Obj\led.r43
+#
+###############################################################################
+
+C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\Project_04\led.c
+      1          //===============================================================
+      2          //  File Name: led.c
+      3          //  Description: This file contains the Initialization of all LED
+      4          //                    controlling I/O pins
+      5          //  Author: Sam Messick
+      6          //  Date Jan. 2018
+      7          //  Compiler Build with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      8          //===============================================================
+      9          
+     10          #include  "led.h"
+
+   \                                 In  segment DATA16_AN, at 0x202
+   \   union <unnamed> _A_PAOUT_L
+   \                     _A_PAOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x220
+   \   union <unnamed> _A_PBIN_L
+   \                     _A_PBIN_L:
+   \   000000                DS8 2
+     11          
+
+   \                                 In  segment CODE, align 2
+     12          void Init_LEDs(void){
+   \                     Init_LEDs:
+     13          //------------------------------------------------------------------------------
+     14          // LED Configurations
+     15          //------------------------------------------------------------------------------
+     16          // Turns on both LEDs
+     17            P1OUT |= RED_LED;
+   \   000000   D2D30202     BIS.B   #0x1, &0x202
+     18            P1OUT |= GRN_LED;
+   \   000004   E2D30202     BIS.B   #0x2, &0x202
+     19          //------------------------------------------------------------------------------
+     20          }
+   \   000008   1001         RETA
+   \   00000A                REQUIRE _A_PAOUT_L
+     21          
+
+   \                                 In  segment CODE, align 2
+     22          void updateBacklight(void){
+   \                     updateBacklight:
+     23          //------------------------------------------------------------------------------
+     24          // Checks if button 2 or 1 has been pressed and updates backlight accordingly
+     25          //------------------------------------------------------------------------------
+     26            
+     27            if((P3IN | BUTTON1)
+     28               && ~(P1OUT | RED_LED)) // Button 1 pushed, Red LED off
+   \   000000   5E422002     MOV.B   &0x220, R14
+   \   000004   5F420202     MOV.B   &0x202, R15
+     29              P1OUT |= RED_LED;       // Turn on Red LED
+   \   000008   D2D30202     BIS.B   #0x1, &0x202
+     30            else                     // ELSE
+     31              P1OUT &= ~RED_LED;      // Turn off Red LED
+     32                
+     33            if(P3IN | BUTTON2        // Button 2 pushed, Green LED off
+     34               && ~(P1OUT | GRN_LED)) 
+   \   00000C   5D422002     MOV.B   &0x220, R13
+   \   000010   5C420202     MOV.B   &0x202, R12
+     35              P1OUT |= GRN_LED;       // Turn on Green LED     
+   \   000014   E2D30202     BIS.B   #0x2, &0x202
+     36            else                     // ELSE
+     37              P1OUT &= ~GRN_LED;      // Turn off Red LED
+     38          }
+   \   000018   1001         RETA
+   \   00001A                REQUIRE _A_PBIN_L
+   \   00001A                REQUIRE _A_PAOUT_L
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Init_LEDs
+      4   updateBacklight
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      10  Init_LEDs
+       2  _A_PAOUT_L
+       2  _A_PBIN_L
+      26  updateBacklight
+
+ 
+ 36 bytes in segment CODE
+  4 bytes in segment DATA16_AN
+ 
+ 36 bytes of CODE memory
+  0 bytes of DATA memory (+ 4 bytes shared)
+
+Errors: none
+Warnings: none
