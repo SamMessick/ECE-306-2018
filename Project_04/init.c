@@ -1,7 +1,7 @@
 //===============================================================
 //  File Name: init.c
 //  Description: This file contains the Initialization of all
-//                    display values and enables interrupts
+//                    display values, and enables interrupts
 //
 //  Author: Sam Messick
 //  Date Jan. 2018
@@ -12,7 +12,7 @@
 
 void Init_Conditions(void){
 //------------------------------------------------------------------------------
-  // Sets initial conditions
+  // Clears LCD
   int i;
 
   for(i=COLUMN1;i<=COLUMN_NUM_COLUMNS;i++){
