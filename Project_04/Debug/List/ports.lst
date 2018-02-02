@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           01/Feb/2018  15:20:07
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           02/Feb/2018  10:42:55
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -14,31 +14,31 @@
 #    __code_model  =  large
 #    Source file   =  
 #        C:\Users\shmes\Desktop\Escritorio
-#        Personal\Escuela\ECE\306\Project_04\ports.c
+#        Personal\Escuela\ECE\306\ECE306-When-Shit-Got-Real\Project_04\ports.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EWF77B.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EW8C72.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
-#        Personal\Escuela\ECE\306\Project_04\ports.c" -lC
-#        "C:\Users\shmes\Desktop\Escritorio
-#        Personal\Escuela\ECE\306\Project_04\Debug\List" -o
-#        "C:\Users\shmes\Desktop\Escritorio
-#        Personal\Escuela\ECE\306\Project_04\Debug\Obj" --no_cse --no_unroll
-#        --no_inline --no_code_motion --no_tbaa --debug -D__MSP430FR5994__ -e
-#        --double=32 --dlib_config "C:\Program Files (x86)\IAR Systems\Embedded
-#        Workbench 8.0\430\lib\dlib\dl430xlsfn.h" --core=430X
-#        --data_model=small -On --multiplier=32 --hw_workaround=CPU40
-#        --code_model=large)
+#        Personal\Escuela\ECE\306\ECE306-When-Shit-Got-Real\Project_04\ports.c"
+#        -lC "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306-When-Shit-Got-Real\Project_04\Debug\List"
+#        -o "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306-When-Shit-Got-Real\Project_04\Debug\Obj"
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5994__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large)
 #    Locale        =  Spanish_USA.1252
 #    List file     =  
 #        C:\Users\shmes\Desktop\Escritorio
-#        Personal\Escuela\ECE\306\Project_04\Debug\List\ports.lst
+#        Personal\Escuela\ECE\306\ECE306-When-Shit-Got-Real\Project_04\Debug\List\ports.lst
 #    Object file   =  
 #        C:\Users\shmes\Desktop\Escritorio
-#        Personal\Escuela\ECE\306\Project_04\Debug\Obj\ports.r43
+#        Personal\Escuela\ECE\306\ECE306-When-Shit-Got-Real\Project_04\Debug\Obj\ports.r43
 #
 ###############################################################################
 
-C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\Project_04\ports.c
+C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-When-Shit-Got-Real\Project_04\ports.c
       1          //===============================================================
       2          //  File Name: ports.c
       3          //  Description: This file contains the Initialization of all
@@ -137,8 +137,8 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\Project_04\ports.c
    \   000000   D2C30A02     BIC.B   #0x1, &0x20a
      28            P1SEL1 &= ~RED_LED;                   // RED_LED as GP I/O
    \   000004   D2C30C02     BIC.B   #0x1, &0x20c
-     29            P1OUT  |= RED_LED;                    // Set Red LED On
-   \   000008   D2D30202     BIS.B   #0x1, &0x202
+     29            P1OUT  &= ~RED_LED;                   // Set Red LED Off
+   \   000008   D2C30202     BIC.B   #0x1, &0x202
      30            P1DIR  |= RED_LED;                    // Set Red LED direction to output
    \   00000C   D2D30402     BIS.B   #0x1, &0x204
      31            // P1_1
@@ -146,8 +146,8 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\Project_04\ports.c
    \   000010   E2C30A02     BIC.B   #0x2, &0x20a
      33            P1SEL1 &= ~GRN_LED;                   // GRN_LED as GP I/O
    \   000014   E2C30C02     BIC.B   #0x2, &0x20c
-     34            P1OUT  |= GRN_LED;                    // Set Green LED On
-   \   000018   E2D30202     BIS.B   #0x2, &0x202
+     34            P1OUT  &= ~GRN_LED;                    // Set Green LED Off
+   \   000018   E2C30202     BIC.B   #0x2, &0x202
      35            P1DIR  |= GRN_LED;                    // Set Green LED direction to output
    \   00001C   E2D30402     BIS.B   #0x2, &0x204
      36            // P1_2

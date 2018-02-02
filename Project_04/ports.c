@@ -26,12 +26,12 @@ void Init_Port1(void){  // Initlizes all pins on Port 1
   // P1_0
   P1SEL0 &= ~RED_LED;                   // RED_LED as GP I/O
   P1SEL1 &= ~RED_LED;                   // RED_LED as GP I/O
-  P1OUT  |= RED_LED;                    // Set Red LED On
+  P1OUT  &= ~RED_LED;                   // Set Red LED Off
   P1DIR  |= RED_LED;                    // Set Red LED direction to output
   // P1_1
   P1SEL0 &= ~GRN_LED;                   // GRN_LED as GP I/O
   P1SEL1 &= ~GRN_LED;                   // GRN_LED as GP I/O
-  P1OUT  |= GRN_LED;                    // Set Green LED On
+  P1OUT  &= ~GRN_LED;                    // Set Green LED Off
   P1DIR  |= GRN_LED;                    // Set Green LED direction to output
   // P1_2
   P1SEL0 |= V_THUMB;                    // ADC input for Thumbwheel

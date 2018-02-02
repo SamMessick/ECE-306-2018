@@ -25,6 +25,7 @@ void main(void){
   Init_Conditions();                   // Initialize Variables and Initial Conditions
   Init_Timers();                       // Initialize Timers
   Init_LCD();                          // Initialize LCD
+  Init_LEDs();
 
 // Place the contents of what you want on the display, in between the quotes
 // Limited to 10 characters per line
@@ -46,7 +47,6 @@ void main(void){
     switch(Time_Sequence){
       case CASE5:                        // 1000 msec
         if(one_time){
-          Init_LEDs();
           lcd_BIG_mid();
           display_changed = true;
           one_time = false;
@@ -55,38 +55,30 @@ void main(void){
         break;
       case CASE4:                        // 1000 msec
         if(one_time){
-          P1OUT |= GRN_LED;            // Change State of LED 5
           one_time = false;
         }
         break;
       case CASE3:                         // 750 msec
         if(one_time){
-          P1OUT |= RED_LED;            // Change State of LED 4
-          P1OUT &= ~GRN_LED;           // Change State of LED 5
           one_time = false;
         }
         break;
       case CASE2:                         // 500 msec
         if(one_time){
           lcd_4line();
-          P1OUT |= GRN_LED;            // Change State of LED 5
           display_changed = true;
           one_time = false;
         }
         break;
       case  CASE1:                        // 250 msec
         if(one_time){
-          P1OUT &= ~RED_LED;           // Change State of LED 4
-          P1OUT &= ~GRN_LED;           // Change State of LED 5
           one_time = false;
         }
         break;                         //
       default: break;
     }
     Switches_Process();                // Check for switch state change
-    Display_Process();
-    
-    updateBacklight();
+    //Display_Process();
   }
 }
 //------------------------------------------------------------------------------

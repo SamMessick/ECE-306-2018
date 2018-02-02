@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           02/Feb/2018  10:11:47
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           02/Feb/2018  11:09:14
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306-When-Shit-Got-Real\Project_04\switches.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EW7CF.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EWA44D.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306-When-Shit-Got-Real\Project_04\switches.c"
 #        -lC "C:\Users\shmes\Desktop\Escritorio
@@ -51,11 +51,282 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-When-Shit-Got-
      10          
      11          #include "switches.h"
 
+   \                                 In  segment DATA16_AN, at 0x202
+   \   union <unnamed> _A_PAOUT_L
+   \                     _A_PAOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x240
+   \   union <unnamed> _A_PCIN_L
+   \                     _A_PCIN_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x242
+   \   union <unnamed> _A_PCOUT_L
+   \                     _A_PCOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x244
+   \   union <unnamed> _A_PCDIR_L
+   \                     _A_PCDIR_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \   uint8_t flag_RED_LED_ON
+   \                     flag_RED_LED_ON:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \   uint8_t flag_GRN_LED_ON
+   \                     flag_GRN_LED_ON:
+   \   000000                DS8 1
+     12          
+     13          //Enable right switch
+
+   \                                 In  segment CODE, align 2
+     14          void enable_switch_BUTTON1(void){
+   \                     enable_switch_BUTTON1:
+     15            P5OUT |= BUTTON1;                     // Select pull up resistor
+   \   000000   F2D040004202 BIS.B   #0x40, &0x242
+     16            P5DIR &= ~BUTTON1;                    // Set direction to input
+   \   000006   F2C040004402 BIC.B   #0x40, &0x244
+     17          }
+   \   00000C   1001         RETA
+   \   00000E                REQUIRE _A_PCOUT_L
+   \   00000E                REQUIRE _A_PCDIR_L
+     18          
+     19          // Enable left switch
+
+   \                                 In  segment CODE, align 2
+     20          void enable_switch_BUTTON2(void){
+   \                     enable_switch_BUTTON2:
+     21            P5OUT |= BUTTON2;                     // Select pull up resistor
+   \   000000   F2D020004202 BIS.B   #0x20, &0x242
+     22            P5DIR &= ~BUTTON2;                    // Set direction to input
+   \   000006   F2C020004402 BIC.B   #0x20, &0x244
+     23          }
+   \   00000C   1001         RETA
+   \   00000E                REQUIRE _A_PCOUT_L
+   \   00000E                REQUIRE _A_PCDIR_L
+     24          //----------------------------------------------------------------
+     25          // Begin with switches enabled
+
+   \                                 In  segment CODE, align 2
+     26          void Init_Switches(void){               
+   \                     Init_Switches:
+     27            enable_switch_BUTTON1();
+   \   000000   ........     CALLA   #enable_switch_BUTTON1
+     28            enable_switch_BUTTON2();
+   \   000004   ........     BRA     #enable_switch_BUTTON2
+     29          }
+     30          //----------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+     31          void disable_switch_BUTTON1(void){
+   \                     disable_switch_BUTTON1:
+     32            P5DIR |= BUTTON1;                     // Set direction to output
+   \   000000   F2D040004402 BIS.B   #0x40, &0x244
+     33            P5OUT &= ~BUTTON1;                    // Set output to low
+   \   000006   F2C040004202 BIC.B   #0x40, &0x242
+     34          }
+   \   00000C   1001         RETA
+   \   00000E                REQUIRE _A_PCDIR_L
+   \   00000E                REQUIRE _A_PCOUT_L
+
+   \                                 In  segment CODE, align 2
+     35          void disable_switch_BUTTON2(void){
+   \                     disable_switch_BUTTON2:
+     36            P5DIR |= BUTTON2;                     // Set direction to output
+   \   000000   F2D020004402 BIS.B   #0x20, &0x244
+     37            P5OUT &= ~BUTTON2;                    // Set output to low
+   \   000006   F2C020004202 BIC.B   #0x20, &0x242
+     38          }
+   \   00000C   1001         RETA
+   \   00000E                REQUIRE _A_PCDIR_L
+   \   00000E                REQUIRE _A_PCOUT_L
+     39          //----------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+     40          void Switch1_Process(void){
+   \                     Switch1_Process:
+     41            static uintmax_t r_counter;
+     42            switch(flag_RED_LED_ON)
+   \   000000   5E42....     MOV.B   &flag_RED_LED_ON, R14
+   \   000004   4E83         SUB.B   #0x0, R14
+   \   000006   0324         JEQ     ??Switch1_Process_2
+   \   000008   5E83         SUB.B   #0x1, R14
+   \   00000A   1224         JEQ     ??Switch1_Process_3
+   \   00000C   1001         RETA
+     43            {
+     44            case false:
+     45              switch(!(P5IN & BUTTON1))
+   \                     ??Switch1_Process_2:
+   \   00000E   F2B040004002 BIT.B   #0x40, &0x240
+   \   000014   152C         JC      ??Switch1_Process_0
+     46              {
+     47              case true:
+     48                P1OUT |= RED_LED;
+   \   000016   D2D30202     BIS.B   #0x1, &0x202
+     49                r_counter++;
+   \   00001A   9253....     ADD.W   #0x1, &??r_counter
+   \   00001E   8263....     ADDC.W  #0x0, &??r_counter + 2
+   \   000022   8263....     ADDC.W  #0x0, &??r_counter + 4
+   \   000026   8263....     ADDC.W  #0x0, &??r_counter + 6
+     50                flag_RED_LED_ON = 1;
+   \   00002A   D243....     MOV.B   #0x1, &flag_RED_LED_ON
+     51                
+     52              default:
+     53                break;
+     54              }
+     55              break;
+   \   00002E   1001         RETA
+     56              
+     57            case true:
+     58              switch(!(P5IN & BUTTON1))
+   \                     ??Switch1_Process_3:
+   \   000030   F2B040004002 BIT.B   #0x40, &0x240
+   \   000036   0428         JNC     ??Switch1_Process_0
+     59              {
+     60              case false:
+     61                P1OUT &= ~RED_LED;
+   \   000038   D2C30202     BIC.B   #0x1, &0x202
+     62                flag_RED_LED_ON = 0;
+   \   00003C   C243....     MOV.B   #0x0, &flag_RED_LED_ON
+     63              default:
+     64                break;
+     65              }
+     66              break;
+     67            }
+     68          }
+   \                     ??Switch1_Process_0:
+   \   000040   1001         RETA
+   \   000042                REQUIRE _A_PAOUT_L
+   \   000042                REQUIRE _A_PCIN_L
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     ??r_counter:
+   \   000000                DS8 8
+
+   \                                 In  segment CODE, align 2
+     69          void Switch2_Process(void){
+   \                     Switch2_Process:
+     70            static uintmax_t g_counter;
+     71            switch(flag_GRN_LED_ON)               // Check if green LED is on
+   \   000000   5E42....     MOV.B   &flag_GRN_LED_ON, R14
+   \   000004   4E83         SUB.B   #0x0, R14
+   \   000006   0324         JEQ     ??Switch2_Process_2
+   \   000008   5E83         SUB.B   #0x1, R14
+   \   00000A   1224         JEQ     ??Switch2_Process_3
+   \   00000C   1001         RETA
+     72            {
+     73            case false:
+     74              switch(!(P5IN & BUTTON2))           // Green LED off; check if button 2 is pushed
+   \                     ??Switch2_Process_2:
+   \   00000E   F2B020004002 BIT.B   #0x20, &0x240
+   \   000014   152C         JC      ??Switch2_Process_0
+     75              {
+     76              case true:                          // button 2 is pushed; turn on green LED
+     77                P1OUT |= GRN_LED;                 
+   \   000016   E2D30202     BIS.B   #0x2, &0x202
+     78                g_counter++;
+   \   00001A   9253....     ADD.W   #0x1, &??g_counter
+   \   00001E   8263....     ADDC.W  #0x0, &??g_counter + 2
+   \   000022   8263....     ADDC.W  #0x0, &??g_counter + 4
+   \   000026   8263....     ADDC.W  #0x0, &??g_counter + 6
+     79                flag_GRN_LED_ON = 1;
+   \   00002A   D243....     MOV.B   #0x1, &flag_GRN_LED_ON
+     80                
+     81              default:
+     82                break;
+     83              }
+     84              break;
+   \   00002E   1001         RETA
+     85              
+     86            case true:                            // Green LED on; check if button 2 is pushed
+     87              switch(!(P5IN & BUTTON2))
+   \                     ??Switch2_Process_3:
+   \   000030   F2B020004002 BIT.B   #0x20, &0x240
+   \   000036   0428         JNC     ??Switch2_Process_0
+     88              {
+     89              case false:                         // button 2 is not pushed; turn off green LED
+     90                P1OUT &= ~GRN_LED;
+   \   000038   E2C30202     BIC.B   #0x2, &0x202
+     91                flag_GRN_LED_ON = 0;
+   \   00003C   C243....     MOV.B   #0x0, &flag_GRN_LED_ON
+     92              default:
+     93                break;
+     94              }
+     95              break;
+     96            }
+     97          }
+   \                     ??Switch2_Process_0:
+   \   000040   1001         RETA
+   \   000042                REQUIRE _A_PAOUT_L
+   \   000042                REQUIRE _A_PCIN_L
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     ??g_counter:
+   \   000000                DS8 8
+
+   \                                 In  segment CODE, align 2
+     98          void Switches_Process(void){
+   \                     Switches_Process:
+     99            Switch1_Process();
+   \   000000   ........     CALLA   #Switch1_Process
+    100            Switch2_Process();
+   \   000004   ........     BRA     #Switch2_Process
+    101          }
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Init_Switches
+        4   -> enable_switch_BUTTON1
+        0   -> enable_switch_BUTTON2
+      4   Switch1_Process
+      4   Switch2_Process
+      4   Switches_Process
+        4   -> Switch1_Process
+        0   -> Switch2_Process
+      4   disable_switch_BUTTON1
+      4   disable_switch_BUTTON2
+      4   enable_switch_BUTTON1
+      4   enable_switch_BUTTON2
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       8  Init_Switches
+      66  Switch1_Process
+      66  Switch2_Process
+       8  Switches_Process
+       2  _A_PAOUT_L
+       2  _A_PCDIR_L
+       2  _A_PCIN_L
+       2  _A_PCOUT_L
+      14  disable_switch_BUTTON1
+      14  disable_switch_BUTTON2
+      14  enable_switch_BUTTON1
+      14  enable_switch_BUTTON2
+       1  flag_GRN_LED_ON
+       1  flag_RED_LED_ON
+       8  g_counter
+       8  r_counter
 
  
-
+ 204 bytes in segment CODE
+   8 bytes in segment DATA16_AN
+  18 bytes in segment DATA16_Z
  
-
+ 204 bytes of CODE memory
+  18 bytes of DATA memory (+ 8 bytes shared)
 
 Errors: none
 Warnings: none

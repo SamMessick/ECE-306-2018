@@ -2342,4 +2342,10 @@
     <file>
         <name>$PROJ_DIR$\timersA0.r43</name>
     </file>
+    <file>
+        <name>$PROJ_DIR$\wheels.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\wheels.h</name>
+    </file>
 </project>
