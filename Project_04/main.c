@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-//  File name: mspCar.c
+//  File name: main.c
 //  Description: This file contains the MSP430 Car's Operating System
 //
 //
@@ -8,7 +8,7 @@
 //  Built with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
 //------------------------------------------------------------------------------
 
-#include "mspCar.h"
+#include "main.h"
 
 void main(void){
 //------------------------------------------------------------------------------

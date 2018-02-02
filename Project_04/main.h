@@ -1,5 +1,5 @@
 //===============================================================
-//  File Name: mspCar.h
+//  File Name: main.h
 //  Description: This file contains the prototypes of all functions,
 //                    definitions of macros and header files used by 
 //                    the mspCar's operating system
