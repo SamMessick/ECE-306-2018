@@ -38,7 +38,6 @@ void disable_switch_BUTTON2(void){
 }
 //----------------------------------------------------------------
 void Switch1_Process(void){
-  static uintmax_t r_counter;
   switch(flag_RED_LED_ON)
   {
   case false:
@@ -46,9 +45,10 @@ void Switch1_Process(void){
     {
     case true:
       P1OUT |= RED_LED;
-      r_counter++;
+      menu_counter += PENULT_OPTION;
+      menu_counter %= MENU_NUM_OPTIONS;
       flag_RED_LED_ON = 1;
-      
+      update_menu();
     default:
       break;
     }
@@ -67,7 +67,6 @@ void Switch1_Process(void){
   }
 }
 void Switch2_Process(void){
-  static uintmax_t g_counter;
   switch(flag_GRN_LED_ON)               // Check if green LED is on
   {
   case false:
@@ -75,7 +74,9 @@ void Switch2_Process(void){
     {
     case true:                          // button 2 is pushed; turn on green LED
       P1OUT |= GRN_LED;                 
-      g_counter++;
+      menu_counter++;
+      menu_counter %= MENU_NUM_OPTIONS;
+      update_menu();
       flag_GRN_LED_ON = 1;
       
     default:
@@ -89,6 +90,7 @@ void Switch2_Process(void){
     case false:                         // button 2 is not pushed; turn off green LED
       P1OUT &= ~GRN_LED;
       flag_GRN_LED_ON = 0;
+      break;
     default:
       break;
     }

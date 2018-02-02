@@ -27,16 +27,8 @@ void main(void){
   Init_LCD();                          // Initialize LCD
   Init_LEDs();
 
-// Place the contents of what you want on the display, in between the quotes
-// Limited to 10 characters per line
-//
-
-  strcpy(display_line[LINE1], "   NCSU   ");
-  update_string(display_line[LINE1], LINE1);
-  strcpy(display_line[LINE2], "Sam M. Car");
-  update_string(display_line[LINE2], LINE2);
-  strcpy(display_line[LINE4], "  ECE306  ");
-  update_string(display_line[LINE4], LINE4);
+// Update LCD display
+  update_menu();
   enable_display_update();
 //  Display_Update(3,1,0,0);
 
@@ -78,7 +70,7 @@ void main(void){
       default: break;
     }
     Switches_Process();                // Check for switch state change
-    //Display_Process();
+    Display_Process();
   }
 }
 //------------------------------------------------------------------------------

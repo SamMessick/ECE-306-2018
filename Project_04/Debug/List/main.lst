@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           02/Feb/2018  10:53:10
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           02/Feb/2018  12:37:22
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306-When-Shit-Got-Real\Project_04\main.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EWEE43.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EW54A2.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306-When-Shit-Got-Real\Project_04\main.c"
 #        -lC "C:\Users\shmes\Desktop\Escritorio
@@ -58,6 +58,30 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-When-Shit-Got-
 
    \                                 In  segment DATA16_Z, align 1, align-sorted
    \   000000                REQUIRE ?cstart_init_zero
+   \   uint8_t left_forward_flag
+   \                     left_forward_flag:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \   uint8_t left_reverse_flag
+   \                     left_reverse_flag:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \   uint8_t right_forward_flag
+   \                     right_forward_flag:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \   uint8_t right_reverse_flag
+   \                     right_reverse_flag:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
    \   char volatile slow_input_down
    \                     slow_input_down:
    \   000000                DS8 1
@@ -95,146 +119,109 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-When-Shit-Got-
      28            Init_LEDs();
    \   000018   ........     CALLA   #Init_LEDs
      29          
-     30          // Place the contents of what you want on the display, in between the quotes
-     31          // Limited to 10 characters per line
-     32          //
-     33          
-     34            strcpy(display_line[LINE1], "   NCSU   ");
-   \   00001C   3D40....     MOV.W   #`?<Constant "   NCSU   ">`, R13
-   \   000020   3C40....     MOV.W   #display_line, R12
-   \   000024   ........     CALLA   #strcpy
-     35            update_string(display_line[LINE1], LINE1);
-   \   000028   0D43         MOV.W   #0x0, R13
-   \   00002A   ........     CALLA   #update_string
-     36            strcpy(display_line[LINE2], "Sam M. Car");
-   \   00002E   3D40....     MOV.W   #`?<Constant "Sam M. Car">`, R13
-   \   000032   3C40....     MOV.W   #display_line + 11, R12
-   \   000036   ........     CALLA   #strcpy
-     37            update_string(display_line[LINE2], LINE2);
-   \   00003A   1D43         MOV.W   #0x1, R13
-   \   00003C   3C40....     MOV.W   #display_line + 11, R12
-   \   000040   ........     CALLA   #update_string
-     38            strcpy(display_line[LINE4], "  ECE306  ");
-   \   000044   3D40....     MOV.W   #`?<Constant "  ECE306  ">`, R13
-   \   000048   3C40....     MOV.W   #display_line + 33, R12
-   \   00004C   ........     CALLA   #strcpy
-     39            update_string(display_line[LINE4], LINE4);
-   \   000050   3D400300     MOV.W   #0x3, R13
-   \   000054   3C40....     MOV.W   #display_line + 33, R12
-   \   000058   ........     CALLA   #update_string
-     40            enable_display_update();
-   \   00005C   ........     CALLA   #enable_display_update
-     41          //  Display_Update(3,1,0,0);
-     42          
-     43          //------------------------------------------------------------------------------
-     44          // Begining of the "While" Operating System
-     45          //------------------------------------------------------------------------------
-     46            while(true) {                      // Can the Operating system run
-     47              switch(Time_Sequence){
+     30          // Update LCD display
+     31            update_menu();
+   \   00001C   ........     CALLA   #update_menu
+     32            enable_display_update();
+   \   000020   ........     CALLA   #enable_display_update
+     33          //  Display_Update(3,1,0,0);
+     34          
+     35          //------------------------------------------------------------------------------
+     36          // Begining of the "While" Operating System
+     37          //------------------------------------------------------------------------------
+     38            while(true) {                      // Can the Operating system run
+     39              switch(Time_Sequence){
    \                     ??main_0:
-   \   000060   1F42....     MOV.W   &Time_Sequence, R15
-   \   000064   3F801900     SUB.W   #0x19, R15
-   \   000068   2E24         JEQ     ??main_7
-   \   00006A   3F801900     SUB.W   #0x19, R15
-   \   00006E   2124         JEQ     ??main_8
-   \   000070   3F801900     SUB.W   #0x19, R15
-   \   000074   1824         JEQ     ??main_9
-   \   000076   3F801900     SUB.W   #0x19, R15
-   \   00007A   0F24         JEQ     ??main_10
-   \   00007C   3F801900     SUB.W   #0x19, R15
-   \   000080   2720         JNE     ??main_6
-     48                case CASE5:                        // 1000 msec
-     49                  if(one_time){
-   \   000082   C293....     CMP.B   #0x0, &one_time
-   \   000086   0624         JEQ     ??main_11
-     50                    lcd_BIG_mid();
-   \   000088   ........     CALLA   #lcd_BIG_mid
-     51                    display_changed = true;
-   \   00008C   D243....     MOV.B   #0x1, &display_changed
-     52                    one_time = false;
-   \   000090   C243....     MOV.B   #0x0, &one_time
-     53                  }
-     54                  Time_Sequence = true;             //
+   \   000024   1F42....     MOV.W   &Time_Sequence, R15
+   \   000028   3F801900     SUB.W   #0x19, R15
+   \   00002C   2E24         JEQ     ??main_7
+   \   00002E   3F801900     SUB.W   #0x19, R15
+   \   000032   2124         JEQ     ??main_8
+   \   000034   3F801900     SUB.W   #0x19, R15
+   \   000038   1824         JEQ     ??main_9
+   \   00003A   3F801900     SUB.W   #0x19, R15
+   \   00003E   0F24         JEQ     ??main_10
+   \   000040   3F801900     SUB.W   #0x19, R15
+   \   000044   2720         JNE     ??main_6
+     40                case CASE5:                        // 1000 msec
+     41                  if(one_time){
+   \   000046   C293....     CMP.B   #0x0, &one_time
+   \   00004A   0624         JEQ     ??main_11
+     42                    lcd_BIG_mid();
+   \   00004C   ........     CALLA   #lcd_BIG_mid
+     43                    display_changed = true;
+   \   000050   D243....     MOV.B   #0x1, &display_changed
+     44                    one_time = false;
+   \   000054   C243....     MOV.B   #0x0, &one_time
+     45                  }
+     46                  Time_Sequence = true;             //
    \                     ??main_11:
-   \   000094   9243....     MOV.W   #0x1, &Time_Sequence
-     55                  break;
-   \   000098   1B3C         JMP     ??main_6
-     56                case CASE4:                        // 1000 msec
-     57                  if(one_time){
+   \   000058   9243....     MOV.W   #0x1, &Time_Sequence
+     47                  break;
+   \   00005C   1B3C         JMP     ??main_6
+     48                case CASE4:                        // 1000 msec
+     49                  if(one_time){
    \                     ??main_10:
-   \   00009A   C293....     CMP.B   #0x0, &one_time
-   \   00009E   1824         JEQ     ??main_6
-     58                    one_time = false;
-   \   0000A0   C243....     MOV.B   #0x0, &one_time
-     59                  }
-     60                  break;
-   \   0000A4   153C         JMP     ??main_6
-     61                case CASE3:                         // 750 msec
-     62                  if(one_time){
+   \   00005E   C293....     CMP.B   #0x0, &one_time
+   \   000062   1824         JEQ     ??main_6
+     50                    one_time = false;
+   \   000064   C243....     MOV.B   #0x0, &one_time
+     51                  }
+     52                  break;
+   \   000068   153C         JMP     ??main_6
+     53                case CASE3:                         // 750 msec
+     54                  if(one_time){
    \                     ??main_9:
-   \   0000A6   C293....     CMP.B   #0x0, &one_time
-   \   0000AA   1224         JEQ     ??main_6
-     63                    one_time = false;
-   \   0000AC   C243....     MOV.B   #0x0, &one_time
-     64                  }
-     65                  break;
-   \   0000B0   0F3C         JMP     ??main_6
-     66                case CASE2:                         // 500 msec
-     67                  if(one_time){
+   \   00006A   C293....     CMP.B   #0x0, &one_time
+   \   00006E   1224         JEQ     ??main_6
+     55                    one_time = false;
+   \   000070   C243....     MOV.B   #0x0, &one_time
+     56                  }
+     57                  break;
+   \   000074   0F3C         JMP     ??main_6
+     58                case CASE2:                         // 500 msec
+     59                  if(one_time){
    \                     ??main_8:
-   \   0000B2   C293....     CMP.B   #0x0, &one_time
-   \   0000B6   0C24         JEQ     ??main_6
-     68                    lcd_4line();
-   \   0000B8   ........     CALLA   #lcd_4line
-     69                    display_changed = true;
-   \   0000BC   D243....     MOV.B   #0x1, &display_changed
-     70                    one_time = false;
-   \   0000C0   C243....     MOV.B   #0x0, &one_time
-     71                  }
-     72                  break;
-   \   0000C4   053C         JMP     ??main_6
-     73                case  CASE1:                        // 250 msec
-     74                  if(one_time){
+   \   000076   C293....     CMP.B   #0x0, &one_time
+   \   00007A   0C24         JEQ     ??main_6
+     60                    lcd_4line();
+   \   00007C   ........     CALLA   #lcd_4line
+     61                    display_changed = true;
+   \   000080   D243....     MOV.B   #0x1, &display_changed
+     62                    one_time = false;
+   \   000084   C243....     MOV.B   #0x0, &one_time
+     63                  }
+     64                  break;
+   \   000088   053C         JMP     ??main_6
+     65                case  CASE1:                        // 250 msec
+     66                  if(one_time){
    \                     ??main_7:
-   \   0000C6   C293....     CMP.B   #0x0, &one_time
-   \   0000CA   0224         JEQ     ??main_6
-     75                    one_time = false;
-   \   0000CC   C243....     MOV.B   #0x0, &one_time
-     76                  }
-     77                  break;                         //
-     78                default: break;
-     79              }
-     80              Switches_Process();                // Check for switch state change
+   \   00008A   C293....     CMP.B   #0x0, &one_time
+   \   00008E   0224         JEQ     ??main_6
+     67                    one_time = false;
+   \   000090   C243....     MOV.B   #0x0, &one_time
+     68                  }
+     69                  break;                         //
+     70                default: break;
+     71              }
+     72              Switches_Process();                // Check for switch state change
    \                     ??main_6:
-   \   0000D0   ........     CALLA   #Switches_Process
-   \   0000D4   C53F         JMP     ??main_0
-   \   0000D6   0343         NOP
-   \   0000D8                REQUIRE _A_PM5CTL0_L
-     81              //Display_Process();
-     82            }
-     83          }
-
-   \                                 In  segment DATA16_C, align 1, align-sorted
-   \                     `?<Constant "   NCSU   ">`:
-   \   000000   2020204E4353 DC8 "   NCSU   "
-   \            5520202000  
-
-   \                                 In  segment DATA16_C, align 1, align-sorted
-   \                     `?<Constant "Sam M. Car">`:
-   \   000000   53616D204D2E DC8 "Sam M. Car"
-   \            2043617200  
-
-   \                                 In  segment DATA16_C, align 1, align-sorted
-   \                     `?<Constant "  ECE306  ">`:
-   \   000000   202045434533 DC8 "  ECE306  "
-   \            3036202000  
-     84          //------------------------------------------------------------------------------
+   \   000094   ........     CALLA   #Switches_Process
+     73              Display_Process();
+   \   000098   ........     CALLA   #Display_Process
+   \   00009C   C33F         JMP     ??main_0
+   \   00009E   0343         NOP
+   \   0000A0                REQUIRE _A_PM5CTL0_L
+     74            }
+     75          }
+     76          //------------------------------------------------------------------------------
 
    Maximum stack usage in bytes:
 
    CSTACK Function
    ------ --------
       4   main
+        4   -> Display_Process
         4   -> Init_Clocks
         4   -> Init_Conditions
         4   -> Init_LCD
@@ -245,31 +232,29 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-When-Shit-Got-
         4   -> enable_display_update
         4   -> lcd_4line
         4   -> lcd_BIG_mid
-        4   -> strcpy
-        4   -> update_string
+        4   -> update_menu
 
 
    Segment part sizes:
 
    Bytes  Function/Label
    -----  --------------
-      11  ?<Constant "   NCSU   ">
-      11  ?<Constant "  ECE306  ">
-      11  ?<Constant "Sam M. Car">
        2  _A_PM5CTL0_L
        1  display_mode
-     216  main
+       1  left_forward_flag
+       1  left_reverse_flag
+     160  main
+       1  right_forward_flag
+       1  right_reverse_flag
        1  slow_input_down
 
  
- 216 bytes in segment CODE
+ 160 bytes in segment CODE
    2 bytes in segment DATA16_AN
-  33 bytes in segment DATA16_C
-   2 bytes in segment DATA16_Z
+   6 bytes in segment DATA16_Z
  
- 216 bytes of CODE  memory
-  33 bytes of CONST memory
-   2 bytes of DATA  memory (+ 2 bytes shared)
+ 160 bytes of CODE memory
+   6 bytes of DATA memory (+ 2 bytes shared)
 
 Errors: none
 Warnings: none

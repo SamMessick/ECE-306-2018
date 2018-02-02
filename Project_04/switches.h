@@ -9,7 +9,9 @@
 //===============================================================
 
 #include "ports.h"
+#include "display.h"
 #include <stdint.h>
+#include <stdbool.h>
 
 void switch_control(void);
 void Init_Switch(void);

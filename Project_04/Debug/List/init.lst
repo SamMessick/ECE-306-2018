@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           02/Feb/2018  10:40:13
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           02/Feb/2018  12:37:22
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306-When-Shit-Got-Real\Project_04\init.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EW114F.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EW5414.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306-When-Shit-Got-Real\Project_04\init.c"
 #        -lC "C:\Users\shmes\Desktop\Escritorio
@@ -50,6 +50,30 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-When-Shit-Got-
       9          //===============================================================
      10          
      11          #include "init.h"
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \   uint8_t left_forward_flag
+   \                     left_forward_flag:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \   uint8_t left_reverse_flag
+   \                     left_reverse_flag:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \   uint8_t right_forward_flag
+   \                     right_forward_flag:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \   uint8_t right_reverse_flag
+   \                     right_reverse_flag:
+   \   000000                DS8 1
      12          
 
    \                                 In  segment CODE, align 2
@@ -57,7 +81,7 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-When-Shit-Got-
    \                     Init_Conditions:
    \   000000   0A12         PUSH.W  R10
      14          //------------------------------------------------------------------------------
-     15            // Sets initial conditions
+     15            // Clears LCD
      16            int i;
      17          
      18            for(i=COLUMN1;i<=COLUMN_NUM_COLUMNS;i++){
@@ -118,11 +142,17 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-When-Shit-Got-
    Bytes  Function/Label
    -----  --------------
       72  Init_Conditions
+       1  left_forward_flag
+       1  left_reverse_flag
+       1  right_forward_flag
+       1  right_reverse_flag
 
  
  72 bytes in segment CODE
+  4 bytes in segment DATA16_Z
  
  72 bytes of CODE memory
+  4 bytes of DATA memory
 
 Errors: none
 Warnings: none

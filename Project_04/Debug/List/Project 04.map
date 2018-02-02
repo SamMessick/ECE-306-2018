@@ -2,7 +2,7 @@
 #                                                                              #
 #      IAR Universal Linker V6.5.1.95                                          #
 #                                                                              #
-#           Link time     =  02/Feb/2018  11:09:14                             #
+#           Link time     =  02/Feb/2018  12:33:02                             #
 #           Target CPU    =  MSP430                                            #
 #           List file     =  "C:\Users\shmes\Desktop\Escritorio Personal\Escue #
 #                            la\ECE\306\ECE306-When-Shit-Got-Real\Project_04\D #
@@ -13,10 +13,13 @@
 #                            Format: ubrof10                                   #
 #                            UBROF version 10.0.6                              #
 #                            Using library modules for C-SPY (-rt)             #
-#           Command line  =  -f C:\Users\shmes\AppData\Local\Temp\EWA4F9.tmp   #
+#           Command line  =  -f C:\Users\shmes\AppData\Local\Temp\EW5DA9.tmp   #
 #                            ("C:\Users\shmes\Desktop\Escritorio Personal\Escu #
 #                            ela\ECE\306\ECE306-When-Shit-Got-Real\Project_04\ #
 #                            Debug\Obj\clocks.r43"                             #
+#                            "C:\Users\shmes\Desktop\Escritorio Personal\Escue #
+#                            la\ECE\306\ECE306-When-Shit-Got-Real\Project_04\D #
+#                            ebug\Obj\display.r43"                             #
 #                            "C:\Users\shmes\Desktop\Escritorio Personal\Escue #
 #                            la\ECE\306\ECE306-When-Shit-Got-Real\Project_04\D #
 #                            ebug\Obj\init.r43"                                #
@@ -41,6 +44,9 @@
 #                            "C:\Users\shmes\Desktop\Escritorio Personal\Escue #
 #                            la\ECE\306\ECE306-When-Shit-Got-Real\Project_04\t #
 #                            imersA0.r43"                                      #
+#                            "C:\Users\shmes\Desktop\Escritorio Personal\Escue #
+#                            la\ECE\306\ECE306-When-Shit-Got-Real\Project_04\D #
+#                            ebug\Obj\wheels.r43"                              #
 #                            -o                                                #
 #                            "C:\Users\shmes\Desktop\Escritorio Personal\Escue #
 #                            la\ECE\306\ECE306-When-Shit-Got-Real\Project_04\D #
@@ -116,7 +122,7 @@
                 *                                      *
                 ****************************************
 
-       Program entry at :           4022  Relocatable, from module : ?cstart
+       Program entry at :           4058  Relocatable, from module : ?cstart
 
 
 
@@ -169,7 +175,7 @@ clocks ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-When-
         _A_CSCTL3_L                         0166
         _A_CSCTL4_L                         0168
         _A_WDTCTL_L                         015C
-        Init_Clocks                         4716
+        Init_Clocks                         48BE
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
         CSCTL0                              0160
@@ -190,8 +196,14 @@ clocks ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-When-
         WDTCTL                              015C
         WDTCTL_H                            015D
         WDTCTL_L                            015C
+display ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-When-Shit-Got-Real\Project_04\Debug\Obj\display.r43 )
+        menu_counter                        1C10
+        update_menu                         46A6
+        LCD_print                           4862
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
 init ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-When-Shit-Got-Real\Project_04\Debug\Obj\init.r43 )
-        Init_Conditions                     4762
+        Init_Conditions                     490A
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
 LCD ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-When-Shit-Got-Real\Project_04\LCD.r43 )
@@ -204,7 +216,7 @@ LCD ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-When-Shi
         _A_UCB1TXBUF_L                      068E
         _A_UCB1IFG_L                        06AC
         lcd_control                         NOT NEEDED
-        display_line                        1C20
+        display_line                        1C11
         display                             1C00
         posi_L1                             NOT NEEDED
         posi_L2                             NOT NEEDED
@@ -214,34 +226,34 @@ LCD ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-When-Shi
         current_line                        NOT NEEDED
         update_display_count                1C08
         display_update_time                 NOT NEEDED
-        update_display                      1C4C
-        display_changed                     1C4D
+        update_display                      1C3D
+        display_changed                     1C3E
         LCD_test                            NOT NEEDED
-        spi_chipselect_idle                 4A10
-        spi_chipselect_active               4A5E
-        spi_reset_idle                      4A7C
-        spi_reset_active                    4A88
-        Display_Process                     NOT NEEDED
-        Display_Update                      NOT NEEDED
-        enable_display_update               4A50
-        update_string                       4952
-        Init_LCD                            460C
-        lcd_4line                           4A42
-        lcd_BIG_mid                         4934
-        lcd_out                             NOT NEEDED
+        spi_chipselect_idle                 4C2E
+        spi_chipselect_active               4C7C
+        spi_reset_idle                      4C9A
+        spi_reset_active                    4CA0
+        Display_Process                     4B18
+        Display_Update                      4952
+        enable_display_update               4C60
+        update_string                       4B58
+        Init_LCD                            460A
+        lcd_4line                           4C6E
+        lcd_BIG_mid                         4B3A
+        lcd_out                             4AF4
         lcd_puts                            NOT NEEDED
-        WriteIns                            490E
-        WriteData                           NOT NEEDED
+        WriteIns                            4A82
+        WriteData                           4AA8
         CheckBusy                           NOT NEEDED
-        ClrDisplay                          496E
-        ClrDisplay_Buffer_0                 49E8
-        ClrDisplay_Buffer_1                 49D4
-        ClrDisplay_Buffer_2                 49C0
-        ClrDisplay_Buffer_3                 49AC
+        ClrDisplay                          4B8C
+        ClrDisplay_Buffer_0                 4BDE
+        ClrDisplay_Buffer_1                 4C1A
+        ClrDisplay_Buffer_2                 4BCA
+        ClrDisplay_Buffer_3                 4BF2
         SetPostion                          NOT NEEDED
-        DisplayOnOff                        4998
-        Init_SPI_B1                         4870
-        SPI_B1_write                        49FC
+        DisplayOnOff                        4BA2
+        Init_SPI_B1                         49DA
+        SPI_B1_write                        4BB6
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
         PBOUT                               0222
@@ -271,7 +283,7 @@ LCD ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-When-Shi
 led ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-When-Shit-Got-Real\Project_04\Debug\Obj\led.r43 )
         _A_PAOUT_L                          0202
         _A_PBIN_L                           0220
-        Init_LEDs                           4A6A
+        Init_LEDs                           4C88
         updateBacklight                     NOT NEEDED
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
@@ -285,7 +297,7 @@ main ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-When-Sh
         _A_PM5CTL0_L                        0130
         slow_input_down                     NOT NEEDED
         display_mode                        NOT NEEDED
-        main                                40AE
+        main                                456A
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
         PM5CTL0                             0130
@@ -305,16 +317,16 @@ ports ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-When-S
         _A_PCREN_L                          0246
         _A_PCSEL0_L                         024A
         _A_PCSEL1_L                         024C
-        Init_Port1                          46A8
-        Init_Port2                          456A
-        Init_Port3                          4186
-        Init_Port4                          4384
-        Init_Port5                          42E2
-        Init_Port6                          4240
-        Init_Port7                          4426
-        Init_Port8                          47AA
-        Init_PortJ                          44C8
-        Init_Ports                          48E8
+        Init_Port1                          4724
+        Init_Port2                          419E
+        Init_Port3                          40E4
+        Init_Port4                          4240
+        Init_Port5                          44C8
+        Init_Port6                          4426
+        Init_Port7                          4384
+        Init_Port8                          4998
+        Init_PortJ                          42E2
+        Init_Ports                          4ACE
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
         PAOUT                               0202
@@ -361,16 +373,16 @@ switches ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-Whe
         _A_PCIN_L                           0240
         _A_PCOUT_L                          NOT NEEDED
         _A_PCDIR_L                          NOT NEEDED
-        flag_RED_LED_ON                     1C4E
-        flag_GRN_LED_ON                     1C4F
+        flag_RED_LED_ON                     1C3F
+        flag_GRN_LED_ON                     1C40
         enable_switch_BUTTON1               NOT NEEDED
         enable_switch_BUTTON2               NOT NEEDED
         Init_Switches                       NOT NEEDED
         disable_switch_BUTTON1              NOT NEEDED
         disable_switch_BUTTON2              NOT NEEDED
-        Switch1_Process                     47EC
-        Switch2_Process                     482E
-        Switches_Process                    4A74
+        Switch1_Process                     47FA
+        Switch2_Process                     4792
+        Switches_Process                    4C92
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
         PAOUT                               0202
@@ -385,10 +397,8 @@ switches ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-Whe
         PCDIR                               0244
         PCDIR_H                             0245
         PCDIR_L                             0244
-        Switch1_Process::r_counter          1C0A
-        Switch2_Process::g_counter          1C12
 system ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-When-Shit-Got-Real\Project_04\Debug\Obj\system.r43 )
-        enable_interrupts                   4A82
+        enable_interrupts                   4CA6
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
 timersA0 ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-When-Shit-Got-Real\Project_04\timersA0.r43 )
@@ -399,14 +409,14 @@ timersA0 ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-Whe
         _A_TA0CCR2_L                        NOT NEEDED
         _A_TA0EX0_L                         0360
         _A_TA0IV_L                          036E
-        five_msec_count                     1C1A
-        Time_Sequence                       1C1C
-        one_time                            1C50
-        time_pass_by                        1C1E
-        Init_Timers                         4A92
-        Init_Timer_A0                       48AE
-        Timer0_A0_ISR                       403A
-        TIMER0_A1_ISR                       4080
+        five_msec_count                     1C0A
+        Time_Sequence                       1C0C
+        one_time                            1C41
+        time_pass_by                        1C0E
+        Init_Timers                         4CB0
+        Init_Timer_A0                       4A18
+        Timer0_A0_ISR                       4070
+        TIMER0_A1_ISR                       40B6
         TIMER0_A1_ISR::??INTVEC 88          FFE8
         Timer0_A0_ISR::??INTVEC 90          FFEA
         ?setjmp_save_r4                     NOT NEEDED
@@ -432,18 +442,38 @@ timersA0 ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-Whe
         TA0IV                               036E
         TA0IV_H                             036F
         TA0IV_L                             036E
+wheels ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-When-Shit-Got-Real\Project_04\Debug\Obj\wheels.r43 )
+        _A_PBOUT_L                          NOT NEEDED
+        left_forward_flag                   NOT NEEDED
+        left_reverse_flag                   NOT NEEDED
+        right_forward_flag                  NOT NEEDED
+        right_reverse_flag                  NOT NEEDED
+        Left_Motor_OFF                      NOT NEEDED
+        Right_Motor_OFF                     NOT NEEDED
+        Wheels_OFF                          NOT NEEDED
+        Left_Motor_ON_FORWARD               NOT NEEDED
+        Right_Motor_ON_FORWARD              NOT NEEDED
+        Wheels_ON_FORWARD                   NOT NEEDED
+        Left_Motor_ON_REVERSE               NOT NEEDED
+        Right_Motor_ON_REVERSE              NOT NEEDED
+        Wheels_ON_REVERSE                   NOT NEEDED
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+        PBOUT                               0222
+        PBOUT_H                             0223
+        PBOUT_L                             0222
 ?abort ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         abort                               NOT NEEDED
 ?__dbg_break ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
-        __DebugBreak                        4A9A
+        __DebugBreak                        4CB8
 ?__dwrite ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         __dwrite                            NOT NEEDED
 ?__exit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
-        __exit                              4984
+        __exit                              4C06
 ?__write ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         __write                             NOT NEEDED
 ?_exit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
-        _exit                               4A96
+        _exit                               4CB4
         __cstart_call_dtors                 NOT NEEDED
         __cstart_closeall                   NOT NEEDED
         __cstart_clearlocks                 NOT NEEDED
@@ -454,36 +484,42 @@ timersA0 ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306-Whe
         __call_dtors                        NOT NEEDED
         __data16_vec_cctor                  NOT NEEDED
 ?cstart ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
-        __program_start                     4022
-        ?cstart_begin                       4022
+        __program_start                     4058
+        ?cstart_begin                       4058
         ?cstart_call_mpu_init               NOT NEEDED
         ?cstart_call_frwp_init              NOT NEEDED
         ?cstart_call_low_level_init         NOT NEEDED
         ?cstart_init_copy_ramfunc           NOT NEEDED
-        ?cstart_init_zero                   4026
+        ?cstart_init_zero                   405C
         ?cstart_init_copy                   NOT NEEDED
         ?cstart_init_zero20                 NOT NEEDED
         ?cstart_init_copy20                 NOT NEEDED
         __cstart_init_tls                   NOT NEEDED
         ?cstart_call_ctors                  NOT NEEDED
-        ?cstart_call_main                   4032
-        ?cstart_end                         403A
+        ?cstart_call_main                   4068
+        ?cstart_end                         4070
 lowinit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         __low_level_init                    NOT NEEDED
 ?reset_vector ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         ?reset_vector                       FFFE
 ?exit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
-        exit                                4A8E
+        exit                                4CAC
 ?FrwpInit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         __iar_430_frwp_init                 NOT NEEDED
 ?malloc ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         malloc                              NOT NEEDED
+?DivMod816u ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        ?DivMod8u                           NOT NEEDED
+        ?DivMod16u                          4B74
+?DivMod816s ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        ?DivMod8s                           NOT NEEDED
+        ?DivMod16s                          4A52
 ?memcpy ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         memcpy                              NOT NEEDED
 ?memmove ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         memmove                             NOT NEEDED
 ?memzero ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
-        __data16_memzero                    4A22
+        __data16_memzero                    4C50
         __data16_memcpy                     NOT NEEDED
         __data16_memmove                    NOT NEEDED
 ?MpuInit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
@@ -507,7 +543,7 @@ lowinit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib
 ?IndCallR15 ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         ?IndCallR15                         NOT NEEDED
 ?strcpy ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
-        strcpy                              4A32
+        strcpy                              4C40
 ?xcloseall ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         _Close_all                          NOT NEEDED
 ?xgetmemchunk ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
@@ -529,6 +565,8 @@ lowinit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib
 Module               CODE      DATA      CONST
 ------               ----      ----      -----
                     (Rel)  (Rel)  (Abs)  (Rel)
+?DivMod816s            48
+?DivMod816u            24
 ?__dbg_break            2
 ?__exit                20
 ?_exit                  4
@@ -537,23 +575,24 @@ Module               CODE      DATA      CONST
 ?memzero               16
 ?reset_vector           2
 ?strcpy                16
-LCD                   526     56     10
+LCD                   704     56     10
   + shared                            6
 clocks                 76            12
+display               218      1            87
 init                   72
 led                    10             2
   + shared                            2
-main                  216             2     33
+main                  160             2
 ports               1 372            18
   + shared                            2
-switches              140     18      2
+switches              216      2      2
 system                  6
 timersA0              178      7     12
   + common             92
 N/A (command line)           160
 N/A (alignment)
 ----------          -----    ---     --     --
-Total:              2 684    241     68     33
+Total:              3 172    226     68     87
   + common             92
 
 
@@ -585,19 +624,19 @@ DATA16_AN                              0130 - 0131               2   rel    0
                                        068E - 068F               2 
                                        06AC - 06AD               2 
 DATA16_I                                  1C00                       dse    0
-DATA16_Z                               1C00 - 1C50              51   rel    1
-CODE_I                                    1C52                       rel    1
-DATA20_I                                  1C52                       rel    1
-DATA20_N                                  1C52                       rel    1
-DATA20_Z                                  1C52                       rel    1
+DATA16_Z                               1C00 - 1C41              42   rel    1
+CODE_I                                    1C42                       rel    1
+DATA20_I                                  1C42                       rel    1
+DATA20_N                                  1C42                       rel    1
+DATA20_Z                                  1C42                       rel    1
 CSTACK                                 2B60 - 2BFF              A0   rel    1
-DATA16_C                               4000 - 4020              21   rel    0
-CSTART                                 4022 - 4039              18   rel    1
-ISR_CODE                               403A - 40AD              74   rel    1
-<CODE> 1                               40AE - 4A9B             9EE   rel    1
-DATA20_ID                                 4A9C                       rel    1
-CODE_ID                                   4A9C                       rel    1
-DATA20_C                                  4A9C                       rel    1
+DATA16_C                               4000 - 4056              57   rel    0
+CSTART                                 4058 - 406F              18   rel    1
+ISR_CODE                               4070 - 40E3              74   rel    1
+<CODE> 1                               40E4 - 4CB9             BD6   rel    1
+DATA20_ID                                 4CBA                       rel    1
+CODE_ID                                   4CBA                       rel    1
+DATA20_C                                  4CBA                       rel    1
 INTVEC                                 FF90 - FFEB              5C   com    1
 RESET                                  FFFE - FFFF               2   rel    1
 
@@ -607,9 +646,9 @@ RESET                                  FFFE - FFFF               2   rel    1
                 *                                      *
                 ****************************************
 
- 2 776 bytes of CODE  memory
-   241 bytes of DATA  memory (+ 68 absolute )
-    33 bytes of CONST memory
+ 3 264 bytes of CODE  memory
+   226 bytes of DATA  memory (+ 68 absolute )
+    87 bytes of CONST memory
 
 Errors: none
 Warnings: none

@@ -2164,6 +2164,12 @@
         <name>$PROJ_DIR$\clocks.h</name>
     </file>
     <file>
+        <name>$PROJ_DIR$\display.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\display.h</name>
+    </file>
+    <file>
         <name>$PROJ_DIR$\init.c</name>
     </file>
     <file>

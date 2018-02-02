@@ -12,7 +12,7 @@
 
 void Init_Conditions(void){
 //------------------------------------------------------------------------------
-  // Sets initial conditions
+  // Clears LCD
   int i;
 
   for(i=COLUMN1;i<=COLUMN_NUM_COLUMNS;i++){

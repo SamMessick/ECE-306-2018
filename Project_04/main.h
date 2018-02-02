@@ -11,6 +11,7 @@
 // Includes headers for ports, led, initialization
 #include "msp430.h"
 #include "clocks.h"
+#include "display.h"
 #include "led.h"
 #include "init.h"
 #include "ports.h"
@@ -40,7 +41,6 @@ void lcd_4line(void);
 void Display_Process(void);
 void Display_Update(char p_L1,char p_L2,char p_L3,char p_L4);
 void enable_display_update(void);
-void update_string(char *string_data, int string);
 void Init_LCD(void);
 void lcd_clear(void);
 void lcd_putc(char c);

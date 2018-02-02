@@ -61,11 +61,14 @@
         <Counter1>0000000000000000000000000000000000000000000000000000000000000000</Counter1>
     </EEM_Cycle_Counter_1>
     <DebugChecksum>
-        <Checksum>2109654258</Checksum>
+        <Checksum>3267400106</Checksum>
     </DebugChecksum>
     <CallStack>
         <ShowArgs>0</ShowArgs>
     </CallStack>
+    <Disassembly>
+        <MixedMode>1</MixedMode>
+    </Disassembly>
     <PowerLog>
         <Title_0>Energy</Title_0>
         <Symbol_0>0 4 0</Symbol_0>
@@ -114,7 +117,9 @@
         <LogFile>_ ""</LogFile>
     </TermIOLog>
     <Aliases>
-        <Count>0</Count>
+        <A0>_ "D:\Dropbox\NCSU\Current\Code Master\Project 02\LCD.c" ""</A0>
+        <A1>_ "E:\Dropbox\NCSU\Current\Project_Docs\Assignments\Project 2\try\timersA0.c" ""</A1>
+        <Count>2</Count>
         <SuppressDialog>0</SuppressDialog>
     </Aliases>
     <PowerProbe>
