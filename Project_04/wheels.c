@@ -10,6 +10,14 @@
 
 #include "wheels.h"
 
+// H-bridge protection flags: 
+// don't allow for motion forward/backward simultaneously in one motor
+
+uint8_t left_forward_flag;
+uint8_t left_reverse_flag;
+uint8_t right_forward_flag;
+uint8_t right_reverse_flag;
+
 void WHEELS_test(void);
 void Wheels_OFF(void);
 //------------------------
@@ -85,4 +93,21 @@ void Right_Motor_ON_REVERSE(char speed){
 void Wheels_ON_REVERSE(uint8_t speed){
   Left_Motor_ON_REVERSE(speed);
   Right_Motor_ON_REVERSE(speed);
+}
+
+//------------------------
+// Driving in shapes
+//------------------------
+
+void drive_in_circle(void)
+{
+}
+void drive_in_figure8(void)
+{
+}
+void drive_in_square(void)
+{
+}
+void drive_in_triangle(void)
+{
 }
