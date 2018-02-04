@@ -70,6 +70,7 @@ void main(void){
       default: break;
     }
     Switches_Process();                // Check for switch state change
+    update_menu();
     Display_Process();
   }
 }

@@ -27,12 +27,25 @@ void Init_Port1(void){  // Initlizes all pins on Port 1
   P1SEL0 &= ~RED_LED;                   // RED_LED as GP I/O
   P1SEL1 &= ~RED_LED;                   // RED_LED as GP I/O
   P1OUT  &= ~RED_LED;                   // Set Red LED Off
-  P1DIR  |= RED_LED;                    // Set Red LED direction to output
+  //P1DIR  |= RED_LED;                    // Set Red LED direction to output
+ 
+  
+  P1SEL0 |= RED_LED;                    // Set LED function to PWM
+  P1DIR  |= RED_LED;
+  TA0CTL = TASSEL__SMCLK;
+  TA0CTL |= MC_1;
+  TA0CTL |= TACLR;
+  TA0CCR0 = 0xFFFF;
+  TA0CCTL1 |= OUTMOD_4;
+  TA0CCR1 = 0x5000;                     // Set LED to half power
+  TA0CCR2 = 0x5000;
+
   // P1_1
   P1SEL0 &= ~GRN_LED;                   // GRN_LED as GP I/O
   P1SEL1 &= ~GRN_LED;                   // GRN_LED as GP I/O
   P1OUT  &= ~GRN_LED;                    // Set Green LED Off
   P1DIR  |= GRN_LED;                    // Set Green LED direction to output
+  
   // P1_2
   P1SEL0 |= V_THUMB;                    // ADC input for Thumbwheel
   P1SEL1 |= V_THUMB;                    // ADC input for Thumbwheel
@@ -161,6 +174,9 @@ void Init_Port3(char use_smclk) { // Initlizes all pins on Port 3
   P3SEL1 &= ~L_FORWARD;                 // Set to GP I/O
   P3OUT  &= ~L_FORWARD;                 // Set out value High [on]
   P3DIR  |= L_FORWARD;                  // Set direction to output
+  
+    //testing PWM here
+  
   // P3_6
   P3SEL0 &= ~R_REVERSE;                 // Set to GP I/O
   P3SEL1 &= ~R_REVERSE;                 // Set to GP I/O

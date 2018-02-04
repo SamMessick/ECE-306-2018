@@ -37,6 +37,7 @@ void disable_switch_BUTTON2(void){
   P5OUT &= ~BUTTON2;                    // Set output to low
 }
 //----------------------------------------------------------------
+
 void Switch1_Process(void){
   switch(flag_RED_LED_ON)
   {
@@ -48,7 +49,6 @@ void Switch1_Process(void){
       menu_counter += PENULT_OPTION;
       menu_counter %= MENU_NUM_OPTIONS;
       flag_RED_LED_ON = 1;
-      update_menu();
     default:
       break;
     }
@@ -76,7 +76,6 @@ void Switch2_Process(void){
       P1OUT |= GRN_LED;                 
       menu_counter++;
       menu_counter %= MENU_NUM_OPTIONS;
-      update_menu();
       flag_GRN_LED_ON = 1;
       
     default:

@@ -11,7 +11,7 @@
 // Includes headers for ports, led, initialization
 #include "msp430.h"
 #include "clocks.h"
-#include "display.h"
+#include "menu.h"
 #include "led.h"
 #include "init.h"
 #include "ports.h"

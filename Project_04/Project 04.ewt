@@ -2164,12 +2164,6 @@
         <name>$PROJ_DIR$\clocks.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\display.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\display.h</name>
-    </file>
-    <file>
         <name>$PROJ_DIR$\init.c</name>
     </file>
     <file>
@@ -2189,6 +2183,12 @@
     </file>
     <file>
         <name>$PROJ_DIR$\main.h</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\menu.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\menu.h</name>
     </file>
     <file>
         <name>$PROJ_DIR$\ports.c</name>
