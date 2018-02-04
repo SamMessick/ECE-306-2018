@@ -9,6 +9,7 @@
 //===============================================================
 
 #include "ports.h"
+#include "timerB0.h"
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -20,10 +21,10 @@ void Right_Motor_OFF(void);
 void Wheels_OFF(void);
 void Left_Motor_ON_FORWARD(uint8_t speed);
 void Right_Motor_ON_FORWARD(uint8_t speed);
-void Wheels_ON_FORWARD(uint8_t speed);
+void Drive_Straight(uint8_t speed);
 void Left_Motor_ON_REVERSE(uint8_t speed);
 void Right_Motor_ON_REVERSE(char speed);
-void Wheels_ON_REVERSE(uint8_t speed);
+void Drive_Straight_Reverse(uint8_t speed);
 
 void drive_in_circle(void);
 void drive_in_figure8(void);

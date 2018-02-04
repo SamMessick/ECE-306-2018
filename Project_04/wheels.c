@@ -24,12 +24,14 @@ void Wheels_OFF(void);
 // Turning wheels off
 //------------------------
 void Left_Motor_OFF(void){
-  P3OUT &= ~(L_FORWARD | L_REVERSE);
-  left_forward_flag = left_reverse_flag = 0;
+  TB0CCR3 = MOTOR_OFF;         // Set PWM to 0 percent duty cycle
+  TB0CCR4 = MOTOR_OFF;   
+  left_forward_flag = left_reverse_flag = false;
 }
 void Right_Motor_OFF(void){
-  P3OUT &= ~(R_FORWARD | R_REVERSE);
-  right_forward_flag = right_reverse_flag = 0;
+  TB0CCR5 = MOTOR_OFF;         // Set PWM to 0 percent duty cycle
+  TB0CCR6 = MOTOR_OFF;         
+  right_forward_flag = right_reverse_flag = false;
 }
 void Wheels_OFF(void){
   Left_Motor_OFF();
@@ -43,26 +45,26 @@ void Wheels_OFF(void){
 // Forward *
 //**********
 void Left_Motor_ON_FORWARD(uint8_t speed){
-  switch(left_reverse_flag)
+  switch(left_reverse_flag)                     // Do not attempt forward/backward driving at one time
   {
   case true: break;
   case false: 
-    P3OUT |= L_FORWARD;
-    left_forward_flag = 1;
+    TB0CCR4 = speed*DUTY_CYCLE_DIVISOR;         // Set speed as one of 255 settings
+    left_forward_flag = true;
   }
 }
 
 void Right_Motor_ON_FORWARD(uint8_t speed){
-  switch(right_reverse_flag)
+  switch(right_reverse_flag)                    // Do not attempt forward/backward driving at one time
   {
   case true: break;
   case false: 
-    P3OUT |= R_FORWARD;
-    right_forward_flag = 1;
+    TB0CCR6 = speed*DUTY_CYCLE_DIVISOR;         // Set speed as one of 255 settings
+    right_forward_flag = true;
   }
 }
 
-void Wheels_ON_FORWARD(uint8_t speed){
+void Drive_Straight_Forward(uint8_t speed){
   Left_Motor_ON_FORWARD(speed);
   Right_Motor_ON_FORWARD(speed);
 }
@@ -71,22 +73,22 @@ void Wheels_ON_FORWARD(uint8_t speed){
 // Reverse *
 //**********
 void Left_Motor_ON_REVERSE(uint8_t speed){
-  switch(left_forward_flag)
+  switch(left_forward_flag)                     // Do not attempt forward/backward driving at one time
   {
   case true: break;
   case false: 
-    P3OUT |= L_REVERSE;
-    left_reverse_flag = 1;
+    TB0CCR3 = speed*DUTY_CYCLE_DIVISOR;         // Set speed as one of 255 settings
+    left_reverse_flag = true;
   }
 }
 
 void Right_Motor_ON_REVERSE(char speed){
-  switch(right_forward_flag)
+  switch(right_forward_flag)                    // Do not attempt forward/backward driving at one time
   {
   case true: break;
   case false: 
-    P3OUT |= R_REVERSE;
-    right_reverse_flag = 1;
+    TB0CCR5 = speed*DUTY_CYCLE_DIVISOR;         // Set speed as one of 255 settings
+    right_reverse_flag = true;
   }
 }
 
@@ -101,6 +103,7 @@ void Wheels_ON_REVERSE(uint8_t speed){
 
 void drive_in_circle(void)
 {
+  
 }
 void drive_in_figure8(void)
 {

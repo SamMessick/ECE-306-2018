@@ -18,6 +18,15 @@ void Init_Switch(void);
 void menu_act(void);
 void menu_select(void);
 
+void Init_Switches(void);
+void enable_switch_BUTTON1(void);
+void enable_switch_BUTTON2(void);
+void disable_switch_BUTTON1(void);
+void disable_switch_BUTTON2(void);
+void Switch1_Process(void);
+void Switch2_Process(void);
+void Switches_Process(void);
+
 void usleep(unsigned int usec);
 void usleep10(unsigned int usec);
 void five_msec_sleep(unsigned int msec);

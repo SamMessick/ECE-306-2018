@@ -14,7 +14,7 @@ void main(void){
 //------------------------------------------------------------------------------
 // Main Program
 // This is the main routine for the program. Execution of code starts here.
-// The operating system is Back Ground Fore Ground.
+// The operating system is Back Ground Fore Ground
 //
 //------------------------------------------------------------------------------
   Init_Ports();                        // Initialize Ports
@@ -26,12 +26,13 @@ void main(void){
   Init_Timers();                       // Initialize Timers
   Init_LCD();                          // Initialize LCD
   Init_LEDs();
+  Init_TimerB0();
 
 // Update LCD display
   update_menu();
   enable_display_update();
 //  Display_Update(3,1,0,0);
-
+  
 //------------------------------------------------------------------------------
 // Begining of the "While" Operating System
 //------------------------------------------------------------------------------
