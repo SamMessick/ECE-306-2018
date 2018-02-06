@@ -46,7 +46,7 @@ void Init_Clocks(void){
 // Clock System Control 3 Register
   CSCTL3 = CLEAR_REGISTER;   // Clear register
   CSCTL3 |= DIVA__1;         // set ACLK clock divider /1
-  CSCTL3 |= DIVS__1;         // set SMCLK clock divider /1
+  CSCTL3 |= DIVS__1;        // set SMCLK clock divider /1
   CSCTL3 |= DIVM__1;         // set MCLK clock divider /1
 
 // Clock System Control 4 Register

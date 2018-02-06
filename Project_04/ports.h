@@ -11,6 +11,7 @@
 //head first design patterns tell Kyle that Brody told him about book
 #include  "msp430.h"
 #include <stdbool.h>
+#include <stdint.h>
 
 // Port 1 Pins
 #define RED_LED              (0x01) // RED LED 0
@@ -115,3 +116,46 @@ void Init_Port6(void);
 void Init_Port7(void);
 void Init_Port8(void);
 void Init_PortJ(void);
+void update_menu(void);
+
+#ifndef INIT_ENUMS_H
+#define INIT_ENUMS_H
+
+// enum for display row numbers
+typedef enum{
+  LINE1 = 0,
+  LINE2,
+  LINE3,
+  LINE4,
+  LINE_NUM_LINES,
+}Display_Line_t;
+
+// enum for display column numbers
+typedef enum{
+  COLUMN1 = 0,
+  COLUMN2,
+  COLUMN3,
+  COLUMN4,
+  COLUMN5,
+  COLUMN6,
+  COLUMN7,
+  COLUMN8,
+  COLUMN9,
+  COLUMN10,
+  COLUMN11,
+  COLUMN_NUM_COLUMNS
+}Display_Column_t;
+
+// enum for menu options
+typedef enum{
+  OPTION1 = 1,
+  OPTION2,
+  OPTION3,
+  PENULT_OPTION,
+  MENU_NUM_OPTIONS
+}Menu_Option_t;
+
+#endif
+
+extern volatile uint8_t debounced; 
+extern int8_t menu_counter;            // displays which option has been chosen by the buttons

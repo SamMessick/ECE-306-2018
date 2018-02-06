@@ -9,8 +9,15 @@
 //===============================================================
 
 #include "msp430.h"
+#include "ports.h"
+#include <stdint.h>
+#include <stdbool.h>
 #define MOTOR_PERIOD       (0xFFFF)         // PWM period
 #define MOTOR_OFF               (0)         // 0 percent duty cycle
 #define DUTY_CYCLE_DIVISOR  (0x101)         // Allows for 256 speed options between 0 and 255
+//#define OTWENT_SEC    (0xC350)     // Timer counts to 50000, taking 1/20 second
+#define COUNTER_RESET (0)           
 
-void Init_TimerB0(void);
+void Init_Timer_B0(void);
+
+extern uint8_t motor_speed;

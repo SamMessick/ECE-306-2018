@@ -2310,7 +2310,10 @@
         <name>$PROJ_DIR$\init.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\LCD.r43</name>
+        <name>$PROJ_DIR$\LCD.h</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\..\..\Homework_03\LCD.r43</name>
     </file>
     <file>
         <name>$PROJ_DIR$\led.c</name>
@@ -2344,6 +2347,12 @@
     </file>
     <file>
         <name>$PROJ_DIR$\system.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\timerA1.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\timerA1.h</name>
     </file>
     <file>
         <name>$PROJ_DIR$\timerB0.c</name>

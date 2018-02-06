@@ -18,26 +18,31 @@ void update_menu(void){
   case OPTION1: // circle
     LCD_print("Circ. Mode", "Sam M. Car", "          ", "  ECE306  "); 
     drive_in_circle();
-    Left_Motor_ON_FORWARD(255);
+    Left_Motor_ON_FORWARD(LEFT_LCIRC_SPEED);
+    Right_Motor_ON_FORWARD(RIGHT_LCIRC_SPEED);
     break;
   case OPTION2: // figure 8
     LCD_print("Fig8. Mode", "Sam M. Car", "          ", "  ECE306  "); 
     drive_in_figure8();
-    Left_Motor_ON_FORWARD(128);
+    Left_Motor_ON_FORWARD(LEFT_RCIRC_SPEED);
+    Right_Motor_ON_FORWARD(RIGHT_RCIRC_SPEED);
     break;
-  case OPTION3: // square
-    LCD_print("Squr. Mode", "Sam M. Car", "          ", "  ECE306  ");
-    drive_in_square();
-    Left_Motor_ON_FORWARD(100);
-    break;
+  case OPTION3: // figure 8
+    LCD_print("Fig8. Mode", "Sam M. Car", "          ", "  ECE306  "); 
+    drive_in_figure8();
+    Left_Motor_ON_FORWARD(LEFT_LTURN_SPEED);
+    Right_Motor_ON_FORWARD(RIGHT_LTURN_SPEED);
+    break;  
   case PENULT_OPTION: // triangle
     LCD_print("Trng. Mode", "Sam M. Car", "          ", "  ECE306  "); 
     drive_in_triangle();
-    Left_Motor_ON_FORWARD(190);
+    Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
+    Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
     break;
   default:
     LCD_print("   NCSU   ", "Sam M. Car", "          ", "  ECE306  ");
     Left_Motor_ON_FORWARD(0);
+    Right_Motor_ON_FORWARD(0);
     break;
   }
 }

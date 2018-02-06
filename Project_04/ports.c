@@ -1,7 +1,7 @@
 //===============================================================
 //  File Name: ports.c
 //  Description: This file contains the Initialization of all
-//                    port pins
+//                    port pins as well as pin-based interrupts
 //
 //  Author: Sam Messick
 //  Date Jan. 2018
@@ -9,6 +9,9 @@
 //===============================================================
 
 #include "ports.h"
+
+volatile uint8_t debounced;
+
 
 void Init_Port1(void){  // Initlizes all pins on Port 1
 //=========================================================================
@@ -32,7 +35,7 @@ void Init_Port1(void){  // Initlizes all pins on Port 1
   // P1_1
   P1SEL0 &= ~GRN_LED;                   // GRN_LED as GP I/O
   P1SEL1 &= ~GRN_LED;                   // GRN_LED as GP I/O
-  P1OUT  &= ~GRN_LED;                    // Set Green LED Off
+  P1OUT  &= ~GRN_LED;                   // Set Green LED Off
   P1DIR  |= GRN_LED;                    // Set Green LED direction to output
   
   // P1_2
@@ -144,8 +147,30 @@ void Init_Port3(char use_smclk) { // Initlizes all pins on Port 3
   P3SEL1 &= ~IOT_WAKEUP;                // Set to GP I/O
   P3OUT  &= ~IOT_WAKEUP;                // Set out value Low [off]
   P3DIR  |= IOT_WAKEUP;                 // Set direction to output
+  // P3_4 Begin Dumb "PWM"
+  P3SEL0 &= ~L_REVERSE;
+  P3SEL1 &= ~L_REVERSE;
+  P3OUT  &= ~L_REVERSE;
+  P3DIR  |= L_REVERSE;
+  // P3_5 Begin Dumb "PWM"
+  P3SEL0 &= ~L_FORWARD;
+  P3SEL1 &= ~L_FORWARD;
+  P3OUT  &= ~L_FORWARD;
+  P3DIR  |= L_FORWARD;
+  // P3_6 Begin Dumb "PWM"
+  P3SEL0 &= ~R_REVERSE;
+  P3SEL1 &= ~R_REVERSE;
+  P3OUT  &= ~R_REVERSE;
+  P3DIR  |= R_REVERSE;
+  // P3_7 Begin Dumb "PWM"
+  P3SEL0 &= ~R_FORWARD;
+  P3SEL1 &= ~R_FORWARD;
+  P3OUT  &= ~R_FORWARD;
+  P3DIR  |= R_FORWARD;
+  
+  /* The Better Way
   // P3_4 
-  P3SEL0 |= L_REVERSE;                  // Set to TB0.4
+  P3SEL0 |= L_REVERSE;                  // Set to TB0.3
   P3SEL1 &= ~L_REVERSE;                  
   P3DIR  |= L_REVERSE;
   // P3_5
@@ -153,15 +178,16 @@ void Init_Port3(char use_smclk) { // Initlizes all pins on Port 3
   P3SEL1   &= ~L_FORWARD;                  
   P3DIR    |= L_FORWARD;
   // P3_6
-  P3SEL0 &= ~R_REVERSE;                 // Set to GP I/O
-  P3SEL1 &= ~R_REVERSE;                 // Set to GP I/O
+  P3SEL0 |=  R_REVERSE;                 // Set to TB0.5
+  P3SEL1 &= ~R_REVERSE;                 
   P3OUT  &= ~R_REVERSE;                 // Set out value Low [off]
   P3DIR  |= R_REVERSE;                  // Set direction to output
   // P3_7
-  P3SEL0 &= ~R_FORWARD;                 // Set to GP I/O
-  P3SEL1 &= ~R_FORWARD;                 // Set to GP I/O
-  P3OUT  &= ~R_FORWARD;                 // Set out value High [on]
+  P3SEL0 |=  R_FORWARD;                 // Set to TB0.6
+  P3SEL1 &= ~R_FORWARD;                 
+  P3OUT  &= ~R_FORWARD;                 // Set out value Low [off]
   P3DIR  |= R_FORWARD;                  // Set direction to output
+  */
 }
 ////////////////////////////////////////////////////////////////////////
 void Init_Port4(void) { // Initlizes all pins on Port 4
@@ -258,12 +284,18 @@ void Init_Port5(void) { // Initializes all pins on Port 5
   P5OUT  |= BUTTON2;                    // Configure pullup resistor
   P5DIR  &= ~BUTTON2;                   // Set direction to input
   P5REN  |= BUTTON2;                    // Enable pullup resistor
+  P5IE   |= BUTTON2;                    // Enable interrupts for Button2
+  P5IES  |= BUTTON2;                    // Interrupts occur on Hi/Lo edge
+  P5IFG  &= ~BUTTON2;                   // Button 2 IFG cleared
   // P5_6
   P5SEL0 &= ~BUTTON1;                   // Set to GP I/O
   P5SEL1 &= ~BUTTON1;                   // Set to GP I/O
   P5OUT  |= BUTTON1;                    // Configure pullup resistor
   P5DIR  &= ~BUTTON1;                   // Set direction to input
   P5REN  |= BUTTON1;                    // Enable pullup resistor
+  P5IE   |= BUTTON1;                    // Enable interrupts for Button2
+  P5IES  |= BUTTON1;                    // Interrupts occur on Hi/Lo edge
+  P5IFG  &= ~BUTTON1;                   // Button 2 IFG cleared
   // P5_7
   P5SEL0 &= ~LCD_BACKLITE;              // Set to GP I/O
   P5SEL1 &= ~LCD_BACKLITE;              // Set to GP I/O
@@ -284,45 +316,45 @@ void Init_Port6(void) { // Initializes all pins on Port 6
 //=========================================================================
   // Configure Port 6
   // P6_0
-  P4SEL0 |=  UCA3TXD;                   // Set to GP I/O
-  P4SEL1 &= ~UCA3TXD;                   // Set to GP I/O
-  P4OUT  &= ~UCA3TXD;                   // Set out value Low [off]
-  P4DIR  |= UCA3TXD;                    // Set direction to output
+  P6SEL0 |=  UCA3TXD;                   // Set to GP I/O
+  P6SEL1 &= ~UCA3TXD;                   // Set to GP I/O
+  P6OUT  &= ~UCA3TXD;                   // Set out value Low [off]
+  P6DIR  |= UCA3TXD;                    // Set direction to output
   // P6_1
-  P4SEL0 |=  UCA3RXD;                   // Set to GP I/O
-  P4SEL1 &= ~UCA3RXD;                   // Set to GP I/O
-  P4OUT  &= ~UCA3RXD;                   // Set out value Low [off]
-  P4DIR  |= UCA3RXD;                    // Set direction to output
+  P6SEL0 |=  UCA3RXD;                   // Set to GP I/O
+  P6SEL1 &= ~UCA3RXD;                   // Set to GP I/O
+  P6OUT  &= ~UCA3RXD;                   // Set out value Low [off]
+  P6DIR  |= UCA3RXD;                    // Set direction to output
   // P6_2
-  P4SEL0 &= ~J1_5;                      // Set to GP I/O
-  P4SEL1 &= ~J1_5;                      // Set to GP I/O
-  P4OUT  &= ~J1_5;                      // Set out value Low [off]
-  P4DIR  |= J1_5;                       // Set direction to output
+  P6SEL0 &= ~J1_5;                      // Set to GP I/O
+  P6SEL1 &= ~J1_5;                      // Set to GP I/O
+  P6OUT  &= ~J1_5;                      // Set out value Low [off]
+  P6DIR  |= J1_5;                       // Set direction to output
   // P6_3
-  P4SEL0 &= ~MAG_INT;                   // Set to GP I/O
-  P4SEL1 &= ~MAG_INT;                   // Set to GP I/O
-  P4OUT  &= ~MAG_INT;                   // Set out value Low [off]
-  P4DIR  |= MAG_INT;                    // Set direction to output
+  P6SEL0 &= ~MAG_INT;                   // Set to GP I/O
+  P6SEL1 &= ~MAG_INT;                   // Set to GP I/O
+  P6OUT  &= ~MAG_INT;                   // Set out value Low [off]
+  P6DIR  |= MAG_INT;                    // Set direction to output
   // P6_4
-  P4SEL0 &= ~P6_4;                      // Set to GP I/O
-  P4SEL1 &= ~P6_4;                      // Set to GP I/O
-  P4OUT  &= ~P6_4;                      // Set out value Low [off]
-  P4DIR  |= P6_4;                       // Set direction to output
+  P6SEL0 &= ~P6_4;                      // Set to GP I/O
+  P6SEL1 &= ~P6_4;                      // Set to GP I/O
+  P6OUT  &= ~P6_4;                      // Set out value Low [off]
+  P6DIR  |= P6_4;                       // Set direction to output
   // P6_5
-  P4SEL0 &= ~P6_5;                      // Set to GP I/O
-  P4SEL1 &= ~P6_5;                      // Set to GP I/O
-  P4OUT  &= ~P6_5;                      // Set out value Low [off]
-  P4DIR  |= P6_5;                       // Set direction to output
+  P6SEL0 &= ~P6_5;                      // Set to GP I/O
+  P6SEL1 &= ~P6_5;                      // Set to GP I/O
+  P6OUT  &= ~P6_5;                      // Set out value Low [off]
+  P6DIR  |= P6_5;                       // Set direction to output
   // P6_6
-  P4SEL0 &= ~P6_6;                      // Set to GP I/O
-  P4SEL1 &= ~P6_6;                      // Set to GP I/O
-  P4OUT  &= ~P6_6;                      // Set out value Low [off]
-  P4DIR  |= P6_6;                       // Set direction to output
+  P6SEL0 &= ~P6_6;                      // Set to GP I/O
+  P6SEL1 &= ~P6_6;                      // Set to GP I/O
+  P6OUT  &= ~P6_6;                      // Set out value Low [off]
+  P6DIR  |= P6_6;                       // Set direction to output
   // P6_7
-  P4SEL0 &= ~P6_7;                      // Set to GP I/O
-  P4SEL1 &= ~P6_7;                      // Set to GP I/O
-  P4OUT  &= ~P6_7;                      // Set out value Low [off]
-  P4DIR  |= P6_7;                       // Set direction to output
+  P6SEL0 &= ~P6_7;                      // Set to GP I/O
+  P6SEL1 &= ~P6_7;                      // Set to GP I/O
+  P6OUT  &= ~P6_7;                      // Set out value Low [off]
+  P6DIR  |= P6_7;                       // Set direction to output
 }
 ////////////////////////////////////////////////////////////////////////
 void Init_Port7(void) { // Initializes all pins on Port 7
@@ -338,45 +370,45 @@ void Init_Port7(void) { // Initializes all pins on Port 7
 //=========================================================================
   // Configure Port 7
   // P7_0
-  P4SEL0 &= ~I2CSDA;                    // Set to GP I/O
-  P4SEL1 &= ~I2CSDA;                    // Set to GP I/O
-  P4OUT  &= ~I2CSDA;                    // Set out value Low [off]
-  P4DIR  |= I2CSDA;                     // Set direction to output
+  P7SEL0 &= ~I2CSDA;                    // Set to GP I/O
+  P7SEL1 &= ~I2CSDA;                    // Set to GP I/O
+  P7OUT  &= ~I2CSDA;                    // Set out value Low [off]
+  P7DIR  |= I2CSDA;                     // Set direction to output
   // P7_1
-  P4SEL0 &= ~I2CSCL;                    // Set to GP I/O
-  P4SEL1 &= ~I2CSCL;                    // Set to GP I/O
-  P4OUT  &= ~I2CSCL;                    // Set out value Low [off]
-  P4DIR  |= I2CSCL;                     // Set direction to output
+  P7SEL0 &= ~I2CSCL;                    // Set to GP I/O
+  P7SEL1 &= ~I2CSCL;                    // Set to GP I/O
+  P7OUT  &= ~I2CSCL;                    // Set out value Low [off]
+  P7DIR  |= I2CSCL;                     // Set direction to output
   // P7_2
-  P4SEL0 &= ~SD_DETECT;                 // Set to GP I/O
-  P4SEL1 &= ~SD_DETECT;                 // Set to GP I/O
-  P4OUT  &= ~SD_DETECT;                 // Set out value Low [off]
-  P4DIR  |= SD_DETECT;                  // Set direction to output
+  P7SEL0 &= ~SD_DETECT;                 // Set to GP I/O
+  P7SEL1 &= ~SD_DETECT;                 // Set to GP I/O
+  P7OUT  &= ~SD_DETECT;                 // Set out value Low [off]
+  P7DIR  |= SD_DETECT;                  // Set direction to output
   // P7_3
-  P4SEL0 &= ~J4_36;                     // Set to GP I/O
-  P4SEL1 &= ~J4_36;                     // Set to GP I/O
-  P4OUT  &= ~J4_36;                     // Set out value Low [off]
-  P4DIR  |= J4_36;                      // Set direction to output
+  P7SEL0 &= ~J4_36;                     // Set to GP I/O
+  P7SEL1 &= ~J4_36;                     // Set to GP I/O
+  P7OUT  &= ~J4_36;                     // Set out value Low [off]
+  P7DIR  |= J4_36;                      // Set direction to output
   // P7_4
-  P4SEL0 &= ~P7_4;                      // Set to GP I/O
-  P4SEL1 &= ~P7_4;                      // Set to GP I/O
-  P4OUT  &= ~P7_4;                      // Set out value Low [off]
-  P4DIR  |= P7_4;                       // Set direction to output
+  P7SEL0 &= ~P7_4;                      // Set to GP I/O
+  P7SEL1 &= ~P7_4;                      // Set to GP I/O
+  P7OUT  &= ~P7_4;                      // Set out value Low [off]
+  P7DIR  |= P7_4;                       // Set direction to output
   // P7_5
-  P4SEL0 &= ~P7_5;                      // Set to GP I/O
-  P4SEL1 &= ~P7_5;                      // Set to GP I/O
-  P4OUT  &= ~P7_5;                      // Set out value Low [off]
-  P4DIR  |= P7_5;                       // Set direction to output
+  P7SEL0 &= ~P7_5;                      // Set to GP I/O
+  P7SEL1 &= ~P7_5;                      // Set to GP I/O
+  P7OUT  &= ~P7_5;                      // Set out value Low [off]
+  P7DIR  |= P7_5;                       // Set direction to output
   // P7_6
-  P4SEL0 &= ~P7_6;                      // Set to GP I/O
-  P4SEL1 &= ~P7_6;                      // Set to GP I/O
-  P4OUT  &= ~P7_6;                      // Set out value Low [off]
-  P4DIR  |= P7_6;                       // Set direction to output
+  P7SEL0 &= ~P7_6;                      // Set to GP I/O
+  P7SEL1 &= ~P7_6;                      // Set to GP I/O
+  P7OUT  &= ~P7_6;                      // Set out value Low [off]
+  P7DIR  |= P7_6;                       // Set direction to output
   // P7_7
-  P4SEL0 &= ~P7_7;                      // Set to GP I/O
-  P4SEL1 &= ~P7_7;                      // Set to GP I/O
-  P4OUT  &= ~P7_7;                      // Set out value Low [off]
-  P4DIR  |= P7_7;                       // Set direction to output
+  P7SEL0 &= ~P7_7;                      // Set to GP I/O
+  P7SEL1 &= ~P7_7;                      // Set to GP I/O
+  P7OUT  &= ~P7_7;                      // Set out value Low [off]
+  P7DIR  |= P7_7;                       // Set direction to output
 }
 ////////////////////////////////////////////////////////////////////////
 void Init_Port8(void) { // Initializes all pins on Port 8
@@ -388,25 +420,25 @@ void Init_Port8(void) { // Initializes all pins on Port 8
 //=========================================================================
   // Configure Port 8
   // P8_0
-  P4SEL0 &= ~IR_LED;                     // Set to GP I/O
-  P4SEL1 &= ~IR_LED;                     // Set to GP I/O
-  P4OUT  &= ~IR_LED;                     // Set out value Low [off]
-  P4DIR  |= IR_LED;                      // Set direction to output
+  P8SEL0 &= ~IR_LED;                     // Set to GP I/O
+  P8SEL1 &= ~IR_LED;                     // Set to GP I/O
+  P8OUT  &= ~IR_LED;                     // Set out value Low [off]
+  P8DIR  |= IR_LED;                      // Set direction to output
   // P8_1
-  P4SEL0 &= ~OPT_INT;                    // Set to GP I/O
-  P4SEL1 &= ~OPT_INT;                    // Set to GP I/O
-  P4OUT  &= ~OPT_INT;                    // Set out value Low [off]
-  P4DIR  |= OPT_INT;                     // Set direction to output
+  P8SEL0 &= ~OPT_INT;                    // Set to GP I/O
+  P8SEL1 &= ~OPT_INT;                    // Set to GP I/O
+  P8OUT  &= ~OPT_INT;                    // Set out value Low [off]
+  P8DIR  |= OPT_INT;                     // Set direction to output
   // P8_2
-  P4SEL0 &= ~TMP_INT;                    // Set to GP I/O
-  P4SEL1 &= ~TMP_INT;                    // Set to GP I/O
-  P4OUT  &= ~TMP_INT;                    // Set out value Low [off]
-  P4DIR  |= TMP_INT;                     // Set direction to output
+  P8SEL0 &= ~TMP_INT;                    // Set to GP I/O
+  P8SEL1 &= ~TMP_INT;                    // Set to GP I/O
+  P8OUT  &= ~TMP_INT;                    // Set out value Low [off]
+  P8DIR  |= TMP_INT;                     // Set direction to output
   // P8_3
-  P4SEL0 &= ~INT2;                       // Set to GP I/O
-  P4SEL1 &= ~INT2;                       // Set to GP I/O
-  P4OUT  &= ~INT2;                       // Set out value Low [off]
-  P4DIR  |= INT2;                        // Set direction to output
+  P8SEL0 &= ~INT2;                       // Set to GP I/O
+  P8SEL1 &= ~INT2;                       // Set to GP I/O
+  P8OUT  &= ~INT2;                       // Set out value Low [off]
+  P8DIR  |= INT2;                        // Set direction to output
 }
 /////////////////////////////////////////////////////////////////////////
 void Init_PortJ(void) { // Initializes all pins on Port J
@@ -422,48 +454,49 @@ void Init_PortJ(void) { // Initializes all pins on Port J
 //=========================================================================
   // Configure Port J
   // PJ_0
-  P4SEL0 &= ~PJ_0;                      // Set to GP I/O
-  P4SEL1 &= ~PJ_0;                      // Set to GP I/O
-  P4OUT  &= ~PJ_0;                      // Set out value Low [off]
-  P4DIR  |= PJ_0;                       // Set direction to output
+  PJSEL0 &= ~PJ_0;                      // Set to GP I/O
+  PJSEL1 &= ~PJ_0;                      // Set to GP I/O
+  PJOUT  &= ~PJ_0;                      // Set out value Low [off]
+  PJDIR  |= PJ_0;                       // Set direction to output
   // PJ_1
-  P4SEL0 &= ~PJ_1;                      // Set to GP I/O
-  P4SEL1 &= ~PJ_1;                      // Set to GP I/O
-  P4OUT  &= ~PJ_1;                      // Set out value Low [off]
-  P4DIR  |= PJ_1;                       // Set direction to output
+  PJSEL0 &= ~PJ_1;                      // Set to GP I/O
+  PJSEL1 &= ~PJ_1;                      // Set to GP I/O
+  PJOUT  &= ~PJ_1;                      // Set out value Low [off]
+  PJDIR  |= PJ_1;                       // Set direction to output
   // PJ_2 
-  P4SEL0 &= ~PJ_2;                      // Set to GP I/O
-  P4SEL1 &= ~PJ_2;                      // Set to GP I/O
-  P4OUT  &= ~PJ_2;                      // Set out value Low [off]
-  P4DIR  |= PJ_2;                       // Set direction to output
+  PJSEL0 &= ~PJ_2;                      // Set to GP I/O
+  PJSEL1 &= ~PJ_2;                      // Set to GP I/O
+  PJOUT  &= ~PJ_2;                      // Set out value Low [off]
+  PJDIR  |= PJ_2;                       // Set direction to output
   // PJ_3
-  P4SEL0 &= ~PJ_3;                      // Set to GP I/O
-  P4SEL1 &= ~PJ_3;                      // Set to GP I/O
-  P4OUT  &= ~PJ_3;                      // Set out value Low [off]
-  P4DIR  |= PJ_3;                       // Set direction to output
+  PJSEL0 &= ~PJ_3;                      // Set to GP I/O
+  PJSEL1 &= ~PJ_3;                      // Set to GP I/O
+  PJOUT  &= ~PJ_3;                      // Set out value Low [off]
+  PJDIR  |= PJ_3;                       // Set direction to output
   // PJ_4
-  P4SEL0 |= LFXIN;                      // Primary function selected
-  P4SEL1 &= ~LFXIN;                     // Primary function selected
-  P4OUT  &= ~LFXIN;                     // Set out value Low [off]
-  P4DIR  |= LFXIN;                      // Set direction to output
+  PJSEL0 |= LFXIN;                      // Primary function selected
+  PJSEL1 &= ~LFXIN;                     // Primary function selected
+  PJOUT  &= ~LFXIN;                     // Set out value Low [off]
+  PJDIR  |= LFXIN;                      // Set direction to output
   // PJ_5
-  P4SEL0 |=  LFXOUT;                    // Primary function selected
-  P4SEL1 &= ~LFXOUT;                    // Primary function selected
-  P4OUT  &= ~LFXOUT;                    // Set out value Low [off]
-  P4DIR  |= LFXOUT;                     // Set direction to output
+  PJSEL0 |=  LFXOUT;                    // Primary function selected
+  PJSEL1 &= ~LFXOUT;                    // Primary function selected
+  PJOUT  &= ~LFXOUT;                    // Set out value Low [off]
+  PJDIR  |= LFXOUT;                     // Set direction to output
   // PJ_6
-  P4SEL0 &= ~HFXIN;                     // Set to GP I/O
-  P4SEL1 &= ~HFXIN;                     // Set to GP I/O
-  P4OUT  &= ~HFXIN;                     // Set out value Low [off]
-  P4DIR  |= HFXIN;                      // Set direction to output
+  PJSEL0 &= ~HFXIN;                     // Set to GP I/O
+  PJSEL1 &= ~HFXIN;                     // Set to GP I/O
+  PJOUT  &= ~HFXIN;                     // Set out value Low [off]
+  PJDIR  |= HFXIN;                      // Set direction to output
   // PJ_7
-  P4SEL0 &= ~HFXOUT;                    // Set to GP I/O
-  P4SEL1 &= ~HFXOUT;                    // Set to GP I/O
-  P4OUT  &= ~HFXOUT;                    // Set out value Low [off]
-  P4DIR  |= HFXOUT;                     // Set direction to output
+  PJSEL0 &= ~HFXOUT;                    // Set to GP I/O
+  PJSEL1 &= ~HFXOUT;                    // Set to GP I/O
+  PJOUT  &= ~HFXOUT;                    // Set out value Low [off]
+  PJDIR  |= HFXOUT;                     // Set direction to output
 }
 
 void Init_Ports(void){ // Calls all port initialization functions
+  debounced = true;
   Init_Port1();
   Init_Port2();
   Init_Port3(false);
@@ -473,4 +506,40 @@ void Init_Ports(void){ // Calls all port initialization functions
   Init_Port7();
   Init_Port8();
   Init_PortJ();
+}
+
+#pragma vector = PORT5_VECTOR
+__interrupt void Port_5(void){
+  switch(P5IFG)
+  {
+  case 0x20: // Right Button
+    switch(debounced)                     // Has the switch had time to readjust?
+    {
+    case true:
+      P1OUT  ^= GRN_LED; 
+      menu_counter++;
+      menu_counter %= MENU_NUM_OPTIONS;
+      TA1CCTL2 |= CCIE;                   // Enable 2 second delay for menu update
+      debounced = false;
+      TA1CCTL1 |= CCIE;                   // Enable clock interrupts every 1/20 second
+      break;
+    default:
+      break;
+    }
+  case 0x40: // Left Button
+    switch(debounced)                     // Has the switch had time to readjust?
+    {
+    case true:
+      P1OUT  ^= RED_LED; 
+      menu_counter += PENULT_OPTION;
+      menu_counter %= MENU_NUM_OPTIONS;
+      TA1CCTL2 |= CCIE;                   // Enable 2 second delay for menu update
+      debounced = false;
+      TA1CCTL1 |= CCIE;                   // Enable clock interrupts every 1/20 second
+      break;
+    default:
+      break;
+    }
+  }
+  P5IFG = false;
 }
