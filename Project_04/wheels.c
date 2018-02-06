@@ -110,39 +110,29 @@ void Drive_Straight_REVERSE(uint8_t speed){
 // Driving in shapes
 //------------------------
 
-void drive_in_circle(void)
-{ 
-  delay(1000);
-  // prototype for function
-  // setup interrupt timer countdown for full circle
-  /*wait for interrupt 1 to turn motors on*/
-  //uint8_t slow_speed;
-  //uint8_t fast_speed;
-  //Right_Motor_ON_FORWARD(slow_speed);
-  //Left_Motor_ON_FORWARD(fast_speed);
-  /*wait for interrupt 2 to turn motors off*/
+void drive_in_circle(void){ 
+  Left_Motor_ON_FORWARD(LEFT_LCIRC_SPEED);
+  Right_Motor_ON_FORWARD(RIGHT_LCIRC_SPEED);
+  delay(10000);
+  Wheels_OFF();
 }
-void drive_in_figure8(void)
-{ 
-  delay(1000);
-  // prototype for function
-  // set two circle countdown timers for each trigger
-  /* wait for interrupt 1 to turn motors on*/
-  /*GLOBALS:
-
-    uint8_t slow_speed;
-    uint8_t fast_speed;
-  */
-  /* First Interrupt */
-  //uint8_t slow_speed;
-  //uint8_t fast_speed;
-  //Right_Motor_ON_FORWARD(slow_speed);
-  //Left_Motor_ON_FORWARD(fast_speed);
-  /*wait for interrupt 2 to turn to next setting*/
-  /*wait for interrupt to turn motors off */  
+void drive_in_figure8(void){
+  Left_Motor_ON_FORWARD(LEFT_LCIRC_SPEED);
+  Right_Motor_ON_FORWARD(RIGHT_LCIRC_SPEED);
+  delay(10000);
+  Left_Motor_ON_FORWARD(LEFT_RCIRC_SPEED);
+  Right_Motor_ON_FORWARD(RIGHT_RCIRC_SPEED);
+  Wheels_OFF();
 }
-void drive_in_triangle(void)
-{ 
-  delay(1000);// prototype for function
-  // setup timer for full circle
+void drive_in_triangle(void){ 
+  uint8_t counter;
+  for(;counter <= TRIANGLE_NUM_SIDES; counter++){
+    Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
+    Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
+    delay(2000);
+    //Turn to the left
+    Left_Motor_ON_FORWARD(LEFT_LTURN_SPEED);
+    Right_Motor_ON_FORWARD(RIGHT_RTURN_SPEED);
+    delay(1500);
+  }
 }
