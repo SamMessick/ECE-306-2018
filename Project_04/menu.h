@@ -45,7 +45,6 @@ typedef enum{
 typedef enum{
   OPTION1 = 1,
   OPTION2,
-  OPTION3,
   PENULT_OPTION,
   MENU_NUM_OPTIONS
 }Menu_Option_t;
