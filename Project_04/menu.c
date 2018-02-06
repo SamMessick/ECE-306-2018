@@ -23,10 +23,6 @@ void update_menu(void){
     LCD_print("Fig8. Mode", "Sam M. Car", "          ", "  ECE306  "); 
     drive_in_figure8();
     break;
-  case OPTION3: // figure 8
-    LCD_print("Fig8. Mode", "Sam M. Car", "          ", "  ECE306  "); 
-    drive_in_figure8();
-    break;  
   case PENULT_OPTION: // triangle
     LCD_print("Trng. Mode", "Sam M. Car", "          ", "  ECE306  "); 
     drive_in_triangle();
