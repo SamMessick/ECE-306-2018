@@ -18,8 +18,8 @@ void Init_Timer_A1(void) {
   // Initialize Timer A1 and activate display update
   TA1CTL = TASSEL__SMCLK;
   TA1CTL |= (TACLR | MC_1 | ID_3);    // SMCLK Clock source on up mode at 1 MHz
-  TA1CCR0 = OTWENT_SEC;               // Max interrupt time set to 1/20 second
-  TA1CCR1 = OTWENT_SEC;               // Max interrupt time set to 1/20 second
+  TA1CCR0 = MSEC;               // Max interrupt time set to 1/20 second
+  TA1CCR1 = MSEC;                     // Max interrupt time set to 1/1000 second
   TA1CCR2 = MSEC;                     // Max interrupt time set to 1/1000 second
   
   TA1CCTL0 |= CCIE;                   // Enable clock interrupts every 1/20 second
@@ -65,13 +65,13 @@ void handle_procedural_delay(void){
 __interrupt void Timer1_A0_ISR(void){
   static uint8_t counter_A10;
   counter_A10++;
-  switch(counter_A10 % TIME_CYCLES)
+  switch(counter_A10 % ONE_SEC)
   {
   case COUNTER_RESET:
     lcd_BIG_mid();
     display_changed = true;
     counter_A10 = COUNTER_RESET; break;
-  case HALF_CYCLES:
+  case HALF_SEC:
     lcd_4line();
     display_changed = true; break;
   }
