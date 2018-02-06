@@ -21,9 +21,9 @@ uint8_t right_reverse_flag;
 unit8_t delay_continue;
 
 void delay(uint16_t msecs){
-  delay_time = msecs;                   // send delay time to global accessible by timer A1
+  delay_time     = msecs;                   // send delay time to global accessible by timer A1
   delay_continue = true;
-  TA1CCTL2 &= ~CCIE;                    // enable timer A1.2 to count msecs time
+  TA1CCTL2 |= CCIE;                    // enable timer A1.2 to count msecs time
   while(delay_continue){}
 }
 
