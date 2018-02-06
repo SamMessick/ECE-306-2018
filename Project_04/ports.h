@@ -104,6 +104,11 @@
 #define HFXIN                (0x40) // HFX Input
 #define HFXOUT               (0x80) // HFX Output
 
+///////////////////////////////////////////////////
+
+// Interrupt Vector Pins
+#define P5IFG_BUTTON_1        (0x20) // Right button interrupt flag bit
+#define P5IFG_BUTTON_2        (0x40) // Left button interrupt flag bit
 
 // Ports function prototypes
 void Init_Ports(void);
