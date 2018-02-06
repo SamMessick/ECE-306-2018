@@ -512,7 +512,7 @@ void Init_Ports(void){ // Calls all port initialization functions
 __interrupt void Port_5(void){
   switch(P5IFG)
   {
-  case 0x20: // Right Button
+  case P5IFG_BUTTON_1: // Right Button
     switch(debounced)                     // Has the switch had time to readjust?
     {
     case true:
@@ -526,7 +526,7 @@ __interrupt void Port_5(void){
     default:
       break;
     }
-  case 0x40: // Left Button
+  case P5IFG_BUTTON_2: // Left Button
     switch(debounced)                     // Has the switch had time to readjust?
     {
     case true:
