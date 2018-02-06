@@ -50,8 +50,8 @@ void handle_procedural_delay(void){
   {
   case COUNTER_RESET:
     TA1CCTL2 &= ~CCIE;                   // Disable 2 second delay routine                
-    counter_A12 = COUNTER_RESET;
-    update_menu(); break;                // Enable pending menu instruction
+    counter_A12 = COUNTER_RESET; 
+    delay_continue = false; break;                // Enable pending menu instruction
   default:
     break;
   }
