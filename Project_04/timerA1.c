@@ -16,7 +16,7 @@
 
 volatile uint16_t counter_A11;        // Timer A1.1 interrupt occurences counter (range 0 - 1000)
 volatile uint16_t counter_A12;        // Timer A1.2 interrupt occurences counter (range 0 - 1000)
-volatile uint16_t delay_time;         // Timer A1.2 counter assignment -- receives input from main
+// volatile uint16_t delay_time;         // Timer A1.2 counter assignment -- receives input from main
 
 void Init_Timer_A1(void) {
   // Initialize Timer A1 and activate display update
