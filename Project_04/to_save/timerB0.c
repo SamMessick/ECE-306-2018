@@ -12,12 +12,10 @@
  *       Comments marked with XXXXXXXXXXXXX's should be deleted following demonstration       */
 
 #include "timerB0.h"
-  /********************************************************************************************
 // Initialize motor PWM registers
 void Init_Timer_B0(void){
   TB0CTL    = TASSEL__SMCLK;            // Select SMCLK for source
-  TB0CTL   |= (MC_2|TBCLR);             // Continuous mode; clear Timer B0 register                                                                               **MC_1
-  //TB0CCR0   = MOTOR_PERIOD;             // PWM period
+  TB0CTL   |= (MC_2|TBCLR);             // Continuous mode; clear Timer B0 register 
   TB0CCR4   = MOTOR_PERIOD;
   TB0CCR6   = MOTOR_PERIOD;
 
@@ -36,4 +34,3 @@ void Init_Timer_B0(void){
   TB0CCR4   = MOTOR_OFF;                
   TB0CCR5   = MOTOR_OFF;                
   TB0CCR6   = MOTOR_OFF;      
-   ********************************************************************************************/

@@ -16,6 +16,8 @@
 #include "led.h"
 #include "init.h"
 #include "ports.h"
+#include "timerA1.h"
+#include "timerB0.h"
 #include <string.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -32,3 +34,5 @@ void Init_Timer_B1(void);
 void Init_Timer_B2(void);
 
 // OS control variables
+//volatile char slow_input_down;
+//unsigned char display_mode;
