@@ -29,11 +29,12 @@ void update_menu(void){
     break;
   default:
     LCD_print("   NCSU   ", "Sam M. Car", "          ", "  ECE306  ");
+    Wheels_OFF();
     break;
   }
 }
 
-void LCD_print(char first_line[10], char second_line[10], char third_line[10], char fourth_line[10]){
+void LCD_print(char first_line[COLUMN_NUM_COLUMNS], char second_line[COLUMN_NUM_COLUMNS], char third_line[COLUMN_NUM_COLUMNS], char fourth_line[COLUMN_NUM_COLUMNS]){
   strcpy(display_line[LINE1], first_line);
   update_string(display_line[LINE1], LINE1);
   strcpy(display_line[LINE2], second_line);

@@ -10,9 +10,11 @@
 
 #include "timerA1.h"
 
-volatile uint8_t counter_A11;
-volatile uint8_t counter_A12;
-uint16_t delay_time;
+uint16_t counter_A11;
+uint16_t counter_A12;
+volatile uint16_t delay_time;
+
+volatile uint8_t delay_continue;
 
 void Init_Timer_A1(void) {
   // Initialize Timer A1 and activate display update
@@ -38,7 +40,8 @@ void handle_quart_second_delay(void){
   case COUNTER_RESET:                    // **If delay is complete
     TA1CCTL1 &= ~CCIE;                   // Disable debounce delay routine                 
     counter_A11 = COUNTER_RESET;
-    debounced = true; break;             // Allow switch to reactivate button interrupt routine
+    debounced = true;                    // Allow switch to reactivate button interrupt routine
+    update_menu(); break;             
   default:
     break;
   }
@@ -51,7 +54,8 @@ void handle_procedural_delay(void){
   case COUNTER_RESET:
     TA1CCTL2 &= ~CCIE;                   // Disable procedural delay routine                
     counter_A12 = COUNTER_RESET; 
-    delay_continue = false; break;       // Enable pending background instruction
+    delay_time  = COUNTER_RESET;
+    update_menu(); break;       // Enable pending background instruction
   default:
     break;
   }
@@ -63,7 +67,7 @@ void handle_procedural_delay(void){
 // ------LCD Display Updater------ //
 #pragma vector = TIMER1_A0_VECTOR
 __interrupt void Timer1_A0_ISR(void){
-  static uint8_t counter_A10;
+  static uint16_t counter_A10;
   counter_A10++;
   switch(counter_A10 % ONE_SEC)
   {

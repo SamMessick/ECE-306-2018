@@ -21,7 +21,7 @@ void main(void){
 //
 //------------------------------------------------------------------------------
   
-  Init_Ports();                        // Initialize Ports
+   Init_Ports();                        // Initialize Ports
 // Disable the GPIO power-on default high-impedance mode to activate
 // previously configured port settings
   PM5CTL0 &= ~LOCKLPM5;
@@ -41,6 +41,7 @@ void main(void){
 // Begining of the Interrupt-Based Operating System
 //------------------------------------------------------------------------------
   for(;;) {
+    for(;;);
   }
 //------------------------------------------------------------------------------
 }

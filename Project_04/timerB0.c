@@ -15,8 +15,8 @@ void Init_Timer_B0(void){
   TB0CTL    = TASSEL__SMCLK;            // Select SMCLK for source
   TB0CTL   |= (MC_2|TBCLR);             // Continuous mode; clear Timer B0 register                                                                               **MC_1
   //TB0CCR0   = MOTOR_PERIOD;             // PWM period
-  TB0CCR4   = 0xFFFF;
-  TB0CCR6   = 0xFFFF;
+  TB0CCR4   = MOTOR_PERIOD;
+  TB0CCR6   = MOTOR_PERIOD;
  
   //Garbage PWM
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/

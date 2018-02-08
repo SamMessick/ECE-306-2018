@@ -11,7 +11,7 @@
 #include "ports.h"
 
 volatile uint8_t debounced;
-
+uint8_t shape_routine_begin;
 
 void Init_Port1(void){  // Initlizes all pins on Port 1
 //=========================================================================
@@ -521,11 +521,13 @@ __interrupt void Port_5(void){
       menu_counter %= MENU_NUM_OPTIONS;
       TA1CCTL2 |= CCIE;                   // Enable 2 second delay for menu update
       debounced = false;
+      shape_routine_begin = true;
       TA1CCTL1 |= CCIE;                   // Enable clock interrupts every 1/20 second
       break;
     default:
       break;
     }
+    break;
   case P5IFG_BUTTON_2: // Left Button
     switch(debounced)                     // Has the switch had time to readjust?
     {
@@ -535,6 +537,7 @@ __interrupt void Port_5(void){
       menu_counter %= MENU_NUM_OPTIONS;
       TA1CCTL2 |= CCIE;                   // Enable 2 second delay for menu update
       debounced = false;
+      shape_routine_begin = true;
       TA1CCTL1 |= CCIE;                   // Enable clock interrupts every 1/20 second
       break;
     default:

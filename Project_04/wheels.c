@@ -18,15 +18,6 @@ uint8_t left_reverse_flag;
 uint8_t right_forward_flag;
 uint8_t right_reverse_flag;
 
-unit8_t delay_continue;
-
-void delay(uint16_t msecs){
-  delay_time     = msecs;                   // send delay time to global accessible by timer A1
-  delay_continue = true;
-  TA1CCTL2 |= CCIE;                    // enable timer A1.2 to count msecs time
-  while(delay_continue){}
-}
-
 void WHEELS_test(void);
 void Wheels_OFF(void);
 //------------------------
@@ -110,29 +101,113 @@ void Drive_Straight_REVERSE(uint8_t speed){
 // Driving in shapes
 //------------------------
 
-void drive_in_circle(void){ 
-  Left_Motor_ON_FORWARD(LEFT_LCIRC_SPEED);
-  Right_Motor_ON_FORWARD(RIGHT_LCIRC_SPEED);
-  delay(10000);
-  Wheels_OFF();
+void drive_in_circle(void){
+  static uint8_t edges_left_to_drive = NUM_TRIALS;
+  static uint8_t instruction_label;
+  switch(shape_routine_begin)
+  {
+  case true:
+    switch(instruction_label)
+    {
+    case INSTRUCTION1: // wait two seconds before beginning
+      delay_time = TWO_SEC;                   // send delay time to global accessible by timer A1
+      TA1CCTL2 |= CCIE;                    // enable timer A1.2 to count time
+      instruction_label++; break;
+    case INSTRUCTION2: // drive in circle counterclockwise
+      Left_Motor_ON_FORWARD(LEFT_LCIRC_SPEED);
+      Right_Motor_ON_FORWARD(RIGHT_LCIRC_SPEED);
+      delay_time = CIR_SEC;                   // send delay time to global accessible by timer A1
+      TA1CCTL2 |= CCIE;                    // enable timer A1.2 to count time
+      switch(--edges_left_to_drive)
+      {
+      case false:
+        instruction_label++; 
+        break;
+      default:
+        instruction_label = INSTRUCTION2; break;
+      } break;
+    default:      // turn off wheels and return permanently to main
+      Wheels_OFF();
+      instruction_label = INSTRUCTION1;
+      edges_left_to_drive = NUM_TRIALS;
+    }
+  }
 }
 void drive_in_figure8(void){
-  Left_Motor_ON_FORWARD(LEFT_LCIRC_SPEED);
-  Right_Motor_ON_FORWARD(RIGHT_LCIRC_SPEED);
-  delay(10000);
-  Left_Motor_ON_FORWARD(LEFT_RCIRC_SPEED);
-  Right_Motor_ON_FORWARD(RIGHT_RCIRC_SPEED);
-  Wheels_OFF();
+  static uint8_t edges_left_to_drive = NUM_TRIALS;
+  static uint8_t instruction_label;
+  switch(shape_routine_begin)
+  {
+  case true:
+    switch(instruction_label)
+    {
+    case INSTRUCTION1: // wait two seconds before beginning
+      delay_time = TWO_SEC;                   // send delay time to global accessible by timer A1
+      TA1CCTL2 |= CCIE;                    // enable timer A1.2 to count time
+      instruction_label++; break;
+    case INSTRUCTION2: // drive in circle counterclockwise
+      Left_Motor_ON_FORWARD(LEFT_FIG8L_SPEED);
+      Right_Motor_ON_FORWARD(RIGHT_FIG8L_SPEED);
+      delay_time = FOR_SEC;                   // send delay time to global accessible by timer A1
+      TA1CCTL2 |= CCIE;                    // enable timer A1.2 to count time
+      instruction_label++; break;
+    case INSTRUCTION3: // drive in circle clockwise
+      Left_Motor_ON_FORWARD(LEFT_FIG8R_SPEED);
+      Right_Motor_ON_FORWARD(RIGHT_FIG8R_SPEED);
+      delay_time = FOR_SEC;                   // send delay time to global accessible by timer A1
+      TA1CCTL2 |= CCIE;                    // enable timer A1.2 to count time
+      switch(--edges_left_to_drive)
+      {
+      case false:
+        instruction_label++; 
+        break;
+      default:
+        instruction_label = INSTRUCTION2; break;
+      } break;
+    default:      // turn off wheels and return permanently to main
+      Wheels_OFF();
+      instruction_label = INSTRUCTION1;
+      edges_left_to_drive = NUM_TRIALS;
+    }
+  }
 }
-void drive_in_triangle(void){ 
-  uint8_t counter;
-  for(;counter <= TRIANGLE_NUM_SIDES; counter++){
-    Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
-    Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
-    delay(2000);
-    //Turn to the left
-    Left_Motor_ON_FORWARD(LEFT_LTURN_SPEED);
-    Right_Motor_ON_FORWARD(RIGHT_RTURN_SPEED);
-    delay(1500);
+void drive_in_triangle(void){
+  static uint8_t edges_left_to_drive = NUM_TRIANGLE_EDGES;
+  static uint8_t instruction_label;
+  switch(shape_routine_begin)
+  {
+  case true:
+    switch(instruction_label)
+    {
+    case INSTRUCTION1: // wait two seconds before beginning
+      delay_time = TWO_SEC;                   // send delay time to global accessible by timer A1
+      TA1CCTL2 |= CCIE;                    // enable timer A1.2 to count time
+      instruction_label++;
+      break;
+    case INSTRUCTION2: // drive along triangle edge
+      Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
+      Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
+      delay_time = ONE_SEC;                   // send delay time to global accessible by timer A1
+      TA1CCTL2 |= CCIE;                    // enable timer A1.2 to count time
+      instruction_label++; break;
+    case INSTRUCTION3: // turn 60 degrees counterclockwise
+      Left_Motor_ON_FORWARD(LEFT_LTURN_SPEED);
+      Right_Motor_ON_FORWARD(RIGHT_LTURN_SPEED);
+      delay_time = ONE_SEC;                   // send delay time to global accessible by timer A1
+      TA1CCTL2 |= CCIE;                    // enable timer A1.2 to count time
+      switch(--edges_left_to_drive)
+      {
+      case false:
+        instruction_label++; 
+        break;
+      default:
+        TA1CCTL2 |= CCIE;                    // enable timer A1.2 to count time
+        instruction_label = INSTRUCTION2; break;
+      } break;
+    default:      // turn off wheels and return permanently to main
+      Wheels_OFF();
+      instruction_label = INSTRUCTION1;
+      edges_left_to_drive = NUM_TRIANGLE_EDGES;
+    } break;
   }
 }
