@@ -9,6 +9,7 @@
 //===============================================================
 
 #include "LCD.h"
+#include "switches.h"
 #include "wheels.h"
 #include <string.h>
 #include <stdint.h>

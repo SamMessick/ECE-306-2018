@@ -25,7 +25,7 @@ void Init_Timer_B0(void){
   TA1CTL &= ~(TAIFG);                 // Clear Timer A1 interrupt flag and interrupt enable
   
   
-  Set all motor pins to Reset/Set mode, 0% duty cycle
+// Set all motor pins to Reset/Set mode, 0% duty cycle
   TB0CCTL3 |= OUTMOD_7;                 //  Reset/Set mode
   TB0CCTL4 |= OUTMOD_7;                 
   TB0CCTL5 |= OUTMOD_7;                 
@@ -33,4 +33,5 @@ void Init_Timer_B0(void){
   TB0CCR3   = MOTOR_OFF;                //  Begin with motor off
   TB0CCR4   = MOTOR_OFF;                
   TB0CCR5   = MOTOR_OFF;                
-  TB0CCR6   = MOTOR_OFF;      
+  TB0CCR6   = MOTOR_OFF;    
+}  

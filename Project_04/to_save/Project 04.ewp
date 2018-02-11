@@ -2313,7 +2313,7 @@
         <name>$PROJ_DIR$\LCD.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\..\..\Homework_03\LCD.r43</name>
+        <name>$PROJ_DIR$\..\LCD.r43</name>
     </file>
     <file>
         <name>$PROJ_DIR$\led.c</name>

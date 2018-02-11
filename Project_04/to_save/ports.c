@@ -148,22 +148,22 @@ void Init_Port3(char use_smclk) { // Initlizes all pins on Port 3
   P3OUT  &= ~IOT_WAKEUP;                // Set out value Low [off]
   P3DIR  |= IOT_WAKEUP;                 // Set direction to output
   // P3_4 Begin Dumb "PWM"
-  P3SEL0 &= ~L_REVERSE;
+  P3SEL0 |= L_REVERSE;
   P3SEL1 &= ~L_REVERSE;
   P3OUT  &= ~L_REVERSE;
   P3DIR  |= L_REVERSE;
   // P3_5 Begin Dumb "PWM"
-  P3SEL0 &= ~L_FORWARD;
+  P3SEL0 |= L_FORWARD;
   P3SEL1 &= ~L_FORWARD;
   P3OUT  &= ~L_FORWARD;
   P3DIR  |= L_FORWARD;
   // P3_6 Begin Dumb "PWM"
-  P3SEL0 &= ~R_REVERSE;
+  P3SEL0 |= R_REVERSE;
   P3SEL1 &= ~R_REVERSE;
   P3OUT  &= ~R_REVERSE;
   P3DIR  |= R_REVERSE;
   // P3_7 Begin Dumb "PWM"
-  P3SEL0 &= ~R_FORWARD;
+  P3SEL0 |= R_FORWARD;
   P3SEL1 &= ~R_FORWARD;
   P3OUT  &= ~R_FORWARD;
   P3DIR  |= R_FORWARD;

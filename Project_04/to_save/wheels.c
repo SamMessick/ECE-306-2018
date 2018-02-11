@@ -19,7 +19,6 @@ uint8_t right_forward_flag;
 uint8_t right_reverse_flag;
 
 void WHEELS_test(void);
-void Wheels_OFF(void);
 //------------------------
 // Turning wheels off
 //------------------------
@@ -45,7 +44,7 @@ void Wheels_OFF(void){
 // Forward *
 //**********
 void Left_Motor_ON_FORWARD(uint8_t speed){
-  if(left_reverse_flag)                         // If left motor is not set to move backward already
+  if(!left_reverse_flag)                         // If left motor is not set to move backward already
   {
     TB0CCR4 = speed*DUTY_CYCLE_DIVISOR;         // Set left motor forward speed as one of 255 settings
     left_forward_flag = true;                   // Prevent left motor from moving backward simultaneously
@@ -53,7 +52,7 @@ void Left_Motor_ON_FORWARD(uint8_t speed){
 }
 
 void Right_Motor_ON_FORWARD(uint8_t speed){
-  if(right_reverse_flag)                        // If right motor is not set to move backward already
+  if(!right_reverse_flag)                        // If right motor is not set to move backward already
   { 
     TB0CCR6 = speed*DUTY_CYCLE_DIVISOR;         // Set right motor forward speed as one of 255 settings
     right_forward_flag = true;                  // Prevent right motor from moving backward simultaneously
@@ -115,9 +114,10 @@ void drive_in_circle(void){
       delay_time = CIR_SEC;                         // send delay time to global accessible by timer A1
       TA1CCTL2 |= CCIE;                             // enable timer A1.2 to count time
       if(--circles_left_to_drive)
-        instruction_label = INSTRUCTION2; break     // drive in circles until there are no circles left to drive
+        instruction_label = INSTRUCTION2;     // drive in circles until there are no circles left to drive
       else 
-        instruction_label++; break;                 // end shape routine
+        instruction_label++;                 // end shape routine
+      break;
       
         
     default:           /* turn off wheels and return permanently to main */
@@ -157,15 +157,15 @@ void drive_in_figure8(void){
       delay_time = FOR_SEC;                        // send delay time to global accessible by timer A1
       TA1CCTL2 |= CCIE;                            // enable timer A1.2 to count time
       if(--figure8s_left_to_drive)
-        instruction_label = INSTRUCTION2; break    // drive in figure-8s until there are no more left to drive
+        instruction_label = INSTRUCTION2;    // drive in figure-8s until there are no more left to drive
       else 
-        instruction_label++; break;                // end shape routine
-        
+        instruction_label++;                // end shape routine
+      break;
         
     default:          /* turn off wheels and return permanently to main */
       Wheels_OFF();
       instruction_label = INSTRUCTION1;
-      edges_left_to_drive = NUM_TRIALS;
+      figure8s_left_to_drive = NUM_TRIALS;
     }
 }
 
@@ -198,15 +198,15 @@ void drive_in_triangle(void){
       Right_Motor_ON_FORWARD(RIGHT_LTURN_SPEED);
       delay_time = ONE_SEC;                        // send delay time to global accessible by timer A1
       TA1CCTL2 |= CCIE;                            // enable timer A1.2 to count time
-      if(--figure8s_left_to_drive)
-        instruction_label = INSTRUCTION2; break    // drive in figure-8s until there are no more left to drive
+      if(--edges_left_to_drive)
+        instruction_label = INSTRUCTION2;    // drive in figure-8s until there are no more left to drive
       else 
-        instruction_label++; break;                 // end shape routine
-      
+        instruction_label++;                  // end shape routine
+      break;
       
     default:          /* turn off wheels and return permanently to main */
       Wheels_OFF();
       instruction_label = INSTRUCTION1;
       edges_left_to_drive = NUM_TRIANGLE_EDGES;
-    } break;
+    }
 }

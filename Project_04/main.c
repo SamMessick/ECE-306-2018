@@ -13,6 +13,9 @@
 
 #include "main.h"
 
+extern unsigned int Time_Sequence;
+extern unsigned char one_time;
+
 void main(void){
 //------------------------------------------------------------------------------
 // Main Program
@@ -21,7 +24,7 @@ void main(void){
 //
 //------------------------------------------------------------------------------
   
-   Init_Ports();                        // Initialize Ports
+  Init_Ports();                        // Initialize Ports
 // Disable the GPIO power-on default high-impedance mode to activate
 // previously configured port settings
   PM5CTL0 &= ~LOCKLPM5;
@@ -30,8 +33,6 @@ void main(void){
   Init_Timers();                       // Initialize Timers
   Init_LCD();                          // Initialize LCD
   Init_LEDs();
-  Init_Timer_B0();
-  Init_Timer_A1();
 
 // Update LCD display
   enable_display_update();
@@ -41,7 +42,9 @@ void main(void){
 // Begining of the Interrupt-Based Operating System
 //------------------------------------------------------------------------------
   for(;;) {
-    for(;;);
+	  switch(Time_Sequence)
+	  Switches_Process();
+	  update_menu();
   }
 //------------------------------------------------------------------------------
 }

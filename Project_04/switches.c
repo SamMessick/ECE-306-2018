@@ -41,7 +41,8 @@ void disable_switch_BUTTON2(void){
 void Switch1_Process(void){
   /*
    * Replaced with Port 5 interrupt routine
-   *
+   * Used instead at TAs request
+   */
   switch(flag_RED_LED_ON)
   {
   case false:
@@ -68,12 +69,14 @@ void Switch1_Process(void){
     }
     break;
   }
-  */
 }
+
+
 void Switch2_Process(void){
   /*
    * Replaced with Port 5 interrupt routine
-   *
+   * Used instead at TAs request
+   */
   switch(flag_GRN_LED_ON)               // Check if green LED is on
   {
   case false:
@@ -102,8 +105,9 @@ void Switch2_Process(void){
     }
     break;
   }
-  */
 }
+
+
 void Switches_Process(void){
   Switch1_Process();
   Switch2_Process();

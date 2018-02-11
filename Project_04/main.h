@@ -24,11 +24,5 @@
 void Switches_Process(void); // switches.c
 
 void Init_Timers(void);      // timers.c, timersA0.c ...
-void Init_Timer_A1(void);
-void Init_Timer_A2(void);
-void Init_Timer_A3(void);
-void Init_Timer_B0(void);
-void Init_Timer_B1(void);
-void Init_Timer_B2(void);
 
 // OS control variables
