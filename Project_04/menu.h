@@ -55,6 +55,7 @@ void update_menu(void);
 void LCD_print(char first_line[10], char second_line[10], char third_line[10], char fourth_line[10]);
 void update_string(char *string_data, int string);
 void delay(uint16_t msecs);
+void update_text_size(void);
 
 
 extern char display_line[LINE_NUM_LINES][COLUMN_NUM_COLUMNS];
