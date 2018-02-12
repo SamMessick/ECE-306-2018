@@ -58,6 +58,7 @@ typedef enum{
 
 // Wheel operation
 void WHEELS_test(void);
+void update_motor_state(void);
 void Wheels_OFF(void);
 void Left_Motor_OFF(void);
 void Right_Motor_OFF(void);
