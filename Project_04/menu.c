@@ -44,3 +44,22 @@ void LCD_print(char first_line[COLUMN_NUM_COLUMNS], char second_line[COLUMN_NUM_
   strcpy(display_line[LINE4], fourth_line);
   update_string(display_line[LINE4], LINE4);
 }
+
+void update_text_size(void){
+ switch(Time_Sequence){
+      case 100:                        // 1000 msec
+        if(one_time){
+          lcd_BIG_mid();
+          display_changed = 1;
+          one_time = 0;
+        }
+        break;
+      case 50:                         // 500 msec
+        if(one_time){
+          lcd_4line();
+          display_changed = 1;
+          one_time = 0;
+        }
+        break;   
+ }
+}
