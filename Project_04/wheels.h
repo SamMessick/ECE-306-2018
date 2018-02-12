@@ -77,3 +77,4 @@ void drive_in_triangle(void);
 extern unsigned int Motors_Off_Time;         // Time out of 100ms after which motors turn off
 extern unsigned int Motors_Enabled;          // Flag set if motors are to run
 extern volatile unsigned int Time_Sequence;  // Timer variable
+extern uint16_t delay_time;
