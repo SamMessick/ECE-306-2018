@@ -38,7 +38,7 @@ void update_motor_state(void){
 
 void Wheels_OFF(void){
     L_FORWARD_on_time = MOTOR_OFF;
-    L_FORWARD_on_time = MOTOR_OFF;
+    R_FORWARD_on_time = MOTOR_OFF;
 }
 
 //------------------------
