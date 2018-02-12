@@ -14,6 +14,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdbool.h>
+#define COUNTER_RESET      (0)
 #ifndef INIT_ENUMS_H
 #define INIT_ENUMS_H
 
