@@ -32,13 +32,14 @@ void update_menu(void){
     break;
   case PENULT_OPTION: // triangle
     LCD_print("Trng. Mode", "Sam M. Car", "          ", "  ECE306  "); 
-    drive_in_triangle();
-    delay(delay_time);
+    if(delay_flag)
+      delay();
+    else
+      drive_in_triangle();
     break;
   default:
     LCD_print("   NCSU   ", "Sam M. Car", "          ", "  ECE306  ");
-    Wheels_OFF();
-    delay(delay_time);
+      Wheels_OFF();
     break;
   }
 }
