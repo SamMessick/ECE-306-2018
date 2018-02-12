@@ -11,6 +11,7 @@
 #include "ports.h"
 #include <stdint.h>
 #include <stdbool.h>
+#define PWM_PERIOD             (100)
 #define LEFT_FORWARD_SPEED      (99)               // 253 o.o 255          (253/255) * 1000
 #define RIGHT_FORWARD_SPEED     (99)               // 180 o.o 255          (180/255) * 1000
 #define LEFT_LCIRC_SPEED        (16)               // 40  o.o 255          ( 40/255) * 1000
