@@ -11,19 +11,24 @@
 #include "menu.h"
 
 int8_t menu_counter;
+uint8_t delay_flag;
 
 void update_menu(void){
   switch(menu_counter)
   {
   case OPTION1: // circle
     LCD_print("Circ. Mode", "Sam M. Car", "          ", "  ECE306  "); 
-    drive_in_circle();
-    delay(delay_time);
+    if(delay_flag)
+      delay();
+    else
+      drive_in_circle();
     break;
   case OPTION2: // figure 8
     LCD_print("Fig8. Mode", "Sam M. Car", "          ", "  ECE306  "); 
-    drive_in_figure8();
-    delay(delay_time);
+    if(delay_flag)
+      delay();
+    else
+      drive_in_figure8();
     break;
   case PENULT_OPTION: // triangle
     LCD_print("Trng. Mode", "Sam M. Car", "          ", "  ECE306  "); 
@@ -49,16 +54,20 @@ void LCD_print(char first_line[COLUMN_NUM_COLUMNS], char second_line[COLUMN_NUM_
   update_string(display_line[LINE4], LINE4);
 }
 
-void delay(uint16_t msecs){
-  unsigned int Time_Sequence_tmp = Time_Sequence
+void delay(){
+  static unsigned int Time_Sequence_tmp = Time_Sequence-
   uint16_t counter;
-  while(counter < msecs)
+  
+  if(counter == delay_time)
   {
-    if(Time_Sequence != Time_Sequence_tmp)
-    {
+      counter = COUNTER_RESET;
+      delay_flag = false;
+  }
+  
+  if(Time_Sequence != Time_Sequence_tmp)
+  {
       counter++;
       Time_Sequence_tmp = Time_Sequence;
-    }
   }
 }
 
