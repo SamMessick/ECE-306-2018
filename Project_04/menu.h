@@ -65,3 +65,4 @@ extern volatile unsigned int update_display_count;
 extern volatile unsigned char display_changed;
 extern int8_t menu_counter;            // displays which option has been chosen by the buttons
 extern uint16_t delay_time;
+extern volatile unsigned int Time_Sequence;
