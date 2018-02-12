@@ -19,6 +19,8 @@ uint8_t right_forward_flag;
 uint8_t right_reverse_flag;
 
 uint16_t delay_time;
+unsigned int Motors_Off_Time;         // Time out of 100ms that motors turn off
+unsigned int Motors_Enabled;          // Flag set if motors are to run
 
 void WHEELS_test(void);
 
