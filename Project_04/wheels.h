@@ -11,21 +11,20 @@
 #include "ports.h"
 #include <stdint.h>
 #include <stdbool.h>
-#define LEFT_FORWARD_SPEED      (253)
-#define RIGHT_FORWARD_SPEED     (180)
-#define LEFT_LCIRC_SPEED        (40)
-#define RIGHT_LCIRC_SPEED       (253)
-#define LEFT_FIG8L_SPEED        (20)
-#define RIGHT_FIG8L_SPEED       (253)
-#define LEFT_FIG8R_SPEED        (253)
-#define RIGHT_FIG8R_SPEED       (20)
-#define LEFT_LTURN_SPEED        (253)
-#define RIGHT_LTURN_SPEED         (0)
-#define NUM_TRIALS                (2)
-#define NUM_TRIANGLE_EDGES        (6)      // goes around twice
+#define LEFT_FORWARD_SPEED      (99)               // 253 o.o 255          (253/255) * 1000
+#define RIGHT_FORWARD_SPEED     (99)               // 180 o.o 255          (180/255) * 1000
+#define LEFT_LCIRC_SPEED        (16)               // 40  o.o 255          ( 40/255) * 1000
+#define RIGHT_LCIRC_SPEED       (99)               // 253 o.o 255          (253/255) * 1000
+#define LEFT_FIG8L_SPEED         (8)               // 20  o.o 255          ( 20/255) * 1000
+#define RIGHT_FIG8L_SPEED       (99)               // 253 o.o 255          (253/255) * 1000
+#define LEFT_FIG8R_SPEED        (99)               // 253 o.o 255          (253/255) * 1000
+#define RIGHT_FIG8R_SPEED        (8)               // 20  o.o 255          ( 20/255) * 1000
+#define LEFT_LTURN_SPEED        (99)               // 253 o.o 255          (253/255) * 1000
+#define RIGHT_LTURN_SPEED        (0)               // 0   o.o 255          (  0/255) * 1000
+#define NUM_TRIALS               (2)                
+#define NUM_TRIANGLE_EDGES       (6)               // goes around twice
 
-#define MOTOR_OFF                 (0)
-#define DUTY_CYCLE_DIVISOR       (50)
+#define MOTOR_OFF                (0)
 
 #define COUNTER_RESET_STATE      (0)
 #ifndef SHAPE_INSTR_ENUM
@@ -74,6 +73,6 @@ void drive_in_circle(void);
 void drive_in_figure8(void);
 void drive_in_triangle(void);
 
-extern unsigned int Motors_Off_Time;         // Time out of 100ms that motors turn off
+extern unsigned int Motors_Off_Time;         // Time out of 100ms after which motors turn off
 extern unsigned int Motors_Enabled;          // Flag set if motors are to run
-extern volatile unsigned int Time_Sequence;
+extern volatile unsigned int Time_Sequence;  // Timer variable
