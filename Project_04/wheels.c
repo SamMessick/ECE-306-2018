@@ -21,7 +21,18 @@ uint8_t right_reverse_flag;
 uint16_t delay_time;
 
 void WHEELS_test(void);
-void Wheels_OFF(void);
+
+void update_motor_state(void){
+    if(Motors_Enabled)
+    {
+      if(Time_Sequence < Motors_Off_Time)
+        P3OUT |= (L_FORWARD | R_FORWARD);
+      
+      else if(Time_Sequence >= Motors_Off_Time)    
+        P3OUT &= ~(L_FORWARD | R_FORWARD);
+    }
+}
+
 //------------------------
 // Turning wheels off
 //------------------------
