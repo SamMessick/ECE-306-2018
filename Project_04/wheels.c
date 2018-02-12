@@ -18,6 +18,8 @@ uint8_t left_reverse_flag;
 uint8_t right_forward_flag;
 uint8_t right_reverse_flag;
 
+uint16_t delay_time;
+
 void WHEELS_test(void);
 void Wheels_OFF(void);
 //------------------------
@@ -115,7 +117,7 @@ void drive_in_circle(void){
       delay_time = CIR_SEC;                         // send delay time to global accessible by timer A1
       TA1CCTL2 |= CCIE;                             // enable timer A1.2 to count time
       if(--circles_left_to_drive)
-        instruction_label = INSTRUCTION2; break     // drive in circles until there are no circles left to drive
+        instruction_label = INSTRUCTION2;           // drive in circles until there are no circles left to drive
       else 
         instruction_label++; break;                 // end shape routine
       
@@ -157,7 +159,7 @@ void drive_in_figure8(void){
       delay_time = FOR_SEC;                        // send delay time to global accessible by timer A1
       TA1CCTL2 |= CCIE;                            // enable timer A1.2 to count time
       if(--figure8s_left_to_drive)
-        instruction_label = INSTRUCTION2; break    // drive in figure-8s until there are no more left to drive
+        instruction_label = INSTRUCTION2;          // drive in figure-8s until there are no more left to drive
       else 
         instruction_label++; break;                // end shape routine
         
@@ -165,7 +167,7 @@ void drive_in_figure8(void){
     default:          /* turn off wheels and return permanently to main */
       Wheels_OFF();
       instruction_label = INSTRUCTION1;
-      edges_left_to_drive = NUM_TRIALS;
+      figure8s_left_to_drive = NUM_TRIALS;
     }
 }
 
@@ -198,8 +200,8 @@ void drive_in_triangle(void){
       Right_Motor_ON_FORWARD(RIGHT_LTURN_SPEED);
       delay_time = ONE_SEC;                        // send delay time to global accessible by timer A1
       TA1CCTL2 |= CCIE;                            // enable timer A1.2 to count time
-      if(--figure8s_left_to_drive)
-        instruction_label = INSTRUCTION2; break    // drive in figure-8s until there are no more left to drive
+      if(--edges_left_to_drive)
+        instruction_label = INSTRUCTION2;           // drive in figure-8s until there are no more left to drive
       else 
         instruction_label++; break;                 // end shape routine
       
@@ -208,5 +210,5 @@ void drive_in_triangle(void){
       Wheels_OFF();
       instruction_label = INSTRUCTION1;
       edges_left_to_drive = NUM_TRIANGLE_EDGES;
-    } break;
+    }
 }

@@ -24,6 +24,9 @@
 #define NUM_TRIALS                (2)
 #define NUM_TRIANGLE_EDGES        (6)      // goes around twice
 
+#define MOTOR_OFF                 (0)
+#define DUTY_CYCLE_DIVISOR       (50)
+
 #define COUNTER_RESET_STATE      (0)
 #ifndef SHAPE_INSTR_ENUM
 #define SHAPE_INSTR_ENUM
@@ -71,4 +74,3 @@ void drive_in_figure8(void);
 void drive_in_triangle(void);
 
 extern volatile uint8_t delay_continue;
-extern volatile uint16_t delay_time;

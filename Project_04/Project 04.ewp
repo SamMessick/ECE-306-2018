@@ -2349,18 +2349,6 @@
         <name>$PROJ_DIR$\system.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\timerA1.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\timerA1.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\timerB0.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\timerB0.h</name>
-    </file>
-    <file>
         <name>$PROJ_DIR$\timersA0.r43</name>
     </file>
     <file>

@@ -10,6 +10,9 @@
 
 #include "switches.h"
 
+uint8_t flag_RED_LED_ON;
+uint8_t flag_GRN_LED_ON;
+
 //Enable right switch
 void enable_switch_BUTTON1(void){
   P5OUT |= BUTTON1;                     // Select pull up resistor

@@ -284,18 +284,12 @@ void Init_Port5(void) { // Initializes all pins on Port 5
   P5OUT  |= BUTTON2;                    // Configure pullup resistor
   P5DIR  &= ~BUTTON2;                   // Set direction to input
   P5REN  |= BUTTON2;                    // Enable pullup resistor
-  P5IE   |= BUTTON2;                    // Enable interrupts for Button2
-  P5IES  |= BUTTON2;                    // Interrupts occur on Hi/Lo edge
-  P5IFG  &= ~BUTTON2;                   // Button 2 IFG cleared
   // P5_6
   P5SEL0 &= ~BUTTON1;                   // Set to GP I/O
   P5SEL1 &= ~BUTTON1;                   // Set to GP I/O
   P5OUT  |= BUTTON1;                    // Configure pullup resistor
   P5DIR  &= ~BUTTON1;                   // Set direction to input
   P5REN  |= BUTTON1;                    // Enable pullup resistor
-  P5IE   |= BUTTON1;                    // Enable interrupts for Button2
-  P5IES  |= BUTTON1;                    // Interrupts occur on Hi/Lo edge
-  P5IFG  &= ~BUTTON1;                   // Button 2 IFG cleared
   // P5_7
   P5SEL0 &= ~LCD_BACKLITE;              // Set to GP I/O
   P5SEL1 &= ~LCD_BACKLITE;              // Set to GP I/O

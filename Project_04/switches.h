@@ -7,8 +7,8 @@
 //  Date Feb. 2018
 //  Compiler Build with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
 //===============================================================
-
-#include "menu.h"
+#include "msp430.h"
+#include "ports.h"
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -35,5 +35,4 @@ void measure_delay(void);
 void out_control_words(void);
 
 // Switch on flags; used to "debounce"
-uint8_t flag_RED_LED_ON;
-uint8_t flag_GRN_LED_ON;
+extern int8_t menu_counter;            // displays which option has been chosen by the buttons

@@ -13,8 +13,33 @@
 
 #include "main.h"
 
-extern unsigned int Time_Sequence;
-extern unsigned char one_time;
+extern volatile unsigned int Time_Sequence;     // Counting variable; increments every 5ms up to 125
+extern volatile char one_time;
+
+
+
+///////////////////////////////////
+unsigned int Motors_Off_Time;         // Time out of 125 that motors turn off
+unsigned int Motors_Enabled;          // Flag set if motors are to run
+
+
+void update_motor_state(void){
+    if(Motors_Enabled)
+    {
+      if(Time_Sequence < Motors_Off_Time)
+        P3OUT |= (L_FORWARD | R_FORWARD);
+      
+      else if(Time_Sequence >= Motors_Off_Time)    
+        P3OUT &= ~(L_FORWARD | R_FORWARD);
+    }
+}
+///////////////////////////////////
+
+
+
+
+
+
 
 void main(void){
 //------------------------------------------------------------------------------
@@ -33,18 +58,53 @@ void main(void){
   Init_Timers();                       // Initialize Timers
   Init_LCD();                          // Initialize LCD
   Init_LEDs();
-
-// Update LCD display
-  enable_display_update();
-  update_menu();
+  
   
 //------------------------------------------------------------------------------
-// Begining of the Interrupt-Based Operating System
+// Begining of the "While" Operating System
 //------------------------------------------------------------------------------
-  for(;;) {
-	  switch(Time_Sequence)
-	  Switches_Process();
-	  update_menu();
+  for(;;) {                      // Can the Operating system run
+    update_motor_state();
+    switch(Time_Sequence){
+    case 150:
+      if(one_time){
+      }
+    case 125:                          // 1250 msec
+        if(one_time){
+          one_time = 0;
+        }
+        Time_Sequence = 0;             //
+        break;
+      case 100:                        // 1000 msec
+        if(one_time){
+          lcd_BIG_mid();
+          display_changed = 1;
+          one_time = 0;
+        }
+        break;
+      case 75:                         // 750 msec
+        if(one_time){
+          one_time = 0;
+        }
+        break;
+      case 50:                         // 500 msec
+        if(one_time){
+          lcd_4line();
+          display_changed = 1;
+          one_time = 0;
+        }
+        break;
+      case  25:                        // 250 msec
+        if(one_time){
+          one_time = 0;
+        }
+        break;                         //
+        case 0: 
+          int x = 1+1;
+          break;
+    }
+    Switches_Process();                // Check for switch state change
+    update_menu();
+    Display_Process();
   }
-//------------------------------------------------------------------------------
 }

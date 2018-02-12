@@ -8,7 +8,6 @@
 //  Compiler Build with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
 //===============================================================
 
-#include "menu.h"
 #include "ports.h"
 #include <stdbool.h>
 #include <stdint.h>
