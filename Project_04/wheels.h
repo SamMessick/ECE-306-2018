@@ -43,15 +43,13 @@ typedef enum{
 #define TIMER_INTV_ENUM
 
 typedef enum{
-  OTWENT_SEC = (0xC350),
-  MSEC = (1000),
-  CIR_SEC = (6500),
-  TWO_SEC = (2000),
-  FOR_SEC = (3500),
-  SIX_SEC = (6000),
-  ONE_SEC = (1000),
-  HALF_SEC = (500),
-  QUART_SEC_DELAY = (50)
+  CIR_SEC = (650), // 6.5 seconds
+  TWO_SEC = (200), // 2.0 seconds
+  FOR_SEC = (350), // 3.5 seconds
+  SIX_SEC = (600), // 6.0 seconds
+  ONE_SEC = (100), // 1.0 seconds
+  HALF_SEC = (50), // 0.5 seconds
+  QUART_SEC_DELAY = (25) // .25 seconds
 } timer_intv_t;
 
 #endif
