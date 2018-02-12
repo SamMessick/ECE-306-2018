@@ -76,15 +76,16 @@ void update_text_size(void){
       case 100:                        // 1000 msec
         if(one_time){
           lcd_BIG_mid();
-          display_changed = 1;
-          one_time = 0;
+          display_changed = true;
+          one_time = false;
+          Time_Sequence = 0;
         }
         break;
       case 50:                         // 500 msec
         if(one_time){
           lcd_4line();
-          display_changed = 1;
-          one_time = 0;
+          display_changed = true;
+          one_time = false;
         }
         break;   
  }
