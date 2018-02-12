@@ -56,16 +56,16 @@ void drive_in_circle(void){
     {
         
     case INSTRUCTION1: /* wait two seconds before beginning */
+      delay_flag = true;
       delay_time = TWO_SEC;                         // send delay time to global accessible by timer A1
-      //TA1CCTL2 |= CCIE;                           // enable timer A1.2 to count time
       instruction_label++; break;
-        
+            
         
     case INSTRUCTION2: /* drive in circle counterclockwise */
       L_FORWARD_on_time = LEFT_LCIRC_SPEED;
       R_FORWARD_on_time = RIGHT_LCIRC_SPEED;
+      delay_flag = true;
       delay_time = CIR_SEC;                         // send delay time to global accessible by timer A1
-      TA1CCTL2 |= CCIE;                             // enable timer A1.2 to count time
       if(--circles_left_to_drive)
         instruction_label = INSTRUCTION2;           // drive in circles until there are no circles left to drive
       else 
@@ -90,24 +90,24 @@ void drive_in_figure8(void){
     {
         
     case INSTRUCTION1: /* wait two seconds before beginning */
+      delay_flag = true;
       delay_time = TWO_SEC;                         // send delay time to global accessible by timer A1
-      TA1CCTL2 |= CCIE;                             // enable timer A1.2 to count time
       instruction_label++; break;
         
         
     case INSTRUCTION2: /* drive in circle counterclockwise */
       L_FORWARD_on_time = LEFT_FIG8L_SPEED;
       L_FORWARD_on_time = RIGHT_FIG8L_SPEED;
+      delay_flag = true;
       delay_time = FOR_SEC;                        // send delay time to global accessible by timer A1
-      TA1CCTL2 |= CCIE;                            // enable timer A1.2 to count time
       instruction_label++; break;
         
         
     case INSTRUCTION3: /* drive in circle clockwise */
       L_FORWARD_on_time = LEFT_FIG8R_SPEED;
       R_FORWARD_on_time = RIGHT_FIG8R_SPEED;
+      delay_flag = true;
       delay_time = FOR_SEC;                        // send delay time to global accessible by timer A1
-      TA1CCTL2 |= CCIE;                            // enable timer A1.2 to count time
       if(--figure8s_left_to_drive)
         instruction_label = INSTRUCTION2;          // drive in figure-8s until there are no more left to drive
       else 
@@ -131,8 +131,8 @@ void drive_in_triangle(void){
     switch(instruction_label)
     {
     case INSTRUCTION1: /* wait two seconds before beginning */
+      delay_flag = true;
       delay_time = TWO_SEC;                        // send delay time to global accessible by timer A1
-      TA1CCTL2 |= CCIE;                            // enable timer A1.2 to count time
       instruction_label++;
       break;
         
@@ -141,16 +141,16 @@ void drive_in_triangle(void){
       Motors_Enabled = true;
       L_FORWARD_on_time = LEFT_FORWARD_SPEED;
       R_FORWARD_on_time = RIGHT_FORWARD_SPEED;
+      delay_flag = true;
       delay_time = ONE_SEC;                        // send delay time to global accessible by timer A1
-      TA1CCTL2 |= CCIE;                            // enable timer A1.2 to count time
       instruction_label++; break;
         
         
     case INSTRUCTION3: /* turn 60 degrees counterclockwise */
       L_FORWARD_on_time = LEFT_LTURN_SPEED;
       R_FORWARD_on_time = RIGHT_LTURN_SPEED;
+      delay_flag = true;
       delay_time = ONE_SEC;                        // send delay time to global accessible by timer A1
-      TA1CCTL2 |= CCIE;                            // enable timer A1.2 to count time
       if(--edges_left_to_drive)
         instruction_label = INSTRUCTION2;           // drive in figure-8s until there are no more left to drive
       else 
