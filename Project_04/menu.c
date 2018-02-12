@@ -18,18 +18,22 @@ void update_menu(void){
   case OPTION1: // circle
     LCD_print("Circ. Mode", "Sam M. Car", "          ", "  ECE306  "); 
     drive_in_circle();
+    delay(delay_time);
     break;
   case OPTION2: // figure 8
     LCD_print("Fig8. Mode", "Sam M. Car", "          ", "  ECE306  "); 
     drive_in_figure8();
+    delay(delay_time);
     break;
   case PENULT_OPTION: // triangle
     LCD_print("Trng. Mode", "Sam M. Car", "          ", "  ECE306  "); 
     drive_in_triangle();
+    delay(delay_time);
     break;
   default:
     LCD_print("   NCSU   ", "Sam M. Car", "          ", "  ECE306  ");
     Wheels_OFF();
+    delay(delay_time);
     break;
   }
 }
@@ -43,6 +47,19 @@ void LCD_print(char first_line[COLUMN_NUM_COLUMNS], char second_line[COLUMN_NUM_
   update_string(display_line[LINE3], LINE3);
   strcpy(display_line[LINE4], fourth_line);
   update_string(display_line[LINE4], LINE4);
+}
+
+void delay(uint16_t msecs){
+  unsigned int Time_Sequence_tmp = Time_Sequence
+  uint16_t counter;
+  while(counter < msecs)
+  {
+    if(Time_Sequence != Time_Sequence_tmp)
+    {
+      counter++;
+      Time_Sequence_tmp = Time_Sequence;
+    }
+  }
 }
 
 void update_text_size(void){
