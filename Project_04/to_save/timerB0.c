@@ -16,13 +16,8 @@
 void Init_Timer_B0(void){
   TB0CTL    = TASSEL__SMCLK;            // Select SMCLK for source
   TB0CTL   |= (MC_2|TBCLR);             // Continuous mode; clear Timer B0 register 
-  TB0CCR4   = MOTOR_PERIOD;
-  TB0CCR6   = MOTOR_PERIOD;
 
-  TA1CCTL0 |= CCIE;                   // Enable clock interrupts every 1/20 second
-  TA1CCTL1 &= ~CCIE;
-  TA1CCTL2 &= ~CCIE;
-  TA1CTL &= ~(TAIFG);                 // Clear Timer A1 interrupt flag and interrupt enable
+  TB0CTL &= ~(TBIFG);                 // Clear Timer A1 interrupt flag and interrupt enable
   
   
 // Set all motor pins to Reset/Set mode, 0% duty cycle

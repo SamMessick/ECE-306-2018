@@ -75,6 +75,7 @@ void update_menu(void){
       drive_back_and_forth();
       break;
     }
+    break;
   default:
     LCD_print("   NCSU   ", "Sam M. Car", "          ", "  ECE306  ");
     Wheels_OFF();
@@ -92,5 +93,6 @@ void LCD_print(char first_line[COLUMN_NUM_COLUMNS], char second_line[COLUMN_NUM_
   strcpy(display_line[LINE4], fourth_line);
   update_string(display_line[LINE4], LINE4);
   
+  Display_Process();                     // Refresh LCD screen
   Display_Process();                     // Refresh LCD screen
 }

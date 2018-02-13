@@ -222,10 +222,11 @@ void drive_back_and_forth(void){
     switch(instruction_label)
     {
     case INSTRUCTION1: /* wait two seconds before beginning */
+      Wheels_OFF();
       delay_time = TWO_SEC;                        // send delay time to global accessible by timer A1
       TA1CCTL2 |= CCIE;                            // enable timer A1.2 to count time
-      instruction_label_tmp = instruction_label;
-      instruction_label++; break;
+      instruction_label++; 
+      instruction_label_tmp = instruction_label; break;
         
         
     case INSTRUCTION2: /* drive forward for one second */
@@ -234,15 +235,16 @@ void drive_back_and_forth(void){
       Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
       delay_time = ONE_SEC;                        // send delay time to global accessible by timer A1
       TA1CCTL2 |= CCIE;                            // enable timer A1.2 to count time
-      instruction_label_tmp = instruction_label;
-      instruction_label++; break;
+      instruction_label++; 
+      instruction_label_tmp = instruction_label; break;
         
         
     case INSTRUCTION3: /* pause for one second */
+      Wheels_OFF();
       delay_time = ONE_SEC;                        // send delay time to global accessible by timer A1
       TA1CCTL2 |= CCIE;                            // enable timer A1.2 to count time
-      instruction_label_tmp = instruction_label;
-      instruction_label++; break;
+      instruction_label++; 
+      instruction_label_tmp = instruction_label; break;
       
       
     case INSTRUCTION4: /* travel backward for two seconds */
@@ -251,15 +253,16 @@ void drive_back_and_forth(void){
       Right_Motor_ON_REVERSE(RIGHT_FORWARD_SPEED);
       delay_time = TWO_SEC;                        // send delay time to global accessible by timer A1
       TA1CCTL2 |= CCIE;                            // enable timer A1.2 to count time
-      instruction_label_tmp = instruction_label;
-      instruction_label++; break;
+      instruction_label++; 
+      instruction_label_tmp = instruction_label; break;
       
       
     case INSTRUCTION5: /* pause for one second */
+      Wheels_OFF();
       delay_time = ONE_SEC;                        // send delay time to global accessible by timer A1
       TA1CCTL2 |= CCIE;                            // enable timer A1.2 to count time
-      instruction_label_tmp = instruction_label;
-      instruction_label++; break;
+      instruction_label++;
+      instruction_label_tmp = instruction_label; break;
       
       
     case INSTRUCTION6: /* travel forward for one second */
@@ -268,16 +271,16 @@ void drive_back_and_forth(void){
       Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
       delay_time = ONE_SEC;                        // send delay time to global accessible by timer A1
       TA1CCTL2 |= CCIE;                            // enable timer A1.2 to count time
-      instruction_label_tmp = instruction_label;
-      instruction_label++; break;
+      instruction_label++; 
+      instruction_label_tmp = instruction_label; break;
       
       
     case INSTRUCTION7: /* pause for one second */
+      Wheels_OFF();
       delay_time = ONE_SEC;                        // send delay time to global accessible by timer A1
       TA1CCTL2 |= CCIE;                            // enable timer A1.2 to count time
-      instruction_label_tmp = instruction_label;
       instruction_label++;
-      break;
+      instruction_label_tmp = instruction_label; break;
       
       
     case INSTRUCTION8: /* Spin in place clockwise for three seconds */
@@ -286,16 +289,16 @@ void drive_back_and_forth(void){
       Right_Motor_ON_REVERSE(RIGHT_FORWARD_SPEED);
       delay_time = THR_SEC;                        // send delay time to global accessible by timer A1
       TA1CCTL2 |= CCIE;                            // enable timer A1.2 to count time
-      instruction_label_tmp = instruction_label;
-      instruction_label++; break;
+      instruction_label++; 
+      instruction_label_tmp = instruction_label; break;
       
       
     case INSTRUCTION9: /* pause for two seconds */
+      Wheels_OFF();
       delay_time = TWO_SEC;                        // send delay time to global accessible by timer A1
       TA1CCTL2 |= CCIE;                            // enable timer A1.2 to count time
-      instruction_label_tmp = instruction_label;
       instruction_label++;
-      break;
+      instruction_label_tmp = instruction_label; break;
       
       
     case INSTRUCTION10: /* Spin in place counter-clockwise for three seconds */
@@ -304,16 +307,16 @@ void drive_back_and_forth(void){
       Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
       delay_time = THR_SEC;                        // send delay time to global accessible by timer A1
       TA1CCTL2 |= CCIE;                            // enable timer A1.2 to count time
-      instruction_label_tmp = instruction_label;
-      instruction_label++; break;
+      instruction_label++; 
+      instruction_label_tmp = instruction_label; break;
       
       
     case INSTRUCTION11: /* pause for two seconds */
+      Wheels_OFF();
       delay_time = TWO_SEC;                        // send delay time to global accessible by timer A1
       TA1CCTL2 |= CCIE;                            // enable timer A1.2 to count time
-      instruction_label_tmp = instruction_label;
       instruction_label++;
-      break;
+      instruction_label_tmp = instruction_label; break;
       
     default:          /* turn off wheels and return permanently to main */
       Wheels_OFF();

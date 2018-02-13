@@ -46,7 +46,7 @@ void Wheels_OFF(void){
 void Left_Motor_ON_FORWARD(uint8_t speed){
   if(!left_reverse_flag)                         // If left motor is not set to move backward already
   {
-    TB0CCR4 = speed*DUTY_CYCLE_DIVISOR;         // Set left motor forward speed as one of 255 settings
+    TB0CCR3 = speed*DUTY_CYCLE_DIVISOR;         // Set left motor forward speed as one of 255 settings
     left_forward_flag = true;                   // Prevent left motor from moving backward simultaneously
   }
 }
@@ -54,7 +54,7 @@ void Left_Motor_ON_FORWARD(uint8_t speed){
 void Right_Motor_ON_FORWARD(uint8_t speed){
   if(!right_reverse_flag)                        // If right motor is not set to move backward already
   { 
-    TB0CCR6 = speed*DUTY_CYCLE_DIVISOR;         // Set right motor forward speed as one of 255 settings
+    TB0CCR5 = speed*DUTY_CYCLE_DIVISOR;         // Set right motor forward speed as one of 255 settings
     right_forward_flag = true;                  // Prevent right motor from moving backward simultaneously
   }
 }
