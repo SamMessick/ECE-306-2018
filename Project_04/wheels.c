@@ -14,26 +14,23 @@
 // don't allow for motion forward/backward simultaneously in one motor
 
 uint16_t delay_time;
+uint8_t shape_routine_begin;
 unsigned int L_FORWARD_on_time;       // Time out of 100ms that left motor turns on
 unsigned int R_FORWARD_on_time;       // Time out of 100ms that right motor turns on 
-unsigned int Motors_Enabled;          // Flag set if motors are to run
 
 void WHEELS_test(void);
 
 void update_motor_state(void){
     // Update motor's on/off state based on their PWM on/off times and Time_Sequence
-    if(Motors_Enabled)
-    {
-      if((Time_Sequence % PWM_PERIOD) < R_FORWARD_on_time)
-        P3OUT |=  R_FORWARD;
-      else if((Time_Sequence % PWM_PERIOD) >= R_FORWARD_on_time)    
-        P3OUT &= ~R_FORWARD;
+    if((Time_Sequence % PWM_PERIOD) < R_FORWARD_on_time)
+      P3OUT |=  R_FORWARD;
+    else if((Time_Sequence % PWM_PERIOD) >= R_FORWARD_on_time)    
+      P3OUT &= ~R_FORWARD;
         
-      if((Time_Sequence % PWM_PERIOD) < L_FORWARD_on_time)
-        P3OUT |=  L_FORWARD;
-      else if((Time_Sequence % PWM_PERIOD) >= L_FORWARD_on_time)
-        P3OUT &= ~L_FORWARD;
-    }
+    if((Time_Sequence % PWM_PERIOD) < L_FORWARD_on_time)
+      P3OUT |=  L_FORWARD;
+    else if((Time_Sequence % PWM_PERIOD) >= L_FORWARD_on_time)
+      P3OUT &= ~L_FORWARD;
 }
 
 void Wheels_OFF(void){
@@ -76,6 +73,7 @@ void drive_in_circle(void){
       Wheels_OFF();
       instruction_label = INSTRUCTION1;
       circles_left_to_drive = NUM_TRIALS;
+      shape_routine_begin = false;
     }
 }
 
@@ -97,7 +95,7 @@ void drive_in_figure8(void){
         
     case INSTRUCTION2: /* drive in circle counterclockwise */
       L_FORWARD_on_time = LEFT_FIG8L_SPEED;
-      L_FORWARD_on_time = RIGHT_FIG8L_SPEED;
+      R_FORWARD_on_time = RIGHT_FIG8L_SPEED;
       delay_flag = true;
       delay_time = FOR_SEC;                        // send delay time to global accessible by timer A1
       instruction_label++; break;
@@ -107,7 +105,7 @@ void drive_in_figure8(void){
       L_FORWARD_on_time = LEFT_FIG8R_SPEED;
       R_FORWARD_on_time = RIGHT_FIG8R_SPEED;
       delay_flag = true;
-      delay_time = FOR_SEC;                        // send delay time to global accessible by timer A1
+      delay_time = TTN_SEC;                        // send delay time to global accessible by timer A1
       if(--figure8s_left_to_drive)
         instruction_label = INSTRUCTION2;          // drive in figure-8s until there are no more left to drive
       else 
@@ -118,6 +116,7 @@ void drive_in_figure8(void){
       Wheels_OFF();
       instruction_label = INSTRUCTION1;
       figure8s_left_to_drive = NUM_TRIALS;
+      shape_routine_begin = false;
     }
 }
 
@@ -138,7 +137,6 @@ void drive_in_triangle(void){
         
         
     case INSTRUCTION2: /* drive along triangle edge */
-      Motors_Enabled = true;
       L_FORWARD_on_time = LEFT_FORWARD_SPEED;
       R_FORWARD_on_time = RIGHT_FORWARD_SPEED;
       delay_flag = true;
@@ -150,7 +148,7 @@ void drive_in_triangle(void){
       L_FORWARD_on_time = LEFT_LTURN_SPEED;
       R_FORWARD_on_time = RIGHT_LTURN_SPEED;
       delay_flag = true;
-      delay_time = ONE_SEC;                        // send delay time to global accessible by timer A1
+      delay_time = SFV_SEC;                        // send delay time to global accessible by timer A1
       if(--edges_left_to_drive)
         instruction_label = INSTRUCTION2;           // drive in figure-8s until there are no more left to drive
       else 
@@ -161,5 +159,6 @@ void drive_in_triangle(void){
       Wheels_OFF();
       instruction_label = INSTRUCTION1;
       edges_left_to_drive = NUM_TRIANGLE_EDGES;
+      shape_routine_begin = false;
     }
 }

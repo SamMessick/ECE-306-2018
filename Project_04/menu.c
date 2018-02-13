@@ -56,8 +56,8 @@ void LCD_print(char first_line[COLUMN_NUM_COLUMNS], char second_line[COLUMN_NUM_
 }
 
 void delay(){
-  static unsigned int Time_Sequence_tmp = Time_Sequence-
-  uint16_t counter;
+  static unsigned int Time_Sequence_tmp;
+  static uint16_t counter;
   
   if(counter == delay_time)
   {
@@ -74,15 +74,15 @@ void delay(){
 
 void update_text_size(void){
  switch(Time_Sequence){
-      case 100:                        // 1000 msec
+      case ONE_SEC:                        // 1000 msec
         if(one_time){
           lcd_BIG_mid();
           display_changed = true;
           one_time = false;
-          Time_Sequence = 0;
+          Time_Sequence = ZERO;
         }
         break;
-      case 50:                         // 500 msec
+      case HALF_SEC:                         // 500 msec
         if(one_time){
           lcd_4line();
           display_changed = true;
