@@ -13,11 +13,6 @@
 
 #include "main.h"
 
-extern volatile unsigned int Time_Sequence;     // Counting variable; increments every 5ms up to 125
-extern volatile char one_time;
-
-
-
 void main(void){
 //------------------------------------------------------------------------------
 // Main Program
@@ -26,7 +21,7 @@ void main(void){
 //
 //------------------------------------------------------------------------------
   
-  Init_Ports();                        // Initialize Ports
+   Init_Ports();                        // Initialize Ports
 // Disable the GPIO power-on default high-impedance mode to activate
 // previously configured port settings
   PM5CTL0 &= ~LOCKLPM5;
@@ -35,19 +30,16 @@ void main(void){
   Init_Timers();                       // Initialize Timers
   Init_LCD();                          // Initialize LCD
   Init_LEDs();
+  Init_Timer_B0();
+  Init_Timer_A1();
+
+// Update LCD display
   enable_display_update();
+  update_menu();
   
 //------------------------------------------------------------------------------
-// Begining of the "While" Operating System
-//
-// **Operation adapted from main "while" loop by Carlson
-//     --Time_Sequence continues to update but loops every second
+// Begining of the Interrupt-Based Operating System
 //------------------------------------------------------------------------------
-  for(;;) {                      
-    Switches_Process();                // Check for switch state change
-    update_menu();                     // Check for menu state change
-    update_motor_state();              // Update pseudo-PWM in wheels
-    Display_Process();                 // Update screen text
-    update_text_size();                // Vary big/small text every second
-  }
+  for(;;) {}
+//------------------------------------------------------------------------------
 }

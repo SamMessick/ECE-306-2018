@@ -36,6 +36,7 @@ void handle_procedural_delay(void);
 void handle_quart_second_delay(void);
 
 
-extern volatile uint8_t debounced;
-extern volatile uint16_t delay_time;
-extern volatile uint8_t delay_continue;
+extern volatile uint8_t debounced;           // Timer A1.1 flag: delays button 1 and 2 interrupt refresh by .25 seconds
+extern uint16_t counter_A11;        // Timer A1.1 interrupt occurences counter (range 0 - 1000)
+extern uint16_t counter_A12;        // Timer A1.2 interrupt occurences counter (range 0 - 1000)
+extern volatile uint16_t delay_time;         // Timer A1.2 counter assignment -- receives input from main

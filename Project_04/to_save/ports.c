@@ -10,6 +10,8 @@
 
 #include "ports.h"
 
+volatile uint8_t debounced;
+uint8_t shape_routine_begin;
 
 void Init_Port1(void){  // Initlizes all pins on Port 1
 //=========================================================================
@@ -146,22 +148,22 @@ void Init_Port3(char use_smclk) { // Initlizes all pins on Port 3
   P3OUT  &= ~IOT_WAKEUP;                // Set out value Low [off]
   P3DIR  |= IOT_WAKEUP;                 // Set direction to output
   // P3_4 Begin Dumb "PWM"
-  P3SEL0 &= ~L_REVERSE;
+  P3SEL0 |= L_REVERSE;
   P3SEL1 &= ~L_REVERSE;
   P3OUT  &= ~L_REVERSE;
   P3DIR  |= L_REVERSE;
   // P3_5 Begin Dumb "PWM"
-  P3SEL0 &= ~L_FORWARD;
+  P3SEL0 |= L_FORWARD;
   P3SEL1 &= ~L_FORWARD;
   P3OUT  &= ~L_FORWARD;
   P3DIR  |= L_FORWARD;
   // P3_6 Begin Dumb "PWM"
-  P3SEL0 &= ~R_REVERSE;
+  P3SEL0 |= R_REVERSE;
   P3SEL1 &= ~R_REVERSE;
   P3OUT  &= ~R_REVERSE;
   P3DIR  |= R_REVERSE;
   // P3_7 Begin Dumb "PWM"
-  P3SEL0 &= ~R_FORWARD;
+  P3SEL0 |= R_FORWARD;
   P3SEL1 &= ~R_FORWARD;
   P3OUT  &= ~R_FORWARD;
   P3DIR  |= R_FORWARD;
@@ -282,12 +284,18 @@ void Init_Port5(void) { // Initializes all pins on Port 5
   P5OUT  |= BUTTON2;                    // Configure pullup resistor
   P5DIR  &= ~BUTTON2;                   // Set direction to input
   P5REN  |= BUTTON2;                    // Enable pullup resistor
+  P5IE   |= BUTTON2;                    // Enable interrupts for Button2
+  P5IES  |= BUTTON2;                    // Interrupts occur on Hi/Lo edge
+  P5IFG  &= ~BUTTON2;                   // Button 2 IFG cleared
   // P5_6
   P5SEL0 &= ~BUTTON1;                   // Set to GP I/O
   P5SEL1 &= ~BUTTON1;                   // Set to GP I/O
   P5OUT  |= BUTTON1;                    // Configure pullup resistor
   P5DIR  &= ~BUTTON1;                   // Set direction to input
   P5REN  |= BUTTON1;                    // Enable pullup resistor
+  P5IE   |= BUTTON1;                    // Enable interrupts for Button2
+  P5IES  |= BUTTON1;                    // Interrupts occur on Hi/Lo edge
+  P5IFG  &= ~BUTTON1;                   // Button 2 IFG cleared
   // P5_7
   P5SEL0 &= ~LCD_BACKLITE;              // Set to GP I/O
   P5SEL1 &= ~LCD_BACKLITE;              // Set to GP I/O
@@ -488,6 +496,7 @@ void Init_PortJ(void) { // Initializes all pins on Port J
 }
 
 void Init_Ports(void){ // Calls all port initialization functions
+  debounced = true;
   Init_Port1();
   Init_Port2();
   Init_Port3(false);
@@ -497,4 +506,43 @@ void Init_Ports(void){ // Calls all port initialization functions
   Init_Port7();
   Init_Port8();
   Init_PortJ();
+}
+
+#pragma vector = PORT5_VECTOR
+__interrupt void Port_5(void){
+  switch(P5IFG)
+  {
+  case P5IFG_BUTTON_1: // Right Button
+    switch(debounced)                     // Has the switch had time to readjust?
+    {
+    case true:
+      P1OUT  ^= GRN_LED; 
+      menu_counter++;
+      menu_counter %= MENU_NUM_OPTIONS;
+      TA1CCTL2 |= CCIE;                   // Enable 2 second delay for menu update
+      debounced = false;
+      shape_routine_begin = true;
+      TA1CCTL1 |= CCIE;                   // Enable clock interrupts every 1/20 second
+      break;
+    default:
+      break;
+    }
+    break;
+  case P5IFG_BUTTON_2: // Left Button
+    switch(debounced)                     // Has the switch had time to readjust?
+    {
+    case true:
+      P1OUT  ^= RED_LED; 
+      menu_counter += PENULT_OPTION;
+      menu_counter %= MENU_NUM_OPTIONS;
+      TA1CCTL2 |= CCIE;                   // Enable 2 second delay for menu update
+      debounced = false;
+      shape_routine_begin = true;
+      TA1CCTL1 |= CCIE;                   // Enable clock interrupts every 1/20 second
+      break;
+    default:
+      break;
+    }
+  }
+  P5IFG = false;
 }

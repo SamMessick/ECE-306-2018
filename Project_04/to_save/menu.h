@@ -9,15 +9,10 @@
 //===============================================================
 
 #include "LCD.h"
-#include "switches.h"
 #include "wheels.h"
 #include <string.h>
 #include <stdint.h>
 #include <stdbool.h>
-#define COUNTER_RESET      (0)
-#define ONE_SEC          (100)
-#define HALF_SEC          (50)
-#define ZERO               (0)
 #ifndef INIT_ENUMS_H
 #define INIT_ENUMS_H
 
@@ -58,8 +53,7 @@ typedef enum{
 void update_menu(void);
 void LCD_print(char first_line[10], char second_line[10], char third_line[10], char fourth_line[10]);
 void update_string(char *string_data, int string);
-void delay(void);
-void update_text_size(void);
+void delay(uint16_t msecs);
 
 
 extern char display_line[LINE_NUM_LINES][COLUMN_NUM_COLUMNS];
@@ -68,7 +62,3 @@ extern volatile unsigned char update_display;
 extern volatile unsigned int update_display_count;
 extern volatile unsigned char display_changed;
 extern int8_t menu_counter;            // displays which option has been chosen by the buttons
-extern uint16_t delay_time;
-extern volatile unsigned int Time_Sequence;
-extern volatile char one_time;
-extern uint8_t delay_flag;

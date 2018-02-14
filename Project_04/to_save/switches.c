@@ -10,9 +10,6 @@
 
 #include "switches.h"
 
-uint8_t flag_RED_LED_ON;
-uint8_t flag_GRN_LED_ON;
-
 //Enable right switch
 void enable_switch_BUTTON1(void){
   P5OUT |= BUTTON1;                     // Select pull up resistor
@@ -44,8 +41,7 @@ void disable_switch_BUTTON2(void){
 void Switch1_Process(void){
   /*
    * Replaced with Port 5 interrupt routine
-   * Used instead at TAs request
-   */
+   *
   switch(flag_RED_LED_ON)
   {
   case false:
@@ -55,8 +51,7 @@ void Switch1_Process(void){
       P1OUT |= RED_LED;
       menu_counter += PENULT_OPTION;
       menu_counter %= MENU_NUM_OPTIONS;
-      flag_RED_LED_ON = true;
-      shape_routine_begin = true;
+      flag_RED_LED_ON = 1;
     default:
       break;
     }
@@ -67,20 +62,18 @@ void Switch1_Process(void){
     {
     case false:
       P1OUT &= ~RED_LED;
-      flag_RED_LED_ON = false;
+      flag_RED_LED_ON = 0;
     default:
       break;
     }
     break;
   }
+  */
 }
-
-
 void Switch2_Process(void){
   /*
    * Replaced with Port 5 interrupt routine
-   * Used instead at TAs request
-   */
+   *
   switch(flag_GRN_LED_ON)               // Check if green LED is on
   {
   case false:
@@ -90,8 +83,7 @@ void Switch2_Process(void){
       P1OUT |= GRN_LED;                 
       menu_counter++;
       menu_counter %= MENU_NUM_OPTIONS;
-      flag_GRN_LED_ON = true;
-      shape_routine_begin = true;
+      flag_GRN_LED_ON = 1;
       
     default:
       break;
@@ -103,16 +95,15 @@ void Switch2_Process(void){
     {
     case false:                         // button 2 is not pushed; turn off green LED
       P1OUT &= ~GRN_LED;
-      flag_GRN_LED_ON = false;
+      flag_GRN_LED_ON = 0;
       break;
     default:
       break;
     }
     break;
   }
+  */
 }
-
-
 void Switches_Process(void){
   Switch1_Process();
   Switch2_Process();

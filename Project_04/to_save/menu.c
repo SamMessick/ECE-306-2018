@@ -11,35 +11,25 @@
 #include "menu.h"
 
 int8_t menu_counter;
-uint8_t delay_flag;
 
 void update_menu(void){
   switch(menu_counter)
   {
   case OPTION1: // circle
     LCD_print("Circ. Mode", "Sam M. Car", "          ", "  ECE306  "); 
-    if(delay_flag)
-      delay();
-    else
-      drive_in_circle();
+    drive_in_circle();
     break;
   case OPTION2: // figure 8
     LCD_print("Fig8. Mode", "Sam M. Car", "          ", "  ECE306  "); 
-    if(delay_flag)
-      delay();
-    else
-      drive_in_figure8();
+    drive_in_figure8();
     break;
   case PENULT_OPTION: // triangle
     LCD_print("Trng. Mode", "Sam M. Car", "          ", "  ECE306  "); 
-    if(delay_flag)
-      delay();
-    else
-      drive_in_triangle();
+    drive_in_triangle();
     break;
   default:
     LCD_print("   NCSU   ", "Sam M. Car", "          ", "  ECE306  ");
-      Wheels_OFF();
+    Wheels_OFF();
     break;
   }
 }
@@ -53,41 +43,4 @@ void LCD_print(char first_line[COLUMN_NUM_COLUMNS], char second_line[COLUMN_NUM_
   update_string(display_line[LINE3], LINE3);
   strcpy(display_line[LINE4], fourth_line);
   update_string(display_line[LINE4], LINE4);
-}
-
-void delay(){
-  static unsigned int Time_Sequence_tmp;
-  static uint16_t counter;
-  
-  if(counter == delay_time)
-  {
-      counter = COUNTER_RESET;
-      delay_flag = false;
-  }
-  
-  if(Time_Sequence != Time_Sequence_tmp)
-  {
-      counter++;
-      Time_Sequence_tmp = Time_Sequence;
-  }
-}
-
-void update_text_size(void){
- switch(Time_Sequence){
-      case ONE_SEC:                        // 1000 msec
-        if(one_time){
-          lcd_BIG_mid();
-          display_changed = true;
-          one_time = false;
-          Time_Sequence = ZERO;
-        }
-        break;
-      case HALF_SEC:                         // 500 msec
-        if(one_time){
-          lcd_4line();
-          display_changed = true;
-          one_time = false;
-        }
-        break;   
- }
 }

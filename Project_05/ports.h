@@ -155,10 +155,13 @@ typedef enum{
 typedef enum{
   OPTION1 = 1,
   OPTION2,
+  OPTION3,
   PENULT_OPTION,
   MENU_NUM_OPTIONS
 }Menu_Option_t;
 
 #endif
 
+extern volatile uint8_t debounced; 
 extern int8_t menu_counter;            // displays which option has been chosen by the buttons
+extern uint8_t shape_routine_begin;
