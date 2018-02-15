@@ -19,15 +19,21 @@ void update_menu(void){
     LCD_print("Circ. Mode", "Sam M. Car", "          ", "  ECE306  "); 
     drive_in_circle();
     break;
+    
+    
   case OPTION2: // figure 8
     LCD_print("Fig8. Mode", "Sam M. Car", "          ", "  ECE306  "); 
     drive_in_figure8();
     break;
-  case 3: // triangle
+    
+    
+  case OPTION3: // triangle
     LCD_print("Trng. Mode", "Sam M. Car", "          ", "  ECE306  "); 
     drive_in_triangle();
     break;
-  case 4:
+    
+    
+  case PENULT_OPTION: // Back&Forth and Jazz hands
     switch(instruction_label_tmp)
     {
     case INSTRUCTION1:
@@ -76,7 +82,9 @@ void update_menu(void){
       break;
     }
     break;
-  default:
+    
+    
+  default:   // Do nothing
     LCD_print("   NCSU   ", "Sam M. Car", "          ", "  ECE306  ");
     Wheels_OFF();
     break;

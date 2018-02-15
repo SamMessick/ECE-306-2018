@@ -30,16 +30,21 @@ void main(void){
   Init_Timers();                       // Initialize Timers
   Init_LCD();                          // Initialize LCD
   Init_LEDs();
-  Init_Timer_B0();
-  Init_Timer_A1();
+  Init_Timer_B0();                     // Initialize motor PWM behavior
+  Init_Timer_A1();                     // Initialize delay behavior and LCD updates
 
-// Update LCD display
+// Update LCD display, check state machine, enter low power mode 1
   enable_display_update();
   update_menu();
-  
+  __bis_SR_register(LPM0_bits);
 //------------------------------------------------------------------------------
 // Begining of the Interrupt-Based Operating System
 //------------------------------------------------------------------------------
-  for(;;) {}
+//------------------------------------------------------------------------------
+// TimerA1: controls LCD update, button debouncing and timed delays
+// -------          defers to state machine in menu.c following push-button
+//                  interrupts.
+//               
+// TimerB0: controls wheel PWM
 //------------------------------------------------------------------------------
 }

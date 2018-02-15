@@ -24,8 +24,6 @@
 #define RIGHT_LTURN_SPEED         (0)
 #define NUM_TRIALS                (2)
 #define NUM_TRIANGLE_EDGES        (6)      // goes around twice
-
-#define COUNTER_RESET_STATE      (0)
 #ifndef SHAPE_INSTR_ENUM
 #define SHAPE_INSTR_ENUM
 
@@ -58,10 +56,13 @@ typedef enum{
   SIX_SEC = (6000),
   ONE_SEC = (1000),
   HALF_SEC = (500),
-  QUART_SEC_DELAY = (50)
+  QUART_SEC_DELAY = (150)
 } timer_intv_t;
 
 #endif
+
+void initialize_delay(uint16_t delay);
+void update_instruction_label(uint8_t* instruction_label);
 
 // Wheel operation
 void WHEELS_test(void);

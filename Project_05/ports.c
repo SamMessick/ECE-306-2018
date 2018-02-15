@@ -278,7 +278,7 @@ void Init_Port5(void) { // Initializes all pins on Port 5
   // P5_7
   P5SEL0 &= ~LCD_BACKLITE;              // Set to GP I/O
   P5SEL1 &= ~LCD_BACKLITE;              // Set to GP I/O
-  P5OUT  |= LCD_BACKLITE;               // Set out value High [on]
+  P5OUT  |= LCD_BACKLITE;              // Set out value Low [off]
   P5DIR  |= LCD_BACKLITE;               // Set direction to output
 }
 ////////////////////////////////////////////////////////////////////////

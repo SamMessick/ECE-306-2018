@@ -1,7 +1,7 @@
 //===============================================================
 //  File Name: switches.c
-//  Description: This file contains the functions needed for button
-//                    operation of the LCD, wheels and LEDs
+//  Description: This file contains the functions needed for controlling
+//                    button enabled status.
 //
 //  Author: Sam Messick
 //  Date Feb. 2018
@@ -41,74 +41,3 @@ void Disable_Switches(void){
   disable_switch_BUTTON2();
 }
 //----------------------------------------------------------------
-
-void Switch1_Process(void){
-  /*
-   * Replaced with Port 5 interrupt routine
-   *
-  switch(flag_RED_LED_ON)
-  {
-  case false:
-    switch(!(P5IN & BUTTON1))
-    {
-    case true:
-      P1OUT |= RED_LED;
-      menu_counter += PENULT_OPTION;
-      menu_counter %= MENU_NUM_OPTIONS;
-      flag_RED_LED_ON = 1;
-    default:
-      break;
-    }
-    break;
-    
-  case true:
-    switch(!(P5IN & BUTTON1))
-    {
-    case false:
-      P1OUT &= ~RED_LED;
-      flag_RED_LED_ON = 0;
-    default:
-      break;
-    }
-    break;
-  }
-  */
-}
-void Switch2_Process(void){
-  /*
-   * Replaced with Port 5 interrupt routine
-   *
-  switch(flag_GRN_LED_ON)               // Check if green LED is on
-  {
-  case false:
-    switch(!(P5IN & BUTTON2))           // Green LED off; check if button 2 is pushed
-    {
-    case true:                          // button 2 is pushed; turn on green LED
-      P1OUT |= GRN_LED;                 
-      menu_counter++;
-      menu_counter %= MENU_NUM_OPTIONS;
-      flag_GRN_LED_ON = 1;
-      
-    default:
-      break;
-    }
-    break;
-    
-  case true:                            // Green LED on; check if button 2 is pushed
-    switch(!(P5IN & BUTTON2))
-    {
-    case false:                         // button 2 is not pushed; turn off green LED
-      P1OUT &= ~GRN_LED;
-      flag_GRN_LED_ON = 0;
-      break;
-    default:
-      break;
-    }
-    break;
-  }
-  */
-}
-void Switches_Process(void){
-  Switch1_Process();
-  Switch2_Process();
-}

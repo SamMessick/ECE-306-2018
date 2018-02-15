@@ -13,43 +13,6 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdbool.h>
-#ifndef INIT_ENUMS_H
-#define INIT_ENUMS_H
-
-// enum for display row numbers
-typedef enum{
-  LINE1 = 0,
-  LINE2,
-  LINE3,
-  LINE4,
-  LINE_NUM_LINES,
-}Display_Line_t;
-
-// enum for display column numbers
-typedef enum{
-  COLUMN1 = 0,
-  COLUMN2,
-  COLUMN3,
-  COLUMN4,
-  COLUMN5,
-  COLUMN6,
-  COLUMN7,
-  COLUMN8,
-  COLUMN9,
-  COLUMN10,
-  COLUMN_NUM_COLUMNS
-}Display_Column_t;
-
-// enum for menu options
-typedef enum{
-  OPTION1 = 1,
-  OPTION2 = 2,
-  OPTION3 = 3,
-  PENULT_OPTION = 4,
-  MENU_NUM_OPTIONS
-}Menu_Option_t;
-
-#endif
 
 void update_menu(void);
 void LCD_print(char first_line[10], char second_line[10], char third_line[10], char fourth_line[10]);

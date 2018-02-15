@@ -41,7 +41,6 @@ void handle_quart_second_delay(void){
     counter_A11 = COUNTER_RESET;         //     reset timer A11 counter 
     debounced = true;                    //     Allow switch to reactivate button interrupt routine
     update_menu();                       //     Update menu state machine
-
   }
 }
 
@@ -77,6 +76,7 @@ __interrupt void Timer1_A0_ISR(void){
   }
   Display_Process();                     // Refresh LCD screen
   TA1CTL &= ~(TAIFG);                    // Update Timer A1.0 interrupt queue
+  __bis_SR_register(LPM0_bits);          // Enable low power mode
 }
 
 //   Timer A1 interrupt routines   //
@@ -99,4 +99,5 @@ __interrupt void Timer1_A1_ISR(void){
     handle_procedural_delay();
   }
   TA1CTL &= ~(TAIFG);                             // Update Timer A1.1-2 interrupt queue
+  __bis_SR_register(LPM0_bits);                   // Enable low power mode
 }

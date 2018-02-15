@@ -147,7 +147,6 @@ typedef enum{
   COLUMN8,
   COLUMN9,
   COLUMN10,
-  COLUMN11,
   COLUMN_NUM_COLUMNS
 }Display_Column_t;
 

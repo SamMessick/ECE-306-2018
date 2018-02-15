@@ -8,9 +8,6 @@
 //  Compiler Build with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
 //===============================================================
 
-/* Note: Comments marked with *************'s should be reincorperated following demonstration 
- *       Comments marked with XXXXXXXXXXXXX's should be deleted following demonstration       */
-
 #include "timerB0.h"
 // Initialize motor PWM registers
 void Init_Timer_B0(void){
