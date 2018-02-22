@@ -22,7 +22,7 @@ uint8_t instruction_label_tmp; // Global of current instruction step
 
 void initialize_delay(uint16_t delay){
   delay_time = delay;                          // send delay time to global accessible by timer A1
-  TA1CCTL2 |= CCIE;                            // enable timer A1.2 to count time
+  TA0CCTL2 |= CCIE;                            // enable timer A1.2 to count time
 }
 
 void update_instruction_label(uint8_t* instruction_label){

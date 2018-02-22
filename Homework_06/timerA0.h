@@ -14,16 +14,16 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define TA1IV_1          (0x2)
-#define TA1IV_2          (0x4)
+#define TA0IV_1          (0x2)
+#define TA0IV_2          (0x4)
 #define COUNTER_RESET      (0)
 
-void Init_Timer_A1(void);
+void Init_Timer_A0(void);
 void handle_procedural_delay(void);
 void handle_quart_second_delay(void);
 
 
 extern volatile uint8_t debounced;           // Timer A1.1 flag: delays button 1 and 2 interrupt refresh by .25 seconds
-extern uint16_t counter_A11;                 // Timer A1.1 interrupt occurences counter (range 0 - 1000)
-extern uint16_t counter_A12;                 // Timer A1.2 interrupt occurences counter (range 0 - 1000)
+extern uint16_t counter_A01;                 // Timer A1.1 interrupt occurences counter (range 0 - 1000)
+extern uint16_t counter_A02;                 // Timer A1.2 interrupt occurences counter (range 0 - 1000)
 extern volatile uint16_t delay_time;         // Timer A1.2 counter assignment -- receives input from main

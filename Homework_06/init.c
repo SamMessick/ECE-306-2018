@@ -31,3 +31,8 @@ void Init_Conditions(void){
   enable_interrupts();
 //------------------------------------------------------------------------------
 }
+
+void Init_Timers(void){
+  Init_Timer_B0();                     // Initialize motor PWM behavior
+  Init_Timer_A0();                     // Initialize delay behavior and LCD updates
+}

@@ -16,8 +16,6 @@
 #include "led.h"
 #include "init.h"
 #include "ports.h"
-#include "timerA1.h"
-#include "timerB0.h"
 #include <string.h>
 #include <stdbool.h>
 #include <stdint.h>

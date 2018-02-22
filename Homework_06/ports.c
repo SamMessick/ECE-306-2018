@@ -492,35 +492,27 @@ __interrupt void Port_5(void){
   switch(P5IFG)
   {
   case P5IFG_BUTTON_1: // Right Button
-    switch(debounced)                     // Has the switch had time to readjust?
+    if(debounced)                     // Has the switch had time to readjust?
     {
-    case true:
-      P1OUT  ^= GRN_LED; 
+      P1OUT  ^= GRN_LED;                  // Turn on led signal
+      P5OUT  &= ~LCD_BACKLITE;            // Turn off backlight
       menu_counter++;
       menu_counter %= MENU_NUM_OPTIONS;
-      TA1CCTL2 |= CCIE;                   // Enable 2 second delay for menu update
       debounced = false;
       shape_routine_begin = true;
-      TA1CCTL1 |= CCIE;                   // Enable clock interrupts every 1/20 second
-      break;
-    default:
-      break;
+      TA0CCTL1 |= CCIE;                   // Enable debounce timer
     }
     break;
   case P5IFG_BUTTON_2: // Left Button
-    switch(debounced)                     // Has the switch had time to readjust?
+    if(debounced)                     // Has the switch had time to readjust?
     {
-    case true:
-      P1OUT  ^= RED_LED; 
+      P1OUT  ^= RED_LED;                  // Turn on led signal
+      P5OUT  &= ~LCD_BACKLITE;            // Turn off backlight
       menu_counter += PENULT_OPTION;
       menu_counter %= MENU_NUM_OPTIONS;
-      TA1CCTL2 |= CCIE;                   // Enable 2 second delay for menu update
       debounced = false;
       shape_routine_begin = true;
-      TA1CCTL1 |= CCIE;                   // Enable clock interrupts every 1/20 second
-      break;
-    default:
-      break;
+      TA0CCTL1 |= CCIE;                   // Enable debounce timer
     }
   }
   P5IFG = false;

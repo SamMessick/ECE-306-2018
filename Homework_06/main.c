@@ -27,11 +27,9 @@ void main(void){
   PM5CTL0 &= ~LOCKLPM5;
   Init_Clocks();                       // Initialize Clock System
   Init_Conditions();                   // Initialize Variables and Initial Conditions
-  Init_Timers();                       // Initialize Timers
   Init_LCD();                          // Initialize LCD
   Init_LEDs();
-  Init_Timer_B0();                     // Initialize motor PWM behavior
-  Init_Timer_A1();                     // Initialize delay behavior and LCD updates
+  Init_Timers();                       // Initialize Timers
 
 // Update LCD display, check state machine, enter low power mode 1
   enable_display_update();

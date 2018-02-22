@@ -10,12 +10,15 @@
 
 #include "menu.h"
 #include "ports.h"
+#include "timerA0.h"
+#include "timerB0.h"
 #include <stdbool.h>
 #include <stdint.h>
 #define LCD_RESET_STATE      (0)
 
 // Initialization prototypes
 void Init_Conditions(void);
+void Init_Timers(void);
 void enable_interrupts(void);
 
 /* Assignments found in LCD.c; arrays 
