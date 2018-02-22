@@ -86,7 +86,7 @@ void update_menu(void){
     
   default:   // Do nothing
     LCD_print("   NCSU   ", "Sam M. Car", "          ", "  ECE306  ");
-    Wheels_OFF();
+    //Wheels_OFF();
     break;
   }
 }

@@ -36,7 +36,6 @@ void main(void){
 // Update LCD display, check state machine, enter low power mode 1
   enable_display_update();
   update_menu();
-  __bis_SR_register(LPM0_bits);
 //------------------------------------------------------------------------------
 // Begining of the Interrupt-Based Operating System
 //------------------------------------------------------------------------------
@@ -47,4 +46,5 @@ void main(void){
 //               
 // TimerB0: controls wheel PWM
 //------------------------------------------------------------------------------
+  for(;;);
 }

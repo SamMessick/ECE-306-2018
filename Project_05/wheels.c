@@ -26,7 +26,7 @@ void initialize_delay(uint16_t delay){
 }
 
 void update_instruction_label(uint8_t* instruction_label){
-  *instruction_label++;                         // Set up next instruction
+  (*instruction_label)++;                         // Set up next instruction
   instruction_label_tmp = *instruction_label;   // Set static instruction visable by menu to update LCD
 }
 

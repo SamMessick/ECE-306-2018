@@ -132,7 +132,7 @@ typedef enum{
   LINE2,
   LINE3,
   LINE4,
-  LINE_NUM_LINES,
+  LINE_NUM_LINES
 }Display_Line_t;
 
 // enum for display column numbers
@@ -147,6 +147,7 @@ typedef enum{
   COLUMN8,
   COLUMN9,
   COLUMN10,
+  COLUMN11,
   COLUMN_NUM_COLUMNS
 }Display_Column_t;
 
