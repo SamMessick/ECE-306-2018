@@ -21,16 +21,17 @@ void main(void){
 //
 //------------------------------------------------------------------------------
   
-   Init_Ports();                        // Initialize Ports
+    Init_Ports();                        // Initialize Ports
 // Disable the GPIO power-on default high-impedance mode to activate
 // previously configured port settings
   PM5CTL0 &= ~LOCKLPM5;
   Init_Clocks();                       // Initialize Clock System
-  Init_Conditions();                   // Initialize Variables and Initial Conditions
+  Init_Conditions();                   // Initialize Variables and Initial Conditions
   Init_LCD();                          // Initialize LCD
   Init_LEDs();
   Init_Timers();                       // Initialize Timers
   Init_ADC();
+  uint8_t one_time = true;
 
 // Update LCD display, check state machine, enter low power mode 1
   enable_display_update();
@@ -45,5 +46,29 @@ void main(void){
 //               
 // TimerB0: controls wheel PWM
 //------------------------------------------------------------------------------
-  for(;;);
+//  int counter;
+  for(;;)
+  {
+    while(ADC12CTL0 & ADC12BUSY);
+    if(ADC_Left_Detector < IR_ACTIVE_READING && ADC_Right_Detector < IR_ACTIVE_READING)
+      P5OUT &= ~LCD_BACKLITE;
+    else
+      P5OUT |= LCD_BACKLITE;
+    if(ADC_Thumb > THUMB_ACTIVE_READING && one_time)
+    {
+      TA0CCTL0 &= ~CCIE;
+      one_time = false;
+      update_menu();
+    }
+    if(ADC_Thumb < THUMB_ACTIVE_READING)
+    {
+      TA0CCTL0 |= CCIE;
+      TA0CCTL2 &= ~CCIE;
+      Wheels_OFF();
+      one_time = true;
+    }
+    ADC12IER0  |= (ADC12IE2     | // Enable interrupts for new sample results
+                 ADC12IE4     |
+                 ADC12IE5);
+  }
 }

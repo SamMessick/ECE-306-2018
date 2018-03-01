@@ -23,8 +23,9 @@ void Init_Timer_A0(void) {
   TA0CCR1 = MSEC;                        // interrupt time set to 1/1000 second
   TA0CCR2 = MSEC;                        // interrupt time set to 1/1000 second
   
-  TA0CCTL0 |= CCIE;                      // Enable clock interrupts every 1/1000 second
+  //TA0CCTL0 |= CCIE;                      // Enable clock interrupts every 1/1000 second
   TA0CTL &= ~(TAIFG);                    // Clear Timer A1 interrupt flag and interrupt enable
+  TA0CCTL0 |= CCIE;
 }
 
 ////////////////////////////////////
@@ -33,7 +34,7 @@ void Init_Timer_A0(void) {
 void handle_quart_second_delay(void){
   // Debouncing delay for Buttons 1 and 2
   counter_A01++;                         // Increment debounce counter by 1 msec
-  if(!(counter_A01 % QUART_SEC_DELAY))   // **If debounce counter has counter 250 msec
+  if(!(counter_A01 % QUART_SEC))   // **If debounce counter has counter 250 msec
   {
     TA0CCTL1 &= ~CCIE;                   //     Disable debounce delay routine                 
     counter_A01 = COUNTER_RESET;         //     reset timer A11 counter 
@@ -62,23 +63,11 @@ void handle_procedural_delay(void){
 __interrupt void Timer0_A0_ISR(void){
   static uint16_t counter_A00;           // 1 msec counting interval for Timer A1.0
   counter_A00++;                         // Increment counter by 1 msec for each 1 msec interrupt
-  switch(counter_A00 % ONE_SEC)          // **If one second has elapsed
-  {                                     
-  case COUNTER_RESET:                    // ---One second elapsed---
-    if(debounced)
-      P5OUT ^= LCD_BACKLITE;
-    lcd_BIG_mid();                       // Turn on large LCD text
-    display_changed = true;            
-    update_display  = true;
+  if(counter_A00 % QUART_SEC)            // Quarter-second elapsed
+  {
+    print_detector_values();
     counter_A00 = COUNTER_RESET;         // Reset 1 msec interrupt counter
-    Display_Process(); break;            // Refresh LCD screen 
-  case HALF_SEC:                         // ---Half second elapsed---  
-    lcd_4line();                         // Turn on small LCD text
-    display_changed = true; 
-    update_display  = true;
-    Display_Process(); break;            // Refresh LCD screen     
   }
-  TA0CTL &= ~(TAIFG);                    // Update Timer A1.0 interrupt queue
 }
 
 //   Timer A1 interrupt routines   //

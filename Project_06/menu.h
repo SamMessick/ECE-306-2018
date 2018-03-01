@@ -9,15 +9,26 @@
 //===============================================================
 
 #include "LCD.h"
+#include "adc12_B.h"
 #include "wheels.h"
 #include <string.h>
 #include <stdint.h>
 #include <stdbool.h>
 
+#define IR_ACTIVE_READING   (270)
+#define THUMB_ACTIVE_READING (1000)
+#define COUNTER_RESET        (0)
+#define ASCII_NUM_SHIFT      (48)
+#define THOUSAND             (1000)
+#define HUNDRED              (100)
+#define TEN                  (10)
+#define ONE                  (1)
+
 void update_menu(void);
 void LCD_print(char first_line[COLUMN_NUM_COLUMNS], char second_line[COLUMN_NUM_COLUMNS], char third_line[COLUMN_NUM_COLUMNS], char fourth_line[COLUMN_NUM_COLUMNS]);
 void update_string(char *string_data, int string);
 void delay(uint16_t msecs);
+void print_detector_values(void);
 
 
 extern char display_line[LINE_NUM_LINES][COLUMN_NUM_COLUMNS];

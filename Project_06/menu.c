@@ -12,7 +12,30 @@
 
 int8_t menu_counter;
 
+uint8_t TThousand;
+uint8_t THundred;
+uint8_t TTen;
+uint8_t TOne;
+uint8_t RThousand;
+uint8_t RHundred;
+uint8_t RTen;
+uint8_t ROne;
+uint8_t LThousand;
+uint8_t LHundred;
+uint8_t LTen;
+uint8_t LOne;
+char* word1;
+char word2[COLUMN_NUM_COLUMNS] = "    : RTDT";
+char word3[COLUMN_NUM_COLUMNS] = "    : LFDT";
+char* word4;
+
 void update_menu(void){
+  
+  if(ADC_Thumb < THUMB_ACTIVE_READING)
+    {
+      return;
+    }
+  
   switch(menu_counter)
   {
   case OPTION1: // circle
@@ -80,14 +103,16 @@ void update_menu(void){
       LCD_print("Pausing   ", "Now :)    ", "          ", "  2  sec  "); 
       drive_back_and_forth();
       break;
+    default:
+      LCD_print("   Demo   ", " Complete ", "          ", "          ");
+      drive_back_and_forth();
     }
     break;
     
     
   default:   // Do nothing
-    LCD_print("   NCSU   ", "Sam M. Car", "          ", "  ECE306  ");
-    //Wheels_OFF();
-    break;
+    LCD_print("   NCSU   ", "Sam M. Car", "          ", "  ECE306  "); 
+    Wheels_OFF(); break;
   }
 }
 
@@ -100,7 +125,91 @@ void LCD_print(char first_line[COLUMN_NUM_COLUMNS], char second_line[COLUMN_NUM_
   update_string(display_line[LINE3], LINE3);
   strcpy(display_line[LINE4], fourth_line);
   update_string(display_line[LINE4], LINE4);
+  display_changed = true; 
+  update_display  = true;
+  Display_Process();                     // Refresh LCD screen
+}
+
+void print_detector_values(void)
+{
+  if(ADC_Left_Detector >= IR_ACTIVE_READING)
+    if(ADC_Right_Detector >= IR_ACTIVE_READING)
+      word4 = "  Black   ";
+    else
+      word4 = "  Left    ";
+  else 
+    if(ADC_Right_Detector >= IR_ACTIVE_READING)
+      word4 = "  Right   ";
+    else 
+      word4 = "  White   ";
+    
+  while(ADC_Right_Detector >= THOUSAND)
+  {
+    RThousand++;
+    ADC_Right_Detector -= THOUSAND;
+  }
+  while(ADC_Right_Detector >= HUNDRED)
+  {
+    RHundred++;
+    ADC_Right_Detector -= HUNDRED;
+  }
+  while(ADC_Right_Detector >= TEN)
+  {
+    RTen++;
+    ADC_Right_Detector -= TEN;
+  }
+  while(ADC_Right_Detector >= ONE)
+  {
+    ROne++;
+    ADC_Right_Detector--;
+  }
   
-  Display_Process();                     // Refresh LCD screen
-  Display_Process();                     // Refresh LCD screen
+  while(ADC_Left_Detector >= THOUSAND)
+  {
+    LThousand++;
+    ADC_Left_Detector -= THOUSAND;
+  }
+  while(ADC_Left_Detector >= HUNDRED)
+  {
+    LHundred++;
+    ADC_Left_Detector -= HUNDRED;
+  }
+  while(ADC_Left_Detector >= TEN)
+  {
+    LTen++;
+    ADC_Left_Detector -= TEN;
+  }
+  while(ADC_Left_Detector >= ONE)
+  {
+    LOne++;
+    ADC_Left_Detector--;
+  }
+
+  word2[COLUMN1] = RThousand + ASCII_NUM_SHIFT;
+  word2[COLUMN2] = RHundred  + ASCII_NUM_SHIFT;
+  word2[COLUMN3] = RTen      + ASCII_NUM_SHIFT;
+  word2[COLUMN4] = ROne      + ASCII_NUM_SHIFT;
+  word3[COLUMN1] = LThousand + ASCII_NUM_SHIFT;
+  word3[COLUMN2] = LHundred  + ASCII_NUM_SHIFT;
+  word3[COLUMN3] = LTen      + ASCII_NUM_SHIFT;
+  word3[COLUMN4] = LOne      + ASCII_NUM_SHIFT;
+  TThousand = COUNTER_RESET;
+  THundred = COUNTER_RESET;
+  TTen = COUNTER_RESET;
+  TOne = COUNTER_RESET;
+  RThousand = COUNTER_RESET;
+  RHundred = COUNTER_RESET;
+  RTen = COUNTER_RESET;
+  ROne = COUNTER_RESET;
+  LThousand = COUNTER_RESET;
+  LHundred = COUNTER_RESET;
+  LTen = COUNTER_RESET;
+  LOne = COUNTER_RESET;
+    
+  if(P8OUT & IR_LED)
+    word1 = "IR_EM ON  ";
+  else
+    word1 = "IR_EM OFF ";
+    
+  LCD_print(word1, word2, word3, word4);
 }

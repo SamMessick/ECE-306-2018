@@ -55,7 +55,7 @@ typedef enum{
   SIX_SEC = (120),
   ONE_SEC = (20),
   HALF_SEC = (10),
-  QUART_SEC_DELAY = (5)
+  QUART_SEC = (5)
 } timer_intv_t;
 
 #endif

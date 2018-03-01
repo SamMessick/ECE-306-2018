@@ -11,10 +11,11 @@
 #include "msp430.h"
 #include <stdbool.h>
 #include <stdint.h>
-#define ADC_RESET_STATE    (0)
+#define ADC_RESET_STATE     (0)
+#define STABILIZE_REFERENCE {__delay_cycles(10000);}
 
 void Init_ADC(void);
 
-extern uint16_t ADC_Thumb;
-extern uint16_t ADC_Right_Detector;
-extern uint16_t ADC_Left_Detector;
+extern volatile uint16_t ADC_Thumb;
+extern volatile uint16_t ADC_Right_Detector;
+extern volatile uint16_t ADC_Left_Detector;

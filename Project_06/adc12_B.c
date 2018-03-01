@@ -11,9 +11,9 @@
 
 #include "adc12_B.h"
 
-uint16_t ADC_Thumb;
-uint16_t ADC_Right_Detector;
-uint16_t ADC_Left_Detector;
+volatile uint16_t ADC_Thumb;
+volatile uint16_t ADC_Right_Detector;
+volatile uint16_t ADC_Left_Detector;
 
 void Init_ADC(void){
   ADC12CTL0  = ADC_RESET_STATE;
@@ -24,16 +24,12 @@ void Init_ADC(void){
    *                     (ADC12MEM0 to ADC12MEM7 || ADC12MEM24 to ADC12MEM31)
    * ADC12MSC   : First rising edge of SHI signal triggers sampling timer
    * ADC12ON    : ADC12_B powered ON
-   * ADC12ENC   : Conversion enabled
-   * ADC12SC    : Begin sample-and-conversion
    */
   
   ADC12CTL0 |= (ADC12SHT0_2 | 
                 ADC12SHT1_2 | 
                 ADC12MSC    | 
-                ADC12ON     | 
-                ADC12ENC    | 
-                ADC12SC);
+                ADC12ON);
   
   /////////////////////////////////////////////////////////////////////////////
   
@@ -46,10 +42,10 @@ void Init_ADC(void){
    * ADC12ISSH_0  : Sample-input signal is not inverted
    * ADC12DIV_0   : ADC12CLK divided by 1 
    * ADC12SSEL0   : ADC12_B clock source select (MODOSC)
-   * ADC12CONSEQ_3: Repeat-sequence-of-channels conversion sequence mode 
+   * ADC12CONSEQ_3: Sequence-of-channels conversion sequence mode 
    */
   
-  ADC12CTL0 |= (ADC12PDIV_0 | 
+  ADC12CTL1 |= (ADC12PDIV_0 | 
                 ADC12SHS_0  | 
                 ADC12SHP    | 
                 ADC12ISSH_0 | 
@@ -63,7 +59,7 @@ void Init_ADC(void){
   /* Configure conversion settings
    * -----------------
    * ADC12RES_2   : 12-bit conversion result resolution (14 clock cycle conv.)
-   * ADC12DF_0    : Result data stored as binary unsigned (more space) 
+   * ADC12DF_0    : Result data stored as binary unsigned, right justified
    * ADC12PWRMD_0 : Regular power mode (not LPM) where sample rate 
    *                            not restricted
    */
@@ -122,23 +118,24 @@ void Init_ADC(void){
   ADC12MCTL2 |= (ADC12WINC_0  |
                  ADC12DIF_0   |
                  ADC12VRSEL_0 |
-                 ADC12INCH_5  |
-                 ADC12EOS);
+                 ADC12INCH_5);
   
   /////////////////////////////////////////////////////////////////////////////
+  STABILIZE_REFERENCE
   
-  ADC12IER0  |= ADC12IE2;    // Generate interrupt for MEM2 ADC data load 
+  ADC12IER0  |= (ADC12IE2     | // Enable interrupts for new sample results
+                 ADC12IE4     |
+                 ADC12IE5);
   ADC12CTL0  |= (ADC12ENC |  // Enable Conversion
-                 ADC12SC);   // Enable Stepping
+                 ADC12SC);
 }
 
 #pragma vector = ADC12_B_VECTOR
 __interrupt void ADC12_ISR(void){
-  switch(ADC12IV)
-  {
-  case ADC12IV__ADC12IFG2:                      // Vector 16 ADC12MEM2 Interrupt
-    ADC_Thumb = ADC12MEM0;
-    ADC_Right_Detector = ADC12MEM1;
-    ADC_Left_Detector  = ADC12MEM2; break;
-  }
+  ADC12IER0  &= ~(ADC12IE2     | // Enable interrupts for new sample results
+                 ADC12IE4     |
+                 ADC12IE5);
+  ADC_Thumb = ADC12MEM0;
+  ADC_Right_Detector = ADC12MEM1;
+  ADC_Left_Detector = ADC12MEM2;
 }

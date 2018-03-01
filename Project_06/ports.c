@@ -41,7 +41,6 @@ void Init_Port1(void){  // Initlizes all pins on Port 1
   // P1_2
   P1SEL0 |= V_THUMB;                    // ADC input for Thumbwheel
   P1SEL1 |= V_THUMB;                    // ADC input for Thumbwheel
-  P1DIR  |= V_THUMB;
   // P1_3
   P1SEL0 &= ~TEST_PROBE;                // TEST_PROBE as GP I/O
   P1SEL1 &= ~TEST_PROBE;                // TEST_PROBE as GP I/O
@@ -401,7 +400,7 @@ void Init_Port8(void) { // Initializes all pins on Port 8
   // P8_0
   P8SEL0 &= ~IR_LED;                     // Set to GP I/O
   P8SEL1 &= ~IR_LED;                     // Set to GP I/O
-  P8OUT  &= ~IR_LED;                     // Set out value Low [off]
+  P8OUT  |= IR_LED;                     // Set out value Low [off]
   P8DIR  |= IR_LED;                      // Set direction to output
   // P8_1
   P8SEL0 &= ~OPT_INT;                    // Set to GP I/O
@@ -489,15 +488,17 @@ void Init_Ports(void){ // Calls all port initialization functions
 
 #pragma vector = PORT5_VECTOR
 __interrupt void Port_5(void){
-  switch(P5IFG)
+  switch(P5IFG & PORT5_INT_MASK)
   {
   case P5IFG_BUTTON_1: // Right Button
     if(debounced)                     // Has the switch had time to readjust?
     {
-      P1OUT  ^= GRN_LED;                  // Turn on led signal
-      P5OUT  &= ~LCD_BACKLITE;            // Turn off backlight
       menu_counter++;
       menu_counter %= MENU_NUM_OPTIONS;
+      if(menu_counter % 2)
+        P8OUT |= IR_LED;
+      else
+        P8OUT &= ~IR_LED;
       debounced = false;
       shape_routine_begin = true;
       TA0CCTL1 |= CCIE;                   // Enable debounce timer
@@ -506,10 +507,12 @@ __interrupt void Port_5(void){
   case P5IFG_BUTTON_2: // Left Button
     if(debounced)                     // Has the switch had time to readjust?
     {
-      P1OUT  ^= RED_LED;                  // Turn on led signal
-      P5OUT  &= ~LCD_BACKLITE;            // Turn off backlight
       menu_counter += PENULT_OPTION;
       menu_counter %= MENU_NUM_OPTIONS;
+      if(menu_counter % 2)
+        P8OUT |= IR_LED;
+      else
+        P8OUT &= ~IR_LED;
       debounced = false;
       shape_routine_begin = true;
       TA0CCTL1 |= CCIE;                   // Enable debounce timer

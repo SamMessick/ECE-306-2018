@@ -134,6 +134,7 @@ void drive_in_circle(void){
       Wheels_OFF();
       instruction_label = INSTRUCTION1;
       circles_left_to_drive = NUM_TRIALS;
+      shape_routine_begin = false;
     }
 }
 
@@ -173,6 +174,7 @@ void drive_in_figure8(void){
       Wheels_OFF();
       instruction_label = INSTRUCTION1;
       figure8s_left_to_drive = NUM_TRIALS;
+      shape_routine_begin = false;
     }
 }
 
@@ -212,6 +214,7 @@ void drive_in_triangle(void){
       Wheels_OFF();
       instruction_label = INSTRUCTION1;
       edges_left_to_drive = NUM_TRIANGLE_EDGES;
+      shape_routine_begin = false;
     }
 }
 
@@ -302,5 +305,7 @@ void drive_back_and_forth(void){
     default:          /* turn off wheels and return permanently to main */
       Wheels_OFF();
       instruction_label = INSTRUCTION1;
+      instruction_label_tmp = instruction_label;
+      shape_routine_begin = false;
     }
 }

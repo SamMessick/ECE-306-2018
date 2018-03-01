@@ -123,6 +123,8 @@ void Init_Port8(void);
 void Init_PortJ(void);
 void update_menu(void);
 
+#define PORT5_INT_MASK        (0x60)
+
 #ifndef INIT_ENUMS_H
 #define INIT_ENUMS_H
 
