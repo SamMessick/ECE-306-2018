@@ -88,7 +88,7 @@ void Init_ADC(void){
                 ADC12ICH0MAP_0 | 
                 ADC12TCMAP_1   | 
                 ADC12BATMAP_1  |
-                ADC12CSTARTADD0); 
+                ADC12CSTARTADD_0); 
   
   /////////////////////////////////////////////////////////////////////////////
   
@@ -118,7 +118,8 @@ void Init_ADC(void){
   ADC12MCTL2 |= (ADC12WINC_0  |
                  ADC12DIF_0   |
                  ADC12VRSEL_0 |
-                 ADC12INCH_5);
+                 ADC12INCH_5  |
+                 ADC12EOS);
   
   /////////////////////////////////////////////////////////////////////////////
   STABILIZE_REFERENCE

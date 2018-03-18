@@ -132,17 +132,36 @@ void LCD_print(char first_line[COLUMN_NUM_COLUMNS], char second_line[COLUMN_NUM_
 
 void print_detector_values(void)
 {
+  if(P8OUT | IR_LED)
+  {
   if(ADC_Left_Detector >= IR_ACTIVE_READING)
     if(ADC_Right_Detector >= IR_ACTIVE_READING)
+    {
       word4 = "  Black   ";
+      Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
+      Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
+    }
     else
+    {
       word4 = "  Left    ";
+      Left_Motor_ON_FORWARD(LEFT_R_SEARCH_SPEED);
+      Right_Motor_ON_FORWARD(RIGHT_R_SEARCH_SPEED);
+    }
   else 
     if(ADC_Right_Detector >= IR_ACTIVE_READING)
+    {
       word4 = "  Right   ";
+      Left_Motor_ON_FORWARD(LEFT_L_SEARCH_SPEED);
+      Right_Motor_ON_FORWARD(RIGHT_L_SEARCH_SPEED);
+    }
     else 
+    {
       word4 = "  White   ";
-    
+      Wheels_OFF();
+    }
+  }
+  else 
+    Wheels_OFF();
   while(ADC_Right_Detector >= THOUSAND)
   {
     RThousand++;

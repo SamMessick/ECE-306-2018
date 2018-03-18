@@ -24,6 +24,10 @@
 #define RIGHT_LTURN_SPEED         (0)
 #define NUM_TRIALS                (2)
 #define NUM_TRIANGLE_EDGES        (6)      // goes around twice
+#define LEFT_L_SEARCH_SPEED     (100)
+#define RIGHT_L_SEARCH_SPEED      (0)
+#define LEFT_R_SEARCH_SPEED       (0)
+#define RIGHT_R_SEARCH_SPEED     (80)
 #ifndef SHAPE_INSTR_ENUM
 #define SHAPE_INSTR_ENUM
 
