@@ -1,0 +1,915 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           20/Mar/2018  20:40:48
+# Copyright 1996-2017 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_07\shapes_menu.c
+#    Command line  =  
+#        -f C:\Users\shmes\AppData\Local\Temp\EW421D.tmp
+#        ("C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_07\shapes_menu.c" -lC
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_07\Debug\List" -o
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_07\Debug\Obj" --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5994__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  Spanish_USA.1252
+#    List file     =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_07\Debug\List\shapes_menu.lst
+#    Object file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_07\Debug\Obj\shapes_menu.r43
+#
+###############################################################################
+
+C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_07\shapes_menu.c
+      1          //===============================================================
+      2          //  File Name: shapes_menu.c
+      3          //  Description: This file contains the Initialization of all
+      4          //                    display values, and LCD menu functions
+      5          //
+      6          //  Author: Sam Messick
+      7          //  Date Feb. 2018
+      8          //  Compiler Build with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      9          //===============================================================
+     10          
+     11          #include "shapes_menu.h"
+
+   \                                 In  segment DATA16_AN, at 0x262
+   \   union <unnamed> _A_PDOUT_L
+   \                     _A_PDOUT_L:
+   \   000000                DS8 2
+     12          
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     13          int8_t menu_counter;
+   \                     menu_counter:
+   \   000000                DS8 1
+     14          
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     15          uint8_t TThousand;
+   \                     TThousand:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     16          uint8_t THundred;
+   \                     THundred:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     17          uint8_t TTen;
+   \                     TTen:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     18          uint8_t TOne;
+   \                     TOne:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     19          uint8_t RThousand;
+   \                     RThousand:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     20          uint8_t RHundred;
+   \                     RHundred:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     21          uint8_t RTen;
+   \                     RTen:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     22          uint8_t ROne;
+   \                     ROne:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     23          uint8_t LThousand;
+   \                     LThousand:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     24          uint8_t LHundred;
+   \                     LHundred:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     25          uint8_t LTen;
+   \                     LTen:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     26          uint8_t LOne;
+   \                     LOne:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     27          char* word1;
+   \                     word1:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     28          char word2[COLUMN_NUM_COLUMNS] = "    : RTDT";
+   \                     word2:
+   \   000000                DS8 11
+   \   00000B                REQUIRE `?<Initializer for word2>`
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     29          char word3[COLUMN_NUM_COLUMNS] = "    : LFDT";
+   \                     word3:
+   \   000000                DS8 11
+   \   00000B                REQUIRE `?<Initializer for word3>`
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     30          char* word4;
+   \                     word4:
+   \   000000                DS8 2
+     31          
+
+   \                                 In  segment CODE, align 2
+     32          void defer_to_shape_menu(void){
+   \                     defer_to_shape_menu:
+     33            
+     34            if(ADC_Thumb < THUMB_ACTIVE_READING)
+   \   000000   B290E803.... CMP.W   #0x3e8, &ADC_Thumb
+   \   000006   E628         JNC     ??defer_to_shape_menu_0
+     35              {
+     36                return;
+     37              }
+     38            
+     39            switch(menu_counter)
+   \   000008   5E42....     MOV.B   &menu_counter, R14
+   \   00000C   8E11         SXT     R14
+   \   00000E   3EF3         AND.W   #0xffff, R14
+   \   000010   5E83         SUB.B   #0x1, R14
+   \   000012   0724         JEQ     ??defer_to_shape_menu_5
+   \   000014   5E83         SUB.B   #0x1, R14
+   \   000016   1124         JEQ     ??defer_to_shape_menu_6
+   \   000018   5E83         SUB.B   #0x1, R14
+   \   00001A   1B24         JEQ     ??defer_to_shape_menu_7
+   \   00001C   5E83         SUB.B   #0x1, R14
+   \   00001E   2524         JEQ     ??defer_to_shape_menu_8
+   \   000020   CD3C         JMP     ??defer_to_shape_menu_3
+     40            {
+     41            case OPTION1: // circle
+     42              LCD_print("Circ. Mode", "Sam M. Car", "          ", "  ECE306  "); 
+   \                     ??defer_to_shape_menu_5:
+   \   000022   3F40....     MOV.W   #`?<Constant "  ECE306  ">`, R15
+   \   000026   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   00002A   3D40....     MOV.W   #`?<Constant "Sam M. Car">`, R13
+   \   00002E   3C40....     MOV.W   #`?<Constant "Circ. Mode">`, R12
+   \   000032   ........     CALLA   #LCD_print
+     43              drive_in_circle();
+   \   000036   ........     BRA     #drive_in_circle
+     44              break;
+     45              
+     46              
+     47            case OPTION2: // figure 8
+     48              LCD_print("Fig8. Mode", "Sam M. Car", "          ", "  ECE306  "); 
+   \                     ??defer_to_shape_menu_6:
+   \   00003A   3F40....     MOV.W   #`?<Constant "  ECE306  ">`, R15
+   \   00003E   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   000042   3D40....     MOV.W   #`?<Constant "Sam M. Car">`, R13
+   \   000046   3C40....     MOV.W   #`?<Constant "Fig8. Mode">`, R12
+   \   00004A   ........     CALLA   #LCD_print
+     49              drive_in_figure8();
+   \   00004E   ........     BRA     #drive_in_figure8
+     50              break;
+     51              
+     52              
+     53            case OPTION3: // triangle
+     54              LCD_print("Trng. Mode", "Sam M. Car", "          ", "  ECE306  "); 
+   \                     ??defer_to_shape_menu_7:
+   \   000052   3F40....     MOV.W   #`?<Constant "  ECE306  ">`, R15
+   \   000056   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   00005A   3D40....     MOV.W   #`?<Constant "Sam M. Car">`, R13
+   \   00005E   3C40....     MOV.W   #`?<Constant "Trng. Mode">`, R12
+   \   000062   ........     CALLA   #LCD_print
+     55              drive_in_triangle();
+   \   000066   ........     BRA     #drive_in_triangle
+     56              break;
+     57              
+     58              
+     59            case PENULT_OPTION: // Back&Forth and Jazz hands
+     60              switch(instruction_label_tmp)
+   \                     ??defer_to_shape_menu_8:
+   \   00006A   5E42....     MOV.B   &instruction_label_tmp, R14
+   \   00006E   4E83         SUB.B   #0x0, R14
+   \   000070   1524         JEQ     ??defer_to_shape_menu_9
+   \   000072   5E83         SUB.B   #0x1, R14
+   \   000074   1F24         JEQ     ??defer_to_shape_menu_10
+   \   000076   5E83         SUB.B   #0x1, R14
+   \   000078   2924         JEQ     ??defer_to_shape_menu_11
+   \   00007A   5E83         SUB.B   #0x1, R14
+   \   00007C   3324         JEQ     ??defer_to_shape_menu_12
+   \   00007E   5E83         SUB.B   #0x1, R14
+   \   000080   3D24         JEQ     ??defer_to_shape_menu_13
+   \   000082   5E83         SUB.B   #0x1, R14
+   \   000084   4724         JEQ     ??defer_to_shape_menu_14
+   \   000086   5E83         SUB.B   #0x1, R14
+   \   000088   5124         JEQ     ??defer_to_shape_menu_15
+   \   00008A   5E83         SUB.B   #0x1, R14
+   \   00008C   5B24         JEQ     ??defer_to_shape_menu_16
+   \   00008E   5E83         SUB.B   #0x1, R14
+   \   000090   6524         JEQ     ??defer_to_shape_menu_17
+   \   000092   5E83         SUB.B   #0x1, R14
+   \   000094   6F24         JEQ     ??defer_to_shape_menu_18
+   \   000096   5E83         SUB.B   #0x1, R14
+   \   000098   7924         JEQ     ??defer_to_shape_menu_19
+   \   00009A   843C         JMP     ??defer_to_shape_menu_4
+     61              {
+     62              case INSTRUCTION1:
+     63                LCD_print("Pausing   ", "Now :)    ", "          ", "  2  sec  "); 
+   \                     ??defer_to_shape_menu_9:
+   \   00009C   3F40....     MOV.W   #`?<Constant "  2  sec  ">`, R15
+   \   0000A0   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   0000A4   3D40....     MOV.W   #`?<Constant "Now :)    ">`, R13
+   \   0000A8   3C40....     MOV.W   #`?<Constant "Pausing   ">`, R12
+   \   0000AC   ........     CALLA   #LCD_print
+     64                drive_back_and_forth();
+   \   0000B0   ........     BRA     #drive_back_and_forth
+     65                break;
+     66              case INSTRUCTION2:
+     67                LCD_print("Driving   ", "Forward   ", "          ", "  1  sec  "); 
+   \                     ??defer_to_shape_menu_10:
+   \   0000B4   3F40....     MOV.W   #`?<Constant "  1  sec  ">`, R15
+   \   0000B8   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   0000BC   3D40....     MOV.W   #`?<Constant "Forward   ">`, R13
+   \   0000C0   3C40....     MOV.W   #`?<Constant "Driving   ">`, R12
+   \   0000C4   ........     CALLA   #LCD_print
+     68                drive_back_and_forth();
+   \   0000C8   ........     BRA     #drive_back_and_forth
+     69                break;
+     70              case INSTRUCTION3:
+     71                LCD_print("Pausing   ", "Now :)    ", "          ", "  1  sec  ");  
+   \                     ??defer_to_shape_menu_11:
+   \   0000CC   3F40....     MOV.W   #`?<Constant "  1  sec  ">`, R15
+   \   0000D0   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   0000D4   3D40....     MOV.W   #`?<Constant "Now :)    ">`, R13
+   \   0000D8   3C40....     MOV.W   #`?<Constant "Pausing   ">`, R12
+   \   0000DC   ........     CALLA   #LCD_print
+     72                drive_back_and_forth();
+   \   0000E0   ........     BRA     #drive_back_and_forth
+     73                break;
+     74              case INSTRUCTION4:
+     75                LCD_print("Driving   ", "Reverse   ", "          ", "  2  sec  "); 
+   \                     ??defer_to_shape_menu_12:
+   \   0000E4   3F40....     MOV.W   #`?<Constant "  2  sec  ">`, R15
+   \   0000E8   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   0000EC   3D40....     MOV.W   #`?<Constant "Reverse   ">`, R13
+   \   0000F0   3C40....     MOV.W   #`?<Constant "Driving   ">`, R12
+   \   0000F4   ........     CALLA   #LCD_print
+     76                drive_back_and_forth();
+   \   0000F8   ........     BRA     #drive_back_and_forth
+     77                break;
+     78              case INSTRUCTION5:
+     79                LCD_print("Pausing   ", "Now :)    ", "          ", "  1  sec  "); 
+   \                     ??defer_to_shape_menu_13:
+   \   0000FC   3F40....     MOV.W   #`?<Constant "  1  sec  ">`, R15
+   \   000100   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   000104   3D40....     MOV.W   #`?<Constant "Now :)    ">`, R13
+   \   000108   3C40....     MOV.W   #`?<Constant "Pausing   ">`, R12
+   \   00010C   ........     CALLA   #LCD_print
+     80                drive_back_and_forth();
+   \   000110   ........     BRA     #drive_back_and_forth
+     81                break;
+     82              case INSTRUCTION6:
+     83                LCD_print("Driving   ", "Forward   ", "          ", "  1  sec  "); 
+   \                     ??defer_to_shape_menu_14:
+   \   000114   3F40....     MOV.W   #`?<Constant "  1  sec  ">`, R15
+   \   000118   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   00011C   3D40....     MOV.W   #`?<Constant "Forward   ">`, R13
+   \   000120   3C40....     MOV.W   #`?<Constant "Driving   ">`, R12
+   \   000124   ........     CALLA   #LCD_print
+     84                drive_back_and_forth();
+   \   000128   ........     BRA     #drive_back_and_forth
+     85                break;
+     86              case INSTRUCTION7:
+     87                LCD_print("Pausing   ", "Now :)    ", "          ", "  1  sec  "); 
+   \                     ??defer_to_shape_menu_15:
+   \   00012C   3F40....     MOV.W   #`?<Constant "  1  sec  ">`, R15
+   \   000130   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   000134   3D40....     MOV.W   #`?<Constant "Now :)    ">`, R13
+   \   000138   3C40....     MOV.W   #`?<Constant "Pausing   ">`, R12
+   \   00013C   ........     CALLA   #LCD_print
+     88                drive_back_and_forth();
+   \   000140   ........     BRA     #drive_back_and_forth
+     89                break;
+     90              case INSTRUCTION8:
+     91                LCD_print("Driving   ", "clockwise ", "          ", "  3  sec  "); 
+   \                     ??defer_to_shape_menu_16:
+   \   000144   3F40....     MOV.W   #`?<Constant "  3  sec  ">`, R15
+   \   000148   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   00014C   3D40....     MOV.W   #`?<Constant "clockwise ">`, R13
+   \   000150   3C40....     MOV.W   #`?<Constant "Driving   ">`, R12
+   \   000154   ........     CALLA   #LCD_print
+     92                drive_back_and_forth();
+   \   000158   ........     BRA     #drive_back_and_forth
+     93                break;
+     94              case INSTRUCTION9:
+     95                LCD_print("Pausing   ", "Now :)    ", "          ", "  2  sec  "); 
+   \                     ??defer_to_shape_menu_17:
+   \   00015C   3F40....     MOV.W   #`?<Constant "  2  sec  ">`, R15
+   \   000160   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   000164   3D40....     MOV.W   #`?<Constant "Now :)    ">`, R13
+   \   000168   3C40....     MOV.W   #`?<Constant "Pausing   ">`, R12
+   \   00016C   ........     CALLA   #LCD_print
+     96                drive_back_and_forth();
+   \   000170   ........     BRA     #drive_back_and_forth
+     97                break;
+     98              case INSTRUCTION10:
+     99                LCD_print("Driving   ", "cclockwise", "          ", "  3  sec  "); 
+   \                     ??defer_to_shape_menu_18:
+   \   000174   3F40....     MOV.W   #`?<Constant "  3  sec  ">`, R15
+   \   000178   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   00017C   3D40....     MOV.W   #`?<Constant "cclockwise">`, R13
+   \   000180   3C40....     MOV.W   #`?<Constant "Driving   ">`, R12
+   \   000184   ........     CALLA   #LCD_print
+    100                drive_back_and_forth();
+   \   000188   ........     BRA     #drive_back_and_forth
+    101                break;
+    102              case INSTRUCTION11:
+    103                LCD_print("Pausing   ", "Now :)    ", "          ", "  2  sec  "); 
+   \                     ??defer_to_shape_menu_19:
+   \   00018C   3F40....     MOV.W   #`?<Constant "  2  sec  ">`, R15
+   \   000190   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   000194   3D40....     MOV.W   #`?<Constant "Now :)    ">`, R13
+   \   000198   3C40....     MOV.W   #`?<Constant "Pausing   ">`, R12
+   \   00019C   ........     CALLA   #LCD_print
+    104                drive_back_and_forth();
+   \   0001A0   ........     BRA     #drive_back_and_forth
+    105                break;
+    106              default:
+    107                LCD_print("   Demo   ", " Complete ", "          ", "          ");
+   \                     ??defer_to_shape_menu_4:
+   \   0001A4   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   0001A8   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   0001AC   3D40....     MOV.W   #`?<Constant " Complete ">`, R13
+   \   0001B0   3C40....     MOV.W   #`?<Constant "   Demo   ">`, R12
+   \   0001B4   ........     CALLA   #LCD_print
+    108                drive_back_and_forth();
+   \   0001B8   ........     BRA     #drive_back_and_forth
+    109              }
+    110              break;
+    111              
+    112              
+    113            default:   // Do nothing
+    114              LCD_print("   NCSU   ", "Sam M. Car", "          ", "  ECE306  "); 
+   \                     ??defer_to_shape_menu_3:
+   \   0001BC   3F40....     MOV.W   #`?<Constant "  ECE306  ">`, R15
+   \   0001C0   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   0001C4   3D40....     MOV.W   #`?<Constant "Sam M. Car">`, R13
+   \   0001C8   3C40....     MOV.W   #`?<Constant "   NCSU   ">`, R12
+   \   0001CC   ........     CALLA   #LCD_print
+    115              Wheels_OFF(); break;
+   \   0001D0   ........     CALLA   #Wheels_OFF
+    116            }
+    117          }
+   \                     ??defer_to_shape_menu_0:
+   \   0001D4   1001         RETA
+    118          
+
+   \                                 In  segment CODE, align 2
+    119          void LCD_print(char first_line[COLUMN_NUM_COLUMNS], char second_line[COLUMN_NUM_COLUMNS], char third_line[COLUMN_NUM_COLUMNS], char fourth_line[COLUMN_NUM_COLUMNS]){
+   \                     LCD_print:
+   \   000000   3B15         PUSHM.W #0x4, R11
+   \   000002   0A4C         MOV.W   R12, R10
+   \   000004   0B4D         MOV.W   R13, R11
+   \   000006   084E         MOV.W   R14, R8
+   \   000008   094F         MOV.W   R15, R9
+    120            strcpy(display_line[LINE1], first_line);
+   \   00000A   0D4A         MOV.W   R10, R13
+   \   00000C   3C40....     MOV.W   #display_line, R12
+   \   000010   ........     CALLA   #strcpy
+    121            update_string(display_line[LINE1], LINE1);
+   \   000014   0D43         MOV.W   #0x0, R13
+   \   000016   ........     CALLA   #update_string
+    122            strcpy(display_line[LINE2], second_line);
+   \   00001A   0D4B         MOV.W   R11, R13
+   \   00001C   3C40....     MOV.W   #display_line + 11, R12
+   \   000020   ........     CALLA   #strcpy
+    123            update_string(display_line[LINE2], LINE2);
+   \   000024   1D43         MOV.W   #0x1, R13
+   \   000026   3C40....     MOV.W   #display_line + 11, R12
+   \   00002A   ........     CALLA   #update_string
+    124            strcpy(display_line[LINE3], third_line);
+   \   00002E   0D48         MOV.W   R8, R13
+   \   000030   3C40....     MOV.W   #display_line + 22, R12
+   \   000034   ........     CALLA   #strcpy
+    125            update_string(display_line[LINE3], LINE3);
+   \   000038   2D43         MOV.W   #0x2, R13
+   \   00003A   3C40....     MOV.W   #display_line + 22, R12
+   \   00003E   ........     CALLA   #update_string
+    126            strcpy(display_line[LINE4], fourth_line);
+   \   000042   0D49         MOV.W   R9, R13
+   \   000044   3C40....     MOV.W   #display_line + 33, R12
+   \   000048   ........     CALLA   #strcpy
+    127            update_string(display_line[LINE4], LINE4);
+   \   00004C   3D400300     MOV.W   #0x3, R13
+   \   000050   3C40....     MOV.W   #display_line + 33, R12
+   \   000054   ........     CALLA   #update_string
+    128            display_changed = true; 
+   \   000058   D243....     MOV.B   #0x1, &display_changed
+    129            update_display  = true;
+   \   00005C   D243....     MOV.B   #0x1, &update_display
+    130            Display_Process();                     // Refresh LCD screen
+   \   000060   ........     CALLA   #Display_Process
+    131          }
+   \   000064   3817         POPM.W  #0x4, R11
+   \   000066   1001         RETA
+    132          
+
+   \                                 In  segment CODE, align 2
+    133          void print_detector_values(void)
+   \                     print_detector_values:
+    134          {
+    135            if(P8OUT | IR_LED)
+   \   000000   5E426302     MOV.B   &0x263, R14
+    136            {
+    137            if(ADC_Left_Detector >= IR_ACTIVE_READING)
+   \   000004   B2900E01.... CMP.W   #0x10e, &ADC_Left_Detector
+   \   00000A   1B28         JNC     ??print_detector_values_9
+    138              if(ADC_Right_Detector >= IR_ACTIVE_READING)
+   \   00000C   B2900E01.... CMP.W   #0x10e, &ADC_Right_Detector
+   \   000012   0C28         JNC     ??print_detector_values_10
+    139              {
+    140                word4 = "  Black   ";
+   \   000014   B240........ MOV.W   #`?<Constant "  Black   ">`, &word4
+    141                Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
+   \   00001A   7C40FD00     MOV.B   #0xfd, R12
+   \   00001E   ........     CALLA   #Left_Motor_ON_FORWARD
+    142                Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
+   \   000022   7C40B400     MOV.B   #0xb4, R12
+   \   000026   ........     CALLA   #Right_Motor_ON_FORWARD
+   \   00002A   1F3C         JMP     ??print_detector_values_0
+    143              }
+    144              else
+    145              {
+    146                word4 = "  Left    ";
+   \                     ??print_detector_values_10:
+   \   00002C   B240........ MOV.W   #`?<Constant "  Left    ">`, &word4
+    147                Left_Motor_ON_FORWARD(LEFT_R_SEARCH_SPEED);
+   \   000032   4C43         MOV.B   #0x0, R12
+   \   000034   ........     CALLA   #Left_Motor_ON_FORWARD
+    148                Right_Motor_ON_FORWARD(RIGHT_R_SEARCH_SPEED);
+   \   000038   7C405000     MOV.B   #0x50, R12
+   \   00003C   ........     CALLA   #Right_Motor_ON_FORWARD
+   \   000040   143C         JMP     ??print_detector_values_0
+    149              }
+    150            else 
+    151              if(ADC_Right_Detector >= IR_ACTIVE_READING)
+   \                     ??print_detector_values_9:
+   \   000042   B2900E01.... CMP.W   #0x10e, &ADC_Right_Detector
+   \   000048   0B28         JNC     ??print_detector_values_11
+    152              {
+    153                word4 = "  Right   ";
+   \   00004A   B240........ MOV.W   #`?<Constant "  Right   ">`, &word4
+    154                Left_Motor_ON_FORWARD(LEFT_L_SEARCH_SPEED);
+   \   000050   7C406400     MOV.B   #0x64, R12
+   \   000054   ........     CALLA   #Left_Motor_ON_FORWARD
+    155                Right_Motor_ON_FORWARD(RIGHT_L_SEARCH_SPEED);
+   \   000058   4C43         MOV.B   #0x0, R12
+   \   00005A   ........     CALLA   #Right_Motor_ON_FORWARD
+   \   00005E   053C         JMP     ??print_detector_values_0
+    156              }
+    157              else 
+    158              {
+    159                word4 = "  White   ";
+   \                     ??print_detector_values_11:
+   \   000060   B240........ MOV.W   #`?<Constant "  White   ">`, &word4
+    160                Wheels_OFF();
+   \   000066   ........     CALLA   #Wheels_OFF
+    161              }
+    162            }
+    163            else 
+    164              Wheels_OFF();
+    165            while(ADC_Right_Detector >= THOUSAND)
+   \                     ??print_detector_values_0:
+   \   00006A   B290E803.... CMP.W   #0x3e8, &ADC_Right_Detector
+   \   000070   0628         JNC     ??print_detector_values_1
+    166            {
+    167              RThousand++;
+   \   000072   D253....     ADD.B   #0x1, &RThousand
+    168              ADC_Right_Detector -= THOUSAND;
+   \   000076   B25018FC.... ADD.W   #0xfc18, &ADC_Right_Detector
+   \   00007C   F63F         JMP     ??print_detector_values_0
+    169            }
+    170            while(ADC_Right_Detector >= HUNDRED)
+   \                     ??print_detector_values_1:
+   \   00007E   B2906400.... CMP.W   #0x64, &ADC_Right_Detector
+   \   000084   0628         JNC     ??print_detector_values_2
+    171            {
+    172              RHundred++;
+   \   000086   D253....     ADD.B   #0x1, &RHundred
+    173              ADC_Right_Detector -= HUNDRED;
+   \   00008A   B2509CFF.... ADD.W   #0xff9c, &ADC_Right_Detector
+   \   000090   F63F         JMP     ??print_detector_values_1
+    174            }
+    175            while(ADC_Right_Detector >= TEN)
+   \                     ??print_detector_values_2:
+   \   000092   B2900A00.... CMP.W   #0xa, &ADC_Right_Detector
+   \   000098   0628         JNC     ??print_detector_values_3
+    176            {
+    177              RTen++;
+   \   00009A   D253....     ADD.B   #0x1, &RTen
+    178              ADC_Right_Detector -= TEN;
+   \   00009E   B250F6FF.... ADD.W   #0xfff6, &ADC_Right_Detector
+   \   0000A4   F63F         JMP     ??print_detector_values_2
+    179            }
+    180            while(ADC_Right_Detector >= ONE)
+   \                     ??print_detector_values_3:
+   \   0000A6   8293....     CMP.W   #0x0, &ADC_Right_Detector
+   \   0000AA   0524         JEQ     ??print_detector_values_4
+    181            {
+    182              ROne++;
+   \   0000AC   D253....     ADD.B   #0x1, &ROne
+    183              ADC_Right_Detector--;
+   \   0000B0   B253....     ADD.W   #0xffff, &ADC_Right_Detector
+   \   0000B4   F83F         JMP     ??print_detector_values_3
+    184            }
+    185            
+    186            while(ADC_Left_Detector >= THOUSAND)
+   \                     ??print_detector_values_4:
+   \   0000B6   B290E803.... CMP.W   #0x3e8, &ADC_Left_Detector
+   \   0000BC   0628         JNC     ??print_detector_values_5
+    187            {
+    188              LThousand++;
+   \   0000BE   D253....     ADD.B   #0x1, &LThousand
+    189              ADC_Left_Detector -= THOUSAND;
+   \   0000C2   B25018FC.... ADD.W   #0xfc18, &ADC_Left_Detector
+   \   0000C8   F63F         JMP     ??print_detector_values_4
+    190            }
+    191            while(ADC_Left_Detector >= HUNDRED)
+   \                     ??print_detector_values_5:
+   \   0000CA   B2906400.... CMP.W   #0x64, &ADC_Left_Detector
+   \   0000D0   0628         JNC     ??print_detector_values_6
+    192            {
+    193              LHundred++;
+   \   0000D2   D253....     ADD.B   #0x1, &LHundred
+    194              ADC_Left_Detector -= HUNDRED;
+   \   0000D6   B2509CFF.... ADD.W   #0xff9c, &ADC_Left_Detector
+   \   0000DC   F63F         JMP     ??print_detector_values_5
+    195            }
+    196            while(ADC_Left_Detector >= TEN)
+   \                     ??print_detector_values_6:
+   \   0000DE   B2900A00.... CMP.W   #0xa, &ADC_Left_Detector
+   \   0000E4   0628         JNC     ??print_detector_values_7
+    197            {
+    198              LTen++;
+   \   0000E6   D253....     ADD.B   #0x1, &LTen
+    199              ADC_Left_Detector -= TEN;
+   \   0000EA   B250F6FF.... ADD.W   #0xfff6, &ADC_Left_Detector
+   \   0000F0   F63F         JMP     ??print_detector_values_6
+    200            }
+    201            while(ADC_Left_Detector >= ONE)
+   \                     ??print_detector_values_7:
+   \   0000F2   8293....     CMP.W   #0x0, &ADC_Left_Detector
+   \   0000F6   0524         JEQ     ??print_detector_values_12
+    202            {
+    203              LOne++;
+   \   0000F8   D253....     ADD.B   #0x1, &LOne
+    204              ADC_Left_Detector--;
+   \   0000FC   B253....     ADD.W   #0xffff, &ADC_Left_Detector
+   \   000100   F83F         JMP     ??print_detector_values_7
+    205            }
+    206          
+    207            word2[COLUMN1] = RThousand + ASCII_NUM_SHIFT;
+   \                     ??print_detector_values_12:
+   \   000102   5E42....     MOV.B   &RThousand, R14
+   \   000106   7E503000     ADD.B   #0x30, R14
+   \   00010A   C24E....     MOV.B   R14, &word2
+    208            word2[COLUMN2] = RHundred  + ASCII_NUM_SHIFT;
+   \   00010E   5E42....     MOV.B   &RHundred, R14
+   \   000112   7E503000     ADD.B   #0x30, R14
+   \   000116   C24E....     MOV.B   R14, &word2 + 1
+    209            word2[COLUMN3] = RTen      + ASCII_NUM_SHIFT;
+   \   00011A   5E42....     MOV.B   &RTen, R14
+   \   00011E   7E503000     ADD.B   #0x30, R14
+   \   000122   C24E....     MOV.B   R14, &word2 + 2
+    210            word2[COLUMN4] = ROne      + ASCII_NUM_SHIFT;
+   \   000126   5E42....     MOV.B   &ROne, R14
+   \   00012A   7E503000     ADD.B   #0x30, R14
+   \   00012E   C24E....     MOV.B   R14, &word2 + 3
+    211            word3[COLUMN1] = LThousand + ASCII_NUM_SHIFT;
+   \   000132   5E42....     MOV.B   &LThousand, R14
+   \   000136   7E503000     ADD.B   #0x30, R14
+   \   00013A   C24E....     MOV.B   R14, &word3
+    212            word3[COLUMN2] = LHundred  + ASCII_NUM_SHIFT;
+   \   00013E   5E42....     MOV.B   &LHundred, R14
+   \   000142   7E503000     ADD.B   #0x30, R14
+   \   000146   C24E....     MOV.B   R14, &word3 + 1
+    213            word3[COLUMN3] = LTen      + ASCII_NUM_SHIFT;
+   \   00014A   5E42....     MOV.B   &LTen, R14
+   \   00014E   7E503000     ADD.B   #0x30, R14
+   \   000152   C24E....     MOV.B   R14, &word3 + 2
+    214            word3[COLUMN4] = LOne      + ASCII_NUM_SHIFT;
+   \   000156   5E42....     MOV.B   &LOne, R14
+   \   00015A   7E503000     ADD.B   #0x30, R14
+   \   00015E   C24E....     MOV.B   R14, &word3 + 3
+    215            TThousand = COUNTER_RESET;
+   \   000162   C243....     MOV.B   #0x0, &TThousand
+    216            THundred = COUNTER_RESET;
+   \   000166   C243....     MOV.B   #0x0, &THundred
+    217            TTen = COUNTER_RESET;
+   \   00016A   C243....     MOV.B   #0x0, &TTen
+    218            TOne = COUNTER_RESET;
+   \   00016E   C243....     MOV.B   #0x0, &TOne
+    219            RThousand = COUNTER_RESET;
+   \   000172   C243....     MOV.B   #0x0, &RThousand
+    220            RHundred = COUNTER_RESET;
+   \   000176   C243....     MOV.B   #0x0, &RHundred
+    221            RTen = COUNTER_RESET;
+   \   00017A   C243....     MOV.B   #0x0, &RTen
+    222            ROne = COUNTER_RESET;
+   \   00017E   C243....     MOV.B   #0x0, &ROne
+    223            LThousand = COUNTER_RESET;
+   \   000182   C243....     MOV.B   #0x0, &LThousand
+    224            LHundred = COUNTER_RESET;
+   \   000186   C243....     MOV.B   #0x0, &LHundred
+    225            LTen = COUNTER_RESET;
+   \   00018A   C243....     MOV.B   #0x0, &LTen
+    226            LOne = COUNTER_RESET;
+   \   00018E   C243....     MOV.B   #0x0, &LOne
+    227              
+    228            if(P8OUT & IR_LED)
+   \   000192   D2B36302     BIT.B   #0x1, &0x263
+   \   000196   0428         JNC     ??print_detector_values_13
+    229              word1 = "IR_EM ON  ";
+   \   000198   B240........ MOV.W   #`?<Constant "IR_EM ON  ">`, &word1
+   \   00019E   033C         JMP     ??print_detector_values_8
+    230            else
+    231              word1 = "IR_EM OFF ";
+   \                     ??print_detector_values_13:
+   \   0001A0   B240........ MOV.W   #`?<Constant "IR_EM OFF ">`, &word1
+    232              
+    233            LCD_print(word1, word2, word3, word4);
+   \                     ??print_detector_values_8:
+   \   0001A6   1F42....     MOV.W   &word4, R15
+   \   0001AA   3E40....     MOV.W   #word3, R14
+   \   0001AE   3D40....     MOV.W   #word2, R13
+   \   0001B2   1C42....     MOV.W   &word1, R12
+   \   0001B6   ........     BRA     #LCD_print
+   \   0001BA                REQUIRE _A_PDOUT_L
+    234          }
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for word2>`:
+   \   000000   202020203A20 DC8 "    : RTDT"
+   \            5254445400  
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for word3>`:
+   \   000000   202020203A20 DC8 "    : LFDT"
+   \            4C46445400  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Circ. Mode">`:
+   \   000000   436972632E20 DC8 "Circ. Mode"
+   \            4D6F646500  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Sam M. Car">`:
+   \   000000   53616D204D2E DC8 "Sam M. Car"
+   \            2043617200  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "          ">`:
+   \   000000   202020202020 DC8 "          "
+   \            2020202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "  ECE306  ">`:
+   \   000000   202045434533 DC8 "  ECE306  "
+   \            3036202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Fig8. Mode">`:
+   \   000000   466967382E20 DC8 "Fig8. Mode"
+   \            4D6F646500  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Trng. Mode">`:
+   \   000000   54726E672E20 DC8 "Trng. Mode"
+   \            4D6F646500  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Pausing   ">`:
+   \   000000   50617573696E DC8 "Pausing   "
+   \            6720202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Now :)    ">`:
+   \   000000   4E6F77203A29 DC8 "Now :)    "
+   \            2020202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "  2  sec  ">`:
+   \   000000   202032202073 DC8 "  2  sec  "
+   \            6563202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Driving   ">`:
+   \   000000   44726976696E DC8 "Driving   "
+   \            6720202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Forward   ">`:
+   \   000000   466F72776172 DC8 "Forward   "
+   \            6420202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "  1  sec  ">`:
+   \   000000   202031202073 DC8 "  1  sec  "
+   \            6563202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Reverse   ">`:
+   \   000000   526576657273 DC8 "Reverse   "
+   \            6520202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "clockwise ">`:
+   \   000000   636C6F636B77 DC8 "clockwise "
+   \            6973652000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "  3  sec  ">`:
+   \   000000   202033202073 DC8 "  3  sec  "
+   \            6563202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "cclockwise">`:
+   \   000000   63636C6F636B DC8 "cclockwise"
+   \            7769736500  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "   Demo   ">`:
+   \   000000   20202044656D DC8 "   Demo   "
+   \            6F20202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant " Complete ">`:
+   \   000000   20436F6D706C DC8 " Complete "
+   \            6574652000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "   NCSU   ">`:
+   \   000000   2020204E4353 DC8 "   NCSU   "
+   \            5520202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "  Black   ">`:
+   \   000000   2020426C6163 DC8 "  Black   "
+   \            6B20202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "  Left    ">`:
+   \   000000   20204C656674 DC8 "  Left    "
+   \            2020202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "  Right   ">`:
+   \   000000   202052696768 DC8 "  Right   "
+   \            7420202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "  White   ">`:
+   \   000000   202057686974 DC8 "  White   "
+   \            6520202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "IR_EM ON  ">`:
+   \   000000   49525F454D20 DC8 "IR_EM ON  "
+   \            4F4E202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "IR_EM OFF ">`:
+   \   000000   49525F454D20 DC8 "IR_EM OFF "
+   \            4F46462000  
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+     12   LCD_print
+       12   -> Display_Process
+       12   -> strcpy
+       12   -> update_string
+      4   defer_to_shape_menu
+        4   -> LCD_print
+        4   -> Wheels_OFF
+        0   -> drive_back_and_forth
+        0   -> drive_in_circle
+        0   -> drive_in_figure8
+        0   -> drive_in_triangle
+      4   print_detector_values
+        0   -> LCD_print
+        4   -> Left_Motor_ON_FORWARD
+        4   -> Right_Motor_ON_FORWARD
+        4   -> Wheels_OFF
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      11  ?<Constant "          ">
+      11  ?<Constant "   Demo   ">
+      11  ?<Constant "   NCSU   ">
+      11  ?<Constant "  1  sec  ">
+      11  ?<Constant "  2  sec  ">
+      11  ?<Constant "  3  sec  ">
+      11  ?<Constant "  Black   ">
+      11  ?<Constant "  ECE306  ">
+      11  ?<Constant "  Left    ">
+      11  ?<Constant "  Right   ">
+      11  ?<Constant "  White   ">
+      11  ?<Constant " Complete ">
+      11  ?<Constant "Circ. Mode">
+      11  ?<Constant "Driving   ">
+      11  ?<Constant "Fig8. Mode">
+      11  ?<Constant "Forward   ">
+      11  ?<Constant "IR_EM OFF ">
+      11  ?<Constant "IR_EM ON  ">
+      11  ?<Constant "Now :)    ">
+      11  ?<Constant "Pausing   ">
+      11  ?<Constant "Reverse   ">
+      11  ?<Constant "Sam M. Car">
+      11  ?<Constant "Trng. Mode">
+      11  ?<Constant "cclockwise">
+      11  ?<Constant "clockwise ">
+      11  ?<Initializer for word2>
+      11  ?<Initializer for word3>
+     104  LCD_print
+       1  LHundred
+       1  LOne
+       1  LTen
+       1  LThousand
+       1  RHundred
+       1  ROne
+       1  RTen
+       1  RThousand
+       1  THundred
+       1  TOne
+       1  TTen
+       1  TThousand
+       2  _A_PDOUT_L
+     470  defer_to_shape_menu
+       1  menu_counter
+     442  print_detector_values
+       2  word1
+      11  word2
+      11  word3
+       2  word4
+
+ 
+ 1 016 bytes in segment CODE
+     2 bytes in segment DATA16_AN
+   275 bytes in segment DATA16_C
+    22 bytes in segment DATA16_I
+    22 bytes in segment DATA16_ID
+    17 bytes in segment DATA16_Z
+ 
+ 1 016 bytes of CODE  memory
+   297 bytes of CONST memory
+    39 bytes of DATA  memory (+ 2 bytes shared)
+
+Errors: none
+Warnings: none

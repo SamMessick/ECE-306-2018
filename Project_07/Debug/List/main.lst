@@ -1,0 +1,234 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           20/Mar/2018  20:45:30
+# Copyright 1996-2017 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_07\main.c
+#    Command line  =  
+#        -f C:\Users\shmes\AppData\Local\Temp\EW9244.tmp
+#        ("C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_07\main.c" -lC
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_07\Debug\List" -o
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_07\Debug\Obj" --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5994__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  Spanish_USA.1252
+#    List file     =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_07\Debug\List\main.lst
+#    Object file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_07\Debug\Obj\main.r43
+#
+###############################################################################
+
+C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_07\main.c
+      1          //------------------------------------------------------------------------------
+      2          //  File name: main.c
+      3          //  Description: This file contains the MSP430 Car's Operating System
+      4          //
+      5          //
+      6          //  Sam Messick
+      7          //  Jan 2018
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          //**To fix: reenable PWM in ports.c, wheels.c ,timerB0.c;
+     12          
+     13          
+     14          #include "main.h"
+
+   \                                 In  segment DATA16_AN, at 0x800
+   \   union <unnamed> _A_ADC12CTL0_L
+   \                     _A_ADC12CTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x812
+   \   union <unnamed> _A_ADC12IER0_L
+   \                     _A_ADC12IER0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x242
+   \   union <unnamed> _A_PCOUT_L
+   \                     _A_PCOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x130
+   \   union <unnamed> _A_PM5CTL0_L
+   \                     _A_PM5CTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x342
+   \   union <unnamed> _A_TA0CCTL0_L
+   \                     _A_TA0CCTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x346
+   \   union <unnamed> _A_TA0CCTL2_L
+   \                     _A_TA0CCTL2_L:
+   \   000000                DS8 2
+     15          
+
+   \                                 In  segment CODE, align 2
+     16          void main(void){
+   \                     main:
+     17          //------------------------------------------------------------------------------
+     18          // Main Program
+     19          // This is the main initialization of the car. Execution of code starts here.
+     20          // The operating system is Back Ground Fore Ground... but mainly Fore Ground lol
+     21          //
+     22          //------------------------------------------------------------------------------
+     23            
+     24              Init_Ports();                        // Initialize Ports
+   \   000000   ........     CALLA   #Init_Ports
+     25          // Disable the GPIO power-on default high-impedance mode to activate
+     26          // previously configured port settings
+     27            PM5CTL0 &= ~LOCKLPM5;
+   \   000004   92C33001     BIC.W   #0x1, &0x130
+     28            Init_Clocks();                       // Initialize Clock System
+   \   000008   ........     CALLA   #Init_Clocks
+     29            Init_Conditions();                   // Initialize Variables and Initial Conditions
+   \   00000C   ........     CALLA   #Init_Conditions
+     30            Init_LCD();                          // Initialize LCD
+   \   000010   ........     CALLA   #Init_LCD
+     31            Init_LEDs();
+   \   000014   ........     CALLA   #Init_LEDs
+     32            Init_Timers();                       // Initialize Timers
+   \   000018   ........     CALLA   #Init_Timers
+     33            Init_ADC();
+   \   00001C   ........     CALLA   #Init_ADC
+     34            uint8_t one_time = true;
+   \   000020   5A43         MOV.B   #0x1, R10
+     35          
+     36          // Update LCD display, check state machine, enter low power mode 1
+     37            enable_display_update();
+   \   000022   ........     CALLA   #enable_display_update
+     38            defer_to_shape_menu();
+   \   000026   ........     CALLA   #defer_to_shape_menu
+     39          //------------------------------------------------------------------------------
+     40          // Begining of the Interrupt-Based Operating System
+     41          //------------------------------------------------------------------------------
+     42          //------------------------------------------------------------------------------
+     43          // TimerA1: controls LCD update, button debouncing and timed delays
+     44          // -------          defers to state machine in shapes_menu.c following push-button
+     45          //                  interrupts.
+     46          //               
+     47          // TimerB0: controls wheel PWM
+     48          //------------------------------------------------------------------------------
+     49          //  int counter;
+     50            for(;;)
+     51            {
+     52              while(ADC12CTL0 & ADC12BUSY);
+   \                     ??main_0:
+   \   00002A   92B30008     BIT.W   #0x1, &0x800
+   \   00002E   FD2F         JC      ??main_0
+     53              if(ADC_Left_Detector < IR_ACTIVE_READING && ADC_Right_Detector < IR_ACTIVE_READING)
+   \   000030   B2900E01.... CMP.W   #0x10e, &ADC_Left_Detector
+   \   000036   082C         JC      ??main_2
+   \   000038   B2900E01.... CMP.W   #0x10e, &ADC_Right_Detector
+   \   00003E   042C         JC      ??main_2
+     54                P5OUT &= ~LCD_BACKLITE;
+   \   000040   F2C080004202 BIC.B   #0x80, &0x242
+   \   000046   033C         JMP     ??main_1
+     55              else
+     56                P5OUT |= LCD_BACKLITE;
+   \                     ??main_2:
+   \   000048   F2D080004202 BIS.B   #0x80, &0x242
+     57              if(ADC_Thumb > THUMB_ACTIVE_READING && one_time)
+   \                     ??main_1:
+   \   00004E   B290E903.... CMP.W   #0x3e9, &ADC_Thumb
+   \   000054   0828         JNC     ??main_3
+   \   000056   4A93         CMP.B   #0x0, R10
+   \   000058   0624         JEQ     ??main_3
+     58              {
+     59                TA0CCTL0 &= ~CCIE;
+   \   00005A   B2C010004203 BIC.W   #0x10, &0x342
+     60                one_time = false;
+   \   000060   4A43         MOV.B   #0x0, R10
+     61                defer_to_shape_menu();
+   \   000062   ........     CALLA   #defer_to_shape_menu
+     62              }
+     63              if(ADC_Thumb < THUMB_ACTIVE_READING)
+   \                     ??main_3:
+   \   000066   B290E803.... CMP.W   #0x3e8, &ADC_Thumb
+   \   00006C   092C         JC      ??main_4
+     64              {
+     65                TA0CCTL0 |= CCIE;
+   \   00006E   B2D010004203 BIS.W   #0x10, &0x342
+     66                TA0CCTL2 &= ~CCIE;
+   \   000074   B2C010004603 BIC.W   #0x10, &0x346
+     67                Wheels_OFF();
+   \   00007A   ........     CALLA   #Wheels_OFF
+     68                one_time = true;
+   \   00007E   5A43         MOV.B   #0x1, R10
+     69              }
+     70              ADC12IER0  |= (ADC12IE2     | // Enable interrupts for new sample results
+     71                           ADC12IE4     |
+     72                           ADC12IE5);
+   \                     ??main_4:
+   \   000080   B2D034001208 BIS.W   #0x34, &0x812
+   \   000086   D13F         JMP     ??main_0
+   \   000088   0343         NOP
+   \   00008A                REQUIRE _A_PM5CTL0_L
+   \   00008A                REQUIRE _A_ADC12CTL0_L
+   \   00008A                REQUIRE _A_PCOUT_L
+   \   00008A                REQUIRE _A_TA0CCTL0_L
+   \   00008A                REQUIRE _A_TA0CCTL2_L
+   \   00008A                REQUIRE _A_ADC12IER0_L
+     73            }
+     74          }
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   main
+        4   -> Init_ADC
+        4   -> Init_Clocks
+        4   -> Init_Conditions
+        4   -> Init_LCD
+        4   -> Init_LEDs
+        4   -> Init_Ports
+        4   -> Init_Timers
+        4   -> Wheels_OFF
+        4   -> defer_to_shape_menu
+        4   -> enable_display_update
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  _A_ADC12CTL0_L
+       2  _A_ADC12IER0_L
+       2  _A_PCOUT_L
+       2  _A_PM5CTL0_L
+       2  _A_TA0CCTL0_L
+       2  _A_TA0CCTL2_L
+     138  main
+
+ 
+ 138 bytes in segment CODE
+  12 bytes in segment DATA16_AN
+ 
+ 138 bytes of CODE memory
+   0 bytes of DATA memory (+ 12 bytes shared)
+
+Errors: none
+Warnings: none
