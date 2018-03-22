@@ -1,0 +1,926 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           20/Mar/2018  20:40:48
+# Copyright 1996-2017 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_07\wheels.c
+#    Command line  =  
+#        -f C:\Users\shmes\AppData\Local\Temp\EW432A.tmp
+#        ("C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_07\wheels.c" -lC
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_07\Debug\List" -o
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_07\Debug\Obj" --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5994__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  Spanish_USA.1252
+#    List file     =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_07\Debug\List\wheels.lst
+#    Object file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_07\Debug\Obj\wheels.r43
+#
+###############################################################################
+
+C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_07\wheels.c
+      1          //===============================================================
+      2          //  File Name: wheels.c
+      3          //  Description: This file contains the functions needed for control
+      4          //                    operations of the wheels
+      5          //
+      6          //  Author: Sam Messick
+      7          //  Date Feb. 2018
+      8          //  Compiler Build with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      9          //===============================================================
+     10          
+     11          #include "wheels.h"
+
+   \                                 In  segment DATA16_AN, at 0x346
+   \   union <unnamed> _A_TA0CCTL2_L
+   \                     _A_TA0CCTL2_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3d8
+   \   union <unnamed> _A_TB0CCR3_L
+   \                     _A_TB0CCR3_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3da
+   \   union <unnamed> _A_TB0CCR4_L
+   \                     _A_TB0CCR4_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3dc
+   \   union <unnamed> _A_TB0CCR5_L
+   \                     _A_TB0CCR5_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3de
+   \   union <unnamed> _A_TB0CCR6_L
+   \                     _A_TB0CCR6_L:
+   \   000000                DS8 2
+     12          
+     13          // H-bridge protection flags: 
+     14          // don't allow for motion forward/backward simultaneously in one motor
+     15          
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     16          uint8_t left_forward_flag;     // Is left motor rotating forward?
+   \                     left_forward_flag:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     17          uint8_t left_reverse_flag;     // Is left motor rotating reverse?
+   \                     left_reverse_flag:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     18          uint8_t right_forward_flag;    // Is right motor rotating forward?
+   \                     right_forward_flag:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     19          uint8_t right_reverse_flag;    // Is right motor rotating reverse?
+   \                     right_reverse_flag:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     20          uint8_t instruction_label_tmp; // Global of current instruction step
+   \                     instruction_label_tmp:
+   \   000000                DS8 1
+     21          
+     22          
+
+   \                                 In  segment CODE, align 2
+     23          void initialize_delay(uint16_t delay){
+   \                     initialize_delay:
+     24            delay_time = delay;                          // send delay time to global accessible by timer A1
+   \   000000   824C....     MOV.W   R12, &delay_time
+     25            TA0CCTL2 |= CCIE;                            // enable timer A1.2 to count time
+   \   000004   B2D010004603 BIS.W   #0x10, &0x346
+     26          }
+   \   00000A   1001         RETA
+   \   00000C                REQUIRE _A_TA0CCTL2_L
+     27          
+
+   \                                 In  segment CODE, align 2
+     28          void update_instruction_label(uint8_t* instruction_label){
+   \                     update_instruction_label:
+     29            (*instruction_label)++;                         // Set up next instruction
+   \   000000   DC530000     ADD.B   #0x1, 0(R12)
+     30            instruction_label_tmp = *instruction_label;   // Set static instruction visable by menu to update LCD
+   \   000004   E24C....     MOV.B   @R12, &instruction_label_tmp
+     31          }
+   \   000008   1001         RETA
+     32          
+     33          void WHEELS_test(void);
+     34          //------------------------
+     35          // Turning wheels off
+     36          //------------------------
+
+   \                                 In  segment CODE, align 2
+     37          void Left_Motor_OFF(void){
+   \                     Left_Motor_OFF:
+     38            TB0CCR3 = MOTOR_OFF;         // Set PWM to 0 percent duty cycle
+   \   000000   8243D803     MOV.W   #0x0, &0x3d8
+     39            TB0CCR4 = MOTOR_OFF;   
+   \   000004   8243DA03     MOV.W   #0x0, &0x3da
+     40            left_forward_flag = left_reverse_flag = false;
+   \   000008   C243....     MOV.B   #0x0, &left_reverse_flag
+   \   00000C   D242........ MOV.B   &left_reverse_flag, &left_forward_flag
+     41          }
+   \   000012   1001         RETA
+   \   000014                REQUIRE _A_TB0CCR3_L
+   \   000014                REQUIRE _A_TB0CCR4_L
+
+   \                                 In  segment CODE, align 2
+     42          void Right_Motor_OFF(void){
+   \                     Right_Motor_OFF:
+     43            TB0CCR5 = MOTOR_OFF;         // Set PWM to 0 percent duty cycle
+   \   000000   8243DC03     MOV.W   #0x0, &0x3dc
+     44            TB0CCR6 = MOTOR_OFF;         
+   \   000004   8243DE03     MOV.W   #0x0, &0x3de
+     45            right_forward_flag = right_reverse_flag = false;
+   \   000008   C243....     MOV.B   #0x0, &right_reverse_flag
+   \   00000C   D242........ MOV.B   &right_reverse_flag, &right_forward_flag
+     46          }
+   \   000012   1001         RETA
+   \   000014                REQUIRE _A_TB0CCR5_L
+   \   000014                REQUIRE _A_TB0CCR6_L
+
+   \                                 In  segment CODE, align 2
+     47          void Wheels_OFF(void){
+   \                     Wheels_OFF:
+     48            Left_Motor_OFF();
+   \   000000   ........     CALLA   #Left_Motor_OFF
+     49            Right_Motor_OFF();
+   \   000004   ........     BRA     #Right_Motor_OFF
+     50          }
+     51          
+     52          //------------------------
+     53          // Turning wheels on
+     54          //------------------------
+     55          //**********
+     56          // Forward *
+     57          //**********
+
+   \                                 In  segment CODE, align 2
+     58          void Left_Motor_ON_FORWARD(uint8_t speed){
+   \                     Left_Motor_ON_FORWARD:
+     59            if(!left_reverse_flag)                         // If left motor is not set to move backward already
+   \   000000   C293....     CMP.B   #0x0, &left_reverse_flag
+   \   000004   0A20         JNE     ??Left_Motor_ON_FORWARD_0
+     60            {
+     61              TB0CCR4 = speed*DUTY_CYCLE_DIVISOR;         // Set left motor forward speed as one of 255 settings
+   \   000006   4F4C         MOV.B   R12, R15
+   \   000008   0E4F         MOV.W   R15, R14
+   \   00000A   3FF0FF00     AND.W   #0xff, R15
+   \   00000E   8F10         SWPB    R15
+   \   000010   0F5E         ADD.W   R14, R15
+   \   000012   824FDA03     MOV.W   R15, &0x3da
+     62              left_forward_flag = true;                   // Prevent left motor from moving backward simultaneously
+   \   000016   D243....     MOV.B   #0x1, &left_forward_flag
+     63            }
+     64          }
+   \                     ??Left_Motor_ON_FORWARD_0:
+   \   00001A   1001         RETA
+   \   00001C                REQUIRE _A_TB0CCR4_L
+     65          
+
+   \                                 In  segment CODE, align 2
+     66          void Right_Motor_ON_FORWARD(uint8_t speed){
+   \                     Right_Motor_ON_FORWARD:
+     67            if(!right_reverse_flag)                        // If right motor is not set to move backward already
+   \   000000   C293....     CMP.B   #0x0, &right_reverse_flag
+   \   000004   0A20         JNE     ??Right_Motor_ON_FORWARD_0
+     68            { 
+     69              TB0CCR6 = speed*DUTY_CYCLE_DIVISOR;         // Set right motor forward speed as one of 255 settings
+   \   000006   4F4C         MOV.B   R12, R15
+   \   000008   0E4F         MOV.W   R15, R14
+   \   00000A   3FF0FF00     AND.W   #0xff, R15
+   \   00000E   8F10         SWPB    R15
+   \   000010   0F5E         ADD.W   R14, R15
+   \   000012   824FDE03     MOV.W   R15, &0x3de
+     70              right_forward_flag = true;                  // Prevent right motor from moving backward simultaneously
+   \   000016   D243....     MOV.B   #0x1, &right_forward_flag
+     71            }
+     72          }
+   \                     ??Right_Motor_ON_FORWARD_0:
+   \   00001A   1001         RETA
+   \   00001C                REQUIRE _A_TB0CCR6_L
+     73          
+
+   \                                 In  segment CODE, align 2
+     74          void Drive_Straight_Forward(uint8_t speed){
+   \                     Drive_Straight_Forward:
+   \   000000   4D4C         MOV.B   R12, R13
+     75            Left_Motor_ON_FORWARD(speed);
+   \   000002   4C4D         MOV.B   R13, R12
+   \   000004   ........     CALLA   #Left_Motor_ON_FORWARD
+     76            Right_Motor_ON_FORWARD(speed);
+   \   000008   4C4D         MOV.B   R13, R12
+   \   00000A   ........     BRA     #Right_Motor_ON_FORWARD
+     77          }
+     78            
+     79          //**********
+     80          // Reverse *
+     81          //**********
+
+   \                                 In  segment CODE, align 2
+     82          void Left_Motor_ON_REVERSE(uint8_t speed){
+   \                     Left_Motor_ON_REVERSE:
+     83            if(!left_forward_flag)                        // If left motor is not set to move forward already
+   \   000000   C293....     CMP.B   #0x0, &left_forward_flag
+   \   000004   0A20         JNE     ??Left_Motor_ON_REVERSE_0
+     84            { 
+     85              TB0CCR3 = speed*DUTY_CYCLE_DIVISOR;         // Set left motor reverse speed as one of 255 settings
+   \   000006   4F4C         MOV.B   R12, R15
+   \   000008   0E4F         MOV.W   R15, R14
+   \   00000A   3FF0FF00     AND.W   #0xff, R15
+   \   00000E   8F10         SWPB    R15
+   \   000010   0F5E         ADD.W   R14, R15
+   \   000012   824FD803     MOV.W   R15, &0x3d8
+     86              left_reverse_flag = true;                   // Prevent left motor from moving forward simultaneously
+   \   000016   D243....     MOV.B   #0x1, &left_reverse_flag
+     87            }
+     88          }
+   \                     ??Left_Motor_ON_REVERSE_0:
+   \   00001A   1001         RETA
+   \   00001C                REQUIRE _A_TB0CCR3_L
+     89          
+
+   \                                 In  segment CODE, align 2
+     90          void Right_Motor_ON_REVERSE(char speed){
+   \                     Right_Motor_ON_REVERSE:
+     91            if(!right_forward_flag)                       // If right motor is not set to move forward already
+   \   000000   C293....     CMP.B   #0x0, &right_forward_flag
+   \   000004   0A20         JNE     ??Right_Motor_ON_REVERSE_0
+     92            {
+     93              TB0CCR5 = speed*DUTY_CYCLE_DIVISOR;         // Set right motor reverse speed as one of 255 settings
+   \   000006   4F4C         MOV.B   R12, R15
+   \   000008   0E4F         MOV.W   R15, R14
+   \   00000A   3FF0FF00     AND.W   #0xff, R15
+   \   00000E   8F10         SWPB    R15
+   \   000010   0F5E         ADD.W   R14, R15
+   \   000012   824FDC03     MOV.W   R15, &0x3dc
+     94              right_reverse_flag = true;                  // Prevent right motor from moving forward simultaneously
+   \   000016   D243....     MOV.B   #0x1, &right_reverse_flag
+     95            }
+     96          }
+   \                     ??Right_Motor_ON_REVERSE_0:
+   \   00001A   1001         RETA
+   \   00001C                REQUIRE _A_TB0CCR5_L
+     97          
+
+   \                                 In  segment CODE, align 2
+     98          void Drive_Straight_REVERSE(uint8_t speed){
+   \                     Drive_Straight_REVERSE:
+   \   000000   4D4C         MOV.B   R12, R13
+     99            Left_Motor_ON_REVERSE(speed);
+   \   000002   4C4D         MOV.B   R13, R12
+   \   000004   ........     CALLA   #Left_Motor_ON_REVERSE
+    100            Right_Motor_ON_REVERSE(speed);
+   \   000008   4C4D         MOV.B   R13, R12
+   \   00000A   ........     BRA     #Right_Motor_ON_REVERSE
+    101          }
+    102          
+    103          //------------------------
+    104          // Driving in shapes
+    105          //------------------------
+    106          //**********
+    107          // Circle  *
+    108          //**********
+
+   \                                 In  segment CODE, align 2
+    109          void drive_in_circle(void){
+   \                     drive_in_circle:
+    110            static uint8_t circles_left_to_drive = NUM_TRIALS;
+    111            static uint8_t instruction_label;
+    112            
+    113            if(shape_routine_begin)
+   \   000000   C293....     CMP.B   #0x0, &shape_routine_begin
+   \   000004   2D24         JEQ     ??drive_in_circle_1
+    114              switch(instruction_label)
+   \   000006   5E42....     MOV.B   &??instruction_label, R14
+   \   00000A   4E83         SUB.B   #0x0, R14
+   \   00000C   0324         JEQ     ??drive_in_circle_3
+   \   00000E   5E83         SUB.B   #0x1, R14
+   \   000010   0824         JEQ     ??drive_in_circle_4
+   \   000012   1E3C         JMP     ??drive_in_circle_2
+    115              {
+    116                  
+    117              case INSTRUCTION1: /* wait two seconds before beginning */
+    118                initialize_delay(TWO_SEC);
+   \                     ??drive_in_circle_3:
+   \   000014   3C402800     MOV.W   #0x28, R12
+   \   000018   ........     CALLA   #initialize_delay
+    119                instruction_label++; break;
+   \   00001C   D253....     ADD.B   #0x1, &??instruction_label
+   \   000020   1001         RETA
+    120                  
+    121                  
+    122              case INSTRUCTION2: /* drive in circle counterclockwise */
+    123                Left_Motor_ON_FORWARD(LEFT_LCIRC_SPEED);
+   \                     ??drive_in_circle_4:
+   \   000022   7C402800     MOV.B   #0x28, R12
+   \   000026   ........     CALLA   #Left_Motor_ON_FORWARD
+    124                Right_Motor_ON_FORWARD(RIGHT_LCIRC_SPEED);
+   \   00002A   7C40FD00     MOV.B   #0xfd, R12
+   \   00002E   ........     CALLA   #Right_Motor_ON_FORWARD
+    125                initialize_delay(CIR_SEC);
+   \   000032   3C408200     MOV.W   #0x82, R12
+   \   000036   ........     CALLA   #initialize_delay
+    126                if(--circles_left_to_drive)
+   \   00003A   F253....     ADD.B   #0xff, &??circles_left_to_drive
+   \   00003E   C293....     CMP.B   #0x0, &??circles_left_to_drive
+   \   000042   0324         JEQ     ??drive_in_circle_5
+    127                  instruction_label = INSTRUCTION2;     // drive in circles until there are no circles left to drive
+   \   000044   D243....     MOV.B   #0x1, &??instruction_label
+   \   000048   1001         RETA
+    128                else 
+    129                  instruction_label++;                 // end shape routine
+   \                     ??drive_in_circle_5:
+   \   00004A   D253....     ADD.B   #0x1, &??instruction_label
+    130                break;
+   \   00004E   1001         RETA
+    131                
+    132                  
+    133              default:           /* turn off wheels and return permanently to main */
+    134                Wheels_OFF();
+   \                     ??drive_in_circle_2:
+   \   000050   ........     CALLA   #Wheels_OFF
+    135                instruction_label = INSTRUCTION1;
+   \   000054   C243....     MOV.B   #0x0, &??instruction_label
+    136                circles_left_to_drive = NUM_TRIALS;
+   \   000058   E243....     MOV.B   #0x2, &??circles_left_to_drive
+    137                shape_routine_begin = false;
+   \   00005C   C243....     MOV.B   #0x0, &shape_routine_begin
+    138              }
+    139          }
+   \                     ??drive_in_circle_1:
+   \   000060   1001         RETA
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+   \                     ??circles_left_to_drive:
+   \   000000                DS8 1
+   \   000001                REQUIRE `?<Initializer for circles_left_to_drive>`
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     ??instruction_label:
+   \   000000                DS8 1
+    140          
+    141          //**********
+    142          // Figure-8*
+    143          //**********
+
+   \                                 In  segment CODE, align 2
+    144          void drive_in_figure8(void){
+   \                     drive_in_figure8:
+    145            static uint8_t figure8s_left_to_drive = NUM_TRIALS;
+    146            static uint8_t instruction_label;
+    147            if(shape_routine_begin)
+   \   000000   C293....     CMP.B   #0x0, &shape_routine_begin
+   \   000004   3E24         JEQ     ??drive_in_figure8_1
+    148              switch(instruction_label)
+   \   000006   5E42....     MOV.B   &??instruction_label_1, R14
+   \   00000A   4E83         SUB.B   #0x0, R14
+   \   00000C   0524         JEQ     ??drive_in_figure8_3
+   \   00000E   5E83         SUB.B   #0x1, R14
+   \   000010   0A24         JEQ     ??drive_in_figure8_4
+   \   000012   5E83         SUB.B   #0x1, R14
+   \   000014   1724         JEQ     ??drive_in_figure8_5
+   \   000016   2D3C         JMP     ??drive_in_figure8_2
+    149              {
+    150                  
+    151              case INSTRUCTION1: /* wait two seconds before beginning */
+    152                initialize_delay(TWO_SEC);
+   \                     ??drive_in_figure8_3:
+   \   000018   3C402800     MOV.W   #0x28, R12
+   \   00001C   ........     CALLA   #initialize_delay
+    153                instruction_label++; break;
+   \   000020   D253....     ADD.B   #0x1, &??instruction_label_1
+   \   000024   1001         RETA
+    154                  
+    155                  
+    156              case INSTRUCTION2: /* drive in circle counterclockwise */
+    157                Left_Motor_ON_FORWARD(LEFT_FIG8L_SPEED);
+   \                     ??drive_in_figure8_4:
+   \   000026   7C401400     MOV.B   #0x14, R12
+   \   00002A   ........     CALLA   #Left_Motor_ON_FORWARD
+    158                Right_Motor_ON_FORWARD(RIGHT_FIG8L_SPEED);
+   \   00002E   7C40FD00     MOV.B   #0xfd, R12
+   \   000032   ........     CALLA   #Right_Motor_ON_FORWARD
+    159                initialize_delay(FOR_SEC);
+   \   000036   3C404600     MOV.W   #0x46, R12
+   \   00003A   ........     CALLA   #initialize_delay
+    160                instruction_label++; break;
+   \   00003E   D253....     ADD.B   #0x1, &??instruction_label_1
+   \   000042   1001         RETA
+    161                  
+    162                  
+    163              case INSTRUCTION3: /* drive in circle clockwise */
+    164                Left_Motor_ON_FORWARD(LEFT_FIG8R_SPEED);
+   \                     ??drive_in_figure8_5:
+   \   000044   7C40FD00     MOV.B   #0xfd, R12
+   \   000048   ........     CALLA   #Left_Motor_ON_FORWARD
+    165                Right_Motor_ON_FORWARD(RIGHT_FIG8R_SPEED);
+   \   00004C   7C401400     MOV.B   #0x14, R12
+   \   000050   ........     CALLA   #Right_Motor_ON_FORWARD
+    166                initialize_delay(FOR_SEC);
+   \   000054   3C404600     MOV.W   #0x46, R12
+   \   000058   ........     CALLA   #initialize_delay
+    167                if(--figure8s_left_to_drive)
+   \   00005C   F253....     ADD.B   #0xff, &??figure8s_left_to_drive
+   \   000060   C293....     CMP.B   #0x0, &??figure8s_left_to_drive
+   \   000064   0324         JEQ     ??drive_in_figure8_6
+    168                  instruction_label = INSTRUCTION2;    // drive in figure-8s until there are no more left to drive
+   \   000066   D243....     MOV.B   #0x1, &??instruction_label_1
+   \   00006A   1001         RETA
+    169                else 
+    170                  instruction_label++;                // end shape routine
+   \                     ??drive_in_figure8_6:
+   \   00006C   D253....     ADD.B   #0x1, &??instruction_label_1
+    171                break;
+   \   000070   1001         RETA
+    172                  
+    173              default:          /* turn off wheels and return permanently to main */
+    174                Wheels_OFF();
+   \                     ??drive_in_figure8_2:
+   \   000072   ........     CALLA   #Wheels_OFF
+    175                instruction_label = INSTRUCTION1;
+   \   000076   C243....     MOV.B   #0x0, &??instruction_label_1
+    176                figure8s_left_to_drive = NUM_TRIALS;
+   \   00007A   E243....     MOV.B   #0x2, &??figure8s_left_to_drive
+    177                shape_routine_begin = false;
+   \   00007E   C243....     MOV.B   #0x0, &shape_routine_begin
+    178              }
+    179          }
+   \                     ??drive_in_figure8_1:
+   \   000082   1001         RETA
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+   \                     ??figure8s_left_to_drive:
+   \   000000                DS8 1
+   \   000001                REQUIRE `?<Initializer for figure8s_left_to_drive>`
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     ??instruction_label_1:
+   \   000000                DS8 1
+    180          
+    181          //**********
+    182          // Triangle*
+    183          //**********
+
+   \                                 In  segment CODE, align 2
+    184          void drive_in_triangle(void){
+   \                     drive_in_triangle:
+    185            static uint8_t edges_left_to_drive = NUM_TRIANGLE_EDGES;
+    186            static uint8_t instruction_label;
+    187            if(shape_routine_begin)
+   \   000000   C293....     CMP.B   #0x0, &shape_routine_begin
+   \   000004   3E24         JEQ     ??drive_in_triangle_1
+    188              switch(instruction_label)
+   \   000006   5E42....     MOV.B   &??instruction_label_2, R14
+   \   00000A   4E83         SUB.B   #0x0, R14
+   \   00000C   0524         JEQ     ??drive_in_triangle_3
+   \   00000E   5E83         SUB.B   #0x1, R14
+   \   000010   0A24         JEQ     ??drive_in_triangle_4
+   \   000012   5E83         SUB.B   #0x1, R14
+   \   000014   1724         JEQ     ??drive_in_triangle_5
+   \   000016   2C3C         JMP     ??drive_in_triangle_2
+    189              {
+    190              case INSTRUCTION1: /* wait two seconds before beginning */
+    191                initialize_delay(TWO_SEC);
+   \                     ??drive_in_triangle_3:
+   \   000018   3C402800     MOV.W   #0x28, R12
+   \   00001C   ........     CALLA   #initialize_delay
+    192                instruction_label++;
+   \   000020   D253....     ADD.B   #0x1, &??instruction_label_2
+    193                break;
+   \   000024   1001         RETA
+    194                  
+    195                  
+    196              case INSTRUCTION2: /* drive along triangle edge */
+    197                Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
+   \                     ??drive_in_triangle_4:
+   \   000026   7C40FD00     MOV.B   #0xfd, R12
+   \   00002A   ........     CALLA   #Left_Motor_ON_FORWARD
+    198                Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
+   \   00002E   7C40B400     MOV.B   #0xb4, R12
+   \   000032   ........     CALLA   #Right_Motor_ON_FORWARD
+    199                initialize_delay(ONE_SEC);
+   \   000036   3C401400     MOV.W   #0x14, R12
+   \   00003A   ........     CALLA   #initialize_delay
+    200                instruction_label++; break;
+   \   00003E   D253....     ADD.B   #0x1, &??instruction_label_2
+   \   000042   1001         RETA
+    201                  
+    202                  
+    203              case INSTRUCTION3: /* turn 60 degrees counterclockwise */
+    204                Left_Motor_ON_FORWARD(LEFT_LTURN_SPEED);
+   \                     ??drive_in_triangle_5:
+   \   000044   7C40FD00     MOV.B   #0xfd, R12
+   \   000048   ........     CALLA   #Left_Motor_ON_FORWARD
+    205                Right_Motor_ON_FORWARD(RIGHT_LTURN_SPEED);
+   \   00004C   4C43         MOV.B   #0x0, R12
+   \   00004E   ........     CALLA   #Right_Motor_ON_FORWARD
+    206                initialize_delay(ONE_SEC);
+   \   000052   3C401400     MOV.W   #0x14, R12
+   \   000056   ........     CALLA   #initialize_delay
+    207                if(--edges_left_to_drive)
+   \   00005A   F253....     ADD.B   #0xff, &??edges_left_to_drive
+   \   00005E   C293....     CMP.B   #0x0, &??edges_left_to_drive
+   \   000062   0324         JEQ     ??drive_in_triangle_6
+    208                  instruction_label = INSTRUCTION2;    // drive in figure-8s until there are no more left to drive
+   \   000064   D243....     MOV.B   #0x1, &??instruction_label_2
+   \   000068   1001         RETA
+    209                else 
+    210                  instruction_label++;                  // end shape routine
+   \                     ??drive_in_triangle_6:
+   \   00006A   D253....     ADD.B   #0x1, &??instruction_label_2
+    211                break;
+   \   00006E   1001         RETA
+    212                
+    213              default:          /* turn off wheels and return permanently to main */
+    214                Wheels_OFF();
+   \                     ??drive_in_triangle_2:
+   \   000070   ........     CALLA   #Wheels_OFF
+    215                instruction_label = INSTRUCTION1;
+   \   000074   C243....     MOV.B   #0x0, &??instruction_label_2
+    216                edges_left_to_drive = NUM_TRIANGLE_EDGES;
+   \   000078   F2400600.... MOV.B   #0x6, &??edges_left_to_drive
+    217                shape_routine_begin = false;
+   \   00007E   C243....     MOV.B   #0x0, &shape_routine_begin
+    218              }
+    219          }
+   \                     ??drive_in_triangle_1:
+   \   000082   1001         RETA
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+   \                     ??edges_left_to_drive:
+   \   000000                DS8 1
+   \   000001                REQUIRE `?<Initializer for edges_left_to_drive>`
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     ??instruction_label_2:
+   \   000000                DS8 1
+    220          
+    221          //**********
+    222          // Proj 5  *
+    223          //**********
+    224          
+
+   \                                 In  segment CODE, align 2
+    225          void drive_back_and_forth(void){
+   \                     drive_back_and_forth:
+    226            static uint8_t instruction_label;
+    227            if(shape_routine_begin)
+   \   000000   C293....     CMP.B   #0x0, &shape_routine_begin
+   \   000004   B824         JEQ     ??drive_back_and_forth_1
+    228              switch(instruction_label)
+   \   000006   5E42....     MOV.B   &??instruction_label_3, R14
+   \   00000A   4E83         SUB.B   #0x0, R14
+   \   00000C   1524         JEQ     ??drive_back_and_forth_2
+   \   00000E   5E83         SUB.B   #0x1, R14
+   \   000010   1D24         JEQ     ??drive_back_and_forth_3
+   \   000012   5E83         SUB.B   #0x1, R14
+   \   000014   2D24         JEQ     ??drive_back_and_forth_4
+   \   000016   5E83         SUB.B   #0x1, R14
+   \   000018   3524         JEQ     ??drive_back_and_forth_5
+   \   00001A   5E83         SUB.B   #0x1, R14
+   \   00001C   4524         JEQ     ??drive_back_and_forth_6
+   \   00001E   5E83         SUB.B   #0x1, R14
+   \   000020   4D24         JEQ     ??drive_back_and_forth_7
+   \   000022   5E83         SUB.B   #0x1, R14
+   \   000024   5D24         JEQ     ??drive_back_and_forth_8
+   \   000026   5E83         SUB.B   #0x1, R14
+   \   000028   6524         JEQ     ??drive_back_and_forth_9
+   \   00002A   5E83         SUB.B   #0x1, R14
+   \   00002C   7524         JEQ     ??drive_back_and_forth_10
+   \   00002E   5E83         SUB.B   #0x1, R14
+   \   000030   7D24         JEQ     ??drive_back_and_forth_11
+   \   000032   5E83         SUB.B   #0x1, R14
+   \   000034   8D24         JEQ     ??drive_back_and_forth_12
+   \   000036   963C         JMP     ??drive_back_and_forth_0
+    229              {
+    230              case INSTRUCTION1: /* wait two seconds before beginning */
+    231                Wheels_OFF();
+   \                     ??drive_back_and_forth_2:
+   \   000038   ........     CALLA   #Wheels_OFF
+    232                update_instruction_label(&instruction_label);
+   \   00003C   3C40....     MOV.W   #??instruction_label_3, R12
+   \   000040   ........     CALLA   #update_instruction_label
+    233                initialize_delay(TWO_SEC); break;
+   \   000044   3C402800     MOV.W   #0x28, R12
+   \   000048   ........     BRA     #initialize_delay
+    234                  
+    235                  
+    236              case INSTRUCTION2: /* drive forward for one second */
+    237                Wheels_OFF();
+   \                     ??drive_back_and_forth_3:
+   \   00004C   ........     CALLA   #Wheels_OFF
+    238                Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
+   \   000050   7C40FD00     MOV.B   #0xfd, R12
+   \   000054   ........     CALLA   #Left_Motor_ON_FORWARD
+    239                Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
+   \   000058   7C40B400     MOV.B   #0xb4, R12
+   \   00005C   ........     CALLA   #Right_Motor_ON_FORWARD
+    240                initialize_delay(ONE_SEC);
+   \   000060   3C401400     MOV.W   #0x14, R12
+   \   000064   ........     CALLA   #initialize_delay
+    241                update_instruction_label(&instruction_label); break;
+   \   000068   3C40....     MOV.W   #??instruction_label_3, R12
+   \   00006C   ........     BRA     #update_instruction_label
+    242                  
+    243                  
+    244              case INSTRUCTION3: /* pause for one second */
+    245                Wheels_OFF();
+   \                     ??drive_back_and_forth_4:
+   \   000070   ........     CALLA   #Wheels_OFF
+    246                update_instruction_label(&instruction_label);
+   \   000074   3C40....     MOV.W   #??instruction_label_3, R12
+   \   000078   ........     CALLA   #update_instruction_label
+    247                initialize_delay(ONE_SEC); break;
+   \   00007C   3C401400     MOV.W   #0x14, R12
+   \   000080   ........     BRA     #initialize_delay
+    248                
+    249                
+    250              case INSTRUCTION4: /* travel backward for two seconds */
+    251                Wheels_OFF();
+   \                     ??drive_back_and_forth_5:
+   \   000084   ........     CALLA   #Wheels_OFF
+    252                Left_Motor_ON_REVERSE(LEFT_FORWARD_SPEED);
+   \   000088   7C40FD00     MOV.B   #0xfd, R12
+   \   00008C   ........     CALLA   #Left_Motor_ON_REVERSE
+    253                Right_Motor_ON_REVERSE(RIGHT_FORWARD_SPEED);
+   \   000090   7C40B400     MOV.B   #0xb4, R12
+   \   000094   ........     CALLA   #Right_Motor_ON_REVERSE
+    254                initialize_delay(TWO_SEC);
+   \   000098   3C402800     MOV.W   #0x28, R12
+   \   00009C   ........     CALLA   #initialize_delay
+    255                update_instruction_label(&instruction_label); break;
+   \   0000A0   3C40....     MOV.W   #??instruction_label_3, R12
+   \   0000A4   ........     BRA     #update_instruction_label
+    256                
+    257                
+    258              case INSTRUCTION5: /* pause for one second */
+    259                Wheels_OFF();
+   \                     ??drive_back_and_forth_6:
+   \   0000A8   ........     CALLA   #Wheels_OFF
+    260                update_instruction_label(&instruction_label);
+   \   0000AC   3C40....     MOV.W   #??instruction_label_3, R12
+   \   0000B0   ........     CALLA   #update_instruction_label
+    261                initialize_delay(ONE_SEC); break;
+   \   0000B4   3C401400     MOV.W   #0x14, R12
+   \   0000B8   ........     BRA     #initialize_delay
+    262                
+    263                
+    264              case INSTRUCTION6: /* travel forward for one second */
+    265                Wheels_OFF();
+   \                     ??drive_back_and_forth_7:
+   \   0000BC   ........     CALLA   #Wheels_OFF
+    266                Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
+   \   0000C0   7C40FD00     MOV.B   #0xfd, R12
+   \   0000C4   ........     CALLA   #Left_Motor_ON_FORWARD
+    267                Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
+   \   0000C8   7C40B400     MOV.B   #0xb4, R12
+   \   0000CC   ........     CALLA   #Right_Motor_ON_FORWARD
+    268                initialize_delay(ONE_SEC);
+   \   0000D0   3C401400     MOV.W   #0x14, R12
+   \   0000D4   ........     CALLA   #initialize_delay
+    269                update_instruction_label(&instruction_label); break;
+   \   0000D8   3C40....     MOV.W   #??instruction_label_3, R12
+   \   0000DC   ........     BRA     #update_instruction_label
+    270                
+    271                
+    272              case INSTRUCTION7: /* pause for one second */
+    273                Wheels_OFF();
+   \                     ??drive_back_and_forth_8:
+   \   0000E0   ........     CALLA   #Wheels_OFF
+    274                update_instruction_label(&instruction_label);
+   \   0000E4   3C40....     MOV.W   #??instruction_label_3, R12
+   \   0000E8   ........     CALLA   #update_instruction_label
+    275                initialize_delay(ONE_SEC); break;
+   \   0000EC   3C401400     MOV.W   #0x14, R12
+   \   0000F0   ........     BRA     #initialize_delay
+    276                
+    277                
+    278              case INSTRUCTION8: /* Spin in place clockwise for three seconds */
+    279                Wheels_OFF();
+   \                     ??drive_back_and_forth_9:
+   \   0000F4   ........     CALLA   #Wheels_OFF
+    280                Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
+   \   0000F8   7C40FD00     MOV.B   #0xfd, R12
+   \   0000FC   ........     CALLA   #Left_Motor_ON_FORWARD
+    281                Right_Motor_ON_REVERSE(RIGHT_FORWARD_SPEED);
+   \   000100   7C40B400     MOV.B   #0xb4, R12
+   \   000104   ........     CALLA   #Right_Motor_ON_REVERSE
+    282                initialize_delay(THR_SEC);
+   \   000108   3C403C00     MOV.W   #0x3c, R12
+   \   00010C   ........     CALLA   #initialize_delay
+    283                update_instruction_label(&instruction_label); break;
+   \   000110   3C40....     MOV.W   #??instruction_label_3, R12
+   \   000114   ........     BRA     #update_instruction_label
+    284                
+    285                
+    286              case INSTRUCTION9: /* pause for two seconds */
+    287                Wheels_OFF();
+   \                     ??drive_back_and_forth_10:
+   \   000118   ........     CALLA   #Wheels_OFF
+    288                update_instruction_label(&instruction_label);
+   \   00011C   3C40....     MOV.W   #??instruction_label_3, R12
+   \   000120   ........     CALLA   #update_instruction_label
+    289                initialize_delay(TWO_SEC); break;
+   \   000124   3C402800     MOV.W   #0x28, R12
+   \   000128   ........     BRA     #initialize_delay
+    290                
+    291                
+    292              case INSTRUCTION10: /* Spin in place counter-clockwise for three seconds */
+    293                Wheels_OFF();
+   \                     ??drive_back_and_forth_11:
+   \   00012C   ........     CALLA   #Wheels_OFF
+    294                Left_Motor_ON_REVERSE(LEFT_FORWARD_SPEED);
+   \   000130   7C40FD00     MOV.B   #0xfd, R12
+   \   000134   ........     CALLA   #Left_Motor_ON_REVERSE
+    295                Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
+   \   000138   7C40B400     MOV.B   #0xb4, R12
+   \   00013C   ........     CALLA   #Right_Motor_ON_FORWARD
+    296                initialize_delay(THR_SEC);
+   \   000140   3C403C00     MOV.W   #0x3c, R12
+   \   000144   ........     CALLA   #initialize_delay
+    297                update_instruction_label(&instruction_label); break;
+   \   000148   3C40....     MOV.W   #??instruction_label_3, R12
+   \   00014C   ........     BRA     #update_instruction_label
+    298                
+    299                
+    300              case INSTRUCTION11: /* pause for two seconds */
+    301                Wheels_OFF();
+   \                     ??drive_back_and_forth_12:
+   \   000150   ........     CALLA   #Wheels_OFF
+    302                update_instruction_label(&instruction_label);
+   \   000154   3C40....     MOV.W   #??instruction_label_3, R12
+   \   000158   ........     CALLA   #update_instruction_label
+    303                initialize_delay(TWO_SEC); break;
+   \   00015C   3C402800     MOV.W   #0x28, R12
+   \   000160   ........     BRA     #initialize_delay
+    304                
+    305              default:          /* turn off wheels and return permanently to main */
+    306                Wheels_OFF();
+   \                     ??drive_back_and_forth_0:
+   \   000164   ........     CALLA   #Wheels_OFF
+    307                instruction_label = INSTRUCTION1;
+   \   000168   C243....     MOV.B   #0x0, &??instruction_label_3
+    308                instruction_label_tmp = instruction_label;
+   \   00016C   D242........ MOV.B   &??instruction_label_3, &instruction_label_tmp
+    309                shape_routine_begin = false;
+   \   000172   C243....     MOV.B   #0x0, &shape_routine_begin
+    310              }
+    311          }
+   \                     ??drive_back_and_forth_1:
+   \   000176   1001         RETA
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     ??instruction_label_3:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for circles_left_to_drive>`:
+   \   000000   02           DC8 2
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for figure8s_left_to_drive>`:
+   \   000000   02           DC8 2
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for edges_left_to_drive>`:
+   \   000000   06           DC8 6
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Drive_Straight_Forward
+        4   -> Left_Motor_ON_FORWARD
+        0   -> Right_Motor_ON_FORWARD
+      4   Drive_Straight_REVERSE
+        4   -> Left_Motor_ON_REVERSE
+        0   -> Right_Motor_ON_REVERSE
+      4   Left_Motor_OFF
+      4   Left_Motor_ON_FORWARD
+      4   Left_Motor_ON_REVERSE
+      4   Right_Motor_OFF
+      4   Right_Motor_ON_FORWARD
+      4   Right_Motor_ON_REVERSE
+      4   Wheels_OFF
+        4   -> Left_Motor_OFF
+        0   -> Right_Motor_OFF
+      4   drive_back_and_forth
+        4   -> Left_Motor_ON_FORWARD
+        4   -> Left_Motor_ON_REVERSE
+        4   -> Right_Motor_ON_FORWARD
+        4   -> Right_Motor_ON_REVERSE
+        4   -> Wheels_OFF
+        0   -> initialize_delay
+        4   -> initialize_delay
+        0   -> update_instruction_label
+        4   -> update_instruction_label
+      4   drive_in_circle
+        4   -> Left_Motor_ON_FORWARD
+        4   -> Right_Motor_ON_FORWARD
+        4   -> Wheels_OFF
+        4   -> initialize_delay
+      4   drive_in_figure8
+        4   -> Left_Motor_ON_FORWARD
+        4   -> Right_Motor_ON_FORWARD
+        4   -> Wheels_OFF
+        4   -> initialize_delay
+      4   drive_in_triangle
+        4   -> Left_Motor_ON_FORWARD
+        4   -> Right_Motor_ON_FORWARD
+        4   -> Wheels_OFF
+        4   -> initialize_delay
+      4   initialize_delay
+      4   update_instruction_label
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       1  ?<Initializer for circles_left_to_drive>
+       1  ?<Initializer for edges_left_to_drive>
+       1  ?<Initializer for figure8s_left_to_drive>
+      14  Drive_Straight_Forward
+      14  Drive_Straight_REVERSE
+      20  Left_Motor_OFF
+      28  Left_Motor_ON_FORWARD
+      28  Left_Motor_ON_REVERSE
+      20  Right_Motor_OFF
+      28  Right_Motor_ON_FORWARD
+      28  Right_Motor_ON_REVERSE
+       8  Wheels_OFF
+       2  _A_TA0CCTL2_L
+       2  _A_TB0CCR3_L
+       2  _A_TB0CCR4_L
+       2  _A_TB0CCR5_L
+       2  _A_TB0CCR6_L
+       1  circles_left_to_drive
+     376  drive_back_and_forth
+      98  drive_in_circle
+     132  drive_in_figure8
+     132  drive_in_triangle
+       1  edges_left_to_drive
+       1  figure8s_left_to_drive
+      12  initialize_delay
+       1  instruction_label
+       1  instruction_label
+       1  instruction_label
+       1  instruction_label
+       1  instruction_label_tmp
+       1  left_forward_flag
+       1  left_reverse_flag
+       1  right_forward_flag
+       1  right_reverse_flag
+      10  update_instruction_label
+
+ 
+ 948 bytes in segment CODE
+  10 bytes in segment DATA16_AN
+   3 bytes in segment DATA16_I
+   3 bytes in segment DATA16_ID
+   9 bytes in segment DATA16_Z
+ 
+ 948 bytes of CODE  memory
+   3 bytes of CONST memory
+  12 bytes of DATA  memory (+ 10 bytes shared)
+
+Errors: none
+Warnings: none
