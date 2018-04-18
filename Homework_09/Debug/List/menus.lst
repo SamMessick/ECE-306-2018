@@ -1,0 +1,1539 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           06/Apr/2018  11:11:43
+# Copyright 1996-2017 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_09\menus.c
+#    Command line  =  
+#        -f C:\Users\shmes\AppData\Local\Temp\EWEC28.tmp
+#        ("C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_09\menus.c" -lC
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_09\Debug\List" -o
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_09\Debug\Obj" --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5994__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  Spanish_USA.1252
+#    List file     =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_09\Debug\List\menus.lst
+#    Object file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_09\Debug\Obj\menus.r43
+#
+###############################################################################
+
+C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Homework_09\menus.c
+      1          //===============================================================
+      2          //  File Name: menus.c
+      3          //  Description: This file contains the Initialization of all
+      4          //                    display values, and LCD menu functions
+      5          //
+      6          //  Author: Sam Messick
+      7          //  Date Feb. 2018
+      8          //  Compiler Build with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      9          //===============================================================
+     10          
+     11          #include "menus.h"
+
+   \                                 In  segment DATA16_AN, at 0x262
+   \   union <unnamed> _A_PDOUT_L
+   \                     _A_PDOUT_L:
+   \   000000                DS8 2
+     12          
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     13          int8_t menu_counter;
+   \                     menu_counter:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     14          char* word1;
+   \                     word1:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     15          char* word2;
+   \                     word2:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     16          char* word3;
+   \                     word3:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     17          char* word4;
+   \                     word4:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_I, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     18          char* shapes_strings[NUM_SUB_OPTIONS] = {"Circle    ", "Square    ", "Triangle  ", "Octagon   ", "Pentagon  ", "Hexagon   ", "Cube      ", "Oval      ", "Sphere    ", "Cylinder  "};
+   \                     shapes_strings:
+   \   000000                DS8 20
+   \   000014                REQUIRE `?<Initializer for shapes_strings>`
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     19          uint8_t changed_options;                // Flag protecting against random menu bit setting
+   \                     changed_options:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     20          uint8_t prev_menu_frame;                // Previous menu boolean (inner or outer menu)
+   \                     prev_menu_frame:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     21          uint8_t prev_menu_option;               // Previous main menu selection
+   \                     prev_menu_option:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     22          uint8_t current_menu_option;            // Current  main menu selection
+   \                     current_menu_option:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     23          uint8_t prev_sub_menu_option;           // Previous sub  menu selection
+   \                     prev_sub_menu_option:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     24          uint8_t current_sub_menu_option;        // Current  sub  menu selection
+   \                     current_sub_menu_option:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     25          uint8_t reset_ADC_Thumb_min;            // Flag to reset text scrolling in Red and White Song
+   \                     reset_ADC_Thumb_min:
+   \   000000                DS8 1
+     26          
+
+   \                                 In  segment CODE, align 2
+     27          void LCD_print(char first_line[COLUMN_NUM_COLUMNS], char second_line[COLUMN_NUM_COLUMNS], char third_line[COLUMN_NUM_COLUMNS], char fourth_line[COLUMN_NUM_COLUMNS]){
+   \                     LCD_print:
+   \   000000   3B15         PUSHM.W #0x4, R11
+   \   000002   0A4C         MOV.W   R12, R10
+   \   000004   0B4D         MOV.W   R13, R11
+   \   000006   084E         MOV.W   R14, R8
+   \   000008   094F         MOV.W   R15, R9
+     28            strcpy(display_line[LINE1], first_line);
+   \   00000A   0D4A         MOV.W   R10, R13
+   \   00000C   3C40....     MOV.W   #display_line, R12
+   \   000010   ........     CALLA   #strcpy
+     29            update_string(display_line[LINE1], LINE1);
+   \   000014   0D43         MOV.W   #0x0, R13
+   \   000016   ........     CALLA   #update_string
+     30            strcpy(display_line[LINE2], second_line);
+   \   00001A   0D4B         MOV.W   R11, R13
+   \   00001C   3C40....     MOV.W   #display_line + 11, R12
+   \   000020   ........     CALLA   #strcpy
+     31            update_string(display_line[LINE2], LINE2);
+   \   000024   1D43         MOV.W   #0x1, R13
+   \   000026   3C40....     MOV.W   #display_line + 11, R12
+   \   00002A   ........     CALLA   #update_string
+     32            strcpy(display_line[LINE3], third_line);
+   \   00002E   0D48         MOV.W   R8, R13
+   \   000030   3C40....     MOV.W   #display_line + 22, R12
+   \   000034   ........     CALLA   #strcpy
+     33            update_string(display_line[LINE3], LINE3);
+   \   000038   2D43         MOV.W   #0x2, R13
+   \   00003A   3C40....     MOV.W   #display_line + 22, R12
+   \   00003E   ........     CALLA   #update_string
+     34            strcpy(display_line[LINE4], fourth_line);
+   \   000042   0D49         MOV.W   R9, R13
+   \   000044   3C40....     MOV.W   #display_line + 33, R12
+   \   000048   ........     CALLA   #strcpy
+     35            update_string(display_line[LINE4], LINE4);
+   \   00004C   3D400300     MOV.W   #0x3, R13
+   \   000050   3C40....     MOV.W   #display_line + 33, R12
+   \   000054   ........     CALLA   #update_string
+     36            display_changed = true; 
+   \   000058   D243....     MOV.B   #0x1, &display_changed
+     37            update_display  = true;
+   \   00005C   D243....     MOV.B   #0x1, &update_display
+     38            Display_Process();                     // Refresh LCD screen
+   \   000060   ........     CALLA   #Display_Process
+     39          }
+   \   000064   3817         POPM.W  #0x4, R11
+   \   000066   1001         RETA
+     40          
+
+   \                                 In  segment CODE, align 2
+     41          void hex_to_dec(char* output_line, uint16_t hexadecimal){
+   \                     hex_to_dec:
+   \   000000   3B15         PUSHM.W #0x4, R11
+     42           
+     43            uint8_t Thousand = COUNTER_RESET;       // Counts thousands
+   \   000002   4E43         MOV.B   #0x0, R14
+     44            uint8_t Hundred = COUNTER_RESET;        // Counts hundreds
+   \   000004   4F43         MOV.B   #0x0, R15
+     45            uint8_t Ten = COUNTER_RESET;            // Counts tens
+   \   000006   4A43         MOV.B   #0x0, R10
+     46            uint8_t One = COUNTER_RESET;            // Counts ones
+   \   000008   4B43         MOV.B   #0x0, R11
+     47            
+     48            while(hexadecimal >= THOUSAND)
+   \                     ??hex_to_dec_0:
+   \   00000A   3D90E803     CMP.W   #0x3e8, R13
+   \   00000E   0428         JNC     ??hex_to_dec_1
+     49            {
+     50              Thousand++;
+   \   000010   5E53         ADD.B   #0x1, R14
+     51              hexadecimal -= THOUSAND;
+   \   000012   3D5018FC     ADD.W   #0xfc18, R13
+   \   000016   F93F         JMP     ??hex_to_dec_0
+     52            }
+     53            while(hexadecimal >= HUNDRED)
+   \                     ??hex_to_dec_1:
+   \   000018   3D906400     CMP.W   #0x64, R13
+   \   00001C   0428         JNC     ??hex_to_dec_2
+     54            {
+     55              Hundred++;
+   \   00001E   5F53         ADD.B   #0x1, R15
+     56              hexadecimal -= HUNDRED;
+   \   000020   3D509CFF     ADD.W   #0xff9c, R13
+   \   000024   F93F         JMP     ??hex_to_dec_1
+     57            }
+     58            while(hexadecimal >= TEN)
+   \                     ??hex_to_dec_2:
+   \   000026   3D900A00     CMP.W   #0xa, R13
+   \   00002A   0428         JNC     ??hex_to_dec_3
+     59            {
+     60              Ten++;
+   \   00002C   5A53         ADD.B   #0x1, R10
+     61              hexadecimal -= TEN;
+   \   00002E   3D50F6FF     ADD.W   #0xfff6, R13
+   \   000032   F93F         JMP     ??hex_to_dec_2
+     62            }
+     63            while(hexadecimal >= ONE)
+   \                     ??hex_to_dec_3:
+   \   000034   0D93         CMP.W   #0x0, R13
+   \   000036   0324         JEQ     ??hex_to_dec_4
+     64            {
+     65              One++;
+   \   000038   5B53         ADD.B   #0x1, R11
+     66              hexadecimal--;
+   \   00003A   3D53         ADD.W   #0xffff, R13
+   \   00003C   FB3F         JMP     ??hex_to_dec_3
+     67            }
+     68            if(Thousand > MAX_DIGIT)
+   \                     ??hex_to_dec_4:
+   \   00003E   7E900A00     CMP.B   #0xa, R14
+   \   000042   0228         JNC     ??hex_to_dec_5
+     69              Thousand = MAX_DIGIT;
+   \   000044   7E400900     MOV.B   #0x9, R14
+     70            output_line[COLUMN1] = Thousand + ASCII_NUM_SHIFT;
+   \                     ??hex_to_dec_5:
+   \   000048   484E         MOV.B   R14, R8
+   \   00004A   78503000     ADD.B   #0x30, R8
+   \   00004E   CC480000     MOV.B   R8, 0(R12)
+     71            output_line[COLUMN2] = Hundred  + ASCII_NUM_SHIFT;
+   \   000052   484F         MOV.B   R15, R8
+   \   000054   78503000     ADD.B   #0x30, R8
+   \   000058   CC480100     MOV.B   R8, 0x1(R12)
+     72            output_line[COLUMN3] = Ten      + ASCII_NUM_SHIFT;
+   \   00005C   484A         MOV.B   R10, R8
+   \   00005E   78503000     ADD.B   #0x30, R8
+   \   000062   CC480200     MOV.B   R8, 0x2(R12)
+     73            output_line[COLUMN4] = One      + ASCII_NUM_SHIFT;
+   \   000066   484B         MOV.B   R11, R8
+   \   000068   78503000     ADD.B   #0x30, R8
+   \   00006C   CC480300     MOV.B   R8, 0x3(R12)
+     74          }
+   \   000070   3817         POPM.W  #0x4, R11
+   \   000072   1001         RETA
+     75          
+
+   \                                 In  segment CODE, align 2
+     76          void update_menu(void){
+   \                     update_menu:
+     77            time_for_menu_update_lol = false;
+   \   000000   C243....     MOV.B   #0x0, &time_for_menu_update_lol
+     78            
+     79            if(using_inside_menu)
+   \   000004   C293....     CMP.B   #0x0, &using_inside_menu
+   \   000008   0F24         JEQ     ??update_menu_1
+     80            { 
+     81              switch(current_menu_option)
+   \   00000A   5E42....     MOV.B   &current_menu_option, R14
+   \   00000E   4E83         SUB.B   #0x0, R14
+   \   000010   0524         JEQ     ??update_menu_2
+   \   000012   5E83         SUB.B   #0x1, R14
+   \   000014   0524         JEQ     ??update_menu_3
+   \   000016   5E83         SUB.B   #0x1, R14
+   \   000018   0524         JEQ     ??update_menu_4
+   \   00001A   1001         RETA
+     82              {
+     83              case MAIN_OPTION1:                                         // Resistors menu
+     84                update_resistors_menu();
+   \                     ??update_menu_2:
+   \   00001C   ........     BRA     #update_resistors_menu
+     85                break;
+     86              case MAIN_OPTION2:                                         // Shapes menu
+     87                update_shapes_menu();
+   \                     ??update_menu_3:
+   \   000020   ........     BRA     #update_shapes_menu
+     88                break;
+     89              case MAIN_OPTION3:                                         // Obnoxious song that nobody sings; edgelord status = LV 100
+     90                update_red_and_white_menu();
+   \                     ??update_menu_4:
+   \   000024   ........     BRA     #update_red_and_white_menu
+     91              }
+     92            }
+     93            else                                                         // Using outer menu
+     94            {
+     95              lcd_BIG_mid();
+   \                     ??update_menu_1:
+   \   000028   ........     CALLA   #lcd_BIG_mid
+     96              
+     97              if(ADC_Thumb < MAX_MAIN_OPTION1)
+   \   00002C   B2905F05.... CMP.W   #0x55f, &ADC_Thumb
+   \   000032   152C         JC      ??update_menu_5
+     98              {
+     99                current_menu_option = MAIN_OPTION1;
+   \   000034   C243....     MOV.B   #0x0, &current_menu_option
+    100                  word1 = "   Menu   ";
+   \   000038   B240........ MOV.W   #`?<Constant "   Menu   ">`, &word1
+    101                  word2 = "RESISTORS ";
+   \   00003E   B240........ MOV.W   #`?<Constant "RESISTORS ">`, &word2
+    102                  word3 = " Select-> ";
+   \   000044   B240........ MOV.W   #`?<Constant " Select-> ">`, &word3
+    103                LCD_print(word1, word2, word3, "          ");
+   \   00004A   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   00004E   1E42....     MOV.W   &word3, R14
+   \   000052   1D42....     MOV.W   &word2, R13
+   \   000056   1C42....     MOV.W   &word1, R12
+   \   00005A   ........     BRA     #LCD_print
+    104                return;
+    105              }
+    106              if(ADC_Thumb > MIN_MAIN_OPTION2 && ADC_Thumb < MAX_MAIN_OPTION2)
+   \                     ??update_menu_5:
+   \   00005E   B2909205.... CMP.W   #0x592, &ADC_Thumb
+   \   000064   1928         JNC     ??update_menu_6
+   \   000066   B2909F0B.... CMP.W   #0xb9f, &ADC_Thumb
+   \   00006C   152C         JC      ??update_menu_6
+    107              {
+    108                current_menu_option = MAIN_OPTION2;
+   \   00006E   D243....     MOV.B   #0x1, &current_menu_option
+    109                  word1 = "   Menu   ";
+   \   000072   B240........ MOV.W   #`?<Constant "   Menu   ">`, &word1
+    110                  word2 = "  SHAPES  ";
+   \   000078   B240........ MOV.W   #`?<Constant "  SHAPES  ">`, &word2
+    111                  word3 = " Select-> ";
+   \   00007E   B240........ MOV.W   #`?<Constant " Select-> ">`, &word3
+    112                LCD_print(word1, word2, word3, "          ");
+   \   000084   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   000088   1E42....     MOV.W   &word3, R14
+   \   00008C   1D42....     MOV.W   &word2, R13
+   \   000090   1C42....     MOV.W   &word1, R12
+   \   000094   ........     BRA     #LCD_print
+    113                return;
+    114              }
+    115              if(ADC_Thumb > MIN_MAIN_OPTION3)
+   \                     ??update_menu_6:
+   \   000098   B290D20B.... CMP.W   #0xbd2, &ADC_Thumb
+   \   00009E   1528         JNC     ??update_menu_0
+    116              {
+    117                current_menu_option = MAIN_OPTION3;
+   \   0000A0   E243....     MOV.B   #0x2, &current_menu_option
+    118                  word1 = "   Menu   ";
+   \   0000A4   B240........ MOV.W   #`?<Constant "   Menu   ">`, &word1
+    119                  word2 = "RED&WHITE ";
+   \   0000AA   B240........ MOV.W   #`?<Constant "RED&WHITE ">`, &word2
+    120                  word3 = " Select-> ";
+   \   0000B0   B240........ MOV.W   #`?<Constant " Select-> ">`, &word3
+    121                LCD_print(word1, word2, word3, "          ");
+   \   0000B6   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   0000BA   1E42....     MOV.W   &word3, R14
+   \   0000BE   1D42....     MOV.W   &word2, R13
+   \   0000C2   1C42....     MOV.W   &word1, R12
+   \   0000C6   ........     CALLA   #LCD_print
+    122              }
+    123            }
+    124          }
+   \                     ??update_menu_0:
+   \   0000CA   1001         RETA
+    125          
+    126          
+
+   \                                 In  segment CODE, align 2
+    127          void update_resistors_menu(void){
+   \                     update_resistors_menu:
+    128            lcd_4line();
+   \   000000   ........     CALLA   #lcd_4line
+    129                word1 = "COLOR     ";
+   \   000004   B240........ MOV.W   #`?<Constant "COLOR     ">`, &word1
+    130                word3 = "VALUE     ";
+   \   00000A   B240........ MOV.W   #`?<Constant "VALUE     ">`, &word3
+    131                
+    132                if(ADC_Thumb < MAX_OPTION1)                              // Black
+   \   000010   B290EF01.... CMP.W   #0x1ef, &ADC_Thumb
+   \   000016   122C         JC      ??update_resistors_menu_1
+    133                {
+    134                  word2 = "     Black";
+   \   000018   B240........ MOV.W   #`?<Constant "     Black">`, &word2
+    135                  word4 = BLACK_R;
+   \   00001E   B240........ MOV.W   #`?<Constant "         0">`, &word4
+    136                  current_sub_menu_option = SUB_OPTION1;
+   \   000024   C243....     MOV.B   #0x0, &current_sub_menu_option
+    137                    LCD_print(word1,word2,word3,word4);
+   \   000028   1F42....     MOV.W   &word4, R15
+   \   00002C   1E42....     MOV.W   &word3, R14
+   \   000030   1D42....     MOV.W   &word2, R13
+   \   000034   1C42....     MOV.W   &word1, R12
+   \   000038   ........     BRA     #LCD_print
+    138                  return;
+    139                }
+    140                if(ADC_Thumb > MIN_OPTION2  && ADC_Thumb < MAX_OPTION2)  // Brown
+   \                     ??update_resistors_menu_1:
+   \   00003C   B290FA01.... CMP.W   #0x1fa, &ADC_Thumb
+   \   000042   1628         JNC     ??update_resistors_menu_2
+   \   000044   B2907F03.... CMP.W   #0x37f, &ADC_Thumb
+   \   00004A   122C         JC      ??update_resistors_menu_2
+    141                {
+    142                  word2 = "     Brown";
+   \   00004C   B240........ MOV.W   #`?<Constant "     Brown">`, &word2
+    143                  word4 = BROWN_R;
+   \   000052   B240........ MOV.W   #`?<Constant "         1">`, &word4
+    144                  current_sub_menu_option = SUB_OPTION2;
+   \   000058   D243....     MOV.B   #0x1, &current_sub_menu_option
+    145                    LCD_print(word1,word2,word3,word4);
+   \   00005C   1F42....     MOV.W   &word4, R15
+   \   000060   1E42....     MOV.W   &word3, R14
+   \   000064   1D42....     MOV.W   &word2, R13
+   \   000068   1C42....     MOV.W   &word1, R12
+   \   00006C   ........     BRA     #LCD_print
+    146                  return;
+    147                }
+    148                if(ADC_Thumb > MIN_OPTION3  && ADC_Thumb < MAX_OPTION3)  // Red
+   \                     ??update_resistors_menu_2:
+   \   000070   B2908A03.... CMP.W   #0x38a, &ADC_Thumb
+   \   000076   1628         JNC     ??update_resistors_menu_3
+   \   000078   B2900F05.... CMP.W   #0x50f, &ADC_Thumb
+   \   00007E   122C         JC      ??update_resistors_menu_3
+    149                {
+    150                  word2 = "       Red";
+   \   000080   B240........ MOV.W   #`?<Constant "       Red">`, &word2
+    151                  word4 = RED_R;
+   \   000086   B240........ MOV.W   #`?<Constant "         2">`, &word4
+    152                  current_sub_menu_option = SUB_OPTION3;
+   \   00008C   E243....     MOV.B   #0x2, &current_sub_menu_option
+    153                    LCD_print(word1,word2,word3,word4);
+   \   000090   1F42....     MOV.W   &word4, R15
+   \   000094   1E42....     MOV.W   &word3, R14
+   \   000098   1D42....     MOV.W   &word2, R13
+   \   00009C   1C42....     MOV.W   &word1, R12
+   \   0000A0   ........     BRA     #LCD_print
+    154                  return;
+    155                }
+    156                if(ADC_Thumb > MIN_OPTION4 && ADC_Thumb < MAX_OPTION4)   // Orange
+   \                     ??update_resistors_menu_3:
+   \   0000A4   B2901A05.... CMP.W   #0x51a, &ADC_Thumb
+   \   0000AA   1728         JNC     ??update_resistors_menu_4
+   \   0000AC   B2909F06.... CMP.W   #0x69f, &ADC_Thumb
+   \   0000B2   132C         JC      ??update_resistors_menu_4
+    157                {
+    158                  word2 = "    Orange";
+   \   0000B4   B240........ MOV.W   #`?<Constant "    Orange">`, &word2
+    159                  word4 = ORANGE_R;
+   \   0000BA   B240........ MOV.W   #`?<Constant "         3">`, &word4
+    160                  current_sub_menu_option = SUB_OPTION4;
+   \   0000C0   F2400300.... MOV.B   #0x3, &current_sub_menu_option
+    161                    LCD_print(word1,word2,word3,word4);
+   \   0000C6   1F42....     MOV.W   &word4, R15
+   \   0000CA   1E42....     MOV.W   &word3, R14
+   \   0000CE   1D42....     MOV.W   &word2, R13
+   \   0000D2   1C42....     MOV.W   &word1, R12
+   \   0000D6   ........     BRA     #LCD_print
+    162                  return;
+    163                }
+    164                if(ADC_Thumb > MIN_OPTION5 && ADC_Thumb < MAX_OPTION5)   // Yellow
+   \                     ??update_resistors_menu_4:
+   \   0000DA   B290AA06.... CMP.W   #0x6aa, &ADC_Thumb
+   \   0000E0   1628         JNC     ??update_resistors_menu_5
+   \   0000E2   B2902F08.... CMP.W   #0x82f, &ADC_Thumb
+   \   0000E8   122C         JC      ??update_resistors_menu_5
+    165                {
+    166                  word2 = "    Yellow";
+   \   0000EA   B240........ MOV.W   #`?<Constant "    Yellow">`, &word2
+    167                  word4 = YELLOW_R;
+   \   0000F0   B240........ MOV.W   #`?<Constant "         4">`, &word4
+    168                  current_sub_menu_option = SUB_OPTION5;
+   \   0000F6   E242....     MOV.B   #0x4, &current_sub_menu_option
+    169                    LCD_print(word1,word2,word3,word4);
+   \   0000FA   1F42....     MOV.W   &word4, R15
+   \   0000FE   1E42....     MOV.W   &word3, R14
+   \   000102   1D42....     MOV.W   &word2, R13
+   \   000106   1C42....     MOV.W   &word1, R12
+   \   00010A   ........     BRA     #LCD_print
+    170                  return;
+    171                }
+    172                if(ADC_Thumb > MIN_OPTION6 && ADC_Thumb < MAX_OPTION6)   // Green
+   \                     ??update_resistors_menu_5:
+   \   00010E   B2903A08.... CMP.W   #0x83a, &ADC_Thumb
+   \   000114   1728         JNC     ??update_resistors_menu_6
+   \   000116   B290BF09.... CMP.W   #0x9bf, &ADC_Thumb
+   \   00011C   132C         JC      ??update_resistors_menu_6
+    173                {
+    174                  word2 = "     Green";
+   \   00011E   B240........ MOV.W   #`?<Constant "     Green">`, &word2
+    175                  word4 = GREEN_R;
+   \   000124   B240........ MOV.W   #`?<Constant "         5">`, &word4
+    176                  current_sub_menu_option = SUB_OPTION6;
+   \   00012A   F2400500.... MOV.B   #0x5, &current_sub_menu_option
+    177                    LCD_print(word1,word2,word3,word4);
+   \   000130   1F42....     MOV.W   &word4, R15
+   \   000134   1E42....     MOV.W   &word3, R14
+   \   000138   1D42....     MOV.W   &word2, R13
+   \   00013C   1C42....     MOV.W   &word1, R12
+   \   000140   ........     BRA     #LCD_print
+    178                  return;
+    179                }
+    180                if(ADC_Thumb > MIN_OPTION7 && ADC_Thumb < MAX_OPTION7)   // Blue
+   \                     ??update_resistors_menu_6:
+   \   000144   B290CA09.... CMP.W   #0x9ca, &ADC_Thumb
+   \   00014A   1728         JNC     ??update_resistors_menu_7
+   \   00014C   B2904F0B.... CMP.W   #0xb4f, &ADC_Thumb
+   \   000152   132C         JC      ??update_resistors_menu_7
+    181                {
+    182                  word2 = "      Blue";
+   \   000154   B240........ MOV.W   #`?<Constant "      Blue">`, &word2
+    183                  word4 = BLUE_R;
+   \   00015A   B240........ MOV.W   #`?<Constant "         6">`, &word4
+    184                  current_sub_menu_option = SUB_OPTION7;
+   \   000160   F2400600.... MOV.B   #0x6, &current_sub_menu_option
+    185                    LCD_print(word1,word2,word3,word4);
+   \   000166   1F42....     MOV.W   &word4, R15
+   \   00016A   1E42....     MOV.W   &word3, R14
+   \   00016E   1D42....     MOV.W   &word2, R13
+   \   000172   1C42....     MOV.W   &word1, R12
+   \   000176   ........     BRA     #LCD_print
+    186                  return;
+    187                }
+    188                if(ADC_Thumb > MIN_OPTION8 && ADC_Thumb < MAX_OPTION8)   // Violet
+   \                     ??update_resistors_menu_7:
+   \   00017A   B2905A0B.... CMP.W   #0xb5a, &ADC_Thumb
+   \   000180   1728         JNC     ??update_resistors_menu_8
+   \   000182   B290DF0C.... CMP.W   #0xcdf, &ADC_Thumb
+   \   000188   132C         JC      ??update_resistors_menu_8
+    189                {
+    190                  word2 = "    Violet";
+   \   00018A   B240........ MOV.W   #`?<Constant "    Violet">`, &word2
+    191                  word4 = VIOLET_R;
+   \   000190   B240........ MOV.W   #`?<Constant "         7">`, &word4
+    192                  current_sub_menu_option = SUB_OPTION8;
+   \   000196   F2400700.... MOV.B   #0x7, &current_sub_menu_option
+    193                    LCD_print(word1,word2,word3,word4);
+   \   00019C   1F42....     MOV.W   &word4, R15
+   \   0001A0   1E42....     MOV.W   &word3, R14
+   \   0001A4   1D42....     MOV.W   &word2, R13
+   \   0001A8   1C42....     MOV.W   &word1, R12
+   \   0001AC   ........     BRA     #LCD_print
+    194                  return;
+    195                }
+    196                if(ADC_Thumb > MIN_OPTION9 && ADC_Thumb < MAX_OPTION9)   // Gray
+   \                     ??update_resistors_menu_8:
+   \   0001B0   B290EA0C.... CMP.W   #0xcea, &ADC_Thumb
+   \   0001B6   1628         JNC     ??update_resistors_menu_9
+   \   0001B8   B2906F0E.... CMP.W   #0xe6f, &ADC_Thumb
+   \   0001BE   122C         JC      ??update_resistors_menu_9
+    197                {
+    198                  word2 = "      Gray";
+   \   0001C0   B240........ MOV.W   #`?<Constant "      Gray">`, &word2
+    199                  word4 = GRAY_R;
+   \   0001C6   B240........ MOV.W   #`?<Constant "         8">`, &word4
+    200                  current_sub_menu_option = SUB_OPTION9;
+   \   0001CC   F242....     MOV.B   #0x8, &current_sub_menu_option
+    201                    LCD_print(word1,word2,word3,word4);
+   \   0001D0   1F42....     MOV.W   &word4, R15
+   \   0001D4   1E42....     MOV.W   &word3, R14
+   \   0001D8   1D42....     MOV.W   &word2, R13
+   \   0001DC   1C42....     MOV.W   &word1, R12
+   \   0001E0   ........     BRA     #LCD_print
+    202                  return;
+    203                }
+    204                if(ADC_Thumb > MIN_OPTION10)                             // White
+   \                     ??update_resistors_menu_9:
+   \   0001E4   B2907A0E.... CMP.W   #0xe7a, &ADC_Thumb
+   \   0001EA   1328         JNC     ??update_resistors_menu_0
+    205                {
+    206                  word2 = "     White";
+   \   0001EC   B240........ MOV.W   #`?<Constant "     White">`, &word2
+    207                  word4 = WHITE_R;
+   \   0001F2   B240........ MOV.W   #`?<Constant "         9">`, &word4
+    208                  current_sub_menu_option = SUB_OPTION10;
+   \   0001F8   F2400900.... MOV.B   #0x9, &current_sub_menu_option
+    209                    LCD_print(word1,word2,word3,word4);
+   \   0001FE   1F42....     MOV.W   &word4, R15
+   \   000202   1E42....     MOV.W   &word3, R14
+   \   000206   1D42....     MOV.W   &word2, R13
+   \   00020A   1C42....     MOV.W   &word1, R12
+   \   00020E   ........     CALLA   #LCD_print
+    210                  return;
+    211                }
+    212          }
+   \                     ??update_resistors_menu_0:
+   \   000212   1001         RETA
+    213          
+
+   \                                 In  segment CODE, align 2
+    214          void update_shapes_menu(void){
+   \                     update_shapes_menu:
+    215            lcd_BIG_mid();
+   \   000000   ........     CALLA   #lcd_BIG_mid
+    216                
+    217                if(ADC_Thumb < MAX_OPTION1)                              // Circle
+   \   000004   B290EF01.... CMP.W   #0x1ef, &ADC_Thumb
+   \   00000A   1B2C         JC      ??update_shapes_menu_1
+    218                {
+    219                  current_sub_menu_option = SUB_OPTION10;
+   \   00000C   F2400900.... MOV.B   #0x9, &current_sub_menu_option
+    220                    word1 = shapes_strings[current_sub_menu_option MINUS_ONE];
+   \   000012   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   000016   4F4F         MOV.B   R15, R15
+   \   000018   0F5F         RLA.W   R15
+   \   00001A   924F........ MOV.W   LWRD(shapes_strings + 65534)(R15), &word1
+    221                    word2 = shapes_strings[current_sub_menu_option];
+   \   000020   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   000024   4F4F         MOV.B   R15, R15
+   \   000026   0F5F         RLA.W   R15
+   \   000028   924F........ MOV.W   shapes_strings(R15), &word2
+    222                    LCD_print(word1,word2,"          ","          ");
+   \   00002E   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   000032   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   000036   1D42....     MOV.W   &word2, R13
+   \   00003A   1C42....     MOV.W   &word1, R12
+   \   00003E   ........     BRA     #LCD_print
+    223                  return;
+    224                }
+    225                if(ADC_Thumb > MIN_OPTION2  && ADC_Thumb < MAX_OPTION2)   // Square
+   \                     ??update_shapes_menu_1:
+   \   000042   B290FA01.... CMP.W   #0x1fa, &ADC_Thumb
+   \   000048   2528         JNC     ??update_shapes_menu_2
+   \   00004A   B2907F03.... CMP.W   #0x37f, &ADC_Thumb
+   \   000050   212C         JC      ??update_shapes_menu_2
+    226                {
+    227                  current_sub_menu_option = SUB_OPTION9;
+   \   000052   F242....     MOV.B   #0x8, &current_sub_menu_option
+    228                    word1 = shapes_strings[current_sub_menu_option MINUS_ONE];
+   \   000056   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   00005A   4F4F         MOV.B   R15, R15
+   \   00005C   0F5F         RLA.W   R15
+   \   00005E   924F........ MOV.W   LWRD(shapes_strings + 65534)(R15), &word1
+    229                    word2 = shapes_strings[current_sub_menu_option];
+   \   000064   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   000068   4F4F         MOV.B   R15, R15
+   \   00006A   0F5F         RLA.W   R15
+   \   00006C   924F........ MOV.W   shapes_strings(R15), &word2
+    230                    word3 = shapes_strings[current_sub_menu_option PLUS_ONE];
+   \   000072   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   000076   4F4F         MOV.B   R15, R15
+   \   000078   0F5F         RLA.W   R15
+   \   00007A   924F........ MOV.W   shapes_strings + 2(R15), &word3
+    231                    LCD_print(word1,word2,word3,"          ");
+   \   000080   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   000084   1E42....     MOV.W   &word3, R14
+   \   000088   1D42....     MOV.W   &word2, R13
+   \   00008C   1C42....     MOV.W   &word1, R12
+   \   000090   ........     BRA     #LCD_print
+    232                  return;
+    233                }
+    234                if(ADC_Thumb > MIN_OPTION3  && ADC_Thumb < MAX_OPTION3)   // Triangle
+   \                     ??update_shapes_menu_2:
+   \   000094   B2908A03.... CMP.W   #0x38a, &ADC_Thumb
+   \   00009A   2628         JNC     ??update_shapes_menu_3
+   \   00009C   B2900F05.... CMP.W   #0x50f, &ADC_Thumb
+   \   0000A2   222C         JC      ??update_shapes_menu_3
+    235                {
+    236                  current_sub_menu_option = SUB_OPTION8;
+   \   0000A4   F2400700.... MOV.B   #0x7, &current_sub_menu_option
+    237                    word1 = shapes_strings[current_sub_menu_option MINUS_ONE];
+   \   0000AA   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   0000AE   4F4F         MOV.B   R15, R15
+   \   0000B0   0F5F         RLA.W   R15
+   \   0000B2   924F........ MOV.W   LWRD(shapes_strings + 65534)(R15), &word1
+    238                    word2 = shapes_strings[current_sub_menu_option];
+   \   0000B8   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   0000BC   4F4F         MOV.B   R15, R15
+   \   0000BE   0F5F         RLA.W   R15
+   \   0000C0   924F........ MOV.W   shapes_strings(R15), &word2
+    239                    word3 = shapes_strings[current_sub_menu_option PLUS_ONE];
+   \   0000C6   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   0000CA   4F4F         MOV.B   R15, R15
+   \   0000CC   0F5F         RLA.W   R15
+   \   0000CE   924F........ MOV.W   shapes_strings + 2(R15), &word3
+    240                    LCD_print(word1,word2,word3,"          ");
+   \   0000D4   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   0000D8   1E42....     MOV.W   &word3, R14
+   \   0000DC   1D42....     MOV.W   &word2, R13
+   \   0000E0   1C42....     MOV.W   &word1, R12
+   \   0000E4   ........     BRA     #LCD_print
+    241                  return;
+    242                }
+    243                if(ADC_Thumb > MIN_OPTION4 && ADC_Thumb < MAX_OPTION4)    // Octagon
+   \                     ??update_shapes_menu_3:
+   \   0000E8   B2901A05.... CMP.W   #0x51a, &ADC_Thumb
+   \   0000EE   2628         JNC     ??update_shapes_menu_4
+   \   0000F0   B2909F06.... CMP.W   #0x69f, &ADC_Thumb
+   \   0000F6   222C         JC      ??update_shapes_menu_4
+    244                {
+    245                  current_sub_menu_option = SUB_OPTION7;
+   \   0000F8   F2400600.... MOV.B   #0x6, &current_sub_menu_option
+    246                    word1 = shapes_strings[current_sub_menu_option MINUS_ONE];
+   \   0000FE   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   000102   4F4F         MOV.B   R15, R15
+   \   000104   0F5F         RLA.W   R15
+   \   000106   924F........ MOV.W   LWRD(shapes_strings + 65534)(R15), &word1
+    247                    word2 = shapes_strings[current_sub_menu_option];
+   \   00010C   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   000110   4F4F         MOV.B   R15, R15
+   \   000112   0F5F         RLA.W   R15
+   \   000114   924F........ MOV.W   shapes_strings(R15), &word2
+    248                    word3 = shapes_strings[current_sub_menu_option PLUS_ONE];
+   \   00011A   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   00011E   4F4F         MOV.B   R15, R15
+   \   000120   0F5F         RLA.W   R15
+   \   000122   924F........ MOV.W   shapes_strings + 2(R15), &word3
+    249                    LCD_print(word1,word2,word3,"          ");
+   \   000128   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   00012C   1E42....     MOV.W   &word3, R14
+   \   000130   1D42....     MOV.W   &word2, R13
+   \   000134   1C42....     MOV.W   &word1, R12
+   \   000138   ........     BRA     #LCD_print
+    250                  return;
+    251                }
+    252                if(ADC_Thumb > MIN_OPTION5 && ADC_Thumb < MAX_OPTION5)   // Pentagon
+   \                     ??update_shapes_menu_4:
+   \   00013C   B290AA06.... CMP.W   #0x6aa, &ADC_Thumb
+   \   000142   2628         JNC     ??update_shapes_menu_5
+   \   000144   B2902F08.... CMP.W   #0x82f, &ADC_Thumb
+   \   00014A   222C         JC      ??update_shapes_menu_5
+    253                {
+    254                  current_sub_menu_option = SUB_OPTION6;
+   \   00014C   F2400500.... MOV.B   #0x5, &current_sub_menu_option
+    255                    word1 = shapes_strings[current_sub_menu_option MINUS_ONE];
+   \   000152   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   000156   4F4F         MOV.B   R15, R15
+   \   000158   0F5F         RLA.W   R15
+   \   00015A   924F........ MOV.W   LWRD(shapes_strings + 65534)(R15), &word1
+    256                    word2 = shapes_strings[current_sub_menu_option];
+   \   000160   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   000164   4F4F         MOV.B   R15, R15
+   \   000166   0F5F         RLA.W   R15
+   \   000168   924F........ MOV.W   shapes_strings(R15), &word2
+    257                    word3 = shapes_strings[current_sub_menu_option PLUS_ONE];
+   \   00016E   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   000172   4F4F         MOV.B   R15, R15
+   \   000174   0F5F         RLA.W   R15
+   \   000176   924F........ MOV.W   shapes_strings + 2(R15), &word3
+    258                    LCD_print(word1,word2,word3,"          ");
+   \   00017C   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   000180   1E42....     MOV.W   &word3, R14
+   \   000184   1D42....     MOV.W   &word2, R13
+   \   000188   1C42....     MOV.W   &word1, R12
+   \   00018C   ........     BRA     #LCD_print
+    259                  return;
+    260                }
+    261                if(ADC_Thumb > MIN_OPTION6 && ADC_Thumb < MAX_OPTION6)   // Hexagon
+   \                     ??update_shapes_menu_5:
+   \   000190   B2903A08.... CMP.W   #0x83a, &ADC_Thumb
+   \   000196   2528         JNC     ??update_shapes_menu_6
+   \   000198   B290BF09.... CMP.W   #0x9bf, &ADC_Thumb
+   \   00019E   212C         JC      ??update_shapes_menu_6
+    262                {
+    263                  current_sub_menu_option = SUB_OPTION5;
+   \   0001A0   E242....     MOV.B   #0x4, &current_sub_menu_option
+    264                    word1 = shapes_strings[current_sub_menu_option MINUS_ONE];
+   \   0001A4   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   0001A8   4F4F         MOV.B   R15, R15
+   \   0001AA   0F5F         RLA.W   R15
+   \   0001AC   924F........ MOV.W   LWRD(shapes_strings + 65534)(R15), &word1
+    265                    word2 = shapes_strings[current_sub_menu_option];
+   \   0001B2   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   0001B6   4F4F         MOV.B   R15, R15
+   \   0001B8   0F5F         RLA.W   R15
+   \   0001BA   924F........ MOV.W   shapes_strings(R15), &word2
+    266                    word3 = shapes_strings[current_sub_menu_option PLUS_ONE];
+   \   0001C0   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   0001C4   4F4F         MOV.B   R15, R15
+   \   0001C6   0F5F         RLA.W   R15
+   \   0001C8   924F........ MOV.W   shapes_strings + 2(R15), &word3
+    267                    LCD_print(word1,word2,word3,"          ");
+   \   0001CE   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   0001D2   1E42....     MOV.W   &word3, R14
+   \   0001D6   1D42....     MOV.W   &word2, R13
+   \   0001DA   1C42....     MOV.W   &word1, R12
+   \   0001DE   ........     BRA     #LCD_print
+    268                  return;
+    269                }
+    270                if(ADC_Thumb > MIN_OPTION7 && ADC_Thumb < MAX_OPTION7)   // Cube
+   \                     ??update_shapes_menu_6:
+   \   0001E2   B290CA09.... CMP.W   #0x9ca, &ADC_Thumb
+   \   0001E8   2628         JNC     ??update_shapes_menu_7
+   \   0001EA   B2904F0B.... CMP.W   #0xb4f, &ADC_Thumb
+   \   0001F0   222C         JC      ??update_shapes_menu_7
+    271                {
+    272                  current_sub_menu_option = SUB_OPTION4;
+   \   0001F2   F2400300.... MOV.B   #0x3, &current_sub_menu_option
+    273                    word1 = shapes_strings[current_sub_menu_option MINUS_ONE];
+   \   0001F8   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   0001FC   4F4F         MOV.B   R15, R15
+   \   0001FE   0F5F         RLA.W   R15
+   \   000200   924F........ MOV.W   LWRD(shapes_strings + 65534)(R15), &word1
+    274                    word2 = shapes_strings[current_sub_menu_option];
+   \   000206   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   00020A   4F4F         MOV.B   R15, R15
+   \   00020C   0F5F         RLA.W   R15
+   \   00020E   924F........ MOV.W   shapes_strings(R15), &word2
+    275                    word3 = shapes_strings[current_sub_menu_option PLUS_ONE];
+   \   000214   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   000218   4F4F         MOV.B   R15, R15
+   \   00021A   0F5F         RLA.W   R15
+   \   00021C   924F........ MOV.W   shapes_strings + 2(R15), &word3
+    276                    LCD_print(word1,word2,word3,"          ");
+   \   000222   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   000226   1E42....     MOV.W   &word3, R14
+   \   00022A   1D42....     MOV.W   &word2, R13
+   \   00022E   1C42....     MOV.W   &word1, R12
+   \   000232   ........     BRA     #LCD_print
+    277                  return;
+    278                }
+    279                if(ADC_Thumb > MIN_OPTION8 && ADC_Thumb < MAX_OPTION8)   // Oval
+   \                     ??update_shapes_menu_7:
+   \   000236   B2905A0B.... CMP.W   #0xb5a, &ADC_Thumb
+   \   00023C   2528         JNC     ??update_shapes_menu_8
+   \   00023E   B290DF0C.... CMP.W   #0xcdf, &ADC_Thumb
+   \   000244   212C         JC      ??update_shapes_menu_8
+    280                {
+    281                  current_sub_menu_option = SUB_OPTION3;
+   \   000246   E243....     MOV.B   #0x2, &current_sub_menu_option
+    282                    word1 = shapes_strings[current_sub_menu_option MINUS_ONE];
+   \   00024A   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   00024E   4F4F         MOV.B   R15, R15
+   \   000250   0F5F         RLA.W   R15
+   \   000252   924F........ MOV.W   LWRD(shapes_strings + 65534)(R15), &word1
+    283                    word2 = shapes_strings[current_sub_menu_option];
+   \   000258   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   00025C   4F4F         MOV.B   R15, R15
+   \   00025E   0F5F         RLA.W   R15
+   \   000260   924F........ MOV.W   shapes_strings(R15), &word2
+    284                    word3 = shapes_strings[current_sub_menu_option PLUS_ONE];
+   \   000266   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   00026A   4F4F         MOV.B   R15, R15
+   \   00026C   0F5F         RLA.W   R15
+   \   00026E   924F........ MOV.W   shapes_strings + 2(R15), &word3
+    285                    LCD_print(word1,word2,word3,"          ");
+   \   000274   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   000278   1E42....     MOV.W   &word3, R14
+   \   00027C   1D42....     MOV.W   &word2, R13
+   \   000280   1C42....     MOV.W   &word1, R12
+   \   000284   ........     BRA     #LCD_print
+    286                  return;
+    287                }
+    288                if(ADC_Thumb > MIN_OPTION9 && ADC_Thumb < MAX_OPTION9)   // Sphere
+   \                     ??update_shapes_menu_8:
+   \   000288   B290EA0C.... CMP.W   #0xcea, &ADC_Thumb
+   \   00028E   2528         JNC     ??update_shapes_menu_9
+   \   000290   B2906F0E.... CMP.W   #0xe6f, &ADC_Thumb
+   \   000296   212C         JC      ??update_shapes_menu_9
+    289                {
+    290                  current_sub_menu_option = SUB_OPTION2;
+   \   000298   D243....     MOV.B   #0x1, &current_sub_menu_option
+    291                    word1 = shapes_strings[current_sub_menu_option MINUS_ONE];
+   \   00029C   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   0002A0   4F4F         MOV.B   R15, R15
+   \   0002A2   0F5F         RLA.W   R15
+   \   0002A4   924F........ MOV.W   LWRD(shapes_strings + 65534)(R15), &word1
+    292                    word2 = shapes_strings[current_sub_menu_option];
+   \   0002AA   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   0002AE   4F4F         MOV.B   R15, R15
+   \   0002B0   0F5F         RLA.W   R15
+   \   0002B2   924F........ MOV.W   shapes_strings(R15), &word2
+    293                    word3 = shapes_strings[current_sub_menu_option PLUS_ONE];
+   \   0002B8   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   0002BC   4F4F         MOV.B   R15, R15
+   \   0002BE   0F5F         RLA.W   R15
+   \   0002C0   924F........ MOV.W   shapes_strings + 2(R15), &word3
+    294                    LCD_print(word1,word2,word3,"          ");
+   \   0002C6   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   0002CA   1E42....     MOV.W   &word3, R14
+   \   0002CE   1D42....     MOV.W   &word2, R13
+   \   0002D2   1C42....     MOV.W   &word1, R12
+   \   0002D6   ........     BRA     #LCD_print
+    295                  return;
+    296                }
+    297                if(ADC_Thumb > MIN_OPTION10)                             // Cylinder
+   \                     ??update_shapes_menu_9:
+   \   0002DA   B2907A0E.... CMP.W   #0xe7a, &ADC_Thumb
+   \   0002E0   1A28         JNC     ??update_shapes_menu_0
+    298                {
+    299                  current_sub_menu_option = SUB_OPTION1;
+   \   0002E2   C243....     MOV.B   #0x0, &current_sub_menu_option
+    300                    word2 = shapes_strings[current_sub_menu_option];
+   \   0002E6   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   0002EA   4F4F         MOV.B   R15, R15
+   \   0002EC   0F5F         RLA.W   R15
+   \   0002EE   924F........ MOV.W   shapes_strings(R15), &word2
+    301                    word3 = shapes_strings[current_sub_menu_option PLUS_ONE];
+   \   0002F4   5F42....     MOV.B   &current_sub_menu_option, R15
+   \   0002F8   4F4F         MOV.B   R15, R15
+   \   0002FA   0F5F         RLA.W   R15
+   \   0002FC   924F........ MOV.W   shapes_strings + 2(R15), &word3
+    302                    LCD_print("          ",word2,word3,"          ");
+   \   000302   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   000306   1E42....     MOV.W   &word3, R14
+   \   00030A   1D42....     MOV.W   &word2, R13
+   \   00030E   3C40....     MOV.W   #`?<Constant "          ">`, R12
+   \   000312   ........     CALLA   #LCD_print
+    303                  return;
+    304                }
+    305          }
+   \                     ??update_shapes_menu_0:
+   \   000316   1001         RETA
+    306          
+
+   \                                 In  segment CODE, align 2
+    307          void update_red_and_white_menu(void){
+   \                     update_red_and_white_menu:
+    308            static uint8_t  red_and_white_top;              // Boolean for switching value of red and white
+    309            static uint8_t  call_counter;                   // Counter describing number of times update_red_and_white_menu has been called
+    310            static uint16_t ADC_Thumb_min = ADC_MAX;        // Minimum reading off of ADC_Thumb (prevents characters from advancing backward)
+    311            static uint8_t  song_lyrics_offset;
+    312            static char*    song_lyrics = "We're the Red and White from State And we know we are the best. A hand behind our back, We can take on all the rest. Come over the hill Carolina. Devils and Deacs stand in line. The Red and White from N.C. State. Go State!           \0";
+    313            static char current_lyrics[LCD_WORD_SIZE];             // To be displayed on middle line of LCD
+    314            
+    315            // Update red and white border printout
+    316            call_counter++;
+   \   000000   D253....     ADD.B   #0x1, &??call_counter
+    317            if(!(call_counter % FUNCTION_CALL_PERIOD))
+   \   000004   3E400500     MOV.W   #0x5, R14
+   \   000008   5C42....     MOV.B   &??call_counter, R12
+   \   00000C   4C4C         MOV.B   R12, R12
+   \   00000E   ........     CALLA   #?DivMod16s
+   \   000012   0E93         CMP.W   #0x0, R14
+   \   000014   0420         JNE     ??update_red_and_white_menu_1
+    318            {
+    319              red_and_white_top ^= BIT1;                   // Swap positions of "Red  White" / "White and Red"
+   \   000016   E2E3....     XOR.B   #0x2, &??red_and_white_top
+    320              call_counter = COUNTER_RESET;
+   \   00001A   C243....     MOV.B   #0x0, &??call_counter
+    321            }
+    322            if(red_and_white_top)
+   \                     ??update_red_and_white_menu_1:
+   \   00001E   C293....     CMP.B   #0x0, &??red_and_white_top
+   \   000022   0724         JEQ     ??update_red_and_white_menu_2
+    323            {
+    324              word1 = "Red&White!";
+   \   000024   B240........ MOV.W   #`?<Constant "Red&White!">`, &word1
+    325              word3 = "White&Red!";
+   \   00002A   B240........ MOV.W   #`?<Constant "White&Red!">`, &word3
+   \   000030   063C         JMP     ??update_red_and_white_menu_0
+    326            }
+    327            else
+    328            {
+    329              word1 = "White&Red!";
+   \                     ??update_red_and_white_menu_2:
+   \   000032   B240........ MOV.W   #`?<Constant "White&Red!">`, &word1
+    330              word3 = "Red&White!";
+   \   000038   B240........ MOV.W   #`?<Constant "Red&White!">`, &word3
+    331            }
+    332            
+    333            //Update lyrics printout
+    334            song_lyrics_offset = (uint8_t)((((double)(ADC_MAX - ADC_Thumb))/ ADC_MAX) * (SONG_LYRICS_LENGTH - LCD_WORD_SIZE));
+   \                     ??update_red_and_white_menu_0:
+   \   00003E   3C40FF0F     MOV.W   #0xfff, R12
+   \   000042   1C82....     SUB.W   &ADC_Thumb, R12
+   \   000046   0D43         MOV.W   #0x0, R13
+   \   000048   ........     CALLA   #_Cast32uto32f
+   \   00004C   3E4000F0     MOV.W   #0xf000, R14
+   \   000050   3F407F45     MOV.W   #0x457f, R15
+   \   000054   ........     CALLA   #_Div32f
+   \   000058   0E43         MOV.W   #0x0, R14
+   \   00005A   3F406043     MOV.W   #0x4360, R15
+   \   00005E   ........     CALLA   #_Mul32f
+   \   000062   ........     CALLA   #_Cast32fto32s
+   \   000066   C24C....     MOV.B   R12, &??song_lyrics_offset
+    335            if(song_lyrics_offset > SONG_LYRICS_LENGTH - LCD_WORD_SIZE)
+   \   00006A   F290E100.... CMP.B   #0xe1, &??song_lyrics_offset
+   \   000070   0328         JNC     ??update_red_and_white_menu_3
+    336            {
+    337              song_lyrics_offset = (SONG_LYRICS_LENGTH - LCD_WORD_SIZE);
+   \   000072   F240E000.... MOV.B   #0xe0, &??song_lyrics_offset
+    338            }
+    339            
+    340            // Update ADC_Thumb min and scrolling text
+    341            if(reset_ADC_Thumb_min /* Changed back from outer menu */)
+   \                     ??update_red_and_white_menu_3:
+   \   000078   C293....     CMP.B   #0x0, &reset_ADC_Thumb_min
+   \   00007C   0524         JEQ     ??update_red_and_white_menu_4
+    342            {
+    343              ADC_Thumb_min = ADC_Thumb;
+   \   00007E   9242........ MOV.W   &ADC_Thumb, &??ADC_Thumb_min
+    344              reset_ADC_Thumb_min = false;
+   \   000084   C243....     MOV.B   #0x0, &reset_ADC_Thumb_min
+    345            }
+    346            
+    347            if(ADC_Thumb > ADC_Thumb_min)                        // Back-scrolling not permitted
+   \                     ??update_red_and_white_menu_4:
+   \   000088   9292........ CMP.W   &ADC_Thumb, &??ADC_Thumb_min
+   \   00008E   0A2C         JC      ??update_red_and_white_menu_5
+    348            {
+    349              LCD_print(word1, current_lyrics, word3, word4);
+   \   000090   1F42....     MOV.W   &word4, R15
+   \   000094   1E42....     MOV.W   &word3, R14
+   \   000098   3D40....     MOV.W   #??current_lyrics, R13
+   \   00009C   1C42....     MOV.W   &word1, R12
+   \   0000A0   ........     BRA     #LCD_print
+    350            }
+    351            else                                                 // Regular forward scroll
+    352            {
+    353              ADC_Thumb_min = ADC_Thumb;
+   \                     ??update_red_and_white_menu_5:
+   \   0000A4   9242........ MOV.W   &ADC_Thumb, &??ADC_Thumb_min
+    354              strncpy(current_lyrics, song_lyrics + song_lyrics_offset, LCD_WORD_SIZE);
+   \   0000AA   3E400A00     MOV.W   #0xa, R14
+   \   0000AE   1D42....     MOV.W   &??song_lyrics, R13
+   \   0000B2   5F42....     MOV.B   &??song_lyrics_offset, R15
+   \   0000B6   4F4F         MOV.B   R15, R15
+   \   0000B8   0D5F         ADD.W   R15, R13
+   \   0000BA   3C40....     MOV.W   #??current_lyrics, R12
+   \   0000BE   ........     CALLA   #strncpy
+    355              LCD_print(word1, current_lyrics, word3, word4);
+   \   0000C2   1F42....     MOV.W   &word4, R15
+   \   0000C6   1E42....     MOV.W   &word3, R14
+   \   0000CA   0D4C         MOV.W   R12, R13
+   \   0000CC   1C42....     MOV.W   &word1, R12
+   \   0000D0   ........     BRA     #LCD_print
+    356            }
+    357          }
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     ??red_and_white_top:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     ??call_counter:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_I, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+   \                     ??ADC_Thumb_min:
+   \   000000                DS8 2
+   \   000002                REQUIRE `?<Initializer for ADC_Thumb_min>`
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     ??song_lyrics_offset:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_I, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+   \                     ??song_lyrics:
+   \   000000                DS8 2
+   \   000002                REQUIRE `?<Initializer for song_lyrics>`
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     ??current_lyrics:
+   \   000000                DS8 10
+    358          
+
+   \                                 In  segment CODE, align 2
+    359          void print_detector_values(void){
+   \                     print_detector_values:
+    360            if(calibrated && (P8OUT & IR_LED))
+   \   000000   C293....     CMP.B   #0x0, &calibrated
+   \   000004   0524         JEQ     ??print_detector_values_1
+   \   000006   D2B36302     BIT.B   #0x1, &0x263
+   \   00000A   0228         JNC     ??print_detector_values_1
+    361            {
+    362              pid_udpate_left();
+   \   00000C   ........     BRA     #pid_udpate_left
+    363            }
+    364            else 
+    365            {
+    366              Wheels_OFF();
+   \                     ??print_detector_values_1:
+   \   000010   ........     CALLA   #Wheels_OFF
+    367            
+    368              hex_to_dec(word2, ADC_Thumb);
+   \   000014   1D42....     MOV.W   &ADC_Thumb, R13
+   \   000018   1C42....     MOV.W   &word2, R12
+   \   00001C   ........     CALLA   #hex_to_dec
+    369              hex_to_dec(word3, ADC_Left_Detector);
+   \   000020   1D42....     MOV.W   &ADC_Left_Detector, R13
+   \   000024   1C42....     MOV.W   &word3, R12
+   \   000028   ........     CALLA   #hex_to_dec
+    370              
+    371              if(P8OUT & IR_LED)
+   \   00002C   D2B36302     BIT.B   #0x1, &0x263
+   \   000030   0428         JNC     ??print_detector_values_2
+    372                word1 = "IR_EM ON  ";
+   \   000032   B240........ MOV.W   #`?<Constant "IR_EM ON  ">`, &word1
+   \   000038   033C         JMP     ??print_detector_values_0
+    373              else
+    374                word1 = "IR_EM OFF ";
+   \                     ??print_detector_values_2:
+   \   00003A   B240........ MOV.W   #`?<Constant "IR_EM OFF ">`, &word1
+    375              
+    376              LCD_print(word1, word2, word3, word4);
+   \                     ??print_detector_values_0:
+   \   000040   1F42....     MOV.W   &word4, R15
+   \   000044   1E42....     MOV.W   &word3, R14
+   \   000048   1D42....     MOV.W   &word2, R13
+   \   00004C   1C42....     MOV.W   &word1, R12
+   \   000050   ........     BRA     #LCD_print
+   \   000054                REQUIRE _A_PDOUT_L
+    377            }
+    378          }
+
+   \                                 In  segment DATA16_ID, align 2, align-sorted
+   \                     `?<Initializer for shapes_strings>`:
+   \   000000   ........     DC16 `?<Constant "Circle    ">`, `?<Constant "Square    ">`
+   \   000004   ........     DC16 `?<Constant "Triangle  ">`, `?<Constant "Octagon   ">`
+   \   000008   ........     DC16 `?<Constant "Pentagon  ">`, `?<Constant "Hexagon   ">`
+   \   00000C   ........     DC16 `?<Constant "Cube      ">`, `?<Constant "Oval      ">`
+   \   000010   ........     DC16 `?<Constant "Sphere    ">`, `?<Constant "Cylinder  ">`
+
+   \                                 In  segment DATA16_ID, align 2, align-sorted
+   \                     `?<Initializer for ADC_Thumb_min>`:
+   \   000000   FF0F         DC16 4095
+
+   \                                 In  segment DATA16_ID, align 2, align-sorted
+   \                     `?<Initializer for song_lyrics>`:
+   \   000000   ....         DC16 `?<Constant "We\\'re the Red and Whi...">`
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Circle    ">`:
+   \   000000   436972636C65 DC8 "Circle    "
+   \            2020202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Square    ">`:
+   \   000000   537175617265 DC8 "Square    "
+   \            2020202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Triangle  ">`:
+   \   000000   547269616E67 DC8 "Triangle  "
+   \            6C65202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Octagon   ">`:
+   \   000000   4F637461676F DC8 "Octagon   "
+   \            6E20202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Pentagon  ">`:
+   \   000000   50656E746167 DC8 "Pentagon  "
+   \            6F6E202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Hexagon   ">`:
+   \   000000   48657861676F DC8 "Hexagon   "
+   \            6E20202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Cube      ">`:
+   \   000000   437562652020 DC8 "Cube      "
+   \            2020202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Oval      ">`:
+   \   000000   4F76616C2020 DC8 "Oval      "
+   \            2020202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Sphere    ">`:
+   \   000000   537068657265 DC8 "Sphere    "
+   \            2020202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Cylinder  ">`:
+   \   000000   43796C696E64 DC8 "Cylinder  "
+   \            6572202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "   Menu   ">`:
+   \   000000   2020204D656E DC8 "   Menu   "
+   \            7520202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "RESISTORS ">`:
+   \   000000   524553495354 DC8 "RESISTORS "
+   \            4F52532000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant " Select-> ">`:
+   \   000000   2053656C6563 DC8 " Select-> "
+   \            742D3E2000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "          ">`:
+   \   000000   202020202020 DC8 "          "
+   \            2020202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "  SHAPES  ">`:
+   \   000000   202053484150 DC8 "  SHAPES  "
+   \            4553202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "RED&WHITE ">`:
+   \   000000   524544265748 DC8 "RED&WHITE "
+   \            4954452000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "COLOR     ">`:
+   \   000000   434F4C4F5220 DC8 "COLOR     "
+   \            2020202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "VALUE     ">`:
+   \   000000   56414C554520 DC8 "VALUE     "
+   \            2020202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "     Black">`:
+   \   000000   202020202042 DC8 "     Black"
+   \            6C61636B00  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "         0">`:
+   \   000000   202020202020 DC8 "         0"
+   \            2020203000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "     Brown">`:
+   \   000000   202020202042 DC8 "     Brown"
+   \            726F776E00  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "         1">`:
+   \   000000   202020202020 DC8 "         1"
+   \            2020203100  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "       Red">`:
+   \   000000   202020202020 DC8 "       Red"
+   \            2052656400  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "         2">`:
+   \   000000   202020202020 DC8 "         2"
+   \            2020203200  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "    Orange">`:
+   \   000000   202020204F72 DC8 "    Orange"
+   \            616E676500  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "         3">`:
+   \   000000   202020202020 DC8 "         3"
+   \            2020203300  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "    Yellow">`:
+   \   000000   202020205965 DC8 "    Yellow"
+   \            6C6C6F7700  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "         4">`:
+   \   000000   202020202020 DC8 "         4"
+   \            2020203400  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "     Green">`:
+   \   000000   202020202047 DC8 "     Green"
+   \            7265656E00  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "         5">`:
+   \   000000   202020202020 DC8 "         5"
+   \            2020203500  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "      Blue">`:
+   \   000000   202020202020 DC8 "      Blue"
+   \            426C756500  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "         6">`:
+   \   000000   202020202020 DC8 "         6"
+   \            2020203600  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "    Violet">`:
+   \   000000   202020205669 DC8 "    Violet"
+   \            6F6C657400  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "         7">`:
+   \   000000   202020202020 DC8 "         7"
+   \            2020203700  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "      Gray">`:
+   \   000000   202020202020 DC8 "      Gray"
+   \            4772617900  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "         8">`:
+   \   000000   202020202020 DC8 "         8"
+   \            2020203800  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "     White">`:
+   \   000000   202020202057 DC8 "     White"
+   \            6869746500  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "         9">`:
+   \   000000   202020202020 DC8 "         9"
+   \            2020203900  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Red&White!">`:
+   \   000000   526564265768 DC8 "Red&White!"
+   \            6974652100  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "White&Red!">`:
+   \   000000   576869746526 DC8 "White&Red!"
+   \            5265642100  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "We\\'re the Red and Whi...">`:
+   \   000000   576527726520 DC8 57H, 65H, 27H, 72H, 65H, 20H, 74H, 68H
+   \            7468        
+   \   000008   652052656420 DC8 65H, 20H, 52H, 65H, 64H, 20H, 61H, 6EH
+   \            616E        
+   \   000010   642057686974 DC8 64H, 20H, 57H, 68H, 69H, 74H, 65H, 20H
+   \            6520        
+   \   000018   66726F6D2053 DC8 66H, 72H, 6FH, 6DH, 20H, 53H, 74H, 61H
+   \            7461        
+   \   000020   746520416E64 DC8 74H, 65H, 20H, 41H, 6EH, 64H, 20H, 77H
+   \            2077        
+   \   000028   65206B6E6F77 DC8 65H, 20H, 6BH, 6EH, 6FH, 77H, 20H, 77H
+   \            2077        
+   \   000030   652061726520 DC8 65H, 20H, 61H, 72H, 65H, 20H, 74H, 68H
+   \            7468        
+   \   000038   652062657374 DC8 65H, 20H, 62H, 65H, 73H, 74H, 2EH, 20H
+   \            2E20        
+   \   000040   412068616E64 DC8 41H, 20H, 68H, 61H, 6EH, 64H, 20H, 62H
+   \            2062        
+   \   000048   6568696E6420 DC8 65H, 68H, 69H, 6EH, 64H, 20H, 6FH, 75H
+   \            6F75        
+   \   000050   72206261636B DC8 72H, 20H, 62H, 61H, 63H, 6BH, 2CH, 20H
+   \            2C20        
+   \   000058   57652063616E DC8 57H, 65H, 20H, 63H, 61H, 6EH, 20H, 74H
+   \            2074        
+   \   000060   616B65206F6E DC8 61H, 6BH, 65H, 20H, 6FH, 6EH, 20H, 61H
+   \            2061        
+   \   000068   6C6C20746865 DC8 6CH, 6CH, 20H, 74H, 68H, 65H, 20H, 72H
+   \            2072        
+   \   000070   6573742E2043 DC8 65H, 73H, 74H, 2EH, 20H, 43H, 6FH, 6DH
+   \            6F6D        
+   \   000078   65206F766572 DC8 65H, 20H, 6FH, 76H, 65H, 72H, 20H, 74H
+   \            2074        
+   \   000080   68652068696C DC8 68H, 65H, 20H, 68H, 69H, 6CH, 6CH, 20H
+   \            6C20        
+   \   000088   4361726F6C69 DC8 43H, 61H, 72H, 6FH, 6CH, 69H, 6EH, 61H
+   \            6E61        
+   \   000090   2E2044657669 DC8 2EH, 20H, 44H, 65H, 76H, 69H, 6CH, 73H
+   \            6C73        
+   \   000098   20616E642044 DC8 20H, 61H, 6EH, 64H, 20H, 44H, 65H, 61H
+   \            6561        
+   \   0000A0   637320737461 DC8 63H, 73H, 20H, 73H, 74H, 61H, 6EH, 64H
+   \            6E64        
+   \   0000A8   20696E206C69 DC8 20H, 69H, 6EH, 20H, 6CH, 69H, 6EH, 65H
+   \            6E65        
+   \   0000B0   2E2054686520 DC8 2EH, 20H, 54H, 68H, 65H, 20H, 52H, 65H
+   \            5265        
+   \   0000B8   6420616E6420 DC8 64H, 20H, 61H, 6EH, 64H, 20H, 57H, 68H
+   \            5768        
+   \   0000C0   697465206672 DC8 69H, 74H, 65H, 20H, 66H, 72H, 6FH, 6DH
+   \            6F6D        
+   \   0000C8   204E2E432E20 DC8 20H, 4EH, 2EH, 43H, 2EH, 20H, 53H, 74H
+   \            5374        
+   \   0000D0   6174652E2047 DC8 61H, 74H, 65H, 2EH, 20H, 47H, 6FH, 20H
+   \            6F20        
+   \   0000D8   537461746521 DC8 53H, 74H, 61H, 74H, 65H, 21H, 20H, 20H
+   \            2020        
+   \   0000E0   202020202020 DC8 20H, 20H, 20H, 20H, 20H, 20H, 20H, 20H
+   \            2020        
+   \   0000E8   200000       DC8 20H, 0, 0
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "IR_EM ON  ">`:
+   \   000000   49525F454D20 DC8 "IR_EM ON  "
+   \            4F4E202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "IR_EM OFF ">`:
+   \   000000   49525F454D20 DC8 "IR_EM OFF "
+   \            4F46462000  
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+     12   LCD_print
+       12   -> Display_Process
+       12   -> strcpy
+       12   -> update_string
+     12   hex_to_dec
+      4   print_detector_values
+        0   -> LCD_print
+        4   -> Wheels_OFF
+        4   -> hex_to_dec
+        0   -> pid_udpate_left
+      4   update_menu
+        0   -> LCD_print
+        4   -> LCD_print
+        4   -> lcd_BIG_mid
+        0   -> update_red_and_white_menu
+        0   -> update_resistors_menu
+        0   -> update_shapes_menu
+      4   update_red_and_white_menu
+        0   -> LCD_print
+        4   -> strncpy
+        4 ?DivMod16s
+        4 _Cast32fto32s
+        4 _Cast32uto32f
+        4 _Div32f
+        4 _Mul32f
+      4   update_resistors_menu
+        0   -> LCD_print
+        4   -> LCD_print
+        4   -> lcd_4line
+      4   update_shapes_menu
+        0   -> LCD_print
+        4   -> LCD_print
+        4   -> lcd_BIG_mid
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      11  ?<Constant "          ">
+      11  ?<Constant "         0">
+      11  ?<Constant "         1">
+      11  ?<Constant "         2">
+      11  ?<Constant "         3">
+      11  ?<Constant "         4">
+      11  ?<Constant "         5">
+      11  ?<Constant "         6">
+      11  ?<Constant "         7">
+      11  ?<Constant "         8">
+      11  ?<Constant "         9">
+      11  ?<Constant "       Red">
+      11  ?<Constant "      Blue">
+      11  ?<Constant "      Gray">
+      11  ?<Constant "     Black">
+      11  ?<Constant "     Brown">
+      11  ?<Constant "     Green">
+      11  ?<Constant "     White">
+      11  ?<Constant "    Orange">
+      11  ?<Constant "    Violet">
+      11  ?<Constant "    Yellow">
+      11  ?<Constant "   Menu   ">
+      11  ?<Constant "  SHAPES  ">
+      11  ?<Constant " Select-> ">
+      11  ?<Constant "COLOR     ">
+      11  ?<Constant "Circle    ">
+      11  ?<Constant "Cube      ">
+      11  ?<Constant "Cylinder  ">
+      11  ?<Constant "Hexagon   ">
+      11  ?<Constant "IR_EM OFF ">
+      11  ?<Constant "IR_EM ON  ">
+      11  ?<Constant "Octagon   ">
+      11  ?<Constant "Oval      ">
+      11  ?<Constant "Pentagon  ">
+      11  ?<Constant "RED&WHITE ">
+      11  ?<Constant "RESISTORS ">
+      11  ?<Constant "Red&White!">
+      11  ?<Constant "Sphere    ">
+      11  ?<Constant "Square    ">
+      11  ?<Constant "Triangle  ">
+      11  ?<Constant "VALUE     ">
+     235  ?<Constant "We\'re the Red and Whi...">
+      11  ?<Constant "White&Red!">
+       2  ?<Initializer for ADC_Thumb_min>
+      20  ?<Initializer for shapes_strings>
+       2  ?<Initializer for song_lyrics>
+       2  ADC_Thumb_min
+     104  LCD_print
+       2  _A_PDOUT_L
+       1  call_counter
+       1  changed_options
+      10  current_lyrics
+       1  current_menu_option
+       1  current_sub_menu_option
+     116  hex_to_dec
+       1  menu_counter
+       1  prev_menu_frame
+       1  prev_menu_option
+       1  prev_sub_menu_option
+      84  print_detector_values
+       1  red_and_white_top
+       1  reset_ADC_Thumb_min
+      20  shapes_strings
+       2  song_lyrics
+       1  song_lyrics_offset
+     204  update_menu
+     212  update_red_and_white_menu
+     532  update_resistors_menu
+     792  update_shapes_menu
+       2  word1
+       2  word2
+       2  word3
+       2  word4
+
+ 
+ 2 044 bytes in segment CODE
+     2 bytes in segment DATA16_AN
+   697 bytes in segment DATA16_C
+    24 bytes in segment DATA16_I
+    24 bytes in segment DATA16_ID
+    29 bytes in segment DATA16_Z
+ 
+ 2 044 bytes of CODE  memory
+   721 bytes of CONST memory
+    53 bytes of DATA  memory (+ 2 bytes shared)
+
+Errors: none
+Warnings: none

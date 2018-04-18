@@ -1,0 +1,454 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           08/Apr/2018  19:02:50
+# Copyright 1996-2017 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_08\serial.c
+#    Command line  =  
+#        -f C:\Users\shmes\AppData\Local\Temp\EW2F6A.tmp
+#        ("C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_08\serial.c" -lC
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_08\Debug\List" -o
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_08\Debug\Obj" --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5994__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  Spanish_USA.1252
+#    List file     =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_08\Debug\List\serial.lst
+#    Object file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_08\Debug\Obj\serial.r43
+#
+###############################################################################
+
+C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Homework_08\serial.c
+      1          //===============================================================
+      2          //  File Name: serial.c
+      3          //  Description: This file contains the Initialization and
+      4          //                    interrupts for serial I/O
+      5          //
+      6          //  Author: Sam Messick
+      7          //  Date Mar. 2018
+      8          //  Compiler Build with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      9          //===============================================================
+     10          
+     11          #include "serial.h"
+
+   \                                 In  segment DATA16_AN, at 0x620
+   \   union <unnamed> _A_UCA3CTLW0_L
+   \                     _A_UCA3CTLW0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x626
+   \   union <unnamed> _A_UCA3BRW_L
+   \                     _A_UCA3BRW_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x628
+   \   union <unnamed> _A_UCA3MCTLW_L
+   \                     _A_UCA3MCTLW_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x62a
+   \   union <unnamed> _A_UCA3STATW_L
+   \                     _A_UCA3STATW_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x62c
+   \   union <unnamed> _A_UCA3RXBUF_L
+   \                     _A_UCA3RXBUF_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x62e
+   \   union <unnamed> _A_UCA3TXBUF_L
+   \                     _A_UCA3TXBUF_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x63a
+   \   union <unnamed> _A_UCA3IE_L
+   \                     _A_UCA3IE_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x63c
+   \   union <unnamed> _A_UCA3IFG_L
+   \                     _A_UCA3IFG_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x63e
+   \   union <unnamed> _A_UCA3IV_L
+   \                     _A_UCA3IV_L:
+   \   000000                DS8 2
+     12          
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     13          char USB_Char_Rx[SMALL_RING_SIZE]  = "          ";
+   \                     USB_Char_Rx:
+   \   000000                DS8 16
+   \   000010                REQUIRE `?<Initializer for USB_Char_Rx>`
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     14          volatile uint8_t usb_rx_ring_wr;
+   \                     usb_rx_ring_wr:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     15          volatile uint8_t usb_rx_ring_rd;
+   \                     usb_rx_ring_rd:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     16          volatile uint8_t begin_transmission;
+   \                     begin_transmission:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     17          volatile uint8_t transmitting;
+   \                     transmitting:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     18          volatile uint8_t receive_ready;
+   \                     receive_ready:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     19          char baud_rate[COLUMN_NUM_COLUMNS] = "115200    ";
+   \                     baud_rate:
+   \   000000                DS8 11
+   \   00000B                REQUIRE `?<Initializer for baud_rate>`
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     20          char* string_to_transmit;
+   \                     string_to_transmit:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     21          uint8_t main_ring_rd;
+   \                     main_ring_rd:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     22          char Main_Char_Rx[SMALL_RING_SIZE] = "$Hi Emily!\r\n";
+   \                     Main_Char_Rx:
+   \   000000                DS8 16
+   \   000010                REQUIRE `?<Initializer for Main_Char_Rx>`
+     23          
+
+   \                                 In  segment CODE, align 2
+     24          void Init_Serial(void){
+   \                     Init_Serial:
+     25            //Init_Serial_UCA0();
+     26            Init_Serial_UCA3();
+   \   000000   ........     BRA     #Init_Serial_UCA3
+     27          }
+     28          
+
+   \                                 In  segment CODE, align 2
+     29          void Init_Serial_UCA3(void){
+   \                     Init_Serial_UCA3:
+     30            // Confiure UART 3
+     31            UCA3CTLW0  = REGISTER_WORD_SIZE;    // Use word-size register (16-bit)
+   \   000000   82432006     MOV.W   #0x0, &0x620
+     32            UCA3CTLW0 |= UCSSEL__SMCLK;         // Set SMCLK as frequency source
+   \   000004   B2D080002006 BIS.W   #0x80, &0x620
+     33            UCA3CTLW0 |= UCSWRST;               // Set software reset enable
+   \   00000A   92D32006     BIS.W   #0x1, &0x620
+     34            UCA3BRW    = UCA_BRW_115;                    // 9600 Baud
+   \   00000E   A2422606     MOV.W   #0x4, &0x626
+     35            UCA3MCTLW  = UCA_MCTL_115;
+   \   000012   B24051552806 MOV.W   #0x5551, &0x628
+     36            UCA3CTL1  &= ~UCSWRST;              // Release from software reset
+   \   000018   D2C32006     BIC.B   #0x1, &0x620
+     37            UCA3IE    |= UCRXIE;
+   \   00001C   92D33A06     BIS.W   #0x1, &0x63a
+     38            UCA3IFG   &= ~(UCRXIFG);
+   \   000020   92C33C06     BIC.W   #0x1, &0x63c
+     39          }
+   \   000024   1001         RETA
+   \   000026                REQUIRE _A_UCA3CTLW0_L
+   \   000026                REQUIRE _A_UCA3BRW_L
+   \   000026                REQUIRE _A_UCA3MCTLW_L
+   \   000026                REQUIRE _A_UCA3IE_L
+   \   000026                REQUIRE _A_UCA3IFG_L
+     40          
+
+   \                                 In  segment CODE, align 2
+     41          void transmit_char(char character){
+   \                     transmit_char:
+   \                     ??transmit_char_0:
+     42            while (UCA3STATW & UCBUSY); // Transmit complete interrupt flag
+   \   000000   92B32A06     BIT.W   #0x1, &0x62a
+   \   000004   FD2F         JC      ??transmit_char_0
+     43              UCA3TXBUF = character;
+   \   000006   4C4C         MOV.B   R12, R12
+   \   000008   824C2E06     MOV.W   R12, &0x62e
+     44          }
+   \   00000C   1001         RETA
+   \   00000E                REQUIRE _A_UCA3STATW_L
+   \   00000E                REQUIRE _A_UCA3TXBUF_L
+     45          
+
+   \                                 In  segment CODE, align 2
+     46          void wait_for_input(void){
+   \                     wait_for_input:
+   \   000000   0A12         PUSH.W  R10
+     47            uint8_t string_index;
+     48            for(string_index = BEGINNING; string_index < SMALL_RING_SIZE; string_index++)
+   \   000002   4A43         MOV.B   #0x0, R10
+   \                     ??wait_for_input_0:
+   \   000004   7A901000     CMP.B   #0x10, R10
+   \   000008   042C         JC      ??wait_for_input_1
+     49              read_into_buffer();
+   \   00000A   ........     CALLA   #read_into_buffer
+   \   00000E   5A53         ADD.B   #0x1, R10
+   \   000010   F93F         JMP     ??wait_for_input_0
+     50            main_ring_rd = BEGINNING;
+   \                     ??wait_for_input_1:
+   \   000012   C243....     MOV.B   #0x0, &main_ring_rd
+     51            usb_rx_ring_wr = BEGINNING;
+   \   000016   C243....     MOV.B   #0x0, &usb_rx_ring_wr
+     52            word1 = " Recieved ";
+   \   00001A   B240........ MOV.W   #`?<Constant " Recieved ">`, &word1
+     53            word2 = "          ";
+   \   000020   B240........ MOV.W   #`?<Constant "          ">`, &word2
+     54            // word 3 is baud rate
+     55            word4 = Main_Char_Rx;
+   \   000026   B240........ MOV.W   #Main_Char_Rx, &word4
+     56            LCD_print(word1,word2,word3,word4);
+   \   00002C   1F42....     MOV.W   &word4, R15
+   \   000030   1E42....     MOV.W   &word3, R14
+   \   000034   1D42....     MOV.W   &word2, R13
+   \   000038   1C42....     MOV.W   &word1, R12
+   \   00003C   ........     CALLA   #LCD_print
+     57            UCA3IE |= UCRXIE;
+   \   000040   92D33A06     BIS.W   #0x1, &0x63a
+     58          }
+   \   000044   3A41         POP.W   R10
+   \   000046   1001         RETA
+   \   000048                REQUIRE _A_UCA3IE_L
+     59            
+
+   \                                 In  segment CODE, align 2
+     60          void read_into_buffer(void){
+   \                     read_into_buffer:
+   \                     ??read_into_buffer_0:
+     61            static uint8_t rx_wr_temp;
+     62            
+     63            while(rx_wr_temp != usb_rx_ring_wr)
+   \   000000   D292........ CMP.B   &usb_rx_ring_wr, &??rx_wr_temp
+   \   000006   0424         JEQ     ??read_into_buffer_1
+     64              rx_wr_temp = usb_rx_ring_wr;
+   \   000008   D242........ MOV.B   &usb_rx_ring_wr, &??rx_wr_temp
+   \   00000E   F83F         JMP     ??read_into_buffer_0
+     65            while(main_ring_rd != rx_wr_temp)
+   \                     ??read_into_buffer_1:
+   \   000010   D292........ CMP.B   &??rx_wr_temp, &main_ring_rd
+   \   000016   0C24         JEQ     ??read_into_buffer_2
+     66            {
+     67              Main_Char_Rx[main_ring_rd] = USB_Char_Rx[main_ring_rd];
+   \   000018   5E42....     MOV.B   &main_ring_rd, R14
+   \   00001C   4E4E         MOV.B   R14, R14
+   \   00001E   5F42....     MOV.B   &main_ring_rd, R15
+   \   000022   4F4F         MOV.B   R15, R15
+   \   000024   DF4E........ MOV.B   USB_Char_Rx(R14), Main_Char_Rx(R15)
+     68              main_ring_rd++;
+   \   00002A   D253....     ADD.B   #0x1, &main_ring_rd
+   \   00002E   F03F         JMP     ??read_into_buffer_1
+     69            }
+     70          }
+   \                     ??read_into_buffer_2:
+   \   000030   1001         RETA
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     ??rx_wr_temp:
+   \   000000                DS8 1
+     71          
+     72          #pragma vector = USCI_A3_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+     73          __interrupt void USCI_A3_ISR(void){
+   \                     USCI_A3_ISR:
+   \   000000   5F15         PUSHM.W #0x6, R15
+     74            uint8_t temp;
+     75            switch(__even_in_range(UCA3IV, eight))
+   \   000002   1F423E06     MOV.W   &0x63e, R15
+   \   000006   2F93         CMP.W   #0x2, R15
+   \   000008   2420         JNE     ??USCI_A3_ISR_0
+     76            {
+     77            case two:                                          // RXIFG
+     78              if(UCA3RXBUF == '\0')
+   \   00000A   82932C06     CMP.W   #0x0, &0x62c
+   \   00000E   2124         JEQ     ??USCI_A3_ISR_0
+     79                break;
+     80              if(UCA3RXBUF == '$')
+   \   000010   B29024002C06 CMP.W   #0x24, &0x62c
+   \   000016   0220         JNE     ??USCI_A3_ISR_2
+     81                begin_transmission = true;
+   \   000018   D243....     MOV.B   #0x1, &begin_transmission
+     82              if(begin_transmission)
+   \                     ??USCI_A3_ISR_2:
+   \   00001C   C293....     CMP.B   #0x0, &begin_transmission
+   \   000020   1824         JEQ     ??USCI_A3_ISR_0
+     83              {
+     84                temp = usb_rx_ring_wr;
+   \   000022   5A42....     MOV.B   &usb_rx_ring_wr, R10
+     85                USB_Char_Rx[temp] = UCA3RXBUF;       // Receive USB_Char_Rx character
+   \   000026   1E422C06     MOV.W   &0x62c, R14
+   \   00002A   4A4A         MOV.B   R10, R10
+   \   00002C   CA4E....     MOV.B   R14, USB_Char_Rx(R10)
+     86                if(++usb_rx_ring_wr >= (SMALL_RING_SIZE) || USB_Char_Rx[temp] == '\n')
+   \   000030   5E42....     MOV.B   &usb_rx_ring_wr, R14
+   \   000034   5E53         ADD.B   #0x1, R14
+   \   000036   C24E....     MOV.B   R14, &usb_rx_ring_wr
+   \   00003A   7E901000     CMP.B   #0x10, R14
+   \   00003E   052C         JC      ??USCI_A3_ISR_3
+   \   000040   4A4A         MOV.B   R10, R10
+   \   000042   FA900A00.... CMP.B   #0xa, USB_Char_Rx(R10)
+   \   000048   0420         JNE     ??USCI_A3_ISR_0
+     87                {
+     88                  UCA3IE &= ~(UCRXIE);
+   \                     ??USCI_A3_ISR_3:
+   \   00004A   92C33A06     BIC.W   #0x1, &0x63a
+     89                  wait_for_input();
+   \   00004E   ........     CALLA   #wait_for_input
+     90                }
+     91              }
+     92              break;
+     93            }
+     94          }
+   \                     ??USCI_A3_ISR_0:
+   \   000052   5A17         POPM.W  #0x6, R15
+   \   000054   0013         RETI
+   \   000056                REQUIRE _A_UCA3RXBUF_L
+   \   000056                REQUIRE _A_UCA3IE_L
+   \   000056                REQUIRE _A_UCA3IV_L
+
+   \                                 In  segment INTVEC, offset 0x30, root
+   \                     `??USCI_A3_ISR::??INTVEC 48`:
+   \   000030   ....         DC16    USCI_A3_ISR
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for USB_Char_Rx>`:
+   \   000000   202020202020 DC8 "          "
+   \            2020202000  
+   \   00000B   0000000000   DC8 0, 0, 0, 0, 0
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for baud_rate>`:
+   \   000000   313135323030 DC8 "115200    "
+   \            2020202000  
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for Main_Char_Rx>`:
+   \   000000   24486920456D DC8 "$Hi Emily!\015\012"
+   \            696C79210D0A
+   \            00          
+   \   00000D   000000       DC8 0, 0, 0
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant " Recieved ">`:
+   \   000000   205265636965 DC8 " Recieved "
+   \            7665642000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "          ">`:
+   \   000000   202020202020 DC8 "          "
+   \            2020202000  
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Init_Serial
+        0   -> Init_Serial_UCA3
+      4   Init_Serial_UCA3
+     16   USCI_A3_ISR
+       16   -> wait_for_input
+      4   read_into_buffer
+      4   transmit_char
+      6   wait_for_input
+        6   -> LCD_print
+        6   -> read_into_buffer
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      11  ?<Constant "          ">
+      11  ?<Constant " Recieved ">
+      16  ?<Initializer for Main_Char_Rx>
+      16  ?<Initializer for USB_Char_Rx>
+      11  ?<Initializer for baud_rate>
+       4  Init_Serial
+      38  Init_Serial_UCA3
+      16  Main_Char_Rx
+      16  USB_Char_Rx
+      86  USCI_A3_ISR
+       2  USCI_A3_ISR::??INTVEC 48
+       2  _A_UCA3BRW_L
+       2  _A_UCA3CTLW0_L
+       2  _A_UCA3IE_L
+       2  _A_UCA3IFG_L
+       2  _A_UCA3IV_L
+       2  _A_UCA3MCTLW_L
+       2  _A_UCA3RXBUF_L
+       2  _A_UCA3STATW_L
+       2  _A_UCA3TXBUF_L
+      11  baud_rate
+       1  begin_transmission
+       1  main_ring_rd
+      50  read_into_buffer
+       1  receive_ready
+       1  rx_wr_temp
+       2  string_to_transmit
+      14  transmit_char
+       1  transmitting
+       1  usb_rx_ring_rd
+       1  usb_rx_ring_wr
+      72  wait_for_input
+
+ 
+ 178 bytes in segment CODE
+  18 bytes in segment DATA16_AN
+  22 bytes in segment DATA16_C
+  43 bytes in segment DATA16_I
+  43 bytes in segment DATA16_ID
+   9 bytes in segment DATA16_Z
+   2 bytes in segment INTVEC
+  86 bytes in segment ISR_CODE
+ 
+ 264 bytes of CODE  memory
+  65 bytes of CONST memory (+  2 bytes shared)
+  52 bytes of DATA  memory (+ 18 bytes shared)
+
+Errors: none
+Warnings: none

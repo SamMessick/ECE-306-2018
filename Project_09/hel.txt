@@ -1,0 +1,14 @@
+Set interrupt for IOT_LINK going high (disconnecting) to reset IOT module
+
+Add some sort of plastic between 2nd board and lower pins
+
+-Add some sort of real-time operating system 
+	**use ACLK as main source for timers;
+	**go into LPM0
+	**main loop covers updates with interrupt-flag run state machine
+
+OS can be (among others): Round-Robin, Foreground-Background, Function-queue, RTOS, etc
+
+Turn off IR LED when IOT is on
+
+Utilization (percentage) = Task execution time / task execution period

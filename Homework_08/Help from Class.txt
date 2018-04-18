@@ -1,0 +1,31 @@
+temp1 = wr;            <--- from RxBuffer
+temp2 = wr;
+**don't make rd volatile
+
+--> compare to wr updated from interrupt to see if something has been read in
+
+while(temp1 != wr)
+{
+	temp1 = wr;
+}
+if(rd != temp1)
+{
+	mainBuf[mw++]=RxBuf[rd++]
+	cyclic indices
+        **use mainBuf to check for signature characters/patterns with a state machine
+	**end of process buffer --> print
+}
+
+
+
+project 7: take 16 samples per (200ms) display, average by right shifting
+
+project 8: display baud rate on third line
+incoming message displayed on my bottom line --> moves to my top line when transmitted --> moves to class bottom when transmitted
+
+project 9: follow validation process --> make more complex commands (stop, pwm, boost, slow, dec time, inc time)
+           check for segfaults
+           figure out how to check stack size
+           build in voltage brownout detector
+           integrate voltage detection
+           integrate data log in controller state

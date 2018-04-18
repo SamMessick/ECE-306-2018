@@ -1,0 +1,207 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           08/Apr/2018  17:01:49
+# Copyright 1996-2017 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_08\main.c
+#    Command line  =  
+#        -f C:\Users\shmes\AppData\Local\Temp\EW6381.tmp
+#        ("C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_08\main.c" -lC
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_08\Debug\List" -o
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_08\Debug\Obj" --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5994__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  Spanish_USA.1252
+#    List file     =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_08\Debug\List\main.lst
+#    Object file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_08\Debug\Obj\main.r43
+#
+###############################################################################
+
+C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Homework_08\main.c
+      1          //------------------------------------------------------------------------------
+      2          //  File name: main.c
+      3          //  Description: This file contains the MSP430 Car's Operating System
+      4          //
+      5          //
+      6          //  Sam Messick
+      7          //  Jan 2018
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          #include "main.h"
+
+   \                                 In  segment DATA16_AN, at 0x130
+   \   union <unnamed> _A_PM5CTL0_L
+   \                     _A_PM5CTL0_L:
+   \   000000                DS8 2
+     12          
+
+   \                                 In  segment CODE, align 2
+     13          void main(void){
+   \                     main:
+     14          //------------------------------------------------------------------------------
+     15          // Main Program
+     16          // This is the main initialization of the car. Execution of code starts here.
+     17          // The operating system is Back Ground Fore Ground... but mainly Fore Ground lol
+     18          //
+     19          //------------------------------------------------------------------------------
+     20            
+     21            int string_index;
+     22            
+     23            Init_Ports();                        // Initialize Ports
+   \   000000   ........     CALLA   #Init_Ports
+     24          // Disable the GPIO power-on default high-impedance mode to activate
+     25          // previously configured port settings
+     26            PM5CTL0 &= ~LOCKLPM5;
+   \   000004   92C33001     BIC.W   #0x1, &0x130
+     27            Init_Clocks();                       // Initialize Clock System
+   \   000008   ........     CALLA   #Init_Clocks
+     28            Init_Conditions();                   // Initialize Variables and Initial Conditions
+   \   00000C   ........     CALLA   #Init_Conditions
+     29            Init_LCD();                          // Initialize LCD
+   \   000010   ........     CALLA   #Init_LCD
+     30            Init_LEDs();
+   \   000014   ........     CALLA   #Init_LEDs
+     31            Init_Timers();                       // Initialize Timers
+   \   000018   ........     CALLA   #Init_Timers
+     32            //Init_PID();
+     33            Init_ADC();
+   \   00001C   ........     CALLA   #Init_ADC
+     34            Init_Serial();
+   \   000020   ........     CALLA   #Init_Serial
+     35          
+     36          // Perform user-controlled initialization
+     37            
+     38            enable_display_update();
+   \   000024   ........     CALLA   #enable_display_update
+     39            word1 = " Waiting  ";
+   \   000028   B240........ MOV.W   #`?<Constant " Waiting  ">`, &word1
+     40            word2 = "          ";
+   \   00002E   B240........ MOV.W   #`?<Constant "          ">`, &word2
+     41            word3 = "115200    ";
+   \   000034   B240........ MOV.W   #`?<Constant "115200    ">`, &word3
+     42            word4 = "          ";
+   \   00003A   B240........ MOV.W   #`?<Constant "          ">`, &word4
+     43            LCD_print(word1,word2,word3,word4);
+   \   000040   1F42....     MOV.W   &word4, R15
+   \   000044   1E42....     MOV.W   &word3, R14
+   \   000048   1D42....     MOV.W   &word2, R13
+   \   00004C   1C42....     MOV.W   &word1, R12
+   \   000050   ........     CALLA   #LCD_print
+     44          //------------------------------------------------------------------------------
+     45          // Begining of the Interrupt-Based Operating System
+     46          //------------------------------------------------------------------------------
+     47          //------------------------------------------------------------------------------
+     48          // TimerA0: controls LCD update, button debouncing and timed delays
+     49          // -------          defers to state machine in shapes_menu.c following push-button
+     50          //                  interrupts.
+     51          //               
+     52          // TimerB0: controls wheel PWM
+     53          //------------------------------------------------------------------------------
+     54            
+     55          
+     56            // Loop infinitely through transmitting and receiving messages
+     57            for(;;)
+     58            {
+     59              if(transmitting)
+   \                     ??main_0:
+   \   000054   C293....     CMP.B   #0x0, &transmitting
+   \   000058   FD27         JEQ     ??main_0
+     60              {
+     61                for(string_index = BEGINNING; string_index < SMALL_RING_SIZE; string_index++)
+   \   00005A   0A43         MOV.W   #0x0, R10
+   \                     ??main_1:
+   \   00005C   3A901000     CMP.W   #0x10, R10
+   \   000060   0634         JGE     ??main_2
+     62                {
+     63                  transmit_char(Main_Char_Rx[string_index]);
+   \   000062   5C4A....     MOV.B   Main_Char_Rx(R10), R12
+   \   000066   ........     CALLA   #transmit_char
+     64                }
+   \   00006A   1A53         ADD.W   #0x1, R10
+   \   00006C   F73F         JMP     ??main_1
+     65                transmitting = false;
+   \                     ??main_2:
+   \   00006E   C243....     MOV.B   #0x0, &transmitting
+   \   000072   F03F         JMP     ??main_0
+   \   000074   0343         NOP
+   \   000076                REQUIRE _A_PM5CTL0_L
+     66              } 
+     67            }
+     68          }
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant " Waiting  ">`:
+   \   000000   205761697469 DC8 " Waiting  "
+   \            6E67202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "          ">`:
+   \   000000   202020202020 DC8 "          "
+   \            2020202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "115200    ">`:
+   \   000000   313135323030 DC8 "115200    "
+   \            2020202000  
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   main
+        4   -> Init_ADC
+        4   -> Init_Clocks
+        4   -> Init_Conditions
+        4   -> Init_LCD
+        4   -> Init_LEDs
+        4   -> Init_Ports
+        4   -> Init_Serial
+        4   -> Init_Timers
+        4   -> LCD_print
+        4   -> enable_display_update
+        4   -> transmit_char
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      11  ?<Constant "          ">
+      11  ?<Constant " Waiting  ">
+      11  ?<Constant "115200    ">
+       2  _A_PM5CTL0_L
+     118  main
+
+ 
+ 118 bytes in segment CODE
+   2 bytes in segment DATA16_AN
+  33 bytes in segment DATA16_C
+ 
+ 118 bytes of CODE  memory
+  33 bytes of CONST memory
+   0 bytes of DATA  memory (+ 2 bytes shared)
+
+Errors: none
+Warnings: none

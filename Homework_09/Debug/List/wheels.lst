@@ -1,0 +1,969 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           06/Apr/2018  09:57:05
+# Copyright 1996-2017 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_09\wheels.c
+#    Command line  =  
+#        -f C:\Users\shmes\AppData\Local\Temp\EW9835.tmp
+#        ("C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_09\wheels.c" -lC
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_09\Debug\List" -o
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_09\Debug\Obj" --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5994__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  Spanish_USA.1252
+#    List file     =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_09\Debug\List\wheels.lst
+#    Object file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_09\Debug\Obj\wheels.r43
+#
+###############################################################################
+
+C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Homework_09\wheels.c
+      1          //===============================================================
+      2          //  File Name: wheels.c
+      3          //  Description: This file contains the functions needed for control
+      4          //                    operations of the wheels
+      5          //
+      6          //  Author: Sam Messick
+      7          //  Date Feb. 2018
+      8          //  Compiler Build with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      9          //===============================================================
+     10          
+     11          #include "wheels.h"
+
+   \                                 In  segment DATA16_AN, at 0x800
+   \   union <unnamed> _A_ADC12CTL0_L
+   \                     _A_ADC12CTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x812
+   \   union <unnamed> _A_ADC12IER0_L
+   \                     _A_ADC12IER0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x342
+   \   union <unnamed> _A_TA0CCTL0_L
+   \                     _A_TA0CCTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x346
+   \   union <unnamed> _A_TA0CCTL2_L
+   \                     _A_TA0CCTL2_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3d8
+   \   union <unnamed> _A_TB0CCR3_L
+   \                     _A_TB0CCR3_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3da
+   \   union <unnamed> _A_TB0CCR4_L
+   \                     _A_TB0CCR4_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3dc
+   \   union <unnamed> _A_TB0CCR5_L
+   \                     _A_TB0CCR5_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3de
+   \   union <unnamed> _A_TB0CCR6_L
+   \                     _A_TB0CCR6_L:
+   \   000000                DS8 2
+     12          
+     13          // H-bridge protection flags: 
+     14          // don't allow for motion forward/backward simultaneously in one motor
+     15          
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     16          uint8_t left_forward_flag;     // Is left motor rotating forward?
+   \                     left_forward_flag:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     17          uint8_t left_reverse_flag;     // Is left motor rotating reverse?
+   \                     left_reverse_flag:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     18          uint8_t right_forward_flag;    // Is right motor rotating forward?
+   \                     right_forward_flag:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     19          uint8_t right_reverse_flag;    // Is right motor rotating reverse?
+   \                     right_reverse_flag:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     20          uint8_t instruction_label_tmp; // Global of current instruction step
+   \                     instruction_label_tmp:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     21          uint8_t LastDir;
+   \                     LastDir:
+   \   000000                DS8 1
+     22          
+     23          //--------PID fields-----------//
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     24          int16_t   right_pwm;
+   \                     right_pwm:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     25          int16_t   left_pwm;
+   \                     left_pwm:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     26          PID ld; // Left infrared detector
+   \                     ld:
+   \   000000                DS8 18
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     27          PID rd;
+   \                     rd:
+   \   000000                DS8 18
+     28          //-----------------------------//
+     29          
+     30          
+
+   \                                 In  segment CODE, align 2
+     31          void Init_PID(void){
+   \                     Init_PID:
+     32            /*
+     33            ld.windup_guard = L_PWM_MAX;
+     34            rd.windup_guard = R_PWM_MAX;
+     35            ld.p_gain = 1.5;//((double)(ADC_Thumb))/1000;     // 1.15
+     36            ld.i_gain = 0; 
+     37            ld.d_gain = 6;//1.5;
+     38            rd.p_gain = 3;//((double)(ADC_Thumb))/1000;
+     39            rd.i_gain = 0; 
+     40            rd.d_gain = 6;//1.5;
+     41            right_pwm = RIGHT_FORWARD_SPEED;
+     42            left_pwm = LEFT_FORWARD_SPEED;
+     43          */
+     44          }
+   \   000000   1001         RETA
+
+   \                                 In  segment CODE, align 2
+     45          void pid_udpate_left(void){
+   \                     pid_udpate_left:
+     46            
+     47            if(ADC_Left_Detector >= ir_black_reading)
+   \   000000   9292........ CMP.W   &ir_black_reading, &ADC_Left_Detector
+   \   000006   1628         JNC     ??pid_udpate_left_0
+     48              if(ADC_Right_Detector >= ir_black_reading)
+   \   000008   9292........ CMP.W   &ir_black_reading, &ADC_Right_Detector
+   \   00000E   0828         JNC     ??pid_udpate_left_1
+     49              {
+     50                Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
+   \   000010   7C408C00     MOV.B   #0x8c, R12
+   \   000014   ........     CALLA   #Left_Motor_ON_FORWARD
+     51                Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
+   \   000018   7C404B00     MOV.B   #0x4b, R12
+   \   00001C   ........     BRA     #Right_Motor_ON_FORWARD
+     52              }
+     53              else
+     54              {
+     55                Left_Motor_ON_FORWARD(LEFT_R_SEARCH_SPEED);
+   \                     ??pid_udpate_left_1:
+   \   000020   4C43         MOV.B   #0x0, R12
+   \   000022   ........     CALLA   #Left_Motor_ON_FORWARD
+     56                Right_Motor_ON_FORWARD(RIGHT_R_SEARCH_SPEED);
+   \   000026   7C404B00     MOV.B   #0x4b, R12
+   \   00002A   ........     CALLA   #Right_Motor_ON_FORWARD
+     57                LastDir = LEFT;
+   \   00002E   C243....     MOV.B   #0x0, &LastDir
+   \   000032   1001         RETA
+     58              }
+     59            else 
+     60              if(ADC_Right_Detector >= ir_black_reading)
+   \                     ??pid_udpate_left_0:
+   \   000034   9292........ CMP.W   &ir_black_reading, &ADC_Right_Detector
+   \   00003A   0A28         JNC     ??pid_udpate_left_2
+     61              {
+     62            
+     63                Left_Motor_ON_FORWARD(LEFT_L_SEARCH_SPEED);
+   \   00003C   7C408C00     MOV.B   #0x8c, R12
+   \   000040   ........     CALLA   #Left_Motor_ON_FORWARD
+     64                Right_Motor_ON_FORWARD(RIGHT_L_SEARCH_SPEED);
+   \   000044   4C43         MOV.B   #0x0, R12
+   \   000046   ........     CALLA   #Right_Motor_ON_FORWARD
+     65                LastDir = RIGHT;
+   \   00004A   D243....     MOV.B   #0x1, &LastDir
+   \   00004E   1001         RETA
+     66              }
+     67              else 
+     68              {
+     69                word4 = "  White   ";
+   \                     ??pid_udpate_left_2:
+   \   000050   B240........ MOV.W   #`?<Constant "  White   ">`, &word4
+     70                if(LastDir == LEFT)
+   \   000056   C293....     CMP.B   #0x0, &LastDir
+   \   00005A   0720         JNE     ??pid_udpate_left_3
+     71                {
+     72                  Left_Motor_ON_FORWARD(LEFT_R_SEARCH_SPEED);
+   \   00005C   4C43         MOV.B   #0x0, R12
+   \   00005E   ........     CALLA   #Left_Motor_ON_FORWARD
+     73                  Right_Motor_ON_FORWARD(RIGHT_R_SEARCH_SPEED);
+   \   000062   7C404B00     MOV.B   #0x4b, R12
+   \   000066   ........     BRA     #Right_Motor_ON_FORWARD
+     74                }
+     75                else
+     76                {
+     77                  Left_Motor_ON_FORWARD(LEFT_L_SEARCH_SPEED);
+   \                     ??pid_udpate_left_3:
+   \   00006A   7C408C00     MOV.B   #0x8c, R12
+   \   00006E   ........     CALLA   #Left_Motor_ON_FORWARD
+     78                  Right_Motor_ON_FORWARD(RIGHT_L_SEARCH_SPEED);
+   \   000072   4C43         MOV.B   #0x0, R12
+   \   000074   ........     BRA     #Right_Motor_ON_FORWARD
+     79                }
+     80              }
+     81            
+     82            // Attempted PID
+     83          /* 
+     84             Uses a PID with noise bands at ir_white_reading and 
+     85             ir_black_reading, adjusting for changes to follow
+     86             a black line.
+     87          */
+     88          /*
+     89            // Take NUM_SAMPLES from PID in pid_samples for averaging
+     90            static uint8_t samp_index; 
+     91            static int16_t[NUM_SAMPLES] pid_error_l_samples; 
+     92            static int16_t error_l;
+     93            static int16_t d_error_l;
+     94            
+     95            int16_t error_l_w;
+     96            int16_t error_l_b;
+     97            
+     98            // Update PID errors
+     99            error_l_w = ADC_Left_Detector - ir_white_reading;
+    100            error_l_b = ADC_Left_Detector - ir_black_reading;
+    101            
+    102            // Check if error falls outside of noise bands
+    103            if(error_l_w < 0)
+    104            {
+    105              error_l = error_l_w;
+    106              pid_error_l_samples
+    107            }
+    108            else if(error_l_b > 0)
+    109              error_l = error_l_b;
+    110            else
+    111              return;
+    112            
+    113            
+    114            
+    115            if(error_l IS_POSITIVE)
+    116              P1OUT  |= RED_LED;
+    117            else
+    118              P1OUT  &= ~RED_LED;
+    119            ld.i_error = error_l + ld.i_error;
+    120            d_error_l = error_l - ld.prev_error;
+    121            if(d_error_l IS_POSITIVE)
+    122              P1OUT  |= GRN_LED;
+    123            else
+    124              P1OUT  &= ~GRN_LED;
+    125            
+    126            if(ld.i_error > ld.windup_guard)
+    127              ld.i_error = ld.windup_guard;
+    128            else if(ld.i_error < -ld.windup_guard)
+    129              ld.i_error = -ld.windup_guard;
+    130            
+    131            // Calculate adjusted pwm
+    132            left_pwm =  (uint8_t)(LEFT_FORWARD_SPEED    -
+    133                        (ld.p_gain * error_l) -
+    134                        (ld.i_gain * ld.i_error) -
+    135                        (ld.d_gain * d_error_l));
+    136            right_pwm = (uint8_t)(RIGHT_FORWARD_SPEED  +
+    137                        (rd.p_gain * error_l) +
+    138                        (rd.i_gain * ld.i_error) +
+    139                        (rd.d_gain * d_error_l));
+    140            if(left_pwm > L_PWM_MAX)
+    141              left_pwm = L_PWM_MAX;
+    142            if(left_pwm < L_PWM_MIN)
+    143              left_pwm = L_PWM_MIN;
+    144            if(right_pwm > R_PWM_MAX)
+    145              right_pwm = R_PWM_MAX;
+    146            if(right_pwm < R_PWM_MIN)
+    147              right_pwm = R_PWM_MIN;
+    148            
+    149            // Enable motor
+    150            Left_Motor_ON_FORWARD(left_pwm);
+    151            Right_Motor_ON_FORWARD(right_pwm);
+    152            
+    153            ld.prev_error = error_l;
+    154          */
+    155          }
+    156          
+
+   \                                 In  segment CODE, align 2
+    157          void initialize_delay(uint16_t delay){
+   \                     initialize_delay:
+    158            delay_time = delay;                          // send delay time to global accessible by timer A1
+   \   000000   824C....     MOV.W   R12, &delay_time
+    159            TA0CCTL2 |= CCIE;                            // enable timer A1.2 to count time
+   \   000004   B2D010004603 BIS.W   #0x10, &0x346
+    160          }
+   \   00000A   1001         RETA
+   \   00000C                REQUIRE _A_TA0CCTL2_L
+    161          
+
+   \                                 In  segment CODE, align 2
+    162          void update_instruction_label(uint8_t* instruction_label){
+   \                     update_instruction_label:
+    163            (*instruction_label)++;                         // Set up next instruction
+   \   000000   DC530000     ADD.B   #0x1, 0(R12)
+    164            instruction_label_tmp = *instruction_label;   // Set static instruction visable by menu to update LCD
+   \   000004   E24C....     MOV.B   @R12, &instruction_label_tmp
+    165          }
+   \   000008   1001         RETA
+    166          
+    167          void WHEELS_test(void);
+    168          //------------------------
+    169          // Turning wheels off
+    170          //------------------------
+
+   \                                 In  segment CODE, align 2
+    171          void Left_Motor_OFF(void){
+   \                     Left_Motor_OFF:
+    172            TB0CCR3 = MOTOR_OFF;         // Set PWM to 0 percent duty cycle
+   \   000000   8243D803     MOV.W   #0x0, &0x3d8
+    173            TB0CCR4 = MOTOR_OFF;   
+   \   000004   8243DA03     MOV.W   #0x0, &0x3da
+    174            left_forward_flag = left_reverse_flag = false;
+   \   000008   C243....     MOV.B   #0x0, &left_reverse_flag
+   \   00000C   D242........ MOV.B   &left_reverse_flag, &left_forward_flag
+    175          }
+   \   000012   1001         RETA
+   \   000014                REQUIRE _A_TB0CCR3_L
+   \   000014                REQUIRE _A_TB0CCR4_L
+
+   \                                 In  segment CODE, align 2
+    176          void Right_Motor_OFF(void){
+   \                     Right_Motor_OFF:
+    177            TB0CCR5 = MOTOR_OFF;         // Set PWM to 0 percent duty cycle
+   \   000000   8243DC03     MOV.W   #0x0, &0x3dc
+    178            TB0CCR6 = MOTOR_OFF;         
+   \   000004   8243DE03     MOV.W   #0x0, &0x3de
+    179            right_forward_flag = right_reverse_flag = false;
+   \   000008   C243....     MOV.B   #0x0, &right_reverse_flag
+   \   00000C   D242........ MOV.B   &right_reverse_flag, &right_forward_flag
+    180          }
+   \   000012   1001         RETA
+   \   000014                REQUIRE _A_TB0CCR5_L
+   \   000014                REQUIRE _A_TB0CCR6_L
+
+   \                                 In  segment CODE, align 2
+    181          void Wheels_OFF(void){
+   \                     Wheels_OFF:
+    182            Left_Motor_OFF();
+   \   000000   ........     CALLA   #Left_Motor_OFF
+    183            Right_Motor_OFF();
+   \   000004   ........     BRA     #Right_Motor_OFF
+    184          }
+    185          
+    186          //------------------------
+    187          // Turning wheels on
+    188          //------------------------
+    189          //**********
+    190          // Forward *
+    191          //**********
+
+   \                                 In  segment CODE, align 2
+    192          void Left_Motor_ON_FORWARD(uint8_t speed){
+   \                     Left_Motor_ON_FORWARD:
+    193            if(!left_reverse_flag)                         // If left motor is not set to move backward already
+   \   000000   C293....     CMP.B   #0x0, &left_reverse_flag
+   \   000004   0A20         JNE     ??Left_Motor_ON_FORWARD_0
+    194            {
+    195              TB0CCR4 = speed*DUTY_CYCLE_DIVISOR;         // Set left motor forward speed as one of 255 settings
+   \   000006   4F4C         MOV.B   R12, R15
+   \   000008   0E4F         MOV.W   R15, R14
+   \   00000A   3FF0FF00     AND.W   #0xff, R15
+   \   00000E   8F10         SWPB    R15
+   \   000010   0F5E         ADD.W   R14, R15
+   \   000012   824FDA03     MOV.W   R15, &0x3da
+    196              left_forward_flag = true;                   // Prevent left motor from moving backward simultaneously
+   \   000016   D243....     MOV.B   #0x1, &left_forward_flag
+    197            }
+    198          }
+   \                     ??Left_Motor_ON_FORWARD_0:
+   \   00001A   1001         RETA
+   \   00001C                REQUIRE _A_TB0CCR4_L
+    199          
+
+   \                                 In  segment CODE, align 2
+    200          void Right_Motor_ON_FORWARD(uint8_t speed){
+   \                     Right_Motor_ON_FORWARD:
+    201            if(!right_reverse_flag)                        // If right motor is not set to move backward already
+   \   000000   C293....     CMP.B   #0x0, &right_reverse_flag
+   \   000004   0A20         JNE     ??Right_Motor_ON_FORWARD_0
+    202            { 
+    203              TB0CCR6 = speed*DUTY_CYCLE_DIVISOR;         // Set right motor forward speed as one of 255 settings
+   \   000006   4F4C         MOV.B   R12, R15
+   \   000008   0E4F         MOV.W   R15, R14
+   \   00000A   3FF0FF00     AND.W   #0xff, R15
+   \   00000E   8F10         SWPB    R15
+   \   000010   0F5E         ADD.W   R14, R15
+   \   000012   824FDE03     MOV.W   R15, &0x3de
+    204              right_forward_flag = true;                  // Prevent right motor from moving backward simultaneously
+   \   000016   D243....     MOV.B   #0x1, &right_forward_flag
+    205            }
+    206          }
+   \                     ??Right_Motor_ON_FORWARD_0:
+   \   00001A   1001         RETA
+   \   00001C                REQUIRE _A_TB0CCR6_L
+    207          
+
+   \                                 In  segment CODE, align 2
+    208          void Drive_Straight_Forward(uint8_t speed){
+   \                     Drive_Straight_Forward:
+   \   000000   4D4C         MOV.B   R12, R13
+    209            Left_Motor_ON_FORWARD(speed);
+   \   000002   4C4D         MOV.B   R13, R12
+   \   000004   ........     CALLA   #Left_Motor_ON_FORWARD
+    210            Right_Motor_ON_FORWARD(speed);
+   \   000008   4C4D         MOV.B   R13, R12
+   \   00000A   ........     BRA     #Right_Motor_ON_FORWARD
+    211          }
+    212            
+    213          //**********
+    214          // Reverse *
+    215          //**********
+
+   \                                 In  segment CODE, align 2
+    216          void Left_Motor_ON_REVERSE(uint8_t speed){
+   \                     Left_Motor_ON_REVERSE:
+    217            if(!left_forward_flag)                        // If left motor is not set to move forward already
+   \   000000   C293....     CMP.B   #0x0, &left_forward_flag
+   \   000004   0A20         JNE     ??Left_Motor_ON_REVERSE_0
+    218            { 
+    219              TB0CCR3 = speed*DUTY_CYCLE_DIVISOR;         // Set left motor reverse speed as one of 255 settings
+   \   000006   4F4C         MOV.B   R12, R15
+   \   000008   0E4F         MOV.W   R15, R14
+   \   00000A   3FF0FF00     AND.W   #0xff, R15
+   \   00000E   8F10         SWPB    R15
+   \   000010   0F5E         ADD.W   R14, R15
+   \   000012   824FD803     MOV.W   R15, &0x3d8
+    220              left_reverse_flag = true;                   // Prevent left motor from moving forward simultaneously
+   \   000016   D243....     MOV.B   #0x1, &left_reverse_flag
+    221            }
+    222          }
+   \                     ??Left_Motor_ON_REVERSE_0:
+   \   00001A   1001         RETA
+   \   00001C                REQUIRE _A_TB0CCR3_L
+    223          
+
+   \                                 In  segment CODE, align 2
+    224          void Right_Motor_ON_REVERSE(char speed){
+   \                     Right_Motor_ON_REVERSE:
+    225            if(!right_forward_flag)                       // If right motor is not set to move forward already
+   \   000000   C293....     CMP.B   #0x0, &right_forward_flag
+   \   000004   0A20         JNE     ??Right_Motor_ON_REVERSE_0
+    226            {
+    227              TB0CCR5 = speed*DUTY_CYCLE_DIVISOR;         // Set right motor reverse speed as one of 255 settings
+   \   000006   4F4C         MOV.B   R12, R15
+   \   000008   0E4F         MOV.W   R15, R14
+   \   00000A   3FF0FF00     AND.W   #0xff, R15
+   \   00000E   8F10         SWPB    R15
+   \   000010   0F5E         ADD.W   R14, R15
+   \   000012   824FDC03     MOV.W   R15, &0x3dc
+    228              right_reverse_flag = true;                  // Prevent right motor from moving forward simultaneously
+   \   000016   D243....     MOV.B   #0x1, &right_reverse_flag
+    229            }
+    230          }
+   \                     ??Right_Motor_ON_REVERSE_0:
+   \   00001A   1001         RETA
+   \   00001C                REQUIRE _A_TB0CCR5_L
+    231          
+
+   \                                 In  segment CODE, align 2
+    232          void turn(int8_t degrees){
+   \                     turn:
+   \   000000   5B15         PUSHM.W #0x6, R11
+   \   000002   464C         MOV.B   R12, R6
+    233            if(degrees IS_POSITIVE)
+   \   000004   5693         CMP.B   #0x1, R6
+   \   000006   5E38         JL      ??turn_8
+    234            {
+    235            delay_time = LONG_DELAY;
+   \   000008   A242....     MOV.W   #0x4, &delay_time
+    236            Wheels_OFF();
+   \   00000C   ........     CALLA   #Wheels_OFF
+    237            waiting = true;
+   \   000010   D243....     MOV.B   #0x1, &waiting
+    238            TA0CCTL2 |= CCIE;
+   \   000014   B2D010004603 BIS.W   #0x10, &0x346
+    239            while(waiting);
+   \                     ??turn_0:
+   \   00001A   C293....     CMP.B   #0x0, &waiting
+   \   00001E   FD23         JNE     ??turn_0
+    240            delay_time = SHORT_DELAY;
+   \   000020   A243....     MOV.W   #0x2, &delay_time
+    241            LCD_print("Driving from", "Black line", "          ", "          ");
+   \   000024   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   000028   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   00002C   3D40....     MOV.W   #`?<Constant "Black line">`, R13
+   \   000030   3C40....     MOV.W   #`?<Constant "Driving from">`, R12
+   \   000034   ........     CALLA   #LCD_print
+    242            Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
+   \   000038   7C408C00     MOV.B   #0x8c, R12
+   \   00003C   ........     CALLA   #Left_Motor_ON_FORWARD
+    243            Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
+   \   000040   7C404B00     MOV.B   #0x4b, R12
+   \   000044   ........     CALLA   #Right_Motor_ON_FORWARD
+    244            waiting = true;
+   \   000048   D243....     MOV.B   #0x1, &waiting
+    245            TA0CCTL2 |= CCIE;
+   \   00004C   B2D010004603 BIS.W   #0x10, &0x346
+    246            while(waiting);
+   \                     ??turn_1:
+   \   000052   C293....     CMP.B   #0x0, &waiting
+   \   000056   FD23         JNE     ??turn_1
+    247            delay_time = SHORT_DELAY;
+   \   000058   A243....     MOV.W   #0x2, &delay_time
+    248            Wheels_OFF();
+   \   00005C   ........     CALLA   #Wheels_OFF
+    249            waiting = true;
+   \   000060   D243....     MOV.B   #0x1, &waiting
+    250            TA0CCTL2 |= CCIE;
+   \   000064   B2D010004603 BIS.W   #0x10, &0x346
+    251            while(waiting);
+   \                     ??turn_2:
+   \   00006A   C293....     CMP.B   #0x0, &waiting
+   \   00006E   FD23         JNE     ??turn_2
+    252            delay_time = LONG_DELAY;
+   \   000070   A242....     MOV.W   #0x4, &delay_time
+    253            LCD_print("Turning in", "   Loop   ", "          ", "          ");
+   \   000074   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   000078   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   00007C   3D40....     MOV.W   #`?<Constant "   Loop   ">`, R13
+   \   000080   3C40....     MOV.W   #`?<Constant "Turning in">`, R12
+   \   000084   ........     CALLA   #LCD_print
+    254            Left_Motor_ON_REVERSE(LEFT_SPIN_SPEED);
+   \   000088   7C40A000     MOV.B   #0xa0, R12
+   \   00008C   ........     CALLA   #Left_Motor_ON_REVERSE
+    255            Right_Motor_ON_FORWARD(RIGHT_SPIN_SPEED);
+   \   000090   7C406400     MOV.B   #0x64, R12
+   \   000094   ........     CALLA   #Right_Motor_ON_FORWARD
+    256            waiting = true;
+   \   000098   D243....     MOV.B   #0x1, &waiting
+    257            TA0CCTL2 |= CCIE;
+   \   00009C   B2D010004603 BIS.W   #0x10, &0x346
+    258            while(waiting);
+   \                     ??turn_3:
+   \   0000A2   C293....     CMP.B   #0x0, &waiting
+   \   0000A6   FD23         JNE     ??turn_3
+    259            delay_time = SHORT_DELAY;
+   \   0000A8   A243....     MOV.W   #0x2, &delay_time
+    260            Wheels_OFF();
+   \   0000AC   ........     CALLA   #Wheels_OFF
+    261            waiting = true;
+   \   0000B0   D243....     MOV.B   #0x1, &waiting
+    262            TA0CCTL2 |= CCIE;
+   \   0000B4   B2D010004603 BIS.W   #0x10, &0x346
+    263            while(waiting);
+   \                     ??turn_4:
+   \   0000BA   C293....     CMP.B   #0x0, &waiting
+   \   0000BE   FD23         JNE     ??turn_4
+    264            waiting= true;
+   \   0000C0   D243....     MOV.B   #0x1, &waiting
+    265            }
+    266            if(degrees IS_NEGATIVE)
+   \                     ??turn_8:
+   \   0000C4   4693         CMP.B   #0x0, R6
+   \   0000C6   7E34         JGE     ??turn_9
+    267            {
+    268            uint64_t i;  
+    269            TA0CCTL0 &= ~CCIE;
+   \   0000C8   B2C010004203 BIC.W   #0x10, &0x342
+    270            delay_time = SHORT_DELAY;
+   \   0000CE   A243....     MOV.W   #0x2, &delay_time
+    271            Wheels_OFF();
+   \   0000D2   ........     CALLA   #Wheels_OFF
+    272            for(i = 0; i < 2000; i++);
+   \   0000D6   0843         MOV.W   #0x0, R8
+   \   0000D8   0943         MOV.W   #0x0, R9
+   \   0000DA   0A43         MOV.W   #0x0, R10
+   \   0000DC   0B43         MOV.W   #0x0, R11
+   \                     ??turn_5:
+   \   0000DE   0B93         CMP.W   #0x0, R11
+   \   0000E0   0A28         JNC     ??turn_10
+   \   0000E2   0E20         JNE     ??turn_11
+   \   0000E4   0A93         CMP.W   #0x0, R10
+   \   0000E6   0728         JNC     ??turn_10
+   \   0000E8   0B20         JNE     ??turn_11
+   \   0000EA   0993         CMP.W   #0x0, R9
+   \   0000EC   0428         JNC     ??turn_10
+   \   0000EE   0820         JNE     ??turn_11
+   \   0000F0   3890D007     CMP.W   #0x7d0, R8
+   \   0000F4   052C         JC      ??turn_11
+   \                     ??turn_10:
+   \   0000F6   1853         ADD.W   #0x1, R8
+   \   0000F8   0963         ADDC.W  #0x0, R9
+   \   0000FA   0A63         ADDC.W  #0x0, R10
+   \   0000FC   0B63         ADDC.W  #0x0, R11
+   \   0000FE   EF3F         JMP     ??turn_5
+    273            delay_time = LONG_DELAY;
+   \                     ??turn_11:
+   \   000100   A242....     MOV.W   #0x4, &delay_time
+    274            LCD_print("Turning in", "   Loop   ", "          ", "          ");
+   \   000104   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   000108   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   00010C   3D40....     MOV.W   #`?<Constant "   Loop   ">`, R13
+   \   000110   3C40....     MOV.W   #`?<Constant "Turning in">`, R12
+   \   000114   ........     CALLA   #LCD_print
+    275            Left_Motor_ON_REVERSE(LEFT_SPIN_SPEED);
+   \   000118   7C40A000     MOV.B   #0xa0, R12
+   \   00011C   ........     CALLA   #Left_Motor_ON_REVERSE
+    276            Right_Motor_ON_FORWARD(RIGHT_SPIN_SPEED);
+   \   000120   7C406400     MOV.B   #0x64, R12
+   \   000124   ........     CALLA   #Right_Motor_ON_FORWARD
+    277            for(i = 0; i < 300000; i++);
+   \   000128   0843         MOV.W   #0x0, R8
+   \   00012A   0943         MOV.W   #0x0, R9
+   \   00012C   0A43         MOV.W   #0x0, R10
+   \   00012E   0B43         MOV.W   #0x0, R11
+   \                     ??turn_6:
+   \   000130   0B93         CMP.W   #0x0, R11
+   \   000132   0A28         JNC     ??turn_12
+   \   000134   0E20         JNE     ??turn_13
+   \   000136   0A93         CMP.W   #0x0, R10
+   \   000138   0728         JNC     ??turn_12
+   \   00013A   0B20         JNE     ??turn_13
+   \   00013C   2992         CMP.W   #0x4, R9
+   \   00013E   0428         JNC     ??turn_12
+   \   000140   0820         JNE     ??turn_13
+   \   000142   3890E093     CMP.W   #0x93e0, R8
+   \   000146   052C         JC      ??turn_13
+   \                     ??turn_12:
+   \   000148   1853         ADD.W   #0x1, R8
+   \   00014A   0963         ADDC.W  #0x0, R9
+   \   00014C   0A63         ADDC.W  #0x0, R10
+   \   00014E   0B63         ADDC.W  #0x0, R11
+   \   000150   EF3F         JMP     ??turn_6
+    278            Wheels_OFF();
+   \                     ??turn_13:
+   \   000152   ........     CALLA   #Wheels_OFF
+    279            delay_time = HALF_SEC;
+   \   000156   B2400A00.... MOV.W   #0xa, &delay_time
+    280            LCD_print("Driving in", "   Loop   ", "          ", "          ");
+   \   00015C   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   000160   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   000164   3D40....     MOV.W   #`?<Constant "   Loop   ">`, R13
+   \   000168   3C40....     MOV.W   #`?<Constant "Driving in">`, R12
+   \   00016C   ........     CALLA   #LCD_print
+    281            Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
+   \   000170   7C408C00     MOV.B   #0x8c, R12
+   \   000174   ........     CALLA   #Left_Motor_ON_FORWARD
+    282            Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
+   \   000178   7C404B00     MOV.B   #0x4b, R12
+   \   00017C   ........     CALLA   #Right_Motor_ON_FORWARD
+    283            for(i = 0; i < 1000000; i++);
+   \   000180   0843         MOV.W   #0x0, R8
+   \   000182   0943         MOV.W   #0x0, R9
+   \   000184   0A43         MOV.W   #0x0, R10
+   \   000186   0B43         MOV.W   #0x0, R11
+   \                     ??turn_7:
+   \   000188   0B93         CMP.W   #0x0, R11
+   \   00018A   0B28         JNC     ??turn_14
+   \   00018C   0F20         JNE     ??turn_15
+   \   00018E   0A93         CMP.W   #0x0, R10
+   \   000190   0828         JNC     ??turn_14
+   \   000192   0C20         JNE     ??turn_15
+   \   000194   39900F00     CMP.W   #0xf, R9
+   \   000198   0428         JNC     ??turn_14
+   \   00019A   0820         JNE     ??turn_15
+   \   00019C   38904042     CMP.W   #0x4240, R8
+   \   0001A0   052C         JC      ??turn_15
+   \                     ??turn_14:
+   \   0001A2   1853         ADD.W   #0x1, R8
+   \   0001A4   0963         ADDC.W  #0x0, R9
+   \   0001A6   0A63         ADDC.W  #0x0, R10
+   \   0001A8   0B63         ADDC.W  #0x0, R11
+   \   0001AA   EE3F         JMP     ??turn_7
+    284            Wheels_OFF();
+   \                     ??turn_15:
+   \   0001AC   ........     CALLA   #Wheels_OFF
+    285            LCD_print("          ", "   Demo   ", " Complete ", "          ");
+   \   0001B0   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   0001B4   3E40....     MOV.W   #`?<Constant " Complete ">`, R14
+   \   0001B8   3D40....     MOV.W   #`?<Constant "   Demo   ">`, R13
+   \   0001BC   3C40....     MOV.W   #`?<Constant "          ">`, R12
+   \   0001C0   ........     CALLA   #LCD_print
+    286            }
+    287          }
+   \                     ??turn_9:
+   \   0001C4   5617         POPM.W  #0x6, R11
+   \   0001C6   1001         RETA
+   \   0001C8                REQUIRE _A_TA0CCTL2_L
+   \   0001C8                REQUIRE _A_TA0CCTL0_L
+
+   \                                 In  segment CODE, align 2
+    288          void drive_to_black_line(void){
+   \                     drive_to_black_line:
+    289            LCD_print("Driving to", "Black line", "          ", "          ");
+   \   000000   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   000004   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   000008   3D40....     MOV.W   #`?<Constant "Black line">`, R13
+   \   00000C   3C40....     MOV.W   #`?<Constant "Driving to">`, R12
+   \   000010   ........     CALLA   #LCD_print
+    290            Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
+   \   000014   7C408C00     MOV.B   #0x8c, R12
+   \   000018   ........     CALLA   #Left_Motor_ON_FORWARD
+    291            Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
+   \   00001C   7C404B00     MOV.B   #0x4b, R12
+   \   000020   ........     CALLA   #Right_Motor_ON_FORWARD
+    292            while(ADC_Left_Detector < ir_black_reading
+    293               && ADC_Right_Detector < ir_black_reading)
+   \                     ??drive_to_black_line_1:
+   \   000024   9292........ CMP.W   &ir_black_reading, &ADC_Left_Detector
+   \   00002A   0B2C         JC      ??drive_to_black_line_3
+   \   00002C   9292........ CMP.W   &ir_black_reading, &ADC_Right_Detector
+   \   000032   072C         JC      ??drive_to_black_line_3
+    294            {
+    295              while(ADC12CTL0 & ADC12BUSY);
+   \                     ??drive_to_black_line_0:
+   \   000034   92B30008     BIT.W   #0x1, &0x800
+   \   000038   FD2F         JC      ??drive_to_black_line_0
+    296              ADC12IER0  |= (ADC12IE2     | // Enable interrupts for new sample results
+    297                             ADC12IE4     |
+    298                             ADC12IE5);
+   \   00003A   B2D034001208 BIS.W   #0x34, &0x812
+   \   000040   F13F         JMP     ??drive_to_black_line_1
+    299            }
+    300            Wheels_OFF();
+   \                     ??drive_to_black_line_3:
+   \   000042   ........     CALLA   #Wheels_OFF
+    301            delay_time = HALF_SEC;
+   \   000046   B2400A00.... MOV.W   #0xa, &delay_time
+    302            waiting = true;
+   \   00004C   D243....     MOV.B   #0x1, &waiting
+    303            TA0CCTL2 |= CCIE;
+   \   000050   B2D010004603 BIS.W   #0x10, &0x346
+    304            while(waiting);
+   \                     ??drive_to_black_line_2:
+   \   000056   C293....     CMP.B   #0x0, &waiting
+   \   00005A   FD23         JNE     ??drive_to_black_line_2
+    305          }
+   \   00005C   1001         RETA
+   \   00005E                REQUIRE _A_ADC12CTL0_L
+   \   00005E                REQUIRE _A_ADC12IER0_L
+   \   00005E                REQUIRE _A_TA0CCTL2_L
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "  White   ">`:
+   \   000000   202057686974 DC8 "  White   "
+   \            6520202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Driving from">`:
+   \   000000   44726976696E DC8 "Driving from"
+   \            672066726F6D
+   \            00          
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Black line">`:
+   \   000000   426C61636B20 DC8 "Black line"
+   \            6C696E6500  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "          ">`:
+   \   000000   202020202020 DC8 "          "
+   \            2020202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Turning in">`:
+   \   000000   5475726E696E DC8 "Turning in"
+   \            6720696E00  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "   Loop   ">`:
+   \   000000   2020204C6F6F DC8 "   Loop   "
+   \            7020202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Driving in">`:
+   \   000000   44726976696E DC8 "Driving in"
+   \            6720696E00  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "   Demo   ">`:
+   \   000000   20202044656D DC8 "   Demo   "
+   \            6F20202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant " Complete ">`:
+   \   000000   20436F6D706C DC8 " Complete "
+   \            6574652000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Driving to">`:
+   \   000000   44726976696E DC8 "Driving to"
+   \            6720746F00  
+    306            
+    307            
+    308            
+    309            
+    310            
+    311            
+    312            
+    313            
+    314            
+    315            
+    316            
+    317              //Backup Code 
+    318            /*
+    319            if(ADC_Left_Detector < ir_active_reading && ADC_Right_Detector > ir_active_reading)
+    320            {
+    321              left_pwm += 120;
+    322              if(left_pwm > L_PWM_MAX)
+    323              left_pwm = L_PWM_MAX;
+    324              Left_Motor_ON_FORWARD(left_pwm);
+    325              right_pwm -= 100;
+    326              if(right_pwm < R_PWM_MIN)
+    327              right_pwm = R_PWM_MIN;
+    328              Right_Motor_ON_FORWARD(right_pwm);
+    329            }
+    330            else
+    331            {
+    332              right_pwm += 160;
+    333              if(right_pwm > R_PWM_MAX)
+    334              right_pwm = R_PWM_MAX;
+    335              Right_Motor_ON_FORWARD(right_pwm);
+    336              left_pwm -= 120;
+    337              if(left_pwm < L_PWM_MIN)
+    338              left_pwm = L_PWM_MIN;
+    339              Left_Motor_ON_FORWARD(left_pwm);
+    340            }
+    341          */
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Drive_Straight_Forward
+        4   -> Left_Motor_ON_FORWARD
+        0   -> Right_Motor_ON_FORWARD
+      4   Init_PID
+      4   Left_Motor_OFF
+      4   Left_Motor_ON_FORWARD
+      4   Left_Motor_ON_REVERSE
+      4   Right_Motor_OFF
+      4   Right_Motor_ON_FORWARD
+      4   Right_Motor_ON_REVERSE
+      4   Wheels_OFF
+        4   -> Left_Motor_OFF
+        0   -> Right_Motor_OFF
+      4   drive_to_black_line
+        4   -> LCD_print
+        4   -> Left_Motor_ON_FORWARD
+        4   -> Right_Motor_ON_FORWARD
+        4   -> Wheels_OFF
+      4   initialize_delay
+      4   pid_udpate_left
+        4   -> Left_Motor_ON_FORWARD
+        0   -> Right_Motor_ON_FORWARD
+        4   -> Right_Motor_ON_FORWARD
+     16   turn
+       16   -> LCD_print
+       16   -> Left_Motor_ON_FORWARD
+       16   -> Left_Motor_ON_REVERSE
+       16   -> Right_Motor_ON_FORWARD
+       16   -> Wheels_OFF
+      4   update_instruction_label
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      11  ?<Constant "          ">
+      11  ?<Constant "   Demo   ">
+      11  ?<Constant "   Loop   ">
+      11  ?<Constant "  White   ">
+      11  ?<Constant " Complete ">
+      11  ?<Constant "Black line">
+      13  ?<Constant "Driving from">
+      11  ?<Constant "Driving in">
+      11  ?<Constant "Driving to">
+      11  ?<Constant "Turning in">
+      14  Drive_Straight_Forward
+       2  Init_PID
+       1  LastDir
+      20  Left_Motor_OFF
+      28  Left_Motor_ON_FORWARD
+      28  Left_Motor_ON_REVERSE
+      20  Right_Motor_OFF
+      28  Right_Motor_ON_FORWARD
+      28  Right_Motor_ON_REVERSE
+       8  Wheels_OFF
+       2  _A_ADC12CTL0_L
+       2  _A_ADC12IER0_L
+       2  _A_TA0CCTL0_L
+       2  _A_TA0CCTL2_L
+       2  _A_TB0CCR3_L
+       2  _A_TB0CCR4_L
+       2  _A_TB0CCR5_L
+       2  _A_TB0CCR6_L
+      94  drive_to_black_line
+      12  initialize_delay
+       1  instruction_label_tmp
+      18  ld
+       1  left_forward_flag
+       2  left_pwm
+       1  left_reverse_flag
+     120  pid_udpate_left
+      18  rd
+       1  right_forward_flag
+       2  right_pwm
+       1  right_reverse_flag
+     456  turn
+      10  update_instruction_label
+
+ 
+ 868 bytes in segment CODE
+  16 bytes in segment DATA16_AN
+ 112 bytes in segment DATA16_C
+  46 bytes in segment DATA16_Z
+ 
+ 868 bytes of CODE  memory
+ 112 bytes of CONST memory
+  46 bytes of DATA  memory (+ 16 bytes shared)
+
+Errors: none
+Warnings: none

@@ -1,0 +1,515 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           17/Apr/2018  17:38:48
+# Copyright 1996-2017 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_09\adc12_B.c
+#    Command line  =  
+#        -f C:\Users\shmes\AppData\Local\Temp\EWA7C6.tmp
+#        ("C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_09\adc12_B.c" -lC
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_09\Debug\List" -o
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_09\Debug\Obj" --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5994__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  Spanish_USA.1252
+#    List file     =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_09\Debug\List\adc12_B.lst
+#    Object file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_09\Debug\Obj\adc12_B.r43
+#
+###############################################################################
+
+C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\adc12_B.c
+      1          //===============================================================
+      2          //  File Name: adc12_B.c
+      3          //  Description: This file contains the Initialization of the 
+      4          //               analog-to-digital converter as well as its 
+      5          //               interrupt service routine
+      6          //
+      7          //  Author: Sam Messick
+      8          //  Date Jan. 2018
+      9          //  Compiler Build with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+     10          //===============================================================
+     11          
+     12          #include "adc12_B.h"
+
+   \                                 In  segment DATA16_AN, at 0x800
+   \   union <unnamed> _A_ADC12CTL0_L
+   \                     _A_ADC12CTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x802
+   \   union <unnamed> _A_ADC12CTL1_L
+   \                     _A_ADC12CTL1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x804
+   \   union <unnamed> _A_ADC12CTL2_L
+   \                     _A_ADC12CTL2_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x806
+   \   union <unnamed> _A_ADC12CTL3_L
+   \                     _A_ADC12CTL3_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x812
+   \   union <unnamed> _A_ADC12IER0_L
+   \                     _A_ADC12IER0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x820
+   \   union <unnamed> _A_ADC12MCTL0_L
+   \                     _A_ADC12MCTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x822
+   \   union <unnamed> _A_ADC12MCTL1_L
+   \                     _A_ADC12MCTL1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x824
+   \   union <unnamed> _A_ADC12MCTL2_L
+   \                     _A_ADC12MCTL2_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x860
+   \   union <unnamed> _A_ADC12MEM0_L
+   \                     _A_ADC12MEM0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x862
+   \   union <unnamed> _A_ADC12MEM1_L
+   \                     _A_ADC12MEM1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x864
+   \   union <unnamed> _A_ADC12MEM2_L
+   \                     _A_ADC12MEM2_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x262
+   \   union <unnamed> _A_PDOUT_L
+   \                     _A_PDOUT_L:
+   \   000000                DS8 2
+     13          
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     14          volatile uint16_t ADC_Thumb;
+   \                     ADC_Thumb:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     15          volatile uint16_t ADC_Right_Detector;
+   \                     ADC_Right_Detector:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     16          volatile uint16_t ADC_Left_Detector;
+   \                     ADC_Left_Detector:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     17          uint8_t one_time = true;
+   \                     one_time:
+   \   000000                DS8 1
+   \   000001                REQUIRE `?<Initializer for one_time>`
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     18          uint16_t ir_active_reading;
+   \                     ir_active_reading:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     19          uint8_t calibrated;
+   \                     calibrated:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     20          volatile uint8_t calibrating;
+   \                     calibrating:
+   \   000000                DS8 1
+     21          
+
+   \                                 In  segment CODE, align 2
+     22          void Init_ADC(void){
+   \                     Init_ADC:
+     23            ADC12CTL0  = ADC_RESET_STATE;
+   \   000000   82430008     MOV.W   #0x0, &0x800
+     24            /* Configure ADC sampling; power on
+     25             * -----------------
+     26             * ADC12SHT0_2: 16 ADC12CLK cycles in sampling period
+     27             * ADC12SHT1_2: 16 ADC12CLK cycles in sample-and-hold time 
+     28             *                     (ADC12MEM0 to ADC12MEM7 || ADC12MEM24 to ADC12MEM31)
+     29             * ADC12MSC   : First rising edge of SHI signal triggers sampling timer
+     30             * ADC12ON    : ADC12_B powered ON
+     31             */
+     32            
+     33            ADC12CTL0 |= (ADC12SHT0_2 | 
+     34                          ADC12SHT1_2 | 
+     35                          ADC12MSC    | 
+     36                          ADC12ON);
+   \   000004   B2D090220008 BIS.W   #0x2290, &0x800
+     37            
+     38            /////////////////////////////////////////////////////////////////////////////
+     39            
+     40            ADC12CTL1  = ADC_RESET_STATE;
+   \   00000A   82430208     MOV.W   #0x0, &0x802
+     41            /* Configure ADC clocking
+     42             * -----------------
+     43             * ADC12PDIV_0  : Predivide ADC12CLK by 1
+     44             * ADC12SHS_0   : ADC12SC as sample-and-hold source 
+     45             * ADC12SHP     : SMPCON signal sourced from sampling timer
+     46             * ADC12ISSH_0  : Sample-input signal is not inverted
+     47             * ADC12DIV_0   : ADC12CLK divided by 1 
+     48             * ADC12SSEL0   : ADC12_B clock source select (MODOSC)
+     49             * ADC12CONSEQ_3: Sequence-of-channels conversion sequence mode 
+     50             */
+     51            
+     52            ADC12CTL1 |= (ADC12PDIV_0 | 
+     53                          ADC12SHS_0  | 
+     54                          ADC12SHP    | 
+     55                          ADC12ISSH_0 | 
+     56                          ADC12DIV_0  | 
+     57                          ADC12SSEL0  |
+     58                          ADC12CONSEQ_3);
+   \   00000E   B2D00E020208 BIS.W   #0x20e, &0x802
+     59            
+     60            /////////////////////////////////////////////////////////////////////////////
+     61            
+     62            ADC12CTL2  = ADC_RESET_STATE;
+   \   000014   82430408     MOV.W   #0x0, &0x804
+     63            /* Configure conversion settings
+     64             * -----------------
+     65             * ADC12RES_2   : 12-bit conversion result resolution (14 clock cycle conv.)
+     66             * ADC12DF_0    : Result data stored as binary unsigned, right justified
+     67             * ADC12PWRMD_0 : Regular power mode (not LPM) where sample rate 
+     68             *                            not restricted
+     69             */
+     70            
+     71            ADC12CTL2 |= (ADC12RES_2  | 
+     72                          ADC12DF_0   | 
+     73                          ADC12PWRMD_0); 
+   \   000018   B2D020000408 BIS.W   #0x20, &0x804
+     74            
+     75            /////////////////////////////////////////////////////////////////////////////
+     76            
+     77            ADC12CTL3  = ADC_RESET_STATE;
+   \   00001E   82430608     MOV.W   #0x0, &0x806
+     78            /* Configure ADC input channels
+     79             * -----------------
+     80             * ADC12ICH3MAP_0 : External pin selected for ADC input channel A26
+     81             * ADC12ICH2MAP_0 : External pin selected for ADC input channel A27
+     82             * ADC12ICH1MAP_0 : External pin selected for ADC input channel A28
+     83             * ADC12ICH0MAP_0 : External pin selected for ADC input channel A29
+     84             * ADC12TCMAP_1   : Internal temperature sensor for ADC input channel A30
+     85             * ADC12BATMAP_1  : 1/2 AVCC channel sel. for ADC input channel A31
+     86             * ADC12CSTARTADD0: ADC12MEM0 set as conversion start address (in sequence)
+     87             */
+     88            
+     89            ADC12CTL3 |= (ADC12ICH3MAP_0 | 
+     90                          ADC12ICH2MAP_0 | 
+     91                          ADC12ICH1MAP_0 | 
+     92                          ADC12ICH0MAP_0 | 
+     93                          ADC12TCMAP_1   | 
+     94                          ADC12BATMAP_1  |
+     95                          ADC12CSTARTADD_0); 
+   \   000022   B2D0C0000608 BIS.W   #0xc0, &0x806
+     96            
+     97            /////////////////////////////////////////////////////////////////////////////
+     98            
+     99            ADC12MCTL0 = ADC12MCTL1
+    100                       = ADC12MCTL2
+    101                       = ADC_RESET_STATE;
+   \   000028   0F43         MOV.W   #0x0, R15
+   \   00002A   824F2408     MOV.W   R15, &0x824
+   \   00002E   824F2208     MOV.W   R15, &0x822
+   \   000032   824F2008     MOV.W   R15, &0x820
+    102            
+    103            /* Configure ADC input channels
+    104             * -----------------
+    105             * ADC12WINC_0 : Comparator window disabled
+    106             * ADC12DIF_0  : Single-ended mode enabled
+    107             * ADC12VRSEL_0: VR+ = AVCC, VR- = AVSS
+    108             * ADC12INCH_x : channel = Ax
+    109             * ADC12EOS    : End of sequence
+    110             */
+    111            
+    112            ADC12MCTL0 |= (ADC12WINC_0  |
+    113                           ADC12DIF_0   |
+    114                           ADC12VRSEL_0 |
+    115                           ADC12INCH_2);
+   \   000036   A2D32008     BIS.W   #0x2, &0x820
+    116            
+    117            ADC12MCTL1 |= (ADC12WINC_0  |
+    118                           ADC12DIF_0   |
+    119                           ADC12VRSEL_0 |
+    120                           ADC12INCH_4);
+   \   00003A   A2D22208     BIS.W   #0x4, &0x822
+    121            
+    122            ADC12MCTL2 |= (ADC12WINC_0  |
+    123                           ADC12DIF_0   |
+    124                           ADC12VRSEL_0 |
+    125                           ADC12INCH_5  |
+    126                           ADC12EOS);
+   \   00003E   B2D085002408 BIS.W   #0x85, &0x824
+    127            
+    128            /////////////////////////////////////////////////////////////////////////////
+    129            STABILIZE_REFERENCE
+   \   000044                ////////////// Start of 10000 cycles delay.
+   \   000044   003C         JMP     ??Init_ADC_1
+   \                     ??Init_ADC_1:
+   \   000046   3F40030D     MOV.W   #0xd03, R15
+   \                     ??Init_ADC_0:
+   \   00004A   3F53         ADD.W   #0xffff, R15
+   \   00004C   FE2F         JC      ??Init_ADC_0
+   \   00004E                ////////////// End of delay code.
+    130            
+    131            ADC12IER0  |= (ADC12IE2     | // Enable interrupts for new sample results
+    132                           ADC12IE4     |
+    133                           ADC12IE5);
+   \   00004E   B2D034001208 BIS.W   #0x34, &0x812
+    134            ADC12CTL0  |= (ADC12ENC |  // Enable Conversion
+    135                           ADC12SC);
+   \   000054   B2D003000008 BIS.W   #0x3, &0x800
+    136          }
+   \   00005A   1001         RETA
+   \   00005C                REQUIRE _A_ADC12CTL0_L
+   \   00005C                REQUIRE _A_ADC12CTL1_L
+   \   00005C                REQUIRE _A_ADC12CTL2_L
+   \   00005C                REQUIRE _A_ADC12CTL3_L
+   \   00005C                REQUIRE _A_ADC12MCTL0_L
+   \   00005C                REQUIRE _A_ADC12MCTL1_L
+   \   00005C                REQUIRE _A_ADC12MCTL2_L
+   \   00005C                REQUIRE _A_ADC12IER0_L
+    137          
+    138          #pragma vector = ADC12_B_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+    139          __interrupt void ADC12_ISR(void){
+   \                     ADC12_ISR:
+    140            ADC12IER0  &= ~(ADC12IE2     | // Disable interrupts for new sample results
+    141                           ADC12IE4     |
+    142                           ADC12IE5);
+   \   000000   B2F0CBFF1208 AND.W   #0xffcb, &0x812
+    143            ADC_Thumb = ADC12MEM0;
+   \   000006   92426008.... MOV.W   &0x860, &ADC_Thumb
+    144            ADC_Right_Detector = ADC12MEM1;
+   \   00000C   92426208.... MOV.W   &0x862, &ADC_Right_Detector
+    145            ADC_Left_Detector = ADC12MEM2;
+   \   000012   92426408.... MOV.W   &0x864, &ADC_Left_Detector
+    146          }
+   \   000018   0013         RETI
+   \   00001A                REQUIRE _A_ADC12IER0_L
+   \   00001A                REQUIRE _A_ADC12MEM0_L
+   \   00001A                REQUIRE _A_ADC12MEM1_L
+   \   00001A                REQUIRE _A_ADC12MEM2_L
+    147          
+
+   \                                 In  segment CODE, align 2
+    148          void calibrate_White(void){
+   \                     calibrate_White:
+    149            calibrating = true;
+   \   000000   D243....     MOV.B   #0x1, &calibrating
+    150            //word4 = "Cal. White";
+    151            
+    152            while(calibrating)
+   \                     ??calibrate_White_0:
+   \   000004   C293....     CMP.B   #0x0, &calibrating
+   \   000008   0324         JEQ     ??calibrate_White_1
+    153              updateDisplay();
+   \   00000A   ........     CALLA   #updateDisplay
+   \   00000E   FA3F         JMP     ??calibrate_White_0
+    154            
+    155            ir_active_reading = ADC_Thumb;
+   \                     ??calibrate_White_1:
+   \   000010   9242........ MOV.W   &ADC_Thumb, &ir_active_reading
+    156          }
+   \   000016   1001         RETA
+
+   \                                 In  segment CODE, align 2
+    157          void calibrate_Black(void){
+   \                     calibrate_Black:
+    158            calibrating = true;
+   \   000000   D243....     MOV.B   #0x1, &calibrating
+    159            //word4 = "Cal. Black";
+    160            
+    161            while(calibrating)
+   \                     ??calibrate_Black_0:
+   \   000004   C293....     CMP.B   #0x0, &calibrating
+   \   000008   0324         JEQ     ??calibrate_Black_1
+    162              updateDisplay();
+   \   00000A   ........     CALLA   #updateDisplay
+   \   00000E   FA3F         JMP     ??calibrate_Black_0
+    163          
+    164            calibrated = true;
+   \                     ??calibrate_Black_1:
+   \   000010   D243....     MOV.B   #0x1, &calibrated
+    165          }
+   \   000014   1001         RETA
+    166          
+
+   \                                 In  segment CODE, align 2
+    167          void updateDisplay(void){ 
+   \                     updateDisplay:
+    168            if(calibrated)
+   \   000000   C293....     CMP.B   #0x0, &calibrated
+   \   000004   1124         JEQ     ??updateDisplay_1
+    169            {
+    170              //word4 = "          ";
+    171              hex_to_dec(word4, counter_A00);
+   \   000006   1E42....     MOV.W   &counter_A00, R14
+   \   00000A   0F43         MOV.W   #0x0, R15
+   \   00000C   1C42....     MOV.W   &word4, R12
+   \   000010   ........     CALLA   #hex_to_dec
+    172              LCD_print("Passing thr", "   Loop   ", "          ", word4);
+   \   000014   1F42....     MOV.W   &word4, R15
+   \   000018   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   00001C   3D40....     MOV.W   #`?<Constant "   Loop   ">`, R13
+   \   000020   3C40....     MOV.W   #`?<Constant "Passing thr">`, R12
+   \   000024   ........     CALLA   #LCD_print
+    173            }
+    174            if(ir_ready_to_print)
+   \                     ??updateDisplay_1:
+   \   000028   C293....     CMP.B   #0x0, &ir_ready_to_print
+   \   00002C   0424         JEQ     ??updateDisplay_0
+    175            {
+    176              print_detector_values();
+   \   00002E   ........     CALLA   #print_detector_values
+    177              ir_ready_to_print = false;
+   \   000032   C243....     MOV.B   #0x0, &ir_ready_to_print
+    178            }
+    179            while(ADC12CTL0 & ADC12BUSY);
+   \                     ??updateDisplay_0:
+   \   000036   92B30008     BIT.W   #0x1, &0x800
+   \   00003A   FD2F         JC      ??updateDisplay_0
+    180            P8OUT &= ~(IR_LED);
+   \   00003C   D2C36302     BIC.B   #0x1, &0x263
+    181            
+    182            ADC12IER0  |= (ADC12IE2     | // Enable interrupts for new sample results
+    183                           ADC12IE4     |
+    184                           ADC12IE5);
+   \   000040   B2D034001208 BIS.W   #0x34, &0x812
+    185            P8OUT |= IR_LED;
+   \   000046   D2D36302     BIS.B   #0x1, &0x263
+    186          }
+   \   00004A   1001         RETA
+   \   00004C                REQUIRE _A_ADC12CTL0_L
+   \   00004C                REQUIRE _A_PDOUT_L
+   \   00004C                REQUIRE _A_ADC12IER0_L
+
+   \                                 In  segment INTVEC, offset 0x5c, root
+   \                     `??ADC12_ISR::??INTVEC 92`:
+   \   00005C   ....         DC16    ADC12_ISR
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for one_time>`:
+   \   000000   01           DC8 1
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Passing thr">`:
+   \   000000   50617373696E DC8 "Passing thr"
+   \            672074687200
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "   Loop   ">`:
+   \   000000   2020204C6F6F DC8 "   Loop   "
+   \            7020202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "          ">`:
+   \   000000   202020202020 DC8 "          "
+   \            2020202000  
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   ADC12_ISR
+      4   Init_ADC
+      4   calibrate_Black
+        4   -> updateDisplay
+      4   calibrate_White
+        4   -> updateDisplay
+      4   updateDisplay
+        4   -> LCD_print
+        4   -> hex_to_dec
+        4   -> print_detector_values
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      11  ?<Constant "          ">
+      11  ?<Constant "   Loop   ">
+      12  ?<Constant "Passing thr">
+       1  ?<Initializer for one_time>
+      26  ADC12_ISR
+       2  ADC12_ISR::??INTVEC 92
+       2  ADC_Left_Detector
+       2  ADC_Right_Detector
+       2  ADC_Thumb
+      92  Init_ADC
+       2  _A_ADC12CTL0_L
+       2  _A_ADC12CTL1_L
+       2  _A_ADC12CTL2_L
+       2  _A_ADC12CTL3_L
+       2  _A_ADC12IER0_L
+       2  _A_ADC12MCTL0_L
+       2  _A_ADC12MCTL1_L
+       2  _A_ADC12MCTL2_L
+       2  _A_ADC12MEM0_L
+       2  _A_ADC12MEM1_L
+       2  _A_ADC12MEM2_L
+       2  _A_PDOUT_L
+      22  calibrate_Black
+      24  calibrate_White
+       1  calibrated
+       1  calibrating
+       2  ir_active_reading
+       1  one_time
+      76  updateDisplay
+
+ 
+ 214 bytes in segment CODE
+  24 bytes in segment DATA16_AN
+  34 bytes in segment DATA16_C
+   1 byte  in segment DATA16_I
+   1 byte  in segment DATA16_ID
+  10 bytes in segment DATA16_Z
+   2 bytes in segment INTVEC
+  26 bytes in segment ISR_CODE
+ 
+ 240 bytes of CODE  memory
+  35 bytes of CONST memory (+  2 bytes shared)
+  11 bytes of DATA  memory (+ 24 bytes shared)
+
+Errors: none
+Warnings: none

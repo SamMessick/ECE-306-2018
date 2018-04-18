@@ -1,0 +1,205 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           06/Apr/2018  10:17:48
+# Copyright 1996-2017 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_09\main.c
+#    Command line  =  
+#        -f C:\Users\shmes\AppData\Local\Temp\EW92C8.tmp
+#        ("C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_09\main.c" -lC
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_09\Debug\List" -o
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_09\Debug\Obj" --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5994__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  Spanish_USA.1252
+#    List file     =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_09\Debug\List\main.lst
+#    Object file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Homework_09\Debug\Obj\main.r43
+#
+###############################################################################
+
+C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Homework_09\main.c
+      1          //------------------------------------------------------------------------------
+      2          //  File name: main.c
+      3          //  Description: This file contains the MSP430 Car's Operating System
+      4          //
+      5          //
+      6          //  Sam Messick
+      7          //  Jan 2018
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          //**To fix: reenable PWM in ports.c, wheels.c ,timerB0.c;
+     12          
+     13          
+     14          #include "main.h"
+
+   \                                 In  segment DATA16_AN, at 0x800
+   \   union <unnamed> _A_ADC12CTL0_L
+   \                     _A_ADC12CTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x130
+   \   union <unnamed> _A_PM5CTL0_L
+   \                     _A_PM5CTL0_L:
+   \   000000                DS8 2
+     15          
+
+   \                                 In  segment CODE, align 2
+     16          void main(void){
+   \                     main:
+     17          //------------------------------------------------------------------------------
+     18          // Main Program
+     19          // This is the main initialization of the car. Execution of code starts here.
+     20          // The operating system is Back Ground Fore Ground... but mainly Fore Ground lol
+     21          //
+     22          //------------------------------------------------------------------------------
+     23            
+     24            Init_Ports();                        // Initialize Ports
+   \   000000   ........     CALLA   #Init_Ports
+     25          // Disable the GPIO power-on default high-impedance mode to activate
+     26          // previously configured port settings
+     27            PM5CTL0 &= ~LOCKLPM5;
+   \   000004   92C33001     BIC.W   #0x1, &0x130
+     28            Init_Clocks();                       // Initialize Clock System
+   \   000008   ........     CALLA   #Init_Clocks
+     29            Init_Conditions();                   // Initialize Variables and Initial Conditions
+   \   00000C   ........     CALLA   #Init_Conditions
+     30            Init_LCD();                          // Initialize LCD
+   \   000010   ........     CALLA   #Init_LCD
+     31            Init_LEDs();
+   \   000014   ........     CALLA   #Init_LEDs
+     32            Init_Timers();                       // Initialize Timers
+   \   000018   ........     CALLA   #Init_Timers
+     33            Init_PID();
+   \   00001C   ........     CALLA   #Init_PID
+     34            Init_ADC();
+   \   000020   ........     CALLA   #Init_ADC
+     35            
+     36            enable_display_update();
+   \   000024   ........     CALLA   #enable_display_update
+     37          //------------------------------------------------------------------------------
+     38          // Begining of the Interrupt-Based Operating System
+     39          //------------------------------------------------------------------------------
+     40          //------------------------------------------------------------------------------
+     41          // TimerA0: controls LCD update, button debouncing and timed delays
+     42          // -------          defers to state machine in menus.c following push-button
+     43          //                  interrupts.
+     44          //               
+     45          // TimerB0: controls wheel PWM
+     46          //------------------------------------------------------------------------------
+     47            // Display splash screen
+     48            lcd_BIG_mid();
+   \   000028   ........     CALLA   #lcd_BIG_mid
+     49            LCD_print("   Sam    ", "HOMEWORK 9"," Messick  ", "          ");
+   \   00002C   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   000030   3E40....     MOV.W   #`?<Constant " Messick  ">`, R14
+   \   000034   3D40....     MOV.W   #`?<Constant "HOMEWORK 9">`, R13
+   \   000038   3C40....     MOV.W   #`?<Constant "   Sam    ">`, R12
+   \   00003C   ........     CALLA   #LCD_print
+     50            
+     51            // Begin infinite for loop menuing bullshit
+     52            for(;;)
+     53            { 
+     54              while(ADC12CTL0 & ADC12BUSY);
+   \                     ??main_0:
+   \   000040   92B30008     BIT.W   #0x1, &0x800
+   \   000044   FD2F         JC      ??main_0
+     55              if(time_for_menu_update_lol)
+   \   000046   C293....     CMP.B   #0x0, &time_for_menu_update_lol
+   \   00004A   0224         JEQ     ??main_1
+     56                update_menu();
+   \   00004C   ........     CALLA   #update_menu
+     57              enable_adc();
+   \                     ??main_1:
+   \   000050   ........     CALLA   #enable_adc
+   \   000054   F53F         JMP     ??main_0
+   \   000056   0343         NOP
+   \   000058                REQUIRE _A_PM5CTL0_L
+   \   000058                REQUIRE _A_ADC12CTL0_L
+     58            }
+     59          }
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "   Sam    ">`:
+   \   000000   20202053616D DC8 "   Sam    "
+   \            2020202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "HOMEWORK 9">`:
+   \   000000   484F4D45574F DC8 "HOMEWORK 9"
+   \            524B203900  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant " Messick  ">`:
+   \   000000   204D65737369 DC8 " Messick  "
+   \            636B202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "          ">`:
+   \   000000   202020202020 DC8 "          "
+   \            2020202000  
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   main
+        4   -> Init_ADC
+        4   -> Init_Clocks
+        4   -> Init_Conditions
+        4   -> Init_LCD
+        4   -> Init_LEDs
+        4   -> Init_PID
+        4   -> Init_Ports
+        4   -> Init_Timers
+        4   -> LCD_print
+        4   -> enable_adc
+        4   -> enable_display_update
+        4   -> lcd_BIG_mid
+        4   -> update_menu
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      11  ?<Constant "          ">
+      11  ?<Constant "   Sam    ">
+      11  ?<Constant " Messick  ">
+      11  ?<Constant "HOMEWORK 9">
+       2  _A_ADC12CTL0_L
+       2  _A_PM5CTL0_L
+      88  main
+
+ 
+ 88 bytes in segment CODE
+  4 bytes in segment DATA16_AN
+ 44 bytes in segment DATA16_C
+ 
+ 88 bytes of CODE  memory
+ 44 bytes of CONST memory
+  0 bytes of DATA  memory (+ 4 bytes shared)
+
+Errors: none
+Warnings: none

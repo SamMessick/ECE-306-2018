@@ -1,0 +1,106 @@
+1.) What is the processor utilization for task c?
+
+
+   Uc = T/tau
+      = (5/45)
+      
+  =================
+ || Uc = .1111    ||
+  =================
+
+--------------------------------------------------------------------------------------------------------------------
+
+2.) What is the total processor utilization, U?
+
+
+    U = (3/20) +               <----- Ua
+        (4/75) +               <----- Ub
+        (5/45) +               <----- Uc
+        (2/30) +               <----- Ud
+        (1/25) +               <----- Ue
+        (3/10)                 <----- Uf
+     
+  ================ 
+ || U = .72111   ||
+  ================
+
+--------------------------------------------------------------------------------------------------------------------
+
+3.) List the tasks in decreasing priority (highest to lowest) when using rate-monotonic scheduling
+
+    
+    **In rate-monotonic scheduling, tasks with lower periods (tau) are prioritized.
+
+    Thus
+
+  ===============
+ || f,a,e,d,c,b ||
+  ===============
+--------------------------------------------------------------------------------------------------------------------
+
+4.) When using rate-monotonic scheduling, what is the completion time of the highest priority task in the worst case?
+
+    The highest priority task, f, in the worst case scenario will be the first task to execute, so its
+    completion time will be Tf.
+
+   =======================
+  || Completion Time = 3 ||
+   =======================
+
+--------------------------------------------------------------------------------------------------------------------
+
+5.) When using rate-monotonic scheduling, what is the completion time of the second-highest priority task in the worst case? 
+
+     The second-highest priority task, a, in the worst case scenario will be the second task to execute, so its
+     completion time will be Tf + Ta
+
+   =======================
+  || Completion Time = 6 ||
+   =======================
+
+--------------------------------------------------------------------------------------------------------------------
+
+6.) What is the utilization bound (UMax) for a rate-monotonic-scheduled system with six tasks?
+
+    UMax = m(2^(1/m)-1)
+         = 6(2^(1/6)-1)
+
+  ================ 
+ || UMax = .73477 ||
+  ================
+
+--------------------------------------------------------------------------------------------------------------------
+
+7.) Is the task set guaranteed to be schedulable with rate-monotonic scheduling?
+
+    Given that U < UMax < 1 in this scenario,
+
+  ==================================
+ || The system is guaranteed to be || 
+ || schedulable with RMS           ||
+  ==================================
+
+--------------------------------------------------------------------------------------------------------------------
+
+8.) What are the results from the Exact Schedulability Test?
+
+    a0 = 1 + 2 + 3 + 3 + 4 + 5
+       = 18
+    a1 = 5 + (18/25)*1 + (18/30)*2 + (18/10)*3 + (18/20)*3 + (18/75)*4
+       = 21
+    a2 = 5 + (21/25)*1 + (21/30)*2 + (21/10)*3 + (21/20)*3 + (21/75)*4
+       = 27
+    a3 = 5 + (27/25)*1 + (27/30)*2 + (27/10)*3 + (27/20)*3 + (27/75)*4
+       = 28
+    a4 = 5 + (28/25)*1 + (28/30)*2 + (28/10)*3 + (28/20)*3 + (28/75)*4
+       = 28
+
+--------------------------------------------------------------------------------------------------------------------
+
+9.) According to the Exact Schedulability Test, is the task set scheulable?
+
+    Since a3 = a4 = 28 < 45
+
+  ==============================
+ || The system is schedulable  ||
+  ==============================
