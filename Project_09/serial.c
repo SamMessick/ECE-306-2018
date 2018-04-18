@@ -81,11 +81,6 @@ void check_for_input(void){
         parse_command();
         IOT_DISABLE(CHECK_FOR_COMMAND);
       }
-      else if(Main_Char_Rx[CHAR11] == COMMAND_START && !IOT_STATUS(COMMAND_EXECUTING))
-      {
-        parse_second_command();
-        IOT_DISABLE(CHECK_FOR_COMMAND);
-      }
       else if(Main_Char_Rx[CHAR1] == TEST_START)
       {
         parse_test();
@@ -114,8 +109,13 @@ void read_into_buffer(void){
 }
 
 void parse_command(void){
-  char direction;
-  uint16_t password_attempt;
+  static char left_direction;
+  static char right_direction;
+  static uint8_t left_pwm;
+  static uint8_t right_pwm;
+  
+  uint16_t password_attempt;   // Number between 0000-9999 validating user
+  char command_identifier;
   
   password_attempt = (Main_Char_Rx[CHAR2] - ASCII_NUM_SHIFT)*THOUSAND +
                      (Main_Char_Rx[CHAR3] - ASCII_NUM_SHIFT)*HUNDRED  +
@@ -124,8 +124,98 @@ void parse_command(void){
   
   if(password_attempt == COMMAND_PASS)
   {
-    
-    // User verified; interpret command
+    command_identifier = Main_Char_Rx[CHAR6];
+    switch(command_identifier)
+    {
+    case LEFT_FORWARD:
+    case LEFT_REVERSE:                    // A PWM value was specified
+      
+      // Retrieve PWM values
+      left_direction = Main_Char_Rx[CHAR6];
+      right_direction = Main_Char_Rx[CHAR7];
+      
+      left_pwm =     (Main_Char_Rx[CHAR8] - ASCII_NUM_SHIFT)*HUNDRED  +
+                     (Main_Char_Rx[CHAR9] - ASCII_NUM_SHIFT)*TEN      +
+                     (Main_Char_Rx[CHAR10] - ASCII_NUM_SHIFT);
+      right_pwm =    (Main_Char_Rx[CHAR11] - ASCII_NUM_SHIFT)*HUNDRED  +
+                     (Main_Char_Rx[CHAR12] - ASCII_NUM_SHIFT)*TEN      +
+                     (Main_Char_Rx[CHAR13] - ASCII_NUM_SHIFT);
+      
+      left_pwm  %= MAX_PWM;     // Bring pwm values within range
+      right_pwm %= MAX_PWM; 
+      
+      // Determine PWM direction
+      switch(left_direction)
+      {
+      case LEFT_FORWARD:
+        switch(right_direction)
+        {
+        case RIGHT_FORWARD:
+          Left_Motor_ON_FORWARD(left_pwm);
+          Right_Motor_ON_FORWARD(right_pwm);
+          break;
+          
+        case RIGHT_REVERSE:
+          Left_Motor_ON_FORWARD(left_pwm);
+          Right_Motor_ON_REVERSE(right_pwm);
+        }break;
+        
+      case LEFT_REVERSE:
+        switch(right_direction)
+        {
+        case RIGHT_FORWARD:
+          Left_Motor_ON_REVERSE(left_pwm);
+          Right_Motor_ON_FORWARD(right_pwm);
+          break;
+          
+        case RIGHT_REVERSE:
+          Left_Motor_ON_REVERSE(left_pwm);
+          Right_Motor_ON_REVERSE(right_pwm);
+        }
+      } break;
+      
+    case EMOTE1:                         // Print Samic fast meme to LCD
+      word1 = " Gotta go ";
+      word2 = "<<<<<<<<<<";
+      word3 = "Samic fast";
+      word4 = ">>>>>>>>>>";
+      LCD_print(word1,word2,word3,word4);
+      
+    case EMOTE2:                         // Print Happy Car meme to LCD
+      word1 = " _______  ";
+      word2 = "/^_____^\\ ";
+      word3 = "\\_______/ ";
+      word4 = "Happy Car ";
+      LCD_print(word1,word2,word3,word4);
+      
+    case EMOTE3:                         // Print Dank Memes ad to LCD
+      word1 = " MSP430 JR";
+      word2 = "----------";
+      word3 = "Now w/ 2x ";
+      word4 = "Dank memes";
+      LCD_print(word1,word2,word3,word4);
+      
+    case EMOTE4:                         // Print cautionary meme to LCD
+      word1 = "Look both ";
+      word2 = "ways bfore";
+      word3 = "crossin da";
+      word4 = "black line";
+      LCD_print(word1,word2,word3,word4);
+      
+    case BLACK_LINE_MODE:
+      P5OUT &= ~IOT_RESET;   // Disable IOT device
+      P8OUT |= IR_LED;       // Enable infrared LED for sensor readings
+      
+      /* Goal of code: drive in large circle, disabling white detection for 5 seconds
+       *               enable white detection
+       *               if white found, enable black detection
+       *               if black found, stop, turn, follow black line
+       *               after 20 seconds, turn car out of loop
+       *               drive forward for 4 seconds and stop (display meme)
+       */
+    }
+    /*
+    // Simple directional command (alternatives for debugging)
     direction = Main_Char_Rx[CHAR6];
     
     // Retrieve duration from buffer (milliseconds)
@@ -162,55 +252,7 @@ void parse_command(void){
     TA0CCTL0 |= CCIE;
     IOT_ENABLE(COMMAND_EXECUTING);
   }
-}
-
-void parse_second_command(void){
-  char direction;
-  uint16_t password_attempt;
-  
-  password_attempt = (Main_Char_Rx[CHAR12] - ASCII_NUM_SHIFT)*THOUSAND +
-                     (Main_Char_Rx[CHAR13] - ASCII_NUM_SHIFT)*HUNDRED  +
-                     (Main_Char_Rx[CHAR14] - ASCII_NUM_SHIFT)*TEN      +
-                     (Main_Char_Rx[CHAR15] - ASCII_NUM_SHIFT);
-  
-  if(password_attempt == COMMAND_PASS)
-  {
-    
-    // User verified; interpret command
-    direction = Main_Char_Rx[CHAR16];
-    
-    // Retrieve duration from buffer (milliseconds)
-    delay_time     +=(Main_Char_Rx[CHAR1] - ASCII_NUM_SHIFT)*THOUSAND +
-                     (Main_Char_Rx[CHAR2] - ASCII_NUM_SHIFT)*HUNDRED  +
-                     (Main_Char_Rx[CHAR3] - ASCII_NUM_SHIFT)*TEN      +
-                     (Main_Char_Rx[CHAR4] - ASCII_NUM_SHIFT);
-    switch(direction)
-    {
-    case 'S':
-      Wheels_OFF();
-      break;
-    case 'F':
-      Wheels_OFF();
-      Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
-      Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
-      break;
-    case 'B':
-      Wheels_OFF();
-      Left_Motor_ON_REVERSE(LEFT_FORWARD_SPEED);
-      Right_Motor_ON_REVERSE(RIGHT_FORWARD_SPEED);
-      break;
-    case 'R':
-      Wheels_OFF();
-      Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
-      break;
-    case'L':
-      Wheels_OFF();
-      Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
-      break;  
-    }
-    
-    // Enable timer interrupt
-    TA0CCTL0 |= CCIE;
+  */
   }
 }
 

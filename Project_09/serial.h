@@ -14,6 +14,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+// Serial settings
 #define BEGINNING            (0)
 #define COUNTER_RESET        (0)
 #define ASCII_NUM_SHIFT      (48)
@@ -25,6 +26,7 @@
 #define RXIFG                (2)
 #define TXIFG                (4)
 
+// Serial Initialization
 #define UCA_BRW_115          (4)
 #define UCA_BRW_460          (17)
 #define UCA_MCTL_115         (0x5551)
@@ -32,16 +34,8 @@
 #define LOWER_BAUD           (115200)
 #define HIGHER_BAUD          (460800)
 
-#define COMMAND_START        ('*')
-#define TEST_START           ('.')
-#define READ_DIGIT(x,y)      (x = y - ASCII_NUM_SHIFT)
-#define COMMAND_PASS         (8657)                         // Digit 2 through 5 of command; used to verify user
-#define THOUSAND             (1000)
-#define HUNDRED              (100)
-#define TEN                  (10)
-
+// IP Status Verification
 #define IP_LEAD_BYTE         ('1')
-// iot_status_register
 #define IOT_STATUS(x)        (iot_status_reg & x)
 #define IOT_ENABLE(x)        (iot_status_reg |= x)
 #define IOT_DISABLE(x)       (iot_status_reg &= ~x)
@@ -50,8 +44,29 @@
 #define CHECK_FOR_COMMAND    (0x04)
 #define COMMAND_EXECUTING    (0x08)
 
-#define LF                   (0x0A)
+// Command Constants
+#define COMMAND_PASS         (8657)                         // Digit 2 through 5 of command; used to verify user
+#define THOUSAND             (1000)
+#define HUNDRED              (100)
+#define TEN                  (10)
 
+// Command Identification
+#define COMMAND_START        ('*')    // First character in driving command
+#define TEST_START           ('.')    // First character in test command
+#define LEFT_FORWARD         ('K')    // Left  wheel spins forward
+#define LEFT_REVERSE         ('M')    // Left  wheel spins backward
+#define RIGHT_FORWARD        ('Q')    // Right wheel spins forward
+#define RIGHT_REVERSE        ('S')    // Right wheel spins backward 
+#define BLACK_LINE_MODE      ('L')    // Autonomous driving mode
+#ifndef EMOTE_ENUM
+#define EMOTE_ENUM                    // Button presses from Xbox controller
+typedef enum {
+  EMOTE1 = 'A',
+  EMOTE2 = 'B',
+  EMOTE3 = 'Y',
+  EMOTE4 = 'X'
+} emote_t;
+#endif
 #ifndef COUNTING_ENUM
 #define COUNTING_ENUM
 typedef enum{ //WTF, Sam???????????

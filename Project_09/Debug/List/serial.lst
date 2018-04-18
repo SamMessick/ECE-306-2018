@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           17/Apr/2018  17:38:49
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           17/Apr/2018  23:36:59
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\serial.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EWA8F3.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EWFCC2.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\serial.c" -lC
 #        "C:\Users\shmes\Desktop\Escritorio
@@ -51,9 +51,14 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
      10          
      11          #include "serial.h"
 
-   \                                 In  segment DATA16_AN, at 0x342
-   \   union <unnamed> _A_TA0CCTL0_L
-   \                     _A_TA0CCTL0_L:
+   \                                 In  segment DATA16_AN, at 0x242
+   \   union <unnamed> _A_PCOUT_L
+   \                     _A_PCOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x262
+   \   union <unnamed> _A_PDOUT_L
+   \                     _A_PDOUT_L:
    \   000000                DS8 2
 
    \                                 In  segment DATA16_AN, at 0x5c0
@@ -341,7 +346,7 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
      78              if(IOT_STATUS(CHECK_FOR_COMMAND))
    \                     ??check_for_input_1:
    \   00005E   E2B2....     BIT.B   #0x4, &iot_status_reg
-   \   000062   1D28         JNC     ??check_for_input_0
+   \   000062   1128         JNC     ??check_for_input_0
      79                if(Main_Char_Rx[CHAR1] == COMMAND_START)
    \   000064   F2902A00.... CMP.B   #0x2a, &Main_Char_Rx
    \   00006A   0520         JNE     ??check_for_input_2
@@ -350,67 +355,54 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
    \   00006C   ........     CALLA   #parse_command
      82                  IOT_DISABLE(CHECK_FOR_COMMAND);
    \   000070   E2C2....     BIC.B   #0x4, &iot_status_reg
-   \   000074   143C         JMP     ??check_for_input_0
+   \   000074   083C         JMP     ??check_for_input_0
      83                }
-     84                else if(Main_Char_Rx[CHAR11] == COMMAND_START && !IOT_STATUS(COMMAND_EXECUTING))
+     84                else if(Main_Char_Rx[CHAR1] == TEST_START)
    \                     ??check_for_input_2:
-   \   000076   F2902A00.... CMP.B   #0x2a, &Main_Char_Rx + 10
-   \   00007C   0820         JNE     ??check_for_input_3
-   \   00007E   F2B2....     BIT.B   #0x8, &iot_status_reg
-   \   000082   052C         JC      ??check_for_input_3
+   \   000076   F2902E00.... CMP.B   #0x2e, &Main_Char_Rx
+   \   00007C   0420         JNE     ??check_for_input_0
      85                {
-     86                  parse_second_command();
-   \   000084   ........     CALLA   #parse_second_command
+     86                  parse_test();
+   \   00007E   ........     CALLA   #parse_test
      87                  IOT_DISABLE(CHECK_FOR_COMMAND);
-   \   000088   E2C2....     BIC.B   #0x4, &iot_status_reg
-   \   00008C   083C         JMP     ??check_for_input_0
+   \   000082   E2C2....     BIC.B   #0x4, &iot_status_reg
      88                }
-     89                else if(Main_Char_Rx[CHAR1] == TEST_START)
-   \                     ??check_for_input_3:
-   \   00008E   F2902E00.... CMP.B   #0x2e, &Main_Char_Rx
-   \   000094   0420         JNE     ??check_for_input_0
-     90                {
-     91                  parse_test();
-   \   000096   ........     CALLA   #parse_test
-     92                  IOT_DISABLE(CHECK_FOR_COMMAND);
-   \   00009A   E2C2....     BIC.B   #0x4, &iot_status_reg
-     93                }
-     94              read_into_buffer();
+     89              read_into_buffer();
    \                     ??check_for_input_0:
-   \   00009E   ........     BRA     #read_into_buffer
-     95              //UCA3IE |= UCRXIE;
-     96          }
-     97          
-     98          // Updates main buffer alongside iot buffer
+   \   000086   ........     BRA     #read_into_buffer
+     90              //UCA3IE |= UCRXIE;
+     91          }
+     92          
+     93          // Updates main buffer alongside iot buffer
 
    \                                 In  segment CODE, align 2
-     99          void read_into_buffer(void){
+     94          void read_into_buffer(void){
    \                     read_into_buffer:
    \                     ??read_into_buffer_0:
-    100            static uint8_t rx_wr_temp;
-    101            while(rx_wr_temp != iot_tx_wr)
+     95            static uint8_t rx_wr_temp;
+     96            while(rx_wr_temp != iot_tx_wr)
    \   000000   D292........ CMP.B   &iot_tx_wr, &??rx_wr_temp
    \   000006   0424         JEQ     ??read_into_buffer_1
-    102              rx_wr_temp = iot_tx_wr;
+     97              rx_wr_temp = iot_tx_wr;
    \   000008   D242........ MOV.B   &iot_tx_wr, &??rx_wr_temp
    \   00000E   F83F         JMP     ??read_into_buffer_0
-    103            while(main_ring_rd != rx_wr_temp || chars_to_read > COUNTER_RESET)
+     98            while(main_ring_rd != rx_wr_temp || chars_to_read > COUNTER_RESET)
    \                     ??read_into_buffer_1:
    \   000010   D292........ CMP.B   &??rx_wr_temp, &main_ring_rd
    \   000016   0320         JNE     ??read_into_buffer_2
    \   000018   D293....     CMP.B   #0x1, &chars_to_read
    \   00001C   1C38         JL      ??read_into_buffer_3
-    104            {
-    105              Main_Char_Rx[main_ring_rd] = IOT_Char_Rx[main_ring_rd];
+     99            {
+    100              Main_Char_Rx[main_ring_rd] = IOT_Char_Rx[main_ring_rd];
    \                     ??read_into_buffer_2:
    \   00001E   5E42....     MOV.B   &main_ring_rd, R14
    \   000022   4E4E         MOV.B   R14, R14
    \   000024   5F42....     MOV.B   &main_ring_rd, R15
    \   000028   4F4F         MOV.B   R15, R15
    \   00002A   DF4E........ MOV.B   IOT_Char_Rx(R14), Main_Char_Rx(R15)
-    106              chars_to_read--;
+    101              chars_to_read--;
    \   000030   F253....     ADD.B   #0xff, &chars_to_read
-    107              if(Main_Char_Rx[main_ring_rd] == '\n' || ++main_ring_rd >= SMALL_RING_SIZE)
+    102              if(Main_Char_Rx[main_ring_rd] == '\n' || ++main_ring_rd >= SMALL_RING_SIZE)
    \   000034   5F42....     MOV.B   &main_ring_rd, R15
    \   000038   4F4F         MOV.B   R15, R15
    \   00003A   FF900A00.... CMP.B   #0xa, Main_Char_Rx(R15)
@@ -418,16 +410,16 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
    \   000042   D253....     ADD.B   #0x1, &main_ring_rd
    \   000046   F2901000.... CMP.B   #0x10, &main_ring_rd
    \   00004C   E12B         JNC     ??read_into_buffer_1
-    108              {
-    109                main_ring_rd = BEGINNING;
+    103              {
+    104                main_ring_rd = BEGINNING;
    \                     ??read_into_buffer_4:
    \   00004E   C243....     MOV.B   #0x0, &main_ring_rd
-    110                IOT_ENABLE(CHECK_FOR_COMMAND);
+    105                IOT_ENABLE(CHECK_FOR_COMMAND);
    \   000052   E2D2....     BIS.B   #0x4, &iot_status_reg
-    111                break;
-    112              }
-    113            }
-    114          }
+    106                break;
+    107              }
+    108            }
+    109          }
    \                     ??read_into_buffer_3:
    \   000056   1001         RETA
 
@@ -435,14 +427,19 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
    \   000000                REQUIRE ?cstart_init_zero
    \                     ??rx_wr_temp:
    \   000000                DS8 1
-    115          
+    110          
 
    \                                 In  segment CODE, align 2
-    116          void parse_command(void){
+    111          void parse_command(void){
    \                     parse_command:
-   \   000000   1B15         PUSHM.W #0x2, R11
-    117            char direction;
-    118            uint16_t password_attempt;
+   \   000000   3B15         PUSHM.W #0x4, R11
+    112            static char left_direction;
+    113            static char right_direction;
+    114            static uint8_t left_pwm;
+    115            static uint8_t right_pwm;
+    116            
+    117            uint16_t password_attempt;   // Number between 0000-9999 validating user
+    118            char command_identifier;
     119            
     120            password_attempt = (Main_Char_Rx[CHAR2] - ASCII_NUM_SHIFT)*THOUSAND +
     121                               (Main_Char_Rx[CHAR3] - ASCII_NUM_SHIFT)*HUNDRED  +
@@ -483,319 +480,360 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
     124            
     125            if(password_attempt == COMMAND_PASS)
    \   00004C   3B90D121     CMP.W   #0x21d1, R11
-   \   000050   6120         JNE     ??parse_command_2
+   \   000050   0321         JNE     ??parse_command_1
     126            {
-    127              
-    128              // User verified; interpret command
-    129              direction = Main_Char_Rx[CHAR6];
-   \   000052   5A42....     MOV.B   &Main_Char_Rx + 5, R10
-    130              
-    131              // Retrieve duration from buffer (milliseconds)
-    132              delay_time     +=(Main_Char_Rx[CHAR7] - ASCII_NUM_SHIFT)*THOUSAND +
-    133                               (Main_Char_Rx[CHAR8] - ASCII_NUM_SHIFT)*HUNDRED  +
-    134                               (Main_Char_Rx[CHAR9] - ASCII_NUM_SHIFT)*TEN      +
-    135                               (Main_Char_Rx[CHAR10] - ASCII_NUM_SHIFT);
-   \   000056   5E42....     MOV.B   &Main_Char_Rx + 6, R14
-   \   00005A   4E4E         MOV.B   R14, R14
-   \   00005C   5E0A         RLAM.W  #0x3, R14
-   \   00005E   0F4E         MOV.W   R14, R15
-   \   000060   5E06         RLAM.W  #0x2, R14
-   \   000062   0F5E         ADD.W   R14, R15
-   \   000064   0E5E         RLA.W   R14
-   \   000066   0F5E         ADD.W   R14, R15
-   \   000068   0E5E         RLA.W   R14
-   \   00006A   0F5E         ADD.W   R14, R15
-   \   00006C   0E5E         RLA.W   R14
-   \   00006E   0F5E         ADD.W   R14, R15
-   \   000070   0E5E         RLA.W   R14
-   \   000072   0E5F         ADD.W   R15, R14
-   \   000074   5F42....     MOV.B   &Main_Char_Rx + 7, R15
-   \   000078   4F4F         MOV.B   R15, R15
-   \   00007A   5F06         RLAM.W  #0x2, R15
-   \   00007C   0D4F         MOV.W   R15, R13
-   \   00007E   5F0A         RLAM.W  #0x3, R15
-   \   000080   0D5F         ADD.W   R15, R13
-   \   000082   0F5F         RLA.W   R15
-   \   000084   0F5D         ADD.W   R13, R15
-   \   000086   0E5F         ADD.W   R15, R14
-   \   000088   5F42....     MOV.B   &Main_Char_Rx + 8, R15
-   \   00008C   4F4F         MOV.B   R15, R15
-   \   00008E                RPT     #0xa
-   \   00008E   49180E5F     ADDX.W  R15, R14
-   \   000092   5F42....     MOV.B   &Main_Char_Rx + 9, R15
-   \   000096   4F4F         MOV.B   R15, R15
-   \   000098   0E5F         ADD.W   R15, R14
-   \   00009A   3E50B02F     ADD.W   #0x2fb0, R14
-   \   00009E   825E....     ADD.W   R14, &delay_time
-    136              switch(direction)
-   \   0000A2   4E4A         MOV.B   R10, R14
-   \   0000A4   7E804200     SUB.B   #0x42, R14
-   \   0000A8   1824         JEQ     ??parse_command_3
-   \   0000AA   6E82         SUB.B   #0x4, R14
-   \   0000AC   0B24         JEQ     ??parse_command_4
-   \   0000AE   7E800600     SUB.B   #0x6, R14
-   \   0000B2   2524         JEQ     ??parse_command_5
-   \   0000B4   7E800600     SUB.B   #0x6, R14
-   \   0000B8   1B24         JEQ     ??parse_command_6
-   \   0000BA   5E83         SUB.B   #0x1, R14
-   \   0000BC   2620         JNE     ??parse_command_1
-    137              {
-    138              case 'S':
-    139                Wheels_OFF();
-   \   0000BE   ........     CALLA   #Wheels_OFF
-    140                break;
-   \   0000C2   233C         JMP     ??parse_command_1
-    141              case 'F':
-    142                Wheels_OFF();
-   \                     ??parse_command_4:
-   \   0000C4   ........     CALLA   #Wheels_OFF
-    143                Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
-   \   0000C8   7C40EB00     MOV.B   #0xeb, R12
-   \   0000CC   ........     CALLA   #Left_Motor_ON_FORWARD
-    144                Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
-   \   0000D0   7C409100     MOV.B   #0x91, R12
-   \   0000D4   ........     CALLA   #Right_Motor_ON_FORWARD
-    145                break;
-   \   0000D8   183C         JMP     ??parse_command_1
-    146              case 'B':
-    147                Wheels_OFF();
-   \                     ??parse_command_3:
-   \   0000DA   ........     CALLA   #Wheels_OFF
-    148                Left_Motor_ON_REVERSE(LEFT_FORWARD_SPEED);
-   \   0000DE   7C40EB00     MOV.B   #0xeb, R12
-   \   0000E2   ........     CALLA   #Left_Motor_ON_REVERSE
-    149                Right_Motor_ON_REVERSE(RIGHT_FORWARD_SPEED);
-   \   0000E6   7C409100     MOV.B   #0x91, R12
-   \   0000EA   ........     CALLA   #Right_Motor_ON_REVERSE
-    150                break;
-   \   0000EE   0D3C         JMP     ??parse_command_1
-    151              case 'R':
-    152                Wheels_OFF();
-   \                     ??parse_command_6:
-   \   0000F0   ........     CALLA   #Wheels_OFF
-    153                Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
-   \   0000F4   7C40EB00     MOV.B   #0xeb, R12
-   \   0000F8   ........     CALLA   #Left_Motor_ON_FORWARD
-    154                break;
-   \   0000FC   063C         JMP     ??parse_command_1
-    155              case'L':
-    156                Wheels_OFF();
+    127              command_identifier = Main_Char_Rx[CHAR6];
+   \   000052   5842....     MOV.B   &Main_Char_Rx + 5, R8
+    128              switch(command_identifier)
+   \   000056   4E48         MOV.B   R8, R14
+   \   000058   7E804100     SUB.B   #0x41, R14
+   \   00005C   A124         JEQ     ??parse_command_3
+   \   00005E   5E83         SUB.B   #0x1, R14
+   \   000060   B524         JEQ     ??parse_command_4
+   \   000062   7E800900     SUB.B   #0x9, R14
+   \   000066   0A24         JEQ     ??parse_command_5
+   \   000068   5E83         SUB.B   #0x1, R14
+   \   00006A   F224         JEQ     ??parse_command_6
+   \   00006C   5E83         SUB.B   #0x1, R14
+   \   00006E   0624         JEQ     ??parse_command_5
+   \   000070   7E800B00     SUB.B   #0xb, R14
+   \   000074   D724         JEQ     ??parse_command_7
+   \   000076   5E83         SUB.B   #0x1, R14
+   \   000078   BF24         JEQ     ??parse_command_8
+   \   00007A   EE3C         JMP     ??parse_command_1
+    129              {
+    130              case LEFT_FORWARD:
+    131              case LEFT_REVERSE:                    // A PWM value was specified
+    132                
+    133                // Retrieve PWM values
+    134                left_direction = Main_Char_Rx[CHAR6];
    \                     ??parse_command_5:
-   \   0000FE   ........     CALLA   #Wheels_OFF
-    157                Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
-   \   000102   7C409100     MOV.B   #0x91, R12
-   \   000106   ........     CALLA   #Right_Motor_ON_FORWARD
-    158                break;  
-    159              }
-    160              
-    161              // Enable timer interrupt
-    162              TA0CCTL0 |= CCIE;
+   \   00007C   D242........ MOV.B   &Main_Char_Rx + 5, &??left_direction
+    135                right_direction = Main_Char_Rx[CHAR7];
+   \   000082   D242........ MOV.B   &Main_Char_Rx + 6, &??right_direction
+    136                
+    137                left_pwm =     (Main_Char_Rx[CHAR8] - ASCII_NUM_SHIFT)*HUNDRED  +
+    138                               (Main_Char_Rx[CHAR9] - ASCII_NUM_SHIFT)*TEN      +
+    139                               (Main_Char_Rx[CHAR10] - ASCII_NUM_SHIFT);
+   \   000088   5E42....     MOV.B   &Main_Char_Rx + 7, R14
+   \   00008C                RPT     #0x2
+   \   00008C   41184E5E     RLAX.B  R14
+   \   000090   4F4E         MOV.B   R14, R15
+   \   000092                RPT     #0x3
+   \   000092   42184E5E     RLAX.B  R14
+   \   000096   4F5E         ADD.B   R14, R15
+   \   000098   4E5E         RLA.B   R14
+   \   00009A   4E5F         ADD.B   R15, R14
+   \   00009C   5F42....     MOV.B   &Main_Char_Rx + 8, R15
+   \   0000A0                RPT     #0xa
+   \   0000A0   49184E5F     ADDX.B  R15, R14
+   \   0000A4   5E52....     ADD.B   &Main_Char_Rx + 9, R14
+   \   0000A8   7E503000     ADD.B   #0x30, R14
+   \   0000AC   C24E....     MOV.B   R14, &??left_pwm
+    140                right_pwm =    (Main_Char_Rx[CHAR11] - ASCII_NUM_SHIFT)*HUNDRED  +
+    141                               (Main_Char_Rx[CHAR12] - ASCII_NUM_SHIFT)*TEN      +
+    142                               (Main_Char_Rx[CHAR13] - ASCII_NUM_SHIFT);
+   \   0000B0   5E42....     MOV.B   &Main_Char_Rx + 10, R14
+   \   0000B4                RPT     #0x2
+   \   0000B4   41184E5E     RLAX.B  R14
+   \   0000B8   4F4E         MOV.B   R14, R15
+   \   0000BA                RPT     #0x3
+   \   0000BA   42184E5E     RLAX.B  R14
+   \   0000BE   4F5E         ADD.B   R14, R15
+   \   0000C0   4E5E         RLA.B   R14
+   \   0000C2   4E5F         ADD.B   R15, R14
+   \   0000C4   5F42....     MOV.B   &Main_Char_Rx + 11, R15
+   \   0000C8                RPT     #0xa
+   \   0000C8   49184E5F     ADDX.B  R15, R14
+   \   0000CC   5E52....     ADD.B   &Main_Char_Rx + 12, R14
+   \   0000D0   7E503000     ADD.B   #0x30, R14
+   \   0000D4   C24E....     MOV.B   R14, &??right_pwm
+    143                
+    144                left_pwm  %= MAX_PWM;     // Bring pwm values within range
+   \   0000D8   3A40FF00     MOV.W   #0xff, R10
+   \   0000DC   5C42....     MOV.B   &??left_pwm, R12
+   \   0000E0   4C4C         MOV.B   R12, R12
+   \   0000E2   0E4A         MOV.W   R10, R14
+   \   0000E4   ........     CALLA   #?DivMod16s
+   \   0000E8   0212         PUSH.W  SR
+   \   0000EA   32C2         DINT
+   \   0000EC   0343         NOP
+   \   0000EE   C24C....     MOV.B   R12, &__iar_HWMUL              // MPY
+   \   0000F2   C24A....     MOV.B   R10, &__iar_HWMUL + 8          // OP2
+   \   0000F6   D282........ SUB.B   &__iar_HWMUL + 10, &??left_pwm // RESLO
+   \   0000FC   0343         NOP
+   \   0000FE   3241         POP.W   SR
+    145                right_pwm %= MAX_PWM; 
+   \   000100   3A40FF00     MOV.W   #0xff, R10
+   \   000104   5C42....     MOV.B   &??right_pwm, R12
+   \   000108   4C4C         MOV.B   R12, R12
+   \   00010A   0E4A         MOV.W   R10, R14
+   \   00010C   ........     CALLA   #?DivMod16s
+   \   000110   0212         PUSH.W  SR
+   \   000112   32C2         DINT
+   \   000114   0343         NOP
+   \   000116   C24C....     MOV.B   R12, &__iar_HWMUL              // MPY
+   \   00011A   C24A....     MOV.B   R10, &__iar_HWMUL + 8          // OP2
+   \   00011E   D282........ SUB.B   &__iar_HWMUL + 10, &??right_pwm // RESLO
+   \   000124   0343         NOP
+   \   000126   3241         POP.W   SR
+    146                
+    147                // Determine PWM direction
+    148                switch(left_direction)
+   \   000128   5E42....     MOV.B   &??left_direction, R14
+   \   00012C   7E804B00     SUB.B   #0x4b, R14
+   \   000130   0324         JEQ     ??parse_command_9
+   \   000132   6E83         SUB.B   #0x2, R14
+   \   000134   1B24         JEQ     ??parse_command_10
+   \   000136   903C         JMP     ??parse_command_1
+    149                {
+    150                case LEFT_FORWARD:
+    151                  switch(right_direction)
+   \                     ??parse_command_9:
+   \   000138   5E42....     MOV.B   &??right_direction, R14
+   \   00013C   7E805100     SUB.B   #0x51, R14
+   \   000140   0324         JEQ     ??parse_command_11
+   \   000142   6E83         SUB.B   #0x2, R14
+   \   000144   0A24         JEQ     ??parse_command_12
+   \   000146   883C         JMP     ??parse_command_1
+    152                  {
+    153                  case RIGHT_FORWARD:
+    154                    Left_Motor_ON_FORWARD(left_pwm);
+   \                     ??parse_command_11:
+   \   000148   5C42....     MOV.B   &??left_pwm, R12
+   \   00014C   ........     CALLA   #Left_Motor_ON_FORWARD
+    155                    Right_Motor_ON_FORWARD(right_pwm);
+   \   000150   5C42....     MOV.B   &??right_pwm, R12
+   \   000154   ........     CALLA   #Right_Motor_ON_FORWARD
+    156                    break;
+   \   000158   7F3C         JMP     ??parse_command_1
+    157                    
+    158                  case RIGHT_REVERSE:
+    159                    Left_Motor_ON_FORWARD(left_pwm);
+   \                     ??parse_command_12:
+   \   00015A   5C42....     MOV.B   &??left_pwm, R12
+   \   00015E   ........     CALLA   #Left_Motor_ON_FORWARD
+    160                    Right_Motor_ON_REVERSE(right_pwm);
+   \   000162   5C42....     MOV.B   &??right_pwm, R12
+   \   000166   ........     CALLA   #Right_Motor_ON_REVERSE
+    161                  }break;
+   \   00016A   763C         JMP     ??parse_command_1
+    162                  
+    163                case LEFT_REVERSE:
+    164                  switch(right_direction)
+   \                     ??parse_command_10:
+   \   00016C   5E42....     MOV.B   &??right_direction, R14
+   \   000170   7E805100     SUB.B   #0x51, R14
+   \   000174   0324         JEQ     ??parse_command_13
+   \   000176   6E83         SUB.B   #0x2, R14
+   \   000178   0A24         JEQ     ??parse_command_14
+   \   00017A   6E3C         JMP     ??parse_command_1
+    165                  {
+    166                  case RIGHT_FORWARD:
+    167                    Left_Motor_ON_REVERSE(left_pwm);
+   \                     ??parse_command_13:
+   \   00017C   5C42....     MOV.B   &??left_pwm, R12
+   \   000180   ........     CALLA   #Left_Motor_ON_REVERSE
+    168                    Right_Motor_ON_FORWARD(right_pwm);
+   \   000184   5C42....     MOV.B   &??right_pwm, R12
+   \   000188   ........     CALLA   #Right_Motor_ON_FORWARD
+    169                    break;
+   \   00018C   653C         JMP     ??parse_command_1
+    170                    
+    171                  case RIGHT_REVERSE:
+    172                    Left_Motor_ON_REVERSE(left_pwm);
+   \                     ??parse_command_14:
+   \   00018E   5C42....     MOV.B   &??left_pwm, R12
+   \   000192   ........     CALLA   #Left_Motor_ON_REVERSE
+    173                    Right_Motor_ON_REVERSE(right_pwm);
+   \   000196   5C42....     MOV.B   &??right_pwm, R12
+   \   00019A   ........     CALLA   #Right_Motor_ON_REVERSE
+    174                  }
+    175                } break;
+   \   00019E   5C3C         JMP     ??parse_command_1
+    176                
+    177              case EMOTE1:                         // Print Samic fast meme to LCD
+    178                word1 = " Gotta go ";
+   \                     ??parse_command_3:
+   \   0001A0   B240........ MOV.W   #`?<Constant " Gotta go ">`, &word1
+    179                word2 = "<<<<<<<<<<";
+   \   0001A6   B240........ MOV.W   #`?<Constant "<<<<<<<<<<">`, &word2
+    180                word3 = "Samic fast";
+   \   0001AC   B240........ MOV.W   #`?<Constant "Samic fast">`, &word3
+    181                word4 = ">>>>>>>>>>";
+   \   0001B2   B240........ MOV.W   #`?<Constant ">>>>>>>>>>">`, &word4
+    182                LCD_print(word1,word2,word3,word4);
+   \   0001B8   1F42....     MOV.W   &word4, R15
+   \   0001BC   1E42....     MOV.W   &word3, R14
+   \   0001C0   1D42....     MOV.W   &word2, R13
+   \   0001C4   1C42....     MOV.W   &word1, R12
+   \   0001C8   ........     CALLA   #LCD_print
+    183                
+    184              case EMOTE2:                         // Print Happy Car meme to LCD
+    185                word1 = " _______  ";
+   \                     ??parse_command_4:
+   \   0001CC   B240........ MOV.W   #`?<Constant " _______  ">`, &word1
+    186                word2 = "/^_____^\\ ";
+   \   0001D2   B240........ MOV.W   #`?<Constant "/^_____^\\\\ ">`, &word2
+    187                word3 = "\\_______/ ";
+   \   0001D8   B240........ MOV.W   #`?<Constant "\\\\_______/ ">`, &word3
+    188                word4 = "Happy Car ";
+   \   0001DE   B240........ MOV.W   #`?<Constant "Happy Car ">`, &word4
+    189                LCD_print(word1,word2,word3,word4);
+   \   0001E4   1F42....     MOV.W   &word4, R15
+   \   0001E8   1E42....     MOV.W   &word3, R14
+   \   0001EC   1D42....     MOV.W   &word2, R13
+   \   0001F0   1C42....     MOV.W   &word1, R12
+   \   0001F4   ........     CALLA   #LCD_print
+    190                
+    191              case EMOTE3:                         // Print Dank Memes ad to LCD
+    192                word1 = " MSP430 JR";
+   \                     ??parse_command_8:
+   \   0001F8   B240........ MOV.W   #`?<Constant " MSP430 JR">`, &word1
+    193                word2 = "----------";
+   \   0001FE   B240........ MOV.W   #`?<Constant "----------">`, &word2
+    194                word3 = "Now w/ 2x ";
+   \   000204   B240........ MOV.W   #`?<Constant "Now w/ 2x ">`, &word3
+    195                word4 = "Dank memes";
+   \   00020A   B240........ MOV.W   #`?<Constant "Dank memes">`, &word4
+    196                LCD_print(word1,word2,word3,word4);
+   \   000210   1F42....     MOV.W   &word4, R15
+   \   000214   1E42....     MOV.W   &word3, R14
+   \   000218   1D42....     MOV.W   &word2, R13
+   \   00021C   1C42....     MOV.W   &word1, R12
+   \   000220   ........     CALLA   #LCD_print
+    197                
+    198              case EMOTE4:                         // Print cautionary meme to LCD
+    199                word1 = "Look both ";
+   \                     ??parse_command_7:
+   \   000224   B240........ MOV.W   #`?<Constant "Look both ">`, &word1
+    200                word2 = "ways bfore";
+   \   00022A   B240........ MOV.W   #`?<Constant "ways bfore">`, &word2
+    201                word3 = "crossin da";
+   \   000230   B240........ MOV.W   #`?<Constant "crossin da">`, &word3
+    202                word4 = "black line";
+   \   000236   B240........ MOV.W   #`?<Constant "black line">`, &word4
+    203                LCD_print(word1,word2,word3,word4);
+   \   00023C   1F42....     MOV.W   &word4, R15
+   \   000240   1E42....     MOV.W   &word3, R14
+   \   000244   1D42....     MOV.W   &word2, R13
+   \   000248   1C42....     MOV.W   &word1, R12
+   \   00024C   ........     CALLA   #LCD_print
+    204                
+    205              case BLACK_LINE_MODE:
+    206                P5OUT &= ~IOT_RESET;   // Disable IOT device
+   \                     ??parse_command_6:
+   \   000250   D2C34202     BIC.B   #0x1, &0x242
+    207                P8OUT |= IR_LED;       // Enable infrared LED for sensor readings
+   \   000254   D2D36302     BIS.B   #0x1, &0x263
+    208                
+    209                /* Goal of code: drive in large circle, disabling white detection for 5 seconds
+    210                 *               enable white detection
+    211                 *               if white found, enable black detection
+    212                 *               if black found, stop, turn, follow black line
+    213                 *               after 20 seconds, turn car out of loop
+    214                 *               drive forward for 4 seconds and stop (display meme)
+    215                 */
+    216              }
+    217              /*
+    218              // Simple directional command (alternatives for debugging)
+    219              direction = Main_Char_Rx[CHAR6];
+    220              
+    221              // Retrieve duration from buffer (milliseconds)
+    222              delay_time     +=(Main_Char_Rx[CHAR7] - ASCII_NUM_SHIFT)*THOUSAND +
+    223                               (Main_Char_Rx[CHAR8] - ASCII_NUM_SHIFT)*HUNDRED  +
+    224                               (Main_Char_Rx[CHAR9] - ASCII_NUM_SHIFT)*TEN      +
+    225                               (Main_Char_Rx[CHAR10] - ASCII_NUM_SHIFT);
+    226              switch(direction)
+    227              {
+    228              case 'S':
+    229                Wheels_OFF();
+    230                break;
+    231              case 'F':
+    232                Wheels_OFF();
+    233                Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
+    234                Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
+    235                break;
+    236              case 'B':
+    237                Wheels_OFF();
+    238                Left_Motor_ON_REVERSE(LEFT_FORWARD_SPEED);
+    239                Right_Motor_ON_REVERSE(RIGHT_FORWARD_SPEED);
+    240                break;
+    241              case 'R':
+    242                Wheels_OFF();
+    243                Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
+    244                break;
+    245              case'L':
+    246                Wheels_OFF();
+    247                Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
+    248                break;  
+    249              }
+    250              
+    251              // Enable timer interrupt
+    252              TA0CCTL0 |= CCIE;
+    253              IOT_ENABLE(COMMAND_EXECUTING);
+    254            }
+    255            */
+    256            }
+    257          }
    \                     ??parse_command_1:
-   \   00010A   B2D010004203 BIS.W   #0x10, &0x342
-    163              IOT_ENABLE(COMMAND_EXECUTING);
-   \   000110   F2D2....     BIS.B   #0x8, &iot_status_reg
-    164            }
-    165          }
-   \                     ??parse_command_2:
-   \   000114   1A17         POPM.W  #0x2, R11
-   \   000116   1001         RETA
-   \   000118                REQUIRE _A_TA0CCTL0_L
-    166          
+   \   000258   3817         POPM.W  #0x4, R11
+   \   00025A   1001         RETA
+   \   00025C                REQUIRE _A_PCOUT_L
+   \   00025C                REQUIRE _A_PDOUT_L
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     ??left_direction:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     ??right_direction:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     ??left_pwm:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     ??right_pwm:
+   \   000000                DS8 1
+    258          
 
    \                                 In  segment CODE, align 2
-    167          void parse_second_command(void){
-   \                     parse_second_command:
-   \   000000   1B15         PUSHM.W #0x2, R11
-    168            char direction;
-    169            uint16_t password_attempt;
-    170            
-    171            password_attempt = (Main_Char_Rx[CHAR12] - ASCII_NUM_SHIFT)*THOUSAND +
-    172                               (Main_Char_Rx[CHAR13] - ASCII_NUM_SHIFT)*HUNDRED  +
-    173                               (Main_Char_Rx[CHAR14] - ASCII_NUM_SHIFT)*TEN      +
-    174                               (Main_Char_Rx[CHAR15] - ASCII_NUM_SHIFT);
-   \   000002   5E42....     MOV.B   &Main_Char_Rx + 11, R14
-   \   000006   4E4E         MOV.B   R14, R14
-   \   000008   5E0A         RLAM.W  #0x3, R14
-   \   00000A   0F4E         MOV.W   R14, R15
-   \   00000C   5E06         RLAM.W  #0x2, R14
-   \   00000E   0F5E         ADD.W   R14, R15
-   \   000010   0E5E         RLA.W   R14
-   \   000012   0F5E         ADD.W   R14, R15
-   \   000014   0E5E         RLA.W   R14
-   \   000016   0F5E         ADD.W   R14, R15
-   \   000018   0E5E         RLA.W   R14
-   \   00001A   0F5E         ADD.W   R14, R15
-   \   00001C   0E5E         RLA.W   R14
-   \   00001E   0E5F         ADD.W   R15, R14
-   \   000020   5F42....     MOV.B   &Main_Char_Rx + 12, R15
-   \   000024   4F4F         MOV.B   R15, R15
-   \   000026   5F06         RLAM.W  #0x2, R15
-   \   000028   0D4F         MOV.W   R15, R13
-   \   00002A   5F0A         RLAM.W  #0x3, R15
-   \   00002C   0D5F         ADD.W   R15, R13
-   \   00002E   0F5F         RLA.W   R15
-   \   000030   0F5D         ADD.W   R13, R15
-   \   000032   0E5F         ADD.W   R15, R14
-   \   000034   5F42....     MOV.B   &Main_Char_Rx + 13, R15
-   \   000038   4F4F         MOV.B   R15, R15
-   \   00003A                RPT     #0xa
-   \   00003A   49180E5F     ADDX.W  R15, R14
-   \   00003E   5F42....     MOV.B   &Main_Char_Rx + 14, R15
-   \   000042   4F4F         MOV.B   R15, R15
-   \   000044   0E5F         ADD.W   R15, R14
-   \   000046   3E50B02F     ADD.W   #0x2fb0, R14
-   \   00004A   0B4E         MOV.W   R14, R11
-    175            
-    176            if(password_attempt == COMMAND_PASS)
-   \   00004C   3B90D121     CMP.W   #0x21d1, R11
-   \   000050   5F20         JNE     ??parse_second_command_2
-    177            {
-    178              
-    179              // User verified; interpret command
-    180              direction = Main_Char_Rx[CHAR16];
-   \   000052   5A42....     MOV.B   &Main_Char_Rx + 15, R10
-    181              
-    182              // Retrieve duration from buffer (milliseconds)
-    183              delay_time     +=(Main_Char_Rx[CHAR1] - ASCII_NUM_SHIFT)*THOUSAND +
-    184                               (Main_Char_Rx[CHAR2] - ASCII_NUM_SHIFT)*HUNDRED  +
-    185                               (Main_Char_Rx[CHAR3] - ASCII_NUM_SHIFT)*TEN      +
-    186                               (Main_Char_Rx[CHAR4] - ASCII_NUM_SHIFT);
-   \   000056   5E42....     MOV.B   &Main_Char_Rx, R14
-   \   00005A   4E4E         MOV.B   R14, R14
-   \   00005C   5E0A         RLAM.W  #0x3, R14
-   \   00005E   0F4E         MOV.W   R14, R15
-   \   000060   5E06         RLAM.W  #0x2, R14
-   \   000062   0F5E         ADD.W   R14, R15
-   \   000064   0E5E         RLA.W   R14
-   \   000066   0F5E         ADD.W   R14, R15
-   \   000068   0E5E         RLA.W   R14
-   \   00006A   0F5E         ADD.W   R14, R15
-   \   00006C   0E5E         RLA.W   R14
-   \   00006E   0F5E         ADD.W   R14, R15
-   \   000070   0E5E         RLA.W   R14
-   \   000072   0E5F         ADD.W   R15, R14
-   \   000074   5F42....     MOV.B   &Main_Char_Rx + 1, R15
-   \   000078   4F4F         MOV.B   R15, R15
-   \   00007A   5F06         RLAM.W  #0x2, R15
-   \   00007C   0D4F         MOV.W   R15, R13
-   \   00007E   5F0A         RLAM.W  #0x3, R15
-   \   000080   0D5F         ADD.W   R15, R13
-   \   000082   0F5F         RLA.W   R15
-   \   000084   0F5D         ADD.W   R13, R15
-   \   000086   0E5F         ADD.W   R15, R14
-   \   000088   5F42....     MOV.B   &Main_Char_Rx + 2, R15
-   \   00008C   4F4F         MOV.B   R15, R15
-   \   00008E                RPT     #0xa
-   \   00008E   49180E5F     ADDX.W  R15, R14
-   \   000092   5F42....     MOV.B   &Main_Char_Rx + 3, R15
-   \   000096   4F4F         MOV.B   R15, R15
-   \   000098   0E5F         ADD.W   R15, R14
-   \   00009A   3E50B02F     ADD.W   #0x2fb0, R14
-   \   00009E   825E....     ADD.W   R14, &delay_time
-    187              switch(direction)
-   \   0000A2   4E4A         MOV.B   R10, R14
-   \   0000A4   7E804200     SUB.B   #0x42, R14
-   \   0000A8   1824         JEQ     ??parse_second_command_3
-   \   0000AA   6E82         SUB.B   #0x4, R14
-   \   0000AC   0B24         JEQ     ??parse_second_command_4
-   \   0000AE   7E800600     SUB.B   #0x6, R14
-   \   0000B2   2524         JEQ     ??parse_second_command_5
-   \   0000B4   7E800600     SUB.B   #0x6, R14
-   \   0000B8   1B24         JEQ     ??parse_second_command_6
-   \   0000BA   5E83         SUB.B   #0x1, R14
-   \   0000BC   2620         JNE     ??parse_second_command_1
-    188              {
-    189              case 'S':
-    190                Wheels_OFF();
-   \   0000BE   ........     CALLA   #Wheels_OFF
-    191                break;
-   \   0000C2   233C         JMP     ??parse_second_command_1
-    192              case 'F':
-    193                Wheels_OFF();
-   \                     ??parse_second_command_4:
-   \   0000C4   ........     CALLA   #Wheels_OFF
-    194                Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
-   \   0000C8   7C40EB00     MOV.B   #0xeb, R12
-   \   0000CC   ........     CALLA   #Left_Motor_ON_FORWARD
-    195                Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
-   \   0000D0   7C409100     MOV.B   #0x91, R12
-   \   0000D4   ........     CALLA   #Right_Motor_ON_FORWARD
-    196                break;
-   \   0000D8   183C         JMP     ??parse_second_command_1
-    197              case 'B':
-    198                Wheels_OFF();
-   \                     ??parse_second_command_3:
-   \   0000DA   ........     CALLA   #Wheels_OFF
-    199                Left_Motor_ON_REVERSE(LEFT_FORWARD_SPEED);
-   \   0000DE   7C40EB00     MOV.B   #0xeb, R12
-   \   0000E2   ........     CALLA   #Left_Motor_ON_REVERSE
-    200                Right_Motor_ON_REVERSE(RIGHT_FORWARD_SPEED);
-   \   0000E6   7C409100     MOV.B   #0x91, R12
-   \   0000EA   ........     CALLA   #Right_Motor_ON_REVERSE
-    201                break;
-   \   0000EE   0D3C         JMP     ??parse_second_command_1
-    202              case 'R':
-    203                Wheels_OFF();
-   \                     ??parse_second_command_6:
-   \   0000F0   ........     CALLA   #Wheels_OFF
-    204                Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
-   \   0000F4   7C40EB00     MOV.B   #0xeb, R12
-   \   0000F8   ........     CALLA   #Left_Motor_ON_FORWARD
-    205                break;
-   \   0000FC   063C         JMP     ??parse_second_command_1
-    206              case'L':
-    207                Wheels_OFF();
-   \                     ??parse_second_command_5:
-   \   0000FE   ........     CALLA   #Wheels_OFF
-    208                Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
-   \   000102   7C409100     MOV.B   #0x91, R12
-   \   000106   ........     CALLA   #Right_Motor_ON_FORWARD
-    209                break;  
-    210              }
-    211              
-    212              // Enable timer interrupt
-    213              TA0CCTL0 |= CCIE;
-   \                     ??parse_second_command_1:
-   \   00010A   B2D010004203 BIS.W   #0x10, &0x342
-    214            }
-    215          }
-   \                     ??parse_second_command_2:
-   \   000110   1A17         POPM.W  #0x2, R11
-   \   000112   1001         RETA
-   \   000114                REQUIRE _A_TA0CCTL0_L
-    216          
-
-   \                                 In  segment CODE, align 2
-    217          void parse_test(void){
+    259          void parse_test(void){
    \                     parse_test:
-    218            uint8_t string_index;
-    219            static char* higher_baud = "460800\r\n";
-    220            static char* lower_baud  = "115200\r\n";
-    221            
-    222            switch(Main_Char_Rx[CHAR2])
+    260            uint8_t string_index;
+    261            static char* higher_baud = "460800\r\n";
+    262            static char* lower_baud  = "115200\r\n";
+    263            
+    264            switch(Main_Char_Rx[CHAR2])
    \   000000   5F42....     MOV.B   &Main_Char_Rx + 1, R15
    \   000004   7F804600     SUB.B   #0x46, R15
    \   000008   1A24         JEQ     ??parse_test_5
    \   00000A   7F800D00     SUB.B   #0xd, R15
    \   00000E   2F20         JNE     ??parse_test_2
-    223            {
-    224            case 'S': // 115200 baud
-    225              UCA3CTLW0 |= UCSWRST;               // Set software reset enable
+    265            {
+    266            case 'S': // 115200 baud
+    267              UCA3CTLW0 |= UCSWRST;               // Set software reset enable
    \   000010   92D32006     BIS.W   #0x1, &0x620
-    226              UCA3BRW = UCA_BRW_115;
+    268              UCA3BRW = UCA_BRW_115;
    \   000014   A2422606     MOV.W   #0x4, &0x626
-    227              UCA3MCTLW  = UCA_MCTL_115;
+    269              UCA3MCTLW  = UCA_MCTL_115;
    \   000018   B24051552806 MOV.W   #0x5551, &0x628
-    228              UCA3CTL1  &= ~UCSWRST;              // Release from software reset
+    270              UCA3CTL1  &= ~UCSWRST;              // Release from software reset
    \   00001E   D2C32006     BIC.B   #0x1, &0x620
-    229              UCA3IE    |= UCRXIE;
+    271              UCA3IE    |= UCRXIE;
    \   000022   92D33A06     BIS.W   #0x1, &0x63a
-    230              for(string_index = BEGINNING; string_index < BAUD_WORD_SIZE; string_index++)
+    272              for(string_index = BEGINNING; string_index < BAUD_WORD_SIZE; string_index++)
    \   000026   4E43         MOV.B   #0x0, R14
    \                     ??parse_test_0:
    \   000028   7E92         CMP.B   #0x8, R14
    \   00002A   212C         JC      ??parse_test_2
-    231                transmit_charA0(lower_baud[string_index]);
+    273                transmit_charA0(lower_baud[string_index]);
    \   00002C   1F42....     MOV.W   &??lower_baud, R15
    \   000030   4E4E         MOV.B   R14, R14
    \   000032   0F5E         ADD.W   R14, R15
@@ -803,25 +841,25 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
    \   000036   ........     CALLA   #transmit_charA0
    \   00003A   5E53         ADD.B   #0x1, R14
    \   00003C   F53F         JMP     ??parse_test_0
-    232              break;
-    233            case 'F': // 460800 baud
-    234              UCA3CTLW0 |= UCSWRST;               // Set software reset enable
+    274              break;
+    275            case 'F': // 460800 baud
+    276              UCA3CTLW0 |= UCSWRST;               // Set software reset enable
    \                     ??parse_test_5:
    \   00003E   92D32006     BIS.W   #0x1, &0x620
-    235              UCA3BRW = UCA_BRW_460;
+    277              UCA3BRW = UCA_BRW_460;
    \   000042   B24011002606 MOV.W   #0x11, &0x626
-    236              UCA3MCTLW = UCA_MCTL_460;
+    278              UCA3MCTLW = UCA_MCTL_460;
    \   000048   B240104A2806 MOV.W   #0x4a10, &0x628
-    237              UCA3CTL1  &= ~UCSWRST;              // Release from software reset
+    279              UCA3CTL1  &= ~UCSWRST;              // Release from software reset
    \   00004E   D2C32006     BIC.B   #0x1, &0x620
-    238              UCA3IE    |= UCRXIE;
+    280              UCA3IE    |= UCRXIE;
    \   000052   92D33A06     BIS.W   #0x1, &0x63a
-    239              for(string_index = BEGINNING; string_index < BAUD_WORD_SIZE; string_index++)
+    281              for(string_index = BEGINNING; string_index < BAUD_WORD_SIZE; string_index++)
    \   000056   4E43         MOV.B   #0x0, R14
    \                     ??parse_test_1:
    \   000058   7E92         CMP.B   #0x8, R14
    \   00005A   092C         JC      ??parse_test_2
-    240                transmit_charA0(higher_baud[string_index]);
+    282                transmit_charA0(higher_baud[string_index]);
    \   00005C   1F42....     MOV.W   &??higher_baud, R15
    \   000060   4E4E         MOV.B   R14, R14
    \   000062   0F5E         ADD.W   R14, R15
@@ -829,8 +867,8 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
    \   000066   ........     CALLA   #transmit_charA0
    \   00006A   5E53         ADD.B   #0x1, R14
    \   00006C   F53F         JMP     ??parse_test_1
-    241            }
-    242          }
+    283            }
+    284          }
    \                     ??parse_test_2:
    \   00006E   1001         RETA
    \   000070                REQUIRE _A_UCA3CTLW0_L
@@ -849,32 +887,32 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
    \                     ??lower_baud:
    \   000000                DS8 2
    \   000002                REQUIRE `?<Initializer for lower_baud>`
-    243          
-    244          #pragma vector = USCI_A0_VECTOR
+    285          
+    286          #pragma vector = USCI_A0_VECTOR
 
    \                                 In  segment ISR_CODE, align 2
-    245          __interrupt void USCI_A0_ISR(void){
+    287          __interrupt void USCI_A0_ISR(void){
    \                     USCI_A0_ISR:
    \   000000   0F12         PUSH.W  R15
-    246            switch(__even_in_range(UCA0IV, eight))
+    288            switch(__even_in_range(UCA0IV, eight))
    \   000002   1F42DE05     MOV.W   &0x5de, R15
    \   000006   2F93         CMP.W   #0x2, R15
    \   000008   0920         JNE     ??USCI_A0_ISR_1
-    247            {
-    248            case RXIFG:
-    249              if(UCA0RXBUF == '\0')
+    289            {
+    290            case RXIFG:
+    291              if(UCA0RXBUF == '\0')
    \   00000A   8293CC05     CMP.W   #0x0, &0x5cc
    \   00000E   0624         JEQ     ??USCI_A0_ISR_1
-    250                break;
-    251              // Transmit received character to IOT Module
-    252              while(UCA3STATW & UCBUSY);
+    292                break;
+    293              // Transmit received character to IOT Module
+    294              while(UCA3STATW & UCBUSY);
    \                     ??USCI_A0_ISR_0:
    \   000010   92B32A06     BIT.W   #0x1, &0x62a
    \   000014   FD2F         JC      ??USCI_A0_ISR_0
-    253              UCA3TXBUF = UCA0RXBUF;
+    295              UCA3TXBUF = UCA0RXBUF;
    \   000016   9242CC052E06 MOV.W   &0x5cc, &0x62e
-    254            }
-    255          }
+    296            }
+    297          }
    \                     ??USCI_A0_ISR_1:
    \   00001C   3F41         POP.W   R15
    \   00001E   0013         RETI
@@ -882,31 +920,31 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
    \   000020                REQUIRE _A_UCA3STATW_L
    \   000020                REQUIRE _A_UCA3TXBUF_L
    \   000020                REQUIRE _A_UCA0IV_L
-    256          
-    257          #pragma vector = USCI_A3_VECTOR
+    298          
+    299          #pragma vector = USCI_A3_VECTOR
 
    \                                 In  segment ISR_CODE, align 2
-    258          __interrupt void USCI_A3_ISR(void){
+    300          __interrupt void USCI_A3_ISR(void){
    \                     USCI_A3_ISR:
    \   000000   5F15         PUSHM.W #0x6, R15
-    259            uint8_t temp;
-    260            switch(__even_in_range(UCA3IV, eight))
+    301            uint8_t temp;
+    302            switch(__even_in_range(UCA3IV, eight))
    \   000002   1F423E06     MOV.W   &0x63e, R15
    \   000006   2F93         CMP.W   #0x2, R15
    \   000008   3F20         JNE     ??USCI_A3_ISR_1
-    261            {
-    262            case RXIFG:
-    263              while(UCA0STATW & UCBUSY);
+    303            {
+    304            case RXIFG:
+    305              while(UCA0STATW & UCBUSY);
    \                     ??USCI_A3_ISR_0:
    \   00000A   92B3CA05     BIT.W   #0x1, &0x5ca
    \   00000E   FD2F         JC      ??USCI_A3_ISR_0
-    264              UCA0TXBUF = UCA3RXBUF;             // Echo character to USB
+    306              UCA0TXBUF = UCA3RXBUF;             // Echo character to USB
    \   000010   92422C06CE05 MOV.W   &0x62c, &0x5ce
-    265              
-    266              chars_to_read++;
+    307              
+    308              chars_to_read++;
    \   000016   D253....     ADD.B   #0x1, &chars_to_read
-    267              
-    268              chars_to_read %= DOUBLE_COMMAND_LENGTH;
+    309              
+    310              chars_to_read %= DOUBLE_COMMAND_LENGTH;
    \   00001A   3A401800     MOV.W   #0x18, R10
    \   00001E   5C42....     MOV.B   &chars_to_read, R12
    \   000022   8C11         SXT     R12
@@ -921,14 +959,14 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
    \   00003A   D282........ SUB.B   &__iar_HWMUL + 10, &chars_to_read // RESLO
    \   000040   0343         NOP
    \   000042   3241         POP.W   SR
-    269              temp = iot_tx_wr;
+    311              temp = iot_tx_wr;
    \   000044   5B42....     MOV.B   &iot_tx_wr, R11
-    270              IOT_Char_Rx[temp] = UCA3RXBUF;     // Read character into interrupt buffer
+    312              IOT_Char_Rx[temp] = UCA3RXBUF;     // Read character into interrupt buffer
    \   000048   1E422C06     MOV.W   &0x62c, R14
    \   00004C   4B4B         MOV.B   R11, R11
    \   00004E   CB4E....     MOV.B   R14, IOT_Char_Rx(R11)
-    271              
-    272              if(++iot_tx_wr >= SMALL_RING_SIZE || UCA3RXBUF == '\n')
+    313              
+    314              if(++iot_tx_wr >= SMALL_RING_SIZE || UCA3RXBUF == '\n')
    \   000052   5E42....     MOV.B   &iot_tx_wr, R14
    \   000056   5E53         ADD.B   #0x1, R14
    \   000058   C24E....     MOV.B   R14, &iot_tx_wr
@@ -936,29 +974,29 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
    \   000060   042C         JC      ??USCI_A3_ISR_2
    \   000062   B2900A002C06 CMP.W   #0xa, &0x62c
    \   000068   0F20         JNE     ??USCI_A3_ISR_1
-    273              {
-    274                // Reset interrupt buffer index if end reached
-    275                iot_tx_wr = BEGINNING;
+    315              {
+    316                // Reset interrupt buffer index if end reached
+    317                iot_tx_wr = BEGINNING;
    \                     ??USCI_A3_ISR_2:
    \   00006A   C243....     MOV.B   #0x0, &iot_tx_wr
-    276                
-    277                if(IOT_Char_Rx[CHAR1] == ':' &&
-    278                   IOT_Char_Rx[CHAR2] == IP_LEAD_BYTE &&
-    279                   IOT_STATUS(SOFT_RESET))
+    318                
+    319                if(IOT_Char_Rx[CHAR1] == ':' &&
+    320                   IOT_Char_Rx[CHAR2] == IP_LEAD_BYTE &&
+    321                   IOT_STATUS(SOFT_RESET))
    \   00006E   F2903A00.... CMP.B   #0x3a, &IOT_Char_Rx
    \   000074   0920         JNE     ??USCI_A3_ISR_1
    \   000076   F2903100.... CMP.B   #0x31, &IOT_Char_Rx + 1
    \   00007C   0520         JNE     ??USCI_A3_ISR_1
    \   00007E   D2B3....     BIT.B   #0x1, &iot_status_reg
    \   000082   0228         JNC     ??USCI_A3_ISR_1
-    280                {
-    281                  IOT_ENABLE(IP_READY);               // Notify main that IP address is received
+    322                {
+    323                  IOT_ENABLE(IP_READY);               // Notify main that IP address is received
    \   000084   E2D3....     BIS.B   #0x2, &iot_status_reg
-    282                }
-    283              }
-    284              break;
-    285            }
-    286          }
+    324                }
+    325              }
+    326              break;
+    327            }
+    328          }
    \                     ??USCI_A3_ISR_1:
    \   000088   5A17         POPM.W  #0x6, R15
    \   00008A   0013         RETI
@@ -998,6 +1036,86 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
    \            2020202000  
 
    \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant " Gotta go ">`:
+   \   000000   20476F747461 DC8 " Gotta go "
+   \            20676F2000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "<<<<<<<<<<">`:
+   \   000000   3C3C3C3C3C3C DC8 "<<<<<<<<<<"
+   \            3C3C3C3C00  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Samic fast">`:
+   \   000000   53616D696320 DC8 "Samic fast"
+   \            6661737400  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant ">>>>>>>>>>">`:
+   \   000000   3E3E3E3E3E3E DC8 ">>>>>>>>>>"
+   \            3E3E3E3E00  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant " _______  ">`:
+   \   000000   205F5F5F5F5F DC8 " _______  "
+   \            5F5F202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "/^_____^\\\\ ">`:
+   \   000000   2F5E5F5F5F5F DC8 "/^_____^\\ "
+   \            5F5E5C2000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "\\\\_______/ ">`:
+   \   000000   5C5F5F5F5F5F DC8 "\\_______/ "
+   \            5F5F2F2000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Happy Car ">`:
+   \   000000   486170707920 DC8 "Happy Car "
+   \            4361722000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant " MSP430 JR">`:
+   \   000000   204D53503433 DC8 " MSP430 JR"
+   \            30204A5200  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "----------">`:
+   \   000000   2D2D2D2D2D2D DC8 "----------"
+   \            2D2D2D2D00  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Now w/ 2x ">`:
+   \   000000   4E6F7720772F DC8 "Now w/ 2x "
+   \            2032782000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Dank memes">`:
+   \   000000   44616E6B206D DC8 "Dank memes"
+   \            656D657300  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Look both ">`:
+   \   000000   4C6F6F6B2062 DC8 "Look both "
+   \            6F74682000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "ways bfore">`:
+   \   000000   776179732062 DC8 "ways bfore"
+   \            666F726500  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "crossin da">`:
+   \   000000   63726F737369 DC8 "crossin da"
+   \            6E20646100  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "black line">`:
+   \   000000   626C61636B20 DC8 "black line"
+   \            6C696E6500  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
    \                     `?<Constant "460800\\r\\n">`:
    \   000000   343630383030 DC8 "460800\015\012"
    \            0D0A00      
@@ -1022,22 +1140,16 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
       4   check_for_input
         4   -> LCD_print
         4   -> parse_command
-        4   -> parse_second_command
         4   -> parse_test
         0   -> read_into_buffer
         4   -> strncpy
-      8   parse_command
-        8   -> Left_Motor_ON_FORWARD
-        8   -> Left_Motor_ON_REVERSE
-        8   -> Right_Motor_ON_FORWARD
-        8   -> Right_Motor_ON_REVERSE
-        8   -> Wheels_OFF
-      8   parse_second_command
-        8   -> Left_Motor_ON_FORWARD
-        8   -> Left_Motor_ON_REVERSE
-        8   -> Right_Motor_ON_FORWARD
-        8   -> Right_Motor_ON_REVERSE
-        8   -> Wheels_OFF
+     14   parse_command
+       12   -> LCD_print
+       12   -> Left_Motor_ON_FORWARD
+       12   -> Left_Motor_ON_REVERSE
+       12   -> Right_Motor_ON_FORWARD
+       12   -> Right_Motor_ON_REVERSE
+       12 ?DivMod16s
       4   parse_test
         4   -> transmit_charA0
       4   read_into_buffer
@@ -1051,8 +1163,24 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
    -----  --------------
       11  ?<Constant "          ">
       11  ?<Constant "   ncsu   ">
+      11  ?<Constant " Gotta go ">
+      11  ?<Constant " MSP430 JR">
+      11  ?<Constant " _______  ">
+      11  ?<Constant "----------">
+      11  ?<Constant "/^_____^\\ ">
        9  ?<Constant "115200\r\n">
        9  ?<Constant "460800\r\n">
+      11  ?<Constant "<<<<<<<<<<">
+      11  ?<Constant ">>>>>>>>>>">
+      11  ?<Constant "Dank memes">
+      11  ?<Constant "Happy Car ">
+      11  ?<Constant "Look both ">
+      11  ?<Constant "Now w/ 2x ">
+      11  ?<Constant "Samic fast">
+      11  ?<Constant "\\_______/ ">
+      11  ?<Constant "black line">
+      11  ?<Constant "crossin da">
+      11  ?<Constant "ways bfore">
        2  ?<Initializer for higher_baud>
        1  ?<Initializer for iot_status_reg>
        2  ?<Initializer for lower_baud>
@@ -1067,7 +1195,8 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
        2  USCI_A0_ISR::??INTVEC 96
      140  USCI_A3_ISR
        2  USCI_A3_ISR::??INTVEC 48
-       2  _A_TA0CCTL0_L
+       2  _A_PCOUT_L
+       2  _A_PDOUT_L
        2  _A_UCA0BRW_L
        2  _A_UCA0CTLW0_L
        2  _A_UCA0IE_L
@@ -1087,33 +1216,36 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
        2  _A_UCA3STATW_L
        2  _A_UCA3TXBUF_L
        1  chars_to_read
-     162  check_for_input
+     138  check_for_input
        2  higher_baud
        1  iot_status_reg
        1  iot_tx_wr
+       1  left_direction
+       1  left_pwm
        2  lower_baud
        1  main_ring_rd
-     280  parse_command
-     276  parse_second_command
+     604  parse_command
      112  parse_test
       88  read_into_buffer
+       1  right_direction
+       1  right_pwm
        1  rx_wr_temp
       14  transmit_charA0
       14  transmit_charA3
 
  
- 1 030 bytes in segment CODE
-    38 bytes in segment DATA16_AN
-    40 bytes in segment DATA16_C
+ 1 054 bytes in segment CODE
+    40 bytes in segment DATA16_AN
+   216 bytes in segment DATA16_C
      5 bytes in segment DATA16_I
      5 bytes in segment DATA16_ID
-    58 bytes in segment DATA16_Z
+    62 bytes in segment DATA16_Z
      4 bytes in segment INTVEC
    172 bytes in segment ISR_CODE
  
- 1 202 bytes of CODE  memory
-    45 bytes of CONST memory (+  4 bytes shared)
-    63 bytes of DATA  memory (+ 38 bytes shared)
+ 1 226 bytes of CODE  memory
+   221 bytes of CONST memory (+  4 bytes shared)
+    67 bytes of DATA  memory (+ 40 bytes shared)
 
 Errors: none
 Warnings: none

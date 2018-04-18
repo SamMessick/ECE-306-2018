@@ -13,6 +13,7 @@
 #include "adc12_B.h"
 #include <stdint.h>
 #include <stdbool.h>
+#define MAX_PWM                 (255)
 #define L_PWM_MAX               (255)
 #define L_PWM_MIN               (135)
 #define R_PWM_MAX               (140)
