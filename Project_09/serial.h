@@ -43,6 +43,9 @@
 #define IP_READY             (0x02)
 #define CHECK_FOR_COMMAND    (0x04)
 #define COMMAND_EXECUTING    (0x08)
+#define IOT_RESET_TIME       (250)
+#define IOT_INIT_TIME        (10000)
+#define SOCKET_INIT_SIZE     (18)
 
 // Command Constants
 #define COMMAND_PASS         (8657)                         // Digit 2 through 5 of command; used to verify user
@@ -110,6 +113,7 @@ typedef enum{
 void Init_Serial(void);
 void Init_Serial_UCA0(void);
 void Init_Serial_UCA3(void);
+void Init_IoT(void);
 void transmit_charA0(char character);
 void transmit_charA3(char character);
 void check_for_input(void);

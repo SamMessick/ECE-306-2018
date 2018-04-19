@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           17/Apr/2018  23:30:08
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           19/Apr/2018  09:11:39
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\main.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EWB985.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EW1010.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\main.c" -lC
 #        "C:\Users\shmes\Desktop\Escritorio
@@ -50,11 +50,6 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\mai
       9          //------------------------------------------------------------------------------
      10          
      11          #include "main.h"
-
-   \                                 In  segment DATA16_AN, at 0x222
-   \   union <unnamed> _A_PBOUT_L
-   \                     _A_PBOUT_L:
-   \   000000                DS8 2
 
    \                                 In  segment DATA16_AN, at 0x130
    \   union <unnamed> _A_PM5CTL0_L
@@ -91,27 +86,27 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\mai
    \   000018   ........     CALLA   #Init_ADC
      31            Init_Serial();
    \   00001C   ........     CALLA   #Init_Serial
-     32          
-     33          // Perform user-controlled initialization
-     34            
-     35            enable_display_update();
-   \   000020   ........     CALLA   #enable_display_update
-     36            word1 = " Scanning ";
-   \   000024   B240........ MOV.W   #`?<Constant " Scanning ">`, &word1
-     37            word2 = "          ";
-   \   00002A   B240........ MOV.W   #`?<Constant "          ">`, &word2
-     38            word3 = "          ";
-   \   000030   B240........ MOV.W   #`?<Constant "          ">`, &word3
-     39            word4 = "          ";
-   \   000036   B240........ MOV.W   #`?<Constant "          ">`, &word4
-     40            LCD_print(word1,word2,word3,word4);
-   \   00003C   1F42....     MOV.W   &word4, R15
-   \   000040   1E42....     MOV.W   &word3, R14
-   \   000044   1D42....     MOV.W   &word2, R13
-   \   000048   1C42....     MOV.W   &word1, R12
-   \   00004C   ........     CALLA   #LCD_print
-     41            P3OUT |= IOT_RESET;                  // Turn on IOT_Reset
-   \   000050   D2D32202     BIS.B   #0x1, &0x222
+     32            Init_IoT();
+   \   000020   ........     CALLA   #Init_IoT
+     33          
+     34          // Perform user-controlled initialization
+     35            
+     36            enable_display_update();
+   \   000024   ........     CALLA   #enable_display_update
+     37            word1 = " Scanning ";
+   \   000028   B240........ MOV.W   #`?<Constant " Scanning ">`, &word1
+     38            word2 = "          ";
+   \   00002E   B240........ MOV.W   #`?<Constant "          ">`, &word2
+     39            word3 = "          ";
+   \   000034   B240........ MOV.W   #`?<Constant "          ">`, &word3
+     40            word4 = "          ";
+   \   00003A   B240........ MOV.W   #`?<Constant "          ">`, &word4
+     41            LCD_print(word1,word2,word3,word4);
+   \   000040   1F42....     MOV.W   &word4, R15
+   \   000044   1E42....     MOV.W   &word3, R14
+   \   000048   1D42....     MOV.W   &word2, R13
+   \   00004C   1C42....     MOV.W   &word1, R12
+   \   000050   ........     CALLA   #LCD_print
      42          //------------------------------------------------------------------------------
      43          // Begining of the Interrupt-Based Operating System
      44          //------------------------------------------------------------------------------
@@ -129,16 +124,21 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\mai
      56            {
      57              // Processing for IOT commands
      58              // assume held in Main_Char_Rx[]
-     59              
-     60              check_for_input();
+     59              if(connection_lost)
    \                     ??main_0:
-   \   000054   ........     CALLA   #check_for_input
-   \   000058   FD3F         JMP     ??main_0
-   \   00005A   0343         NOP
-   \   00005C                REQUIRE _A_PM5CTL0_L
-   \   00005C                REQUIRE _A_PBOUT_L
-     61            }
-     62          }
+   \   000054   C293....     CMP.B   #0x0, &connection_lost
+   \   000058   0224         JEQ     ??main_1
+     60                Init_IoT();
+   \   00005A   ........     CALLA   #Init_IoT
+     61              
+     62              check_for_input();
+   \                     ??main_1:
+   \   00005E   ........     CALLA   #check_for_input
+   \   000062   F83F         JMP     ??main_0
+   \   000064   0343         NOP
+   \   000066                REQUIRE _A_PM5CTL0_L
+     63            }
+     64          }
 
    \                                 In  segment DATA16_C, align 1, align-sorted
    \                     `?<Constant " Scanning ">`:
@@ -158,6 +158,7 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\mai
         4   -> Init_ADC
         4   -> Init_Clocks
         4   -> Init_Conditions
+        4   -> Init_IoT
         4   -> Init_LCD
         4   -> Init_Ports
         4   -> Init_Serial
@@ -173,18 +174,17 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\mai
    -----  --------------
       11  ?<Constant "          ">
       11  ?<Constant " Scanning ">
-       2  _A_PBOUT_L
        2  _A_PM5CTL0_L
-      92  main
+     102  main
 
  
- 92 bytes in segment CODE
-  4 bytes in segment DATA16_AN
- 22 bytes in segment DATA16_C
+ 102 bytes in segment CODE
+   2 bytes in segment DATA16_AN
+  22 bytes in segment DATA16_C
  
- 92 bytes of CODE  memory
- 22 bytes of CONST memory
-  0 bytes of DATA  memory (+ 4 bytes shared)
+ 102 bytes of CODE  memory
+  22 bytes of CONST memory
+   0 bytes of DATA  memory (+ 2 bytes shared)
 
 Errors: none
 Warnings: none

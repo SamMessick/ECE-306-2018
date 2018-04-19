@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           17/Apr/2018  23:30:09
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           19/Apr/2018  09:22:36
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\timerA0.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EWBAF2.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EW17CF.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\timerA0.c" -lC
 #        "C:\Users\shmes\Desktop\Escritorio
@@ -244,7 +244,7 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\tim
    \   00000E   0E4A         MOV.W   R10, R14
    \   000010   ........     CALLA   #?DivMod16u
    \   000014   0E93         CMP.W   #0x0, R14
-   \   000016   0B20         JNE     ??Timer0_A0_ISR_0
+   \   000016   0D20         JNE     ??Timer0_A0_ISR_0
      72            {
      73              Wheels_OFF();
    \   000018   ........     CALLA   #Wheels_OFF
@@ -254,27 +254,29 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\tim
    \   000020   8243....     MOV.W   #0x0, &delay_time
      76              IOT_DISABLE(COMMAND_EXECUTING);
    \   000024   F2C2....     BIC.B   #0x8, &iot_status_reg
-     77              TA0CCTL0 &= ~CCIE;
-   \   000028   B2C010004203 BIC.W   #0x10, &0x342
-     78            }
-     79          }
+     77              waiting = false;
+   \   000028   C243....     MOV.B   #0x0, &waiting
+     78              TA0CCTL0 &= ~CCIE;
+   \   00002C   B2C010004203 BIC.W   #0x10, &0x342
+     79            }
+     80          }
    \                     ??Timer0_A0_ISR_0:
-   \   00002E   5A17         POPM.W  #0x6, R15
-   \   000030   0013         RETI
-   \   000032                REQUIRE _A_TA0CCTL0_L
-     80          
-     81          //   Timer A1 interrupt routines   //
-     82          //         **OVERFLOW**            //
-     83          // ------.25 second delay--------- // <-- Highest Priority (debounce)
-     84          // ----- Procedural delay -------- //                      (pauses for delay_time in msecs)
-     85          #pragma vector = TIMER0_A1_VECTOR
+   \   000032   5A17         POPM.W  #0x6, R15
+   \   000034   0013         RETI
+   \   000036                REQUIRE _A_TA0CCTL0_L
+     81          
+     82          //   Timer A1 interrupt routines   //
+     83          //         **OVERFLOW**            //
+     84          // ------.25 second delay--------- // <-- Highest Priority (debounce)
+     85          // ----- Procedural delay -------- //                      (pauses for delay_time in msecs)
+     86          #pragma vector = TIMER0_A1_VECTOR
 
    \                                 In  segment ISR_CODE, align 2
-     86          __interrupt void Timer0_A1_ISR(void){
+     87          __interrupt void Timer0_A1_ISR(void){
    \                     Timer0_A1_ISR:
    \   000000   3F15         PUSHM.W #0x4, R15
-     87            // Check and handle interrupt vector
-     88            switch(TA0IV)
+     88            // Check and handle interrupt vector
+     89            switch(TA0IV)
    \   000002   1F426E03     MOV.W   &0x36e, R15
    \   000006   2F83         SUB.W   #0x2, R15
    \   000008   0524         JEQ     ??Timer0_A1_ISR_1
@@ -283,30 +285,30 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\tim
    \   00000E   2F83         SUB.W   #0x2, R15
    \   000010   0724         JEQ     ??Timer0_A1_ISR_3
    \   000012   0A3C         JMP     ??Timer0_A1_ISR_0
-     89            {
-     90            case TA0IV_1:                                   // ------Button Press Debounce------ //
-     91              handle_quart_second_delay();
+     90            {
+     91            case TA0IV_1:                                   // ------Button Press Debounce------ //
+     92              handle_quart_second_delay();
    \                     ??Timer0_A1_ISR_1:
    \   000014   ........     CALLA   #handle_quart_second_delay
-     92              break;
+     93              break;
    \   000018   073C         JMP     ??Timer0_A1_ISR_0
-     93            case TA0IV_2:                                   // ------ Procedural Delay---------- // 
-     94              handle_procedural_delay();
+     94            case TA0IV_2:                                   // ------ Procedural Delay---------- // 
+     95              handle_procedural_delay();
    \                     ??Timer0_A1_ISR_2:
    \   00001A   ........     CALLA   #handle_procedural_delay
-     95              break;
+     96              break;
    \   00001E   043C         JMP     ??Timer0_A1_ISR_0
-     96            case (TA0IV_1 | TA0IV_2):                       // Procedural delay and button press //
-     97              handle_quart_second_delay();
+     97            case (TA0IV_1 | TA0IV_2):                       // Procedural delay and button press //
+     98              handle_quart_second_delay();
    \                     ??Timer0_A1_ISR_3:
    \   000020   ........     CALLA   #handle_quart_second_delay
-     98              handle_procedural_delay();
+     99              handle_procedural_delay();
    \   000024   ........     CALLA   #handle_procedural_delay
-     99            }
-    100            TA0CTL &= ~(TAIFG);                             // Update Timer A1.1-2 interrupt queue
+    100            }
+    101            TA0CTL &= ~(TAIFG);                             // Update Timer A1.1-2 interrupt queue
    \                     ??Timer0_A1_ISR_0:
    \   000028   92C34003     BIC.W   #0x1, &0x340
-    101          }
+    102          }
    \   00002C   3C17         POPM.W  #0x4, R15
    \   00002E   0013         RETI
    \   000030                REQUIRE _A_TA0IV_L
@@ -343,7 +345,7 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\tim
    Bytes  Function/Label
    -----  --------------
       42  Init_Timer_A0
-      50  Timer0_A0_ISR
+      54  Timer0_A0_ISR
        2  Timer0_A0_ISR::??INTVEC 90
       48  Timer0_A1_ISR
        2  Timer0_A1_ISR::??INTVEC 88
@@ -370,9 +372,9 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\tim
   18 bytes in segment DATA16_AN
   10 bytes in segment DATA16_Z
    4 bytes in segment INTVEC
-  98 bytes in segment ISR_CODE
+ 102 bytes in segment ISR_CODE
  
- 224 bytes of CODE  memory
+ 228 bytes of CODE  memory
    0 bytes of CONST memory (+  4 bytes shared)
   10 bytes of DATA  memory (+ 18 bytes shared)
 

@@ -2176,12 +2176,6 @@
         <name>$PROJ_DIR$\init.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\iot.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\iot.h</name>
-    </file>
-    <file>
         <name>$PROJ_DIR$\LCD.h</name>
     </file>
     <file>

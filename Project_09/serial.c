@@ -15,9 +15,10 @@ volatile uint8_t iot_status_reg = SOFT_RESET;                 // Register for ma
 uint8_t main_ring_rd;
 int8_t chars_to_read; 
 char IOT_Char_Rx[SMALL_RING_SIZE];
-char IP_line1[COLUMN_NUM_COLUMNS];
-char IP_line2[COLUMN_NUM_COLUMNS];
+char IP_line1[COLUMN_NUM_COLUMNS] = "          ";
+char IP_line2[COLUMN_NUM_COLUMNS] = "          ";
 char Main_Char_Rx[SMALL_RING_SIZE];
+char* sock_init_command = "AT+S.SOCKD=32000\r\n";
 
 void Init_Serial(void){
   Init_Serial_UCA0();
@@ -48,6 +49,18 @@ void Init_Serial_UCA3(void){
   UCA3IFG   &= ~(UCRXIFG);
 }
 
+void Init_IoT(void){
+  P3IE      &= ~IOT_FACTORY;
+  P3OUT     &= ~IOT_RESET;
+  delay_time =  IOT_RESET_TIME;
+  TA0CCTL0  |=  CCIE;
+  while(waiting);
+  P3OUT     |=  IOT_RESET;
+  P3IE      |=  IOT_FACTORY;
+  
+  connection_lost = false;
+}
+
 void transmit_charA3(char character){
   while (UCA3STATW & UCBUSY); // Transmit complete interrupt flag
     UCA3TXBUF = character;
@@ -59,15 +72,18 @@ void transmit_charA0(char character){
 }
 
 void check_for_input(void){
-  
+  static uint8_t string_index;
     if(IOT_STATUS(IP_READY))
     {
+      // Establish Socket connection
+      for(string_index = BEGINNING; string_index < SOCKET_INIT_SIZE; string_index++)
+        transmit_charA3(sock_init_command[string_index]);
       // Print out WiFi module IP address on lines 3 and 4 of LCD
       strncpy(IP_line1, IOT_Char_Rx + CHAR2, CHAR7);
       strncpy(IP_line2, IOT_Char_Rx + CHAR9, CHAR7);
       
       word1 = "   ncsu   ";
-      word2 = "          ";
+      word2 = "Port:32000";
       word3 = IP_line1;
       word4 = IP_line2;
       LCD_print(word1,word2,word3,word4);
@@ -151,11 +167,13 @@ void parse_command(void){
         switch(right_direction)
         {
         case RIGHT_FORWARD:
+          Wheels_OFF();
           Left_Motor_ON_FORWARD(left_pwm);
           Right_Motor_ON_FORWARD(right_pwm);
           break;
           
         case RIGHT_REVERSE:
+          Wheels_OFF();
           Left_Motor_ON_FORWARD(left_pwm);
           Right_Motor_ON_REVERSE(right_pwm);
         }break;
@@ -164,11 +182,13 @@ void parse_command(void){
         switch(right_direction)
         {
         case RIGHT_FORWARD:
+          Wheels_OFF();
           Left_Motor_ON_REVERSE(left_pwm);
           Right_Motor_ON_FORWARD(right_pwm);
           break;
           
         case RIGHT_REVERSE:
+          Wheels_OFF();
           Left_Motor_ON_REVERSE(left_pwm);
           Right_Motor_ON_REVERSE(right_pwm);
         }
@@ -180,13 +200,15 @@ void parse_command(void){
       word3 = "Samic fast";
       word4 = ">>>>>>>>>>";
       LCD_print(word1,word2,word3,word4);
+      break;
       
     case EMOTE2:                         // Print Happy Car meme to LCD
-      word1 = " _______  ";
-      word2 = "/^_____^\\ ";
-      word3 = "\\_______/ ";
-      word4 = "Happy Car ";
+      word1 = "I'm afraid";
+      word2 = "I can't do";
+      word3 = "that Dave.";
+      word4 = "  o___o!  ";
       LCD_print(word1,word2,word3,word4);
+      break;
       
     case EMOTE3:                         // Print Dank Memes ad to LCD
       word1 = " MSP430 JR";
@@ -194,13 +216,15 @@ void parse_command(void){
       word3 = "Now w/ 2x ";
       word4 = "Dank memes";
       LCD_print(word1,word2,word3,word4);
+      break;
       
     case EMOTE4:                         // Print cautionary meme to LCD
-      word1 = "Look both ";
-      word2 = "ways bfore";
-      word3 = "crossin da";
-      word4 = "black line";
+      word1 = "Sometimes,";
+      word2 = " I dream  ";
+      word3 = "  about   ";
+      word4 = " cheese...";
       LCD_print(word1,word2,word3,word4);
+      break;
       
     case BLACK_LINE_MODE:
       P5OUT &= ~IOT_RESET;   // Disable IOT device

@@ -74,6 +74,7 @@ __interrupt void Timer0_A0_ISR(void){
     counter_A00 = COUNTER_RESET;         // Reset 1 msec interrupt counter
     delay_time = COUNTER_RESET;
     IOT_DISABLE(COMMAND_EXECUTING);
+    waiting = false;
     TA0CCTL0 &= ~CCIE;
   }
 }

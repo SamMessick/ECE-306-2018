@@ -29,6 +29,7 @@ void main(void){
   //Init_PID();
   Init_ADC();
   Init_Serial();
+  Init_IoT();
 
 // Perform user-controlled initialization
   
@@ -38,7 +39,6 @@ void main(void){
   word3 = "          ";
   word4 = "          ";
   LCD_print(word1,word2,word3,word4);
-  P3OUT |= IOT_RESET;                  // Turn on IOT_Reset
 //------------------------------------------------------------------------------
 // Begining of the Interrupt-Based Operating System
 //------------------------------------------------------------------------------
@@ -56,6 +56,8 @@ void main(void){
   {
     // Processing for IOT commands
     // assume held in Main_Char_Rx[]
+    if(connection_lost)
+      Init_IoT();
     
     check_for_input();
   }

@@ -202,9 +202,7 @@ extern char* word2;
 extern char* word3;
 extern char* word4;
 
-extern char* string_to_transmit;
-extern volatile uint8_t transmitting;
-
 /* Included from wheels.h */
 void initialize_delay(uint16_t delay);
 extern volatile uint8_t waiting;
+extern volatile uint8_t connection_lost;

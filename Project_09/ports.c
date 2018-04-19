@@ -12,7 +12,7 @@
 
 volatile uint8_t debounced;
 uint8_t shape_routine_begin;
-volatile uint8_t transmit_tmp_message;
+volatile uint8_t connection_lost = false;
 
 void Init_Port1(void){  // Initlizes all pins on Port 1
 //=========================================================================
@@ -142,9 +142,9 @@ void Init_Port3(char use_smclk) { // Initlizes all pins on Port 3
   P3SEL1 &= ~IOT_FACTORY;               // Set to GP I/O
   P3OUT  |=  IOT_FACTORY;               // Set out value Low [off]
   P3DIR  |=  IOT_FACTORY;               // Set direction to output
-  P5IE   |=  IOT_FACTORY;               // Enable interrupts for IOT_FACTORY (link)
-  P5IES  &= ~IOT_FACTORY;               // Interrupts occur on Lo/Hi edge
-  P5IFG  &= ~IOT_FACTORY;               // Button 2 IFG cleared
+  P3IE   |=  IOT_FACTORY;               // Enable interrupts for IOT_FACTORY (link)
+  P3IES  &= ~IOT_FACTORY;               // Interrupts occur on Lo/Hi edge
+  P3IFG  &= ~IOT_FACTORY;               // Button 2 IFG cleared
   
   // P3_3
   P3SEL0 &= ~IOT_WAKEUP;                // Set to GP I/O
@@ -500,6 +500,22 @@ void Init_Ports(void){ // Calls all port initialization functions
   Init_Port7();
   Init_Port8();
   Init_PortJ();
+}
+
+
+#pragma vector = PORT3_VECTOR
+__interrupt void Port_3(void){
+  
+  // Notify main loop to reset IoT module
+  connection_lost = true;
+  
+  word1 = "CONNECTION";
+  word2 = "   LOST   ";
+  word3 = "Status:   ";
+  word4 = " Reconnect";
+  LCD_print(word1,word2,word3,word4);
+  
+  P3IFG = false;
 }
 
 #pragma vector = PORT5_VECTOR

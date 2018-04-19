@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           17/Apr/2018  23:30:08
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           19/Apr/2018  09:22:36
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\ports.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EWB9F4.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EW17CE.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\ports.c" -lC
 #        "C:\Users\shmes\Desktop\Escritorio
@@ -91,9 +91,19 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\por
    \                     _A_PBSEL1_L:
    \   000000                DS8 2
 
+   \                                 In  segment DATA16_AN, at 0x238
+   \   union <unnamed> _A_PBIES_L
+   \                     _A_PBIES_L:
+   \   000000                DS8 2
+
    \                                 In  segment DATA16_AN, at 0x23a
    \   union <unnamed> _A_PBIE_L
    \                     _A_PBIE_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x23c
+   \   union <unnamed> _A_PBIFG_L
+   \                     _A_PBIFG_L:
    \   000000                DS8 2
 
    \                                 In  segment DATA16_AN, at 0x242
@@ -196,8 +206,8 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\por
 
    \                                 In  segment DATA16_Z, align 1, align-sorted
    \   000000                REQUIRE ?cstart_init_zero
-     15          volatile uint8_t transmit_tmp_message;
-   \                     transmit_tmp_message:
+     15          volatile uint8_t connection_lost = false;
+   \                     connection_lost:
    \   000000                DS8 1
      16          
 
@@ -413,12 +423,12 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\por
    \   000028   E2D22202     BIS.B   #0x4, &0x222
     144            P3DIR  |=  IOT_FACTORY;               // Set direction to output
    \   00002C   E2D22402     BIS.B   #0x4, &0x224
-    145            P5IE   |=  IOT_FACTORY;               // Enable interrupts for IOT_FACTORY (link)
-   \   000030   E2D25A02     BIS.B   #0x4, &0x25a
-    146            P5IES  &= ~IOT_FACTORY;               // Interrupts occur on Lo/Hi edge
-   \   000034   E2C25802     BIC.B   #0x4, &0x258
-    147            P5IFG  &= ~IOT_FACTORY;               // Button 2 IFG cleared
-   \   000038   E2C25C02     BIC.B   #0x4, &0x25c
+    145            P3IE   |=  IOT_FACTORY;               // Enable interrupts for IOT_FACTORY (link)
+   \   000030   E2D23A02     BIS.B   #0x4, &0x23a
+    146            P3IES  &= ~IOT_FACTORY;               // Interrupts occur on Lo/Hi edge
+   \   000034   E2C23802     BIC.B   #0x4, &0x238
+    147            P3IFG  &= ~IOT_FACTORY;               // Button 2 IFG cleared
+   \   000038   E2C23C02     BIC.B   #0x4, &0x23c
     148            
     149            // P3_3
     150            P3SEL0 &= ~IOT_WAKEUP;                // Set to GP I/O
@@ -471,9 +481,9 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\por
    \   0000AE                REQUIRE _A_PBSEL1_L
    \   0000AE                REQUIRE _A_PBOUT_L
    \   0000AE                REQUIRE _A_PBDIR_L
-   \   0000AE                REQUIRE _A_PCIE_L
-   \   0000AE                REQUIRE _A_PCIES_L
-   \   0000AE                REQUIRE _A_PCIFG_L
+   \   0000AE                REQUIRE _A_PBIE_L
+   \   0000AE                REQUIRE _A_PBIES_L
+   \   0000AE                REQUIRE _A_PBIFG_L
     175          
 
    \                                 In  segment CODE, align 2
@@ -1070,13 +1080,47 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\por
    \   000026   ........     BRA     #Init_PortJ
     503          }
     504          
-    505          #pragma vector = PORT5_VECTOR
+    505          
+    506          #pragma vector = PORT3_VECTOR
 
    \                                 In  segment ISR_CODE, align 2
-    506          __interrupt void Port_5(void){
+    507          __interrupt void Port_3(void){
+   \                     Port_3:
+   \   000000   3F15         PUSHM.W #0x4, R15
+    508            
+    509            // Notify main loop to reset IoT module
+    510            connection_lost = true;
+   \   000002   D243....     MOV.B   #0x1, &connection_lost
+    511            
+    512            word1 = "CONNECTION";
+   \   000006   B240........ MOV.W   #`?<Constant "CONNECTION">`, &word1
+    513            word2 = "   LOST   ";
+   \   00000C   B240........ MOV.W   #`?<Constant "   LOST   ">`, &word2
+    514            word3 = "Status:   ";
+   \   000012   B240........ MOV.W   #`?<Constant "Status:   ">`, &word3
+    515            word4 = " Reconnect";
+   \   000018   B240........ MOV.W   #`?<Constant " Reconnect">`, &word4
+    516            LCD_print(word1,word2,word3,word4);
+   \   00001E   1F42....     MOV.W   &word4, R15
+   \   000022   1E42....     MOV.W   &word3, R14
+   \   000026   1D42....     MOV.W   &word2, R13
+   \   00002A   1C42....     MOV.W   &word1, R12
+   \   00002E   ........     CALLA   #LCD_print
+    517            
+    518            P3IFG = false;
+   \   000032   C2433C02     MOV.B   #0x0, &0x23c
+    519          }
+   \   000036   3C17         POPM.W  #0x4, R15
+   \   000038   0013         RETI
+   \   00003A                REQUIRE _A_PBIFG_L
+    520          
+    521          #pragma vector = PORT5_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+    522          __interrupt void Port_5(void){
    \                     Port_5:
    \   000000   5F15         PUSHM.W #0x6, R15
-    507            switch(P5IFG & PORT5_INT_MASK)
+    523            switch(P5IFG & PORT5_INT_MASK)
    \   000002   5E425C02     MOV.B   &0x25c, R14
    \   000006   4E4E         MOV.B   R14, R14
    \   000008   3EF06000     AND.W   #0x60, R14
@@ -1084,28 +1128,28 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\por
    \   000010   0C24         JEQ     ??Port_5_3
    \   000012   7E802000     SUB.B   #0x20, R14
    \   000016   2920         JNE     ??Port_5_0
-    508            {
-    509            case P5IFG_BUTTON_2: // Right Button
-    510              if(debounced)                     // Has the switch had time to readjust?
+    524            {
+    525            case P5IFG_BUTTON_2: // Right Button
+    526              if(debounced)                     // Has the switch had time to readjust?
    \   000018   C293....     CMP.B   #0x0, &debounced
    \   00001C   2624         JEQ     ??Port_5_0
-    511              {
-    512                P3OUT &= ~(IOT_RESET);               // Disable IOT_RESET pin for soft reset
+    527              {
+    528                P3OUT &= ~(IOT_RESET);               // Disable IOT_RESET pin for soft reset
    \   00001E   D2C32202     BIC.B   #0x1, &0x222
-    513                TA0CCTL1 |= CCIE;                   // Enable debounce timer
+    529                TA0CCTL1 |= CCIE;                   // Enable debounce timer
    \   000022   B2D010004403 BIS.W   #0x10, &0x344
-    514              }
-    515              break;
+    530              }
+    531              break;
    \   000028   203C         JMP     ??Port_5_0
-    516            case P5IFG_BUTTON_1: // Left Button
-    517              if(debounced)                     // Has the switch had time to readjust?
+    532            case P5IFG_BUTTON_1: // Left Button
+    533              if(debounced)                     // Has the switch had time to readjust?
    \                     ??Port_5_3:
    \   00002A   C293....     CMP.B   #0x0, &debounced
    \   00002E   1D24         JEQ     ??Port_5_0
-    518              {
-    519                menu_counter++;
+    534              {
+    535                menu_counter++;
    \   000030   D253....     ADD.B   #0x1, &menu_counter
-    520                menu_counter %= MENU_NUM_OPTIONS;
+    536                menu_counter %= MENU_NUM_OPTIONS;
    \   000034   2A43         MOV.W   #0x2, R10
    \   000036   5C42....     MOV.B   &menu_counter, R12
    \   00003A   8C11         SXT     R12
@@ -1120,18 +1164,18 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\por
    \   000052   D282........ SUB.B   &__iar_HWMUL + 10, &menu_counter // RESLO
    \   000058   0343         NOP
    \   00005A   3241         POP.W   SR
-    521                print_baud_rate();
+    537                print_baud_rate();
    \   00005C   ........     CALLA   #print_baud_rate
-    522                debounced = false;
+    538                debounced = false;
    \   000060   C243....     MOV.B   #0x0, &debounced
-    523                TA0CCTL1 |= CCIE;                   // Enable debounce timer
+    539                TA0CCTL1 |= CCIE;                   // Enable debounce timer
    \   000064   B2D010004403 BIS.W   #0x10, &0x344
-    524              }
-    525            }
-    526            P5IFG = false;
+    540              }
+    541            }
+    542            P5IFG = false;
    \                     ??Port_5_0:
    \   00006A   C2435C02     MOV.B   #0x0, &0x25c
-    527          }
+    543          }
    \   00006E   5A17         POPM.W  #0x6, R15
    \   000070   0013         RETI
    \   000072                REQUIRE _A_PBOUT_L
@@ -1141,6 +1185,30 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\por
    \                                 In  segment INTVEC, offset 0x36, root
    \                     `??Port_5::??INTVEC 54`:
    \   000036   ....         DC16    Port_5
+
+   \                                 In  segment INTVEC, offset 0x42, root
+   \                     `??Port_3::??INTVEC 66`:
+   \   000042   ....         DC16    Port_3
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "CONNECTION">`:
+   \   000000   434F4E4E4543 DC8 "CONNECTION"
+   \            54494F4E00  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "   LOST   ">`:
+   \   000000   2020204C4F53 DC8 "   LOST   "
+   \            5420202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Status:   ">`:
+   \   000000   537461747573 DC8 "Status:   "
+   \            3A20202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant " Reconnect">`:
+   \   000000   205265636F6E DC8 " Reconnect"
+   \            6E65637400  
 
    Maximum stack usage in bytes:
 
@@ -1165,6 +1233,8 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\por
         4   -> Init_Port7
         4   -> Init_Port8
         0   -> Init_PortJ
+     12   Port_3
+       12   -> LCD_print
      18   Port_5
        16   -> print_baud_rate
        16 ?DivMod16s
@@ -1176,6 +1246,10 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\por
 
    Bytes  Function/Label
    -----  --------------
+      11  ?<Constant "   LOST   ">
+      11  ?<Constant " Reconnect">
+      11  ?<Constant "CONNECTION">
+      11  ?<Constant "Status:   ">
      106  Init_Port1
      162  Init_Port2
      174  Init_Port3
@@ -1186,6 +1260,8 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\por
       66  Init_Port8
      162  Init_PortJ
       42  Init_Ports
+      58  Port_3
+       2  Port_3::??INTVEC 66
      114  Port_5
        2  Port_5::??INTVEC 54
        2  _A_PADIR_L
@@ -1193,7 +1269,9 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\por
        2  _A_PASEL0_L
        2  _A_PASEL1_L
        2  _A_PBDIR_L
+       2  _A_PBIES_L
        2  _A_PBIE_L
+       2  _A_PBIFG_L
        2  _A_PBOUT_L
        2  _A_PBSEL0_L
        2  _A_PBSEL1_L
@@ -1214,21 +1292,22 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\por
        2  _A_PJSEL0_L
        2  _A_PJSEL1_L
        2  _A_TA0CCTL1_L
+       1  connection_lost
        1  debounced
       42  reset_iot
        1  shape_routine_begin
-       1  transmit_tmp_message
 
  
  1 438 bytes in segment CODE
-    52 bytes in segment DATA16_AN
+    56 bytes in segment DATA16_AN
+    44 bytes in segment DATA16_C
      3 bytes in segment DATA16_Z
-     2 bytes in segment INTVEC
-   114 bytes in segment ISR_CODE
+     4 bytes in segment INTVEC
+   172 bytes in segment ISR_CODE
  
- 1 552 bytes of CODE  memory
-     0 bytes of CONST memory (+  2 bytes shared)
-     3 bytes of DATA  memory (+ 52 bytes shared)
+ 1 610 bytes of CODE  memory
+    44 bytes of CONST memory (+  4 bytes shared)
+     3 bytes of DATA  memory (+ 56 bytes shared)
 
 Errors: none
 Warnings: none
