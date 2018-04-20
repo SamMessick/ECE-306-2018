@@ -211,10 +211,10 @@ void parse_command(void){
       break;
       
     case EMOTE3:                         // Print Dank Memes ad to LCD
-      word1 = " MSP430 JR";
-      word2 = "----------";
-      word3 = "Now w/ 2x ";
-      word4 = "Dank memes";
+      word1 = " I am the ";
+      word2 = "MSP430  JR";
+      word3 = "----------";
+      word4 = "Wazzup? :)";
       LCD_print(word1,word2,word3,word4);
       break;
       

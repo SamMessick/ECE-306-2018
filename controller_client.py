@@ -46,7 +46,7 @@ analog_l   = 0
 pwm_r      = 0
 analog_r   = 0
 port       = 32000
-remote_ip  = "10.137.132.33"
+remote_ip  = "10.153.58.190"
 
 message = ""
 
@@ -86,7 +86,7 @@ def getState():
     return out
 	
 def rangeMap(value):
-    return value*(max_pwm-min_pwm)/(max_analog-min_analog)
+    return (int) (value*(max_pwm-min_pwm)/(max_analog-min_analog))
 #=====================================================================================================
 
 # ------Set up Xbox controller------- #
@@ -173,17 +173,17 @@ while not status[BUTTON_SELECT]:
 		    pwm_r = 0
         if pwm_l < 0:
             if pwm_r < 0:
-                message = "*8657KQ%03d%03d0\r\n" %(abs(pwm_l),abs(pwm_r))
+                message = "*8657KQ" + str(abs(pwm_l)).zfill(3) + str(abs(pwm_r)).zfill(3) + "0\r\n"
                 spwIoTsock.sendall(message) 
             else:
-                message = "*8657KS%03d%03d0\r\n" %(abs(pwm_l),abs(pwm_r))
+                message = "*8657KS" + str(abs(pwm_l)).zfill(3) + str(abs(pwm_r)).zfill(3) + "0\r\n"
                 spwIoTsock.sendall(message)
         else:
             if pwm_r < 0:
-                message = "*8657MQ%03d%03d0\r\n" %(abs(pwm_l),abs(pwm_r))
+                message = "*8657MQ" + str(abs(pwm_l)).zfill(3) + str(abs(pwm_r)).zfill(3) + "0\r\n" 
                 spwIoTsock.sendall(message)
             else:
-                message = "*8657MS%03d%03d0\r\n" %(abs(pwm_l),abs(pwm_r))
+                message = "*8657MS" + str(abs(pwm_l)).zfill(3) + str(abs(pwm_r)).zfill(3) + "0\r\n"
                 spwIoTsock.sendall(message)
 
     # ------Wait for reconnect if connection fails------ #
