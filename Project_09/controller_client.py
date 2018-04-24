@@ -1,16 +1,20 @@
 '''
- Xbox Controller server for driving MSP430 car
+ Name: controller_client.py
+ 
+ 
+ Xbox 360 Controller client for driving MSP430 car
  with IoT-based serial commands. Developed for
- ECE 309. This software is compatible with Linux 
- distributions. 
+ ECE 306. This software is compatible with Windows,
+ MacOX and most Linux distributions.
 
  Use the Left and Right Xbox 360 joysticks to control
  the PWM values and direction for the left and right
  motors. Use the AXBY buttons to signal an emote.
  Use the back button to trigger the car to enter
- black line mode. Use the start button to trigger
- the car into menu mode.
+ 'no command' mode. Use the start button
+ to reenter remote control.
 
+ 
  Author: Sam Messick
  Last Modified: April 2018
 '''
@@ -20,7 +24,7 @@ import time
 import socket
 import sys
 
-# Indices in status list
+# Indices in status list (Joystick elements)
 LTHUMBSTICK_X = 0
 LTHUMBSTICK_Y = 1
 RTHUMBSTICK_X = 4
@@ -35,26 +39,37 @@ BUTTON_SELECT = 11
 BUTTON_START  = 12
 
 # Control variables
-status_update_delay = .200
-max_pwm    = 240.0
-min_pwm    = 5
-max_analog = 1
-min_analog = 0
-a_pressed  = False         #=============================================#
-b_pressed  = False         # Maintain button pressed to one message sent #
-x_pressed  = False         #                                             #
-y_pressed  = False         #=============================================#
-pwm_l      = 0
-analog_l   = 0
-pwm_r      = 0
-analog_r   = 0
-port       = 32000
-remote_ip  = "10.139.176.87"
+status_update_delay = .200             # delay time between commands
+max_pwm        = 240.0                 # maximum pwm value (to transmit)
+min_pwm        = 5                     # minimum pwm value (to transmit)
+max_analog     = 1                     # maximum joystick reading
+min_analog     = 0                     # minimum joystick reading
+a_pressed      = False         #=============================================#
+b_pressed      = False         # Maintain button pressed to one message sent #
+x_pressed      = False         #                                             #
+y_pressed      = False         #=============================================#
+pwm_l          = 0                     # left wheel pwm value
+analog_l       = 0                     # analog left joystick value
+pwm_r          = 0                     # right wheel pwm value
+analog_r       = 0                     # analog right joystick value
+zero_threshold = (max_pwm/3)           # threshold for zeroing pwm value (allows for joystick dead zone)
+port           = 32000                 # Port of car server socket
+remote_ip      = ""                    # IP address of car server socket
 
-message = ""
-
-#=====================================================================================================
-
+# Command string parameters
+message          = ""              # string for storing command
+special_char     = "*"
+password         = "8657"
+forward_keyword  = "KQ"
+reverse_keyword  = "MS"
+right_keyword    = "KS"
+left_keyword     = "MQ"
+a_keyword        = "A000"
+b_keyword        = "B000"
+y_keyword        = "Y000"
+x_keyword        = "X000"
+blk_line_keyword = "L000"
+command_tag      = "0\r\n"
 
 # Format decimal to string format xxx
 def fmtDec(n):
@@ -62,17 +77,16 @@ def fmtDec(n):
 	
 """
 Returns a vector of the following form:
-[LThumbstickX, LThumbstickY, Unknown Coupled Axis???, 
+[LThumbstickX, LThumbstickY, R/L trigger status, 
 RThumbstickX, RThumbstickY, 
 Button 1/X, Button 2/A, Button 3/B, Button 4/Y, 
-Left Bumper, Right Bumper, Left Trigger, Right Triller,
+Left Bumper, Right Bumper, Left Trigger, Right Trigger,
 Select, Start, Left Thumb Press, Right Thumb Press]
 
 Note:
 No D-Pad.
-Triggers are switches, not variable. 
-Your controller may be different
 """
+
 def getState():                    
     out = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     it = 0 #iterator
@@ -90,7 +104,8 @@ def getState():
 	
 def rangeMap(value):
     return (int) (value*(max_pwm-min_pwm)/(max_analog-min_analog))
-#=====================================================================================================
+	
+#=============================      Setup       ======================================================
 
 # ------Set up Xbox controller------- #
 pygame.init()
@@ -111,26 +126,31 @@ except socket.error as err:
 #print("Awaiting connection from SPW IoT Module")
 #spwIoTsock.listen(1)
 #client, addr = spwIoTsock.accept()
+remote_ip = raw_input("Please enter a valid IP address: ")
 spwIoTsock.connect((remote_ip, port))
 print("Connection established. Got connection at", remote_ip)
 
-#=====================================================================================================
+#===============================     Status Loop     =================================================
+
 # ------Send commands until back button is pressed------ #
 status = getState()
 while True:
     while not status[BUTTON_SELECT]:
     
-        # ---Attempt to send commands to client--- #
+		message = special_char + password;
+		
+        # -------------------------------'remote control' mode-------------------------------------- #
         try:
             time.sleep(status_update_delay)
-            status = getState()
+            status = getState()                    # update device state
             print status
 		
 
             # ---Check for button presses--- #
             if status[BUTTON_A]:    
                 if not a_pressed:
-                    spwIoTsock.sendall("*8657A0000\r\n")
+                    message += (a_keyword + command_tag)
+                    spwIoTsock.sendall(message)
                     a_pressed = True
                     print("A")
                     continue
@@ -140,7 +160,8 @@ while True:
 
             if status[BUTTON_B]:
                 if not b_pressed:
-                    spwIoTsock.sendall("*8657B0000\r\n")
+                    message += (b_keyword + command_tag)
+                    spwIoTsock.sendall(message)
                     b_pressed = True
                     print("B")
                     continue
@@ -150,7 +171,8 @@ while True:
 
             if status[BUTTON_Y]:
                 if not y_pressed:
-                    spwIoTsock.sendall("*8657Y0000\r\n")
+                    message += (y_keyword + command_tag)
+                    spwIoTsock.sendall(message)
                     y_pressed = True
                     print("Y")    
                     continue
@@ -159,7 +181,8 @@ while True:
 
             if status[BUTTON_X]:
                 if not x_pressed:
-                    spwIoTsock.sendall("*8657X0000\r\n")
+                    message += (x_keyword + command_tag)
+                    spwIoTsock.sendall(message)
                     x_pressed = True
                     print("X")
                     continue
@@ -169,23 +192,23 @@ while True:
             # ---if no button presses to handle, send wheel PWM adjustment--- #
             pwm_l = rangeMap(status[LTHUMBSTICK_Y])
             pwm_r = rangeMap(status[RTHUMBSTICK_Y])
-            if abs(pwm_l) < (max_pwm/3):
+            if abs(pwm_l) < (zero_threshold):             # zero PWM if within joystick "dead-zone"
                 pwm_l = 0
-            if abs(pwm_r) < (max_pwm/3):
+            if abs(pwm_r) < (zero_threshold):
 		        pwm_r = 0
             if pwm_l < 0:
                 if pwm_r < 0:
-                    message = "*8657KQ" + str(abs(pwm_l)).zfill(3) + str(abs(pwm_r)).zfill(3) + "0\r\n"
+                    message += (forward_keyword + str(abs(pwm_l)).zfill(3) + str(abs(pwm_r)).zfill(3) + command_tag)
                     spwIoTsock.sendall(message) 
                 else:
-                    message = "*8657KS" + str(abs(pwm_l)).zfill(3) + str(abs(pwm_r)).zfill(3) + "0\r\n"
+                    message += (right_keyword   + str(abs(pwm_l)).zfill(3) + str(abs(pwm_r)).zfill(3) + command_tag)
                     spwIoTsock.sendall(message)
             else:
                 if pwm_r < 0:
-                    message = "*8657MQ" + str(abs(pwm_l)).zfill(3) + str(abs(pwm_r)).zfill(3) + "0\r\n" 
+                    message += (left_keyword    + str(abs(pwm_l)).zfill(3) + str(abs(pwm_r)).zfill(3) + command_tag)
                     spwIoTsock.sendall(message)
                 else:
-                    message = "*8657MS" + str(abs(pwm_l)).zfill(3) + str(abs(pwm_r)).zfill(3) + "0\r\n"
+                    message += (reverse_keyword + str(abs(pwm_l)).zfill(3) + str(abs(pwm_r)).zfill(3) + command_tag)
                     spwIoTsock.sendall(message)
 
         # ------Wait for reconnect if connection fails------ #
@@ -193,8 +216,8 @@ while True:
             print("socket.error: connection lost. Awaiting recconect from SPW IoT Module") 
             try:
                 spwIoTsock.close()
-                spwIoTsock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-                spwIoTsock.connect((remote_ip, port))
+                spwIoTsock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)      
+                spwIoTsock.connect((remote_ip, port))                                 
                 print("Connection established. Connected client socket to", remote_ip)
             except socket.error:
                 print("socket.error: connection to IoT module lost. Please restart program.")
@@ -203,7 +226,8 @@ while True:
 	# -------------------------------'no command' mode-------------------------------------- #
 	
     # ---Back button pressed: send command for black line detection--- #
-    spwIoTsock.sendall("*8657L0000\r\n")
+	message = special_char + password + blk_line_keyword + command_tag
+    spwIoTsock.sendall(message)
 	print("Controller client in 'no command' mode. Press START to reinitiate remote control.")
 	
 	# ---Disconnect from car--- #
