@@ -2,7 +2,7 @@
 #                                                                              #
 #      IAR Universal Linker V6.5.1.95                                          #
 #                                                                              #
-#           Link time     =  19/Apr/2018  09:43:40                             #
+#           Link time     =  23/Apr/2018  22:58:28                             #
 #           Target CPU    =  MSP430                                            #
 #           List file     =  "C:\Users\shmes\Desktop\Escritorio Personal\Escue #
 #                            la\ECE\306\ECE306\Project_09\Debug\List\Project 0 #
@@ -13,7 +13,7 @@
 #                            Format: ubrof10                                   #
 #                            UBROF version 10.0.6                              #
 #                            Using library modules for C-SPY (-rt)             #
-#           Command line  =  -f C:\Users\shmes\AppData\Local\Temp\EW6443.tmp   #
+#           Command line  =  -f C:\Users\shmes\AppData\Local\Temp\EW9C6E.tmp   #
 #                            ("C:\Users\shmes\Desktop\Escritorio Personal\Escu #
 #                            ela\ECE\306\ECE306\Project_09\Debug\Obj\adc12_B.r #
 #                            43"                                               #
@@ -121,7 +121,7 @@
                 *                                      *
                 ****************************************
 
-       Program entry at :           4148  Relocatable, from module : ?cstart
+       Program entry at :           4178  Relocatable, from module : ?cstart
 
 
 
@@ -180,15 +180,15 @@ adc12_B ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Proj
         _A_ADC12MEM1_L                      0862
         _A_ADC12MEM2_L                      0864
         _A_PDOUT_L                          0262
-        ADC_Thumb                           1C10
-        ADC_Right_Detector                  1C12
-        ADC_Left_Detector                   1C14
+        ADC_Thumb                           1C28
+        ADC_Right_Detector                  1C2A
+        ADC_Left_Detector                   1C2C
         one_time                            NOT NEEDED
         ir_active_reading                   NOT NEEDED
         calibrated                          NOT NEEDED
         calibrating                         NOT NEEDED
-        Init_ADC                            4E92
-        ADC12_ISR                           4170
+        Init_ADC                            4F28
+        ADC12_ISR                           41A0
         calibrate_White                     NOT NEEDED
         calibrate_Black                     NOT NEEDED
         updateDisplay                       NOT NEEDED
@@ -238,7 +238,7 @@ clocks ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Proje
         _A_CSCTL3_L                         0166
         _A_CSCTL4_L                         0168
         _A_WDTCTL_L                         015C
-        Init_Clocks                         4F46
+        Init_Clocks                         4FD6
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
         CSCTL0                              0160
@@ -260,8 +260,8 @@ clocks ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Proje
         WDTCTL_H                            015D
         WDTCTL_L                            015C
 init ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\Debug\Obj\init.r43 )
-        Init_Conditions                     4F92
-        Init_Timers                         54D2
+        Init_Conditions                     5022
+        Init_Timers                         553A
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
 LCD ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\LCD.r43 )
@@ -274,44 +274,44 @@ LCD ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_
         _A_UCB1TXBUF_L                      068E
         _A_UCB1IFG_L                        06AC
         lcd_control                         NOT NEEDED
-        display_line                        1C28
-        display                             1C16
+        display_line                        1C40
+        display                             1C2E
         posi_L1                             NOT NEEDED
         posi_L2                             NOT NEEDED
         posi_L3                             NOT NEEDED
         posi_L4                             NOT NEEDED
         char_count                          NOT NEEDED
         current_line                        NOT NEEDED
-        update_display_count                1C1E
+        update_display_count                1C36
         display_update_time                 NOT NEEDED
-        update_display                      1C54
-        display_changed                     1C55
+        update_display                      1C6C
+        display_changed                     1C6D
         LCD_test                            NOT NEEDED
-        spi_chipselect_idle                 5448
-        spi_chipselect_active               54B6
-        spi_reset_idle                      54E6
-        spi_reset_active                    54DA
-        Display_Process                     52B8
-        Display_Update                      4FDA
-        enable_display_update               548C
-        update_string                       532E
-        Init_LCD                            4BD4
+        spi_chipselect_idle                 54B0
+        spi_chipselect_active               551E
+        spi_reset_idle                      554E
+        spi_reset_active                    5542
+        Display_Process                     5320
+        Display_Update                      506A
+        enable_display_update               54F4
+        update_string                       5396
+        Init_LCD                            4B56
         lcd_4line                           NOT NEEDED
         lcd_BIG_mid                         NOT NEEDED
-        lcd_out                             5272
+        lcd_out                             52DA
         lcd_puts                            NOT NEEDED
-        WriteIns                            51DA
-        WriteData                           5200
+        WriteIns                            5242
+        WriteData                           528E
         CheckBusy                           NOT NEEDED
-        ClrDisplay                          537E
-        ClrDisplay_Buffer_0                 5394
-        ClrDisplay_Buffer_1                 53E4
-        ClrDisplay_Buffer_2                 53F8
-        ClrDisplay_Buffer_3                 53BC
+        ClrDisplay                          53E6
+        ClrDisplay_Buffer_0                 53FC
+        ClrDisplay_Buffer_1                 544C
+        ClrDisplay_Buffer_2                 5460
+        ClrDisplay_Buffer_3                 5424
         SetPostion                          NOT NEEDED
-        DisplayOnOff                        53D0
-        Init_SPI_B1                         5062
-        SPI_B1_write                        540C
+        DisplayOnOff                        5438
+        Init_SPI_B1                         50F2
+        SPI_B1_write                        5474
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
         PBOUT                               0222
@@ -340,7 +340,7 @@ LCD ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_
         UCB1IFG_L                           06AC
 main ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\Debug\Obj\main.r43 )
         _A_PM5CTL0_L                        0130
-        main                                4E2C
+        main                                4EC2
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
         PM5CTL0                             0130
@@ -375,22 +375,22 @@ ports ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Projec
         _A_PJSEL0_L                         032A
         _A_PJSEL1_L                         032C
         _A_TA0CCTL1_L                       0344
-        debounced                           1C56
+        debounced                           1C6E
         shape_routine_begin                 NOT NEEDED
-        connection_lost                     1C57
-        Init_Port1                          4D5A
-        Init_Port2                          4B32
-        Init_Port3                          474E
+        connection_lost                     1C6F
+        Init_Port1                          4DF0
+        Init_Port2                          4970
+        Init_Port3                          477E
         reset_iot                           NOT NEEDED
-        Init_Port4                          48AA
-        Init_Port5                          4688
-        Init_Port6                          494C
-        Init_Port7                          49EE
-        Init_Port8                          5020
-        Init_PortJ                          4A90
-        Init_Ports                          5160
-        Port_3                              418A
-        Port_5                              41C4
+        Init_Port4                          482C
+        Init_Port5                          46B8
+        Init_Port6                          4A12
+        Init_Port7                          4AB4
+        Init_Port8                          50B0
+        Init_PortJ                          48CE
+        Init_Ports                          51F0
+        Port_3                              41BA
+        Port_5                              41F4
         Port_5::??INTVEC 54                 FFC6
         Port_3::??INTVEC 66                 FFD2
         ?setjmp_save_r4                     NOT NEEDED
@@ -503,27 +503,28 @@ serial ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Proje
         _A_UCA3IE_L                         063A
         _A_UCA3IFG_L                        063C
         _A_UCA3IV_L                         063E
-        iot_tx_wr                           1C58
-        iot_status_reg                      1C0E
-        main_ring_rd                        1C59
-        chars_to_read                       1C5A
-        IOT_Char_Rx                         1C5B
-        IP_line1                            1C6B
-        IP_line2                            1C76
-        Main_Char_Rx                        1C81
+        iot_tx_wr                           1C70
+        iot_status_reg                      1C10
+        main_ring_rd                        1C71
+        chars_to_read                       1C72
+        IOT_Char_Rx                         1C73
+        IP_line1                            1C11
+        IP_line2                            1C1C
+        Main_Char_Rx                        1C83
         sock_init_command                   1C00
-        Init_Serial                         54C2
-        Init_Serial_UCA0                    524C
-        Init_Serial_UCA3                    5226
-        Init_IoT                            51B2
-        transmit_charA3                     54A8
-        transmit_charA0                     549A
-        check_for_input                     47FC
-        read_into_buffer                    4EEE
-        parse_command                       4348
-        parse_test                          4CEA
-        USCI_A0_ISR                         4236
-        USCI_A3_ISR                         4256
+        sock_ping_command                   1C02
+        Init_Serial                         552A
+        Init_Serial_UCA0                    52B4
+        Init_Serial_UCA3                    5268
+        Init_IoT                            4C7C
+        transmit_charA3                     5510
+        transmit_charA0                     5502
+        check_for_input                     4BF2
+        read_into_buffer                    4F84
+        parse_command                       4378
+        parse_test                          4D80
+        USCI_A0_ISR                         4266
+        USCI_A3_ISR                         4286
         USCI_A3_ISR::??INTVEC 48            FFC0
         USCI_A0_ISR::??INTVEC 96            FFF0
         ?setjmp_save_r4                     NOT NEEDED
@@ -597,26 +598,26 @@ serial ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Proje
         UCA3IV                              063E
         UCA3IV_H                            063F
         UCA3IV_L                            063E
-        check_for_input::string_index       1C91
-        read_into_buffer::rx_wr_temp        1C92
-        parse_command::left_direction       1C93
-        parse_command::right_direction      1C94
-        parse_command::left_pwm             1C95
-        parse_command::right_pwm            1C96
-        parse_test::higher_baud             1C02
-        parse_test::lower_baud              1C04
+        Init_IoT::string_index              1C93
+        read_into_buffer::rx_wr_temp        1C94
+        parse_command::left_direction       1C95
+        parse_command::right_direction      1C96
+        parse_command::left_pwm             1C97
+        parse_command::right_pwm            1C98
+        parse_test::higher_baud             1C04
+        parse_test::lower_baud              1C06
 shapes_menu ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\Debug\Obj\shapes_menu.r43 )
         _A_UCA3CTLW0_L                      NOT NEEDED
         _A_UCA3BRW_L                        NOT NEEDED
         _A_UCA3MCTLW_L                      NOT NEEDED
-        menu_counter                        1C97
-        word1                               1C06
-        word2                               1C08
-        word3                               1C0A
-        word4                               1C0C
-        LCD_print                           4DC4
-        hex_to_dec                          45BC
-        print_baud_rate                     4C70
+        menu_counter                        1C99
+        word1                               1C08
+        word2                               1C0A
+        word3                               1C0C
+        word4                               1C0E
+        LCD_print                           4E5A
+        hex_to_dec                          45EC
+        print_baud_rate                     4D06
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
         UCA3CTLW0                           0620
@@ -629,7 +630,7 @@ shapes_menu ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\
         UCA3MCTLW_H                         0629
         UCA3MCTLW_L                         0628
 system ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\Debug\Obj\system.r43 )
-        enable_interrupts                   54E0
+        enable_interrupts                   5548
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
 timerA0 ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\Debug\Obj\timerA0.r43 )
@@ -642,17 +643,17 @@ timerA0 ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Proj
         _A_TA0CCR1_L                        0354
         _A_TA0CCR2_L                        NOT NEEDED
         _A_TA0IV_L                          036E
-        counter_A01                         1C20
-        counter_A02                         1C22
-        counter_A00                         1C24
-        delay_time                          1C26
+        counter_A01                         1C38
+        counter_A02                         1C3A
+        counter_A00                         1C3C
+        delay_time                          1C3E
         ir_ready_to_print                   NOT NEEDED
-        waiting                             1C98
-        Init_Timer_A0                       5136
-        handle_quart_second_delay           518A
-        handle_procedural_delay             510A
-        Timer0_A0_ISR                       42E2
-        Timer0_A1_ISR                       4318
+        waiting                             1C9A
+        Init_Timer_A0                       51C6
+        handle_quart_second_delay           521A
+        handle_procedural_delay             519A
+        Timer0_A0_ISR                       4312
+        Timer0_A1_ISR                       4348
         Timer0_A1_ISR::??INTVEC 88          FFE8
         Timer0_A0_ISR::??INTVEC 90          FFEA
         ?setjmp_save_r4                     NOT NEEDED
@@ -695,7 +696,7 @@ timerB0 ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Proj
         _A_TB0CCR4_L                        03DA
         _A_TB0CCR5_L                        03DC
         _A_TB0CCR6_L                        03DE
-        Init_Timer_B0                       50A0
+        Init_Timer_B0                       5130
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
         TA1CTL                              0380
@@ -734,10 +735,10 @@ wheels ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Proje
         _A_TB0CCR4_L                        NOT NEEDED
         _A_TB0CCR5_L                        NOT NEEDED
         _A_TB0CCR6_L                        NOT NEEDED
-        left_forward_flag                   1C99
-        left_reverse_flag                   1C9A
-        right_forward_flag                  1C9B
-        right_reverse_flag                  1C9C
+        left_forward_flag                   1C9B
+        left_reverse_flag                   1C9C
+        right_forward_flag                  1C9D
+        right_reverse_flag                  1C9E
         instruction_label_tmp               NOT NEEDED
         LastDir                             NOT NEEDED
         right_pwm                           NOT NEEDED
@@ -747,14 +748,14 @@ wheels ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Proje
         Init_PID                            NOT NEEDED
         initialize_delay                    NOT NEEDED
         update_instruction_label            NOT NEEDED
-        Left_Motor_OFF                      5434
-        Right_Motor_OFF                     5420
-        Wheels_OFF                          54CA
-        Left_Motor_ON_FORWARD               52DA
-        Right_Motor_ON_FORWARD              534A
+        Left_Motor_OFF                      549C
+        Right_Motor_OFF                     5488
+        Wheels_OFF                          5532
+        Left_Motor_ON_FORWARD               5342
+        Right_Motor_ON_FORWARD              53B2
         Drive_Straight_Forward              NOT NEEDED
-        Left_Motor_ON_REVERSE               52F6
-        Right_Motor_ON_REVERSE              5312
+        Left_Motor_ON_REVERSE               535E
+        Right_Motor_ON_REVERSE              537A
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
         TA0CCTL2                            0346
@@ -775,15 +776,15 @@ wheels ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Proje
 ?abort ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         abort                               NOT NEEDED
 ?__dbg_break ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
-        __DebugBreak                        54F8
+        __DebugBreak                        5560
 ?__dwrite ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         __dwrite                            NOT NEEDED
 ?__exit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
-        __exit                              53A8
+        __exit                              5410
 ?__write ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         __write                             NOT NEEDED
 ?_exit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
-        _exit                               54F0
+        _exit                               5558
         __cstart_call_dtors                 NOT NEEDED
         __cstart_closeall                   NOT NEEDED
         __cstart_clearlocks                 NOT NEEDED
@@ -794,43 +795,43 @@ wheels ( C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Proje
         __call_dtors                        NOT NEEDED
         __data16_vec_cctor                  NOT NEEDED
 ?cstart ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
-        __program_start                     4148
-        ?cstart_begin                       4148
+        __program_start                     4178
+        ?cstart_begin                       4178
         ?cstart_call_mpu_init               NOT NEEDED
         ?cstart_call_frwp_init              NOT NEEDED
         ?cstart_call_low_level_init         NOT NEEDED
         ?cstart_init_copy_ramfunc           NOT NEEDED
-        ?cstart_init_zero                   414C
-        ?cstart_init_copy                   4158
+        ?cstart_init_zero                   417C
+        ?cstart_init_copy                   4188
         ?cstart_init_zero20                 NOT NEEDED
         ?cstart_init_copy20                 NOT NEEDED
         __cstart_init_tls                   NOT NEEDED
         ?cstart_call_ctors                  NOT NEEDED
-        ?cstart_call_main                   4168
-        ?cstart_end                         4170
+        ?cstart_call_main                   4198
+        ?cstart_end                         41A0
 lowinit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         __low_level_init                    NOT NEEDED
 ?reset_vector ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         ?reset_vector                       FFFE
 ?exit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
-        exit                                54F4
+        exit                                555C
 ?FrwpInit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         __iar_430_frwp_init                 NOT NEEDED
 ?malloc ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         malloc                              NOT NEEDED
 ?DivMod816u ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         ?DivMod8u                           NOT NEEDED
-        ?DivMod16u                          5366
+        ?DivMod16u                          53CE
 ?DivMod816s ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         ?DivMod8s                           NOT NEEDED
-        ?DivMod16s                          50DA
+        ?DivMod16s                          516A
 ?memcpy ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
-        memcpy                              545A
+        memcpy                              54C2
 ?memmove ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         memmove                             NOT NEEDED
 ?memzero ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
-        __data16_memzero                    547C
-        __data16_memcpy                     54EC
+        __data16_memzero                    54E4
+        __data16_memcpy                     5554
         __data16_memmove                    NOT NEEDED
 ?MpuInit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         __iar_430_mpu_init                  NOT NEEDED
@@ -853,9 +854,9 @@ lowinit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib
 ?IndCallR15 ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         ?IndCallR15                         NOT NEEDED
 ?strcpy ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
-        strcpy                              546C
+        strcpy                              54D4
 ?strncpy ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
-        strncpy                             5296
+        strncpy                             52FE
 ?xcloseall ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
         _Close_all                          NOT NEEDED
 ?xgetmemchunk ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
@@ -900,7 +901,7 @@ main                  102             2     22
 ports               1 568      2     46     44
   + shared             68             4
   + common
-serial              1 326     70     30    242
+serial              1 382     72     30    290
   + shared             98             8
   + common
 shapes_menu           430      9            19
@@ -913,7 +914,7 @@ wheels                160      4
 N/A (command line)           160
 N/A (alignment)
 ----------          -----    ---    ---    ---
-Total:              5 044    316    170    327
+Total:              5 100    318    170    375
   + common             98
 
 
@@ -962,21 +963,21 @@ DATA16_AN                              0130 - 0131               2   rel    0
                                        0812 - 0813               2 
                                        0820 - 0825               6 
                                        0860 - 0865               6 
-DATA16_I                               1C00 - 1C0E               F   rel    1
-DATA16_Z                               1C10 - 1C9C              8D   rel    1
-DATA20_I                                  1C9E                       rel    1
-DATA20_Z                                  1C9E                       rel    1
-DATA20_N                                  1C9E                       rel    1
-CODE_I                                    1C9E                       rel    1
+DATA16_I                               1C00 - 1C26              27   rel    1
+DATA16_Z                               1C28 - 1C9E              77   rel    1
+DATA20_I                                  1CA0                       rel    1
+DATA20_Z                                  1CA0                       rel    1
+DATA20_N                                  1CA0                       rel    1
+CODE_I                                    1CA0                       rel    1
 CSTACK                                 2B60 - 2BFF              A0   rel    1
-DATA16_C                               4000 - 4137             138   rel    0
-DATA16_ID                              4138 - 4146               F   rel    1
-CSTART                                 4148 - 416F              28   rel    1
-ISR_CODE                               4170 - 4347             1D8   rel    1
-<CODE> 1                               4348 - 54F9            11B2   rel    1
-CODE_ID                                   54FA                       rel    1
-DATA20_ID                                 54FA                       rel    1
-DATA20_C                                  54FA                       rel    1
+DATA16_C                               4000 - 414F             150   rel    0
+DATA16_ID                              4150 - 4176              27   rel    1
+CSTART                                 4178 - 419F              28   rel    1
+ISR_CODE                               41A0 - 4377             1D8   rel    1
+<CODE> 1                               4378 - 5561            11EA   rel    1
+CODE_ID                                   5562                       rel    1
+DATA20_ID                                 5562                       rel    1
+DATA20_C                                  5562                       rel    1
 INTVEC                                 FF90 - FFF1              62   com    1
 RESET                                  FFFE - FFFF               2   rel    1
 
@@ -986,9 +987,9 @@ RESET                                  FFFE - FFFF               2   rel    1
                 *                                      *
                 ****************************************
 
- 5 142 bytes of CODE  memory
-   316 bytes of DATA  memory (+ 170 absolute )
-   327 bytes of CONST memory
+ 5 198 bytes of CODE  memory
+   318 bytes of DATA  memory (+ 170 absolute )
+   375 bytes of CONST memory
 
 Errors: none
 Warnings: none

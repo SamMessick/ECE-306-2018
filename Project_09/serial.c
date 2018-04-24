@@ -19,6 +19,7 @@ char IP_line1[COLUMN_NUM_COLUMNS] = "          ";
 char IP_line2[COLUMN_NUM_COLUMNS] = "          ";
 char Main_Char_Rx[SMALL_RING_SIZE];
 char* sock_init_command = "AT+S.SOCKD=32000\r\n";
+char* sock_ping_command = "AT+S.PING=152.1.14.14\r\n";
 
 void Init_Serial(void){
   Init_Serial_UCA0();
@@ -50,14 +51,25 @@ void Init_Serial_UCA3(void){
 }
 
 void Init_IoT(void){
-  P3IE      &= ~IOT_FACTORY;
+  static uint8_t string_index;
+  
+  P3IE      &= ~IOT_FACTORY;           // Begin reset hold
   P3OUT     &= ~IOT_RESET;
   delay_time =  IOT_RESET_TIME;
   TA0CCTL0  |=  CCIE;
+  waiting = true;
   while(waiting);
-  P3OUT     |=  IOT_RESET;
+  P3OUT     |=  IOT_RESET;             // Release reset hold -- wait for IoT connection initialization
   P3IE      |=  IOT_FACTORY;
-  
+  delay_time =  IOT_INIT_TIME;
+  TA0CCTL0  |=  CCIE;
+  waiting = true;
+  while(waiting);
+  // Establish Socket connection
+  for(string_index = BEGINNING; string_index < SOCKET_INIT_SIZE; string_index++)
+    transmit_charA3(sock_init_command[string_index]);
+  for(string_index = BEGINNING; string_index < SOCKET_PING_SIZE; string_index++)
+    transmit_charA3(sock_ping_command[string_index]);
   connection_lost = false;
 }
 
@@ -72,12 +84,8 @@ void transmit_charA0(char character){
 }
 
 void check_for_input(void){
-  static uint8_t string_index;
     if(IOT_STATUS(IP_READY))
     {
-      // Establish Socket connection
-      for(string_index = BEGINNING; string_index < SOCKET_INIT_SIZE; string_index++)
-        transmit_charA3(sock_init_command[string_index]);
       // Print out WiFi module IP address on lines 3 and 4 of LCD
       strncpy(IP_line1, IOT_Char_Rx + CHAR2, CHAR7);
       strncpy(IP_line2, IOT_Char_Rx + CHAR9, CHAR7);
@@ -111,7 +119,7 @@ void read_into_buffer(void){
   static uint8_t rx_wr_temp;
   while(rx_wr_temp != iot_tx_wr)
     rx_wr_temp = iot_tx_wr;
-  while(main_ring_rd != rx_wr_temp || chars_to_read > COUNTER_RESET)
+  while(main_ring_rd != rx_wr_temp/* || chars_to_read > COUNTER_RESET*/)
   {
     Main_Char_Rx[main_ring_rd] = IOT_Char_Rx[main_ring_rd];
     chars_to_read--;

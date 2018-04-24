@@ -46,7 +46,7 @@ analog_l   = 0
 pwm_r      = 0
 analog_r   = 0
 port       = 32000
-remote_ip  = "10.153.58.190"
+remote_ip  = "10.139.176.87"
 
 message = ""
 
@@ -194,5 +194,6 @@ while not status[BUTTON_SELECT]:
     
 # ---Back button pressed: send command for black line detection and close--- #
 
+spwIoTsock.close();
 spwIoTsock.sendall("*8657L0000\r\n");
 sys.exit()

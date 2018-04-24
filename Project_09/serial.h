@@ -46,6 +46,7 @@
 #define IOT_RESET_TIME       (250)
 #define IOT_INIT_TIME        (10000)
 #define SOCKET_INIT_SIZE     (18)
+#define SOCKET_PING_SIZE     (22)
 
 // Command Constants
 #define COMMAND_PASS         (8657)                         // Digit 2 through 5 of command; used to verify user
