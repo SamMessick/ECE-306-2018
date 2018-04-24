@@ -50,6 +50,7 @@
 
 // Command Constants
 #define COMMAND_PASS         (8657)                         // Digit 2 through 5 of command; used to verify user
+#define COMMAND_PERIOD       (5)
 #define THOUSAND             (1000)
 #define HUNDRED              (100)
 #define TEN                  (10)
@@ -62,6 +63,7 @@
 #define RIGHT_FORWARD        ('Q')    // Right wheel spins forward
 #define RIGHT_REVERSE        ('S')    // Right wheel spins backward 
 #define BLACK_LINE_MODE      ('L')    // Autonomous driving mode
+#define EXIT_LINE_MODE       ('E')    // Used for exiting autonomous mode
 #ifndef EMOTE_ENUM
 #define EMOTE_ENUM                    // Button presses from Xbox controller
 typedef enum {
@@ -140,6 +142,7 @@ extern char* word3;
 extern char* word4;
 
 extern char* string_to_transmit;
+extern char* sock_ping_command;
 extern volatile uint8_t transmitting;
 extern volatile uint8_t waiting_for_input;
 extern uint8_t iot_ip_up;

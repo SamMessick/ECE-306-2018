@@ -174,7 +174,7 @@
                 </tool>
                 <tool>
                     <name>ICC430</name>
-                    <file> 59</file>
+                    <file> 59 79</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
@@ -184,7 +184,7 @@
             <inputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 28 20 50 37 18 68 88 29 4 60 17 71 84 33 10 61 23 7 56 44 63</file>
+                    <file> 68 17 18 50 60 28 37 88 29 4 20 71 84 33 10 61 23 7 56 44 63</file>
                 </tool>
                 <tool>
                     <name>ICC430</name>
@@ -319,7 +319,7 @@
             <inputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 10 18 50 0 68 28 61 4 20 38 88 29 60 7 71 84 33 17 56 44 63 37 23 41</file>
+                    <file> 4 20 10 68 0 28 18 50 61 38 88 29 60 7 71 84 33 17 56 44 63 37 23 41</file>
                 </tool>
                 <tool>
                     <name>ICC430</name>

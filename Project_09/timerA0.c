@@ -67,8 +67,10 @@ void handle_procedural_delay(void){
 #pragma vector = TIMER0_A0_VECTOR
 __interrupt void Timer0_A0_ISR(void){
   uint16_t temp = delay_time;
+  static uint8_t string_index;
   counter_A00++;                         // Increment counter by 1 msec for each 1 msec interrupt
-  if(!(counter_A00 % temp))            // Quarter-second elapsed
+  /*
+  if(!(counter_A00 % temp) && IOT_STATUS(SOFT_RESET))            // Quarter-second elapsed
   {
     Wheels_OFF();
     counter_A00 = COUNTER_RESET;         // Reset 1 msec interrupt counter
@@ -76,7 +78,10 @@ __interrupt void Timer0_A0_ISR(void){
     IOT_DISABLE(COMMAND_EXECUTING);
     waiting = false;
     TA0CCTL0 &= ~CCIE;
-  }
+  } */
+  if(!(counter_A00 % temp))
+    for(string_index = BEGINNING; string_index < SOCKET_PING_SIZE; string_index++)     // Ping host every period once established
+        transmit_charA3(sock_ping_command[string_index]);
 }
 
 //   Timer A1 interrupt routines   //

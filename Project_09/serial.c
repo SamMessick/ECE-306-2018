@@ -56,15 +56,11 @@ void Init_IoT(void){
   P3IE      &= ~IOT_FACTORY;           // Begin reset hold
   P3OUT     &= ~IOT_RESET;
   IOT_ENABLE(SOFT_RESET);
-  delay_time =  IOT_RESET_TIME;
-  TA0CCTL0  |=  CCIE;
   word1 = " Scanning ";
   word2 = "          ";
   word3 = "          ";
   word4 = "          ";
   LCD_print(word1,word2,word3,word4);
-  waiting = true;
-  while(waiting);
   P3OUT     |=  IOT_RESET;             // Release reset hold -- wait for IoT connection initialization
   P3IE      |=  IOT_FACTORY;
   connection_lost = false;
@@ -100,6 +96,8 @@ void check_for_input(void){
       iot_tx_wr = BEGINNING;
       IOT_DISABLE(IP_READY);
       IOT_DISABLE(SOFT_RESET);
+      delay_time = 1000;
+      TA0CCTL0  |= CCIE;                   // Enable ping timer
     }
     if(IOT_STATUS(CHECK_FOR_COMMAND))
       if(Main_Char_Rx[CHAR1] == COMMAND_START)
@@ -135,6 +133,7 @@ void read_into_buffer(void){
 }
 
 void parse_command(void){
+  static uint8_t string_index;
   static char left_direction;
   static char right_direction;
   static uint8_t left_pwm;
@@ -247,6 +246,9 @@ void parse_command(void){
        *               after 20 seconds, turn car out of loop
        *               drive forward for 4 seconds and stop (display meme)
        */
+      break;
+    case EXIT_LINE_MODE:
+      /* Drive forward for 5 seconds and display project 10 complete on LCD. */
     }
   }
 }

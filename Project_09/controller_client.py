@@ -69,6 +69,7 @@ b_keyword        = "B000"
 y_keyword        = "Y000"
 x_keyword        = "X000"
 blk_line_keyword = "L000"
+exit_keyword     = "E000"
 command_tag      = "0\r\n"
 
 # Format decimal to string format xxx
@@ -241,7 +242,12 @@ while True:
 	# ---Reconnect to server socket after start button has been pressed--- #
     spwIoTsock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     spwIoTsock.connect((remote_ip, port))
-    print("Connection reestablished. Initiating command transmission.")
+	
+	# ---Send command to leave black line--- #
+    message = special_char + password + exit_keyword + command_tag
+    spwIoTsock.sendall(message)
+    print("Connection reestablished. Terminal command sent.")
+    break
 	
 spwIoTsock.close();
 sys.exit()
