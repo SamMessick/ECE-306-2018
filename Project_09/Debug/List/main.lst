@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           23/Apr/2018  22:45:18
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           24/Apr/2018  03:00:09
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\main.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EW8D99.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EWE158.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\main.c" -lC
 #        "C:\Users\shmes\Desktop\Escritorio
@@ -93,62 +93,38 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\mai
      35            
      36            enable_display_update();
    \   000024   ........     CALLA   #enable_display_update
-     37            word1 = " Scanning ";
-   \   000028   B240........ MOV.W   #`?<Constant " Scanning ">`, &word1
-     38            word2 = "          ";
-   \   00002E   B240........ MOV.W   #`?<Constant "          ">`, &word2
-     39            word3 = "          ";
-   \   000034   B240........ MOV.W   #`?<Constant "          ">`, &word3
-     40            word4 = "          ";
-   \   00003A   B240........ MOV.W   #`?<Constant "          ">`, &word4
-     41            LCD_print(word1,word2,word3,word4);
-   \   000040   1F42....     MOV.W   &word4, R15
-   \   000044   1E42....     MOV.W   &word3, R14
-   \   000048   1D42....     MOV.W   &word2, R13
-   \   00004C   1C42....     MOV.W   &word1, R12
-   \   000050   ........     CALLA   #LCD_print
-     42          //------------------------------------------------------------------------------
-     43          // Begining of the Interrupt-Based Operating System
-     44          //------------------------------------------------------------------------------
-     45          //------------------------------------------------------------------------------
-     46          // TimerA0: controls LCD update, button debouncing and timed delays
-     47          // -------          defers to state machine in shapes_menu.c following push-button
-     48          //                  interrupts.
-     49          //               
-     50          // TimerB0: controls wheel PWM
-     51          //------------------------------------------------------------------------------
-     52            
-     53          
-     54            // Loop infinitely through transmitting and receiving messages
-     55            for(;;)
-     56            {
-     57              // Processing for IOT commands
-     58              // assume held in Main_Char_Rx[]
-     59              if(connection_lost)
+     37          //------------------------------------------------------------------------------
+     38          // Begining of the Interrupt-Based Operating System
+     39          //------------------------------------------------------------------------------
+     40          //------------------------------------------------------------------------------
+     41          // TimerA0: controls LCD update, button debouncing and timed delays
+     42          // -------          defers to state machine in shapes_menu.c following push-button
+     43          //                  interrupts.
+     44          //               
+     45          // TimerB0: controls wheel PWM
+     46          //------------------------------------------------------------------------------
+     47            
+     48          
+     49            // Loop infinitely through transmitting and receiving messages
+     50            for(;;)
+     51            {
+     52              // Processing for IOT commands
+     53              // assume held in Main_Char_Rx[]
+     54              if(connection_lost)
    \                     ??main_0:
-   \   000054   C293....     CMP.B   #0x0, &connection_lost
-   \   000058   0224         JEQ     ??main_1
-     60                Init_IoT();
-   \   00005A   ........     CALLA   #Init_IoT
-     61              
-     62              check_for_input();
+   \   000028   C293....     CMP.B   #0x0, &connection_lost
+   \   00002C   0224         JEQ     ??main_1
+     55                Init_IoT();
+   \   00002E   ........     CALLA   #Init_IoT
+     56              
+     57              check_for_input();
    \                     ??main_1:
-   \   00005E   ........     CALLA   #check_for_input
-   \   000062   F83F         JMP     ??main_0
-   \   000064   0343         NOP
-   \   000066                REQUIRE _A_PM5CTL0_L
-     63            }
-     64          }
-
-   \                                 In  segment DATA16_C, align 1, align-sorted
-   \                     `?<Constant " Scanning ">`:
-   \   000000   205363616E6E DC8 " Scanning "
-   \            696E672000  
-
-   \                                 In  segment DATA16_C, align 1, align-sorted
-   \                     `?<Constant "          ">`:
-   \   000000   202020202020 DC8 "          "
-   \            2020202000  
+   \   000032   ........     CALLA   #check_for_input
+   \   000036   F83F         JMP     ??main_0
+   \   000038   0343         NOP
+   \   00003A                REQUIRE _A_PM5CTL0_L
+     58            }
+     59          }
 
    Maximum stack usage in bytes:
 
@@ -163,7 +139,6 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\mai
         4   -> Init_Ports
         4   -> Init_Serial
         4   -> Init_Timers
-        4   -> LCD_print
         4   -> check_for_input
         4   -> enable_display_update
 
@@ -172,19 +147,15 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\mai
 
    Bytes  Function/Label
    -----  --------------
-      11  ?<Constant "          ">
-      11  ?<Constant " Scanning ">
        2  _A_PM5CTL0_L
-     102  main
+      58  main
 
  
- 102 bytes in segment CODE
-   2 bytes in segment DATA16_AN
-  22 bytes in segment DATA16_C
+ 58 bytes in segment CODE
+  2 bytes in segment DATA16_AN
  
- 102 bytes of CODE  memory
-  22 bytes of CONST memory
-   0 bytes of DATA  memory (+ 2 bytes shared)
+ 58 bytes of CODE memory
+  0 bytes of DATA memory (+ 2 bytes shared)
 
 Errors: none
 Warnings: none

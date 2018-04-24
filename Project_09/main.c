@@ -34,11 +34,6 @@ void main(void){
 // Perform user-controlled initialization
   
   enable_display_update();
-  word1 = " Scanning ";
-  word2 = "          ";
-  word3 = "          ";
-  word4 = "          ";
-  LCD_print(word1,word2,word3,word4);
 //------------------------------------------------------------------------------
 // Begining of the Interrupt-Based Operating System
 //------------------------------------------------------------------------------

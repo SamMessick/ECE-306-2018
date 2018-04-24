@@ -51,25 +51,22 @@ void Init_Serial_UCA3(void){
 }
 
 void Init_IoT(void){
-  static uint8_t string_index;
   
+  Wheels_OFF();                        // Stop vehicle from unwanted movement
   P3IE      &= ~IOT_FACTORY;           // Begin reset hold
   P3OUT     &= ~IOT_RESET;
+  IOT_ENABLE(SOFT_RESET);
   delay_time =  IOT_RESET_TIME;
   TA0CCTL0  |=  CCIE;
+  word1 = " Scanning ";
+  word2 = "          ";
+  word3 = "          ";
+  word4 = "          ";
+  LCD_print(word1,word2,word3,word4);
   waiting = true;
   while(waiting);
   P3OUT     |=  IOT_RESET;             // Release reset hold -- wait for IoT connection initialization
   P3IE      |=  IOT_FACTORY;
-  delay_time =  IOT_INIT_TIME;
-  TA0CCTL0  |=  CCIE;
-  waiting = true;
-  while(waiting);
-  // Establish Socket connection
-  for(string_index = BEGINNING; string_index < SOCKET_INIT_SIZE; string_index++)
-    transmit_charA3(sock_init_command[string_index]);
-  for(string_index = BEGINNING; string_index < SOCKET_PING_SIZE; string_index++)
-    transmit_charA3(sock_ping_command[string_index]);
   connection_lost = false;
 }
 
@@ -84,12 +81,17 @@ void transmit_charA0(char character){
 }
 
 void check_for_input(void){
+  static uint8_t string_index;
     if(IOT_STATUS(IP_READY))
     {
       // Print out WiFi module IP address on lines 3 and 4 of LCD
       strncpy(IP_line1, IOT_Char_Rx + CHAR2, CHAR7);
       strncpy(IP_line2, IOT_Char_Rx + CHAR9, CHAR7);
-      
+      // Establish Socket connection
+      for(string_index = BEGINNING; string_index < SOCKET_INIT_SIZE; string_index++)
+        transmit_charA3(sock_init_command[string_index]);
+      for(string_index = BEGINNING; string_index < SOCKET_PING_SIZE; string_index++)
+        transmit_charA3(sock_ping_command[string_index]);
       word1 = "   ncsu   ";
       word2 = "Port:32000";
       word3 = IP_line1;
@@ -246,45 +248,6 @@ void parse_command(void){
        *               drive forward for 4 seconds and stop (display meme)
        */
     }
-    /*
-    // Simple directional command (alternatives for debugging)
-    direction = Main_Char_Rx[CHAR6];
-    
-    // Retrieve duration from buffer (milliseconds)
-    delay_time     +=(Main_Char_Rx[CHAR7] - ASCII_NUM_SHIFT)*THOUSAND +
-                     (Main_Char_Rx[CHAR8] - ASCII_NUM_SHIFT)*HUNDRED  +
-                     (Main_Char_Rx[CHAR9] - ASCII_NUM_SHIFT)*TEN      +
-                     (Main_Char_Rx[CHAR10] - ASCII_NUM_SHIFT);
-    switch(direction)
-    {
-    case 'S':
-      Wheels_OFF();
-      break;
-    case 'F':
-      Wheels_OFF();
-      Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
-      Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
-      break;
-    case 'B':
-      Wheels_OFF();
-      Left_Motor_ON_REVERSE(LEFT_FORWARD_SPEED);
-      Right_Motor_ON_REVERSE(RIGHT_FORWARD_SPEED);
-      break;
-    case 'R':
-      Wheels_OFF();
-      Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
-      break;
-    case'L':
-      Wheels_OFF();
-      Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
-      break;  
-    }
-    
-    // Enable timer interrupt
-    TA0CCTL0 |= CCIE;
-    IOT_ENABLE(COMMAND_EXECUTING);
-  }
-  */
   }
 }
 
@@ -334,7 +297,7 @@ __interrupt void USCI_A3_ISR(void){
   switch(__even_in_range(UCA3IV, eight))
   {
   case RXIFG:
-    while(UCA0STATW & UCBUSY);
+    //while(UCA0STATW & UCBUSY);
     UCA0TXBUF = UCA3RXBUF;             // Echo character to USB
     
     chars_to_read++;

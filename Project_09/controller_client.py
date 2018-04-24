@@ -25,15 +25,18 @@ LTHUMBSTICK_X = 0
 LTHUMBSTICK_Y = 1
 RTHUMBSTICK_X = 4
 RTHUMBSTICK_Y = 3
-BUTTON_X      = 7
 BUTTON_A      = 5
 BUTTON_B      = 6
+BUTTON_X      = 7
 BUTTON_Y      = 8
+BUTTON_LTHUM  = 9
+BUTTON_RTHUM  = 10
 BUTTON_SELECT = 11
-BUTTON_START  = 14
+BUTTON_START  = 12
 
 # Control variables
-max_pwm    = 250.0
+status_update_delay = .200
+max_pwm    = 240.0
 min_pwm    = 5
 max_analog = 1
 min_analog = 0
@@ -114,86 +117,104 @@ print("Connection established. Got connection at", remote_ip)
 #=====================================================================================================
 # ------Send commands until back button is pressed------ #
 status = getState()
-
-while not status[BUTTON_SELECT]:
-    time.sleep(.050)
-
-    # ---Attempt to send commands to client--- #
-    try:
-	
-        status = getState()
-        print status
+while True:
+    while not status[BUTTON_SELECT]:
+    
+        # ---Attempt to send commands to client--- #
+        try:
+            time.sleep(status_update_delay)
+            status = getState()
+            print status
 		
 
-        # ---Check for button presses--- #
-        if status[BUTTON_A]:    
-            if not a_pressed:
-                spwIoTsock.sendall("*8657A0000\r\n")
-                a_pressed = True
-                print("A")
-                continue
-        else:
-            print("A not pressed")
-            a_pressed = False
-
-        if status[BUTTON_B]:
-            if not b_pressed:
-                spwIoTsock.sendall("*8657B0000\r\n")
-                b_pressed = True
-                print("B")
-                continue
-        else:
-            print("B not pressed")
-            b_pressed = False
-
-        if status[BUTTON_Y]:
-            if not y_pressed:
-                spwIoTsock.sendall("*8657Y0000\r\n")
-                y_pressed = True
-                print("Y")    
-                continue
-        else:
-            y_pressed = False
-
-        if status[BUTTON_X]:
-            if not x_pressed:
-                spwIoTsock.sendall("*8657X0000\r\n")
-                x_pressed = True
-                print("X")
-                continue
-        else:
-            x_pressed = False	
-
-        # ---if no button presses to handle, send wheel PWM adjustment--- #
-        pwm_l = rangeMap(status[LTHUMBSTICK_Y])
-        if abs(pwm_l) < (max_pwm/3):
-            pwm_l = 0
-        pwm_r = rangeMap(status[RTHUMBSTICK_Y])
-        if abs(pwm_r) < (max_pwm/3):
-		    pwm_r = 0
-        if pwm_l < 0:
-            if pwm_r < 0:
-                message = "*8657KQ" + str(abs(pwm_l)).zfill(3) + str(abs(pwm_r)).zfill(3) + "0\r\n"
-                spwIoTsock.sendall(message) 
+            # ---Check for button presses--- #
+            if status[BUTTON_A]:    
+                if not a_pressed:
+                    spwIoTsock.sendall("*8657A0000\r\n")
+                    a_pressed = True
+                    print("A")
+                    continue
             else:
-                message = "*8657KS" + str(abs(pwm_l)).zfill(3) + str(abs(pwm_r)).zfill(3) + "0\r\n"
-                spwIoTsock.sendall(message)
-        else:
-            if pwm_r < 0:
-                message = "*8657MQ" + str(abs(pwm_l)).zfill(3) + str(abs(pwm_r)).zfill(3) + "0\r\n" 
-                spwIoTsock.sendall(message)
-            else:
-                message = "*8657MS" + str(abs(pwm_l)).zfill(3) + str(abs(pwm_r)).zfill(3) + "0\r\n"
-                spwIoTsock.sendall(message)
+                print("A not pressed")
+                a_pressed = False
 
-    # ------Wait for reconnect if connection fails------ #
-    except socket.error:  
-        print("Connection lost. Awaiting recconect from SPW IoT Module") 
-        spwIoTsock.connect((remote_ip, port))
-        print("Connection established. Got connection from", addr)
+            if status[BUTTON_B]:
+                if not b_pressed:
+                    spwIoTsock.sendall("*8657B0000\r\n")
+                    b_pressed = True
+                    print("B")
+                    continue
+            else:
+                print("B not pressed")
+                b_pressed = False
+
+            if status[BUTTON_Y]:
+                if not y_pressed:
+                    spwIoTsock.sendall("*8657Y0000\r\n")
+                    y_pressed = True
+                    print("Y")    
+                    continue
+            else:
+                y_pressed = False
+
+            if status[BUTTON_X]:
+                if not x_pressed:
+                    spwIoTsock.sendall("*8657X0000\r\n")
+                    x_pressed = True
+                    print("X")
+                    continue
+            else:
+                x_pressed = False	
+
+            # ---if no button presses to handle, send wheel PWM adjustment--- #
+            pwm_l = rangeMap(status[LTHUMBSTICK_Y])
+            pwm_r = rangeMap(status[RTHUMBSTICK_Y])
+            if abs(pwm_l) < (max_pwm/3):
+                pwm_l = 0
+            if abs(pwm_r) < (max_pwm/3):
+		        pwm_r = 0
+            if pwm_l < 0:
+                if pwm_r < 0:
+                    message = "*8657KQ" + str(abs(pwm_l)).zfill(3) + str(abs(pwm_r)).zfill(3) + "0\r\n"
+                    spwIoTsock.sendall(message) 
+                else:
+                    message = "*8657KS" + str(abs(pwm_l)).zfill(3) + str(abs(pwm_r)).zfill(3) + "0\r\n"
+                    spwIoTsock.sendall(message)
+            else:
+                if pwm_r < 0:
+                    message = "*8657MQ" + str(abs(pwm_l)).zfill(3) + str(abs(pwm_r)).zfill(3) + "0\r\n" 
+                    spwIoTsock.sendall(message)
+                else:
+                    message = "*8657MS" + str(abs(pwm_l)).zfill(3) + str(abs(pwm_r)).zfill(3) + "0\r\n"
+                    spwIoTsock.sendall(message)
+
+        # ------Wait for reconnect if connection fails------ #
+        except socket.error:  
+            print("Connection lost. Awaiting recconect from SPW IoT Module") 
+            try:
+                spwIoTsock.close()
+                spwIoTsock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+                spwIoTsock.connect((remote_ip, port))
+                print("Connection established. Got connection from", remote_ip)
+            except socket.error:
+                print("Connection to IoT module lost. Please restart program.")
+                sys.exit()
     
-# ---Back button pressed: send command for black line detection and close--- #
-
+    # ---Back button pressed: send command for black line detection--- #
+    spwIoTsock.sendall("*8657L0000\r\n")
+	
+	# ---Disconnect from car--- #
+    spwIoTsock.close()
+	
+	# ---Do not send commands until the start button is pressed--- #
+    while not status[BUTTON_START]:
+        time.sleep(status_update_delay)
+        status = getState()
+	
+	# ---Reconnect to server socket after start button has been pressed--- #
+	spwIoTsock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    spwIoTsock.connect((remote_ip, port))
+    print("Connection established. Got connection at", remote_ip)
+	
 spwIoTsock.close();
-spwIoTsock.sendall("*8657L0000\r\n");
 sys.exit()
