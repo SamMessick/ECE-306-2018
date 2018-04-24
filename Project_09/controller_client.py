@@ -39,7 +39,7 @@ BUTTON_SELECT = 11
 BUTTON_START  = 12
 
 # Control variables
-status_update_delay = .100             # delay time between commands
+status_update_delay = .250             # delay time between commands
 max_pwm        = 240.0                 # maximum pwm value (to transmit)
 min_pwm        = 5                     # minimum pwm value (to transmit)
 max_analog     = 1                     # maximum joystick reading

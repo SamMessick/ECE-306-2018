@@ -269,6 +269,7 @@ void parse_command(void){
       /* Drive forward for 5 seconds and display project 10 complete on LCD. */
     }
   }
+  word1 = Main_Char_Rx;
 }
 
 void parse_test(void){

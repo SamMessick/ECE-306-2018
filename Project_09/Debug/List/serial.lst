@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           24/Apr/2018  15:23:21
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           24/Apr/2018  15:43:41
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\serial.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EW5E3F.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EWFAA8.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\serial.c" -lC
 #        "C:\Users\shmes\Desktop\Escritorio
@@ -897,12 +897,14 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
     269                /* Drive forward for 5 seconds and display project 10 complete on LCD. */
     270              }
     271            }
-    272          }
+    272            word1 = Main_Char_Rx;
    \                     ??parse_command_1:
-   \   0002BE   3817         POPM.W  #0x4, R11
-   \   0002C0   1001         RETA
-   \   0002C2                REQUIRE _A_PCOUT_L
-   \   0002C2                REQUIRE _A_PDOUT_L
+   \   0002BE   B240........ MOV.W   #Main_Char_Rx, &word1
+    273          }
+   \   0002C4   3817         POPM.W  #0x4, R11
+   \   0002C6   1001         RETA
+   \   0002C8                REQUIRE _A_PCOUT_L
+   \   0002C8                REQUIRE _A_PDOUT_L
 
    \                                 In  segment DATA16_Z, align 1, align-sorted
    \   000000                REQUIRE ?cstart_init_zero
@@ -923,39 +925,39 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
    \   000000                REQUIRE ?cstart_init_zero
    \                     ??right_pwm:
    \   000000                DS8 1
-    273          
+    274          
 
    \                                 In  segment CODE, align 2
-    274          void parse_test(void){
+    275          void parse_test(void){
    \                     parse_test:
-    275            uint8_t string_index;
-    276            static char* higher_baud = "460800\r\n";
-    277            static char* lower_baud  = "115200\r\n";
-    278            
-    279            switch(Main_Char_Rx[CHAR2])
+    276            uint8_t string_index;
+    277            static char* higher_baud = "460800\r\n";
+    278            static char* lower_baud  = "115200\r\n";
+    279            
+    280            switch(Main_Char_Rx[CHAR2])
    \   000000   5F42....     MOV.B   &Main_Char_Rx + 1, R15
    \   000004   7F804600     SUB.B   #0x46, R15
    \   000008   1A24         JEQ     ??parse_test_5
    \   00000A   7F800D00     SUB.B   #0xd, R15
    \   00000E   2F20         JNE     ??parse_test_2
-    280            {
-    281            case 'S': // 115200 baud
-    282              UCA3CTLW0 |= UCSWRST;               // Set software reset enable
+    281            {
+    282            case 'S': // 115200 baud
+    283              UCA3CTLW0 |= UCSWRST;               // Set software reset enable
    \   000010   92D32006     BIS.W   #0x1, &0x620
-    283              UCA3BRW = UCA_BRW_115;
+    284              UCA3BRW = UCA_BRW_115;
    \   000014   A2422606     MOV.W   #0x4, &0x626
-    284              UCA3MCTLW  = UCA_MCTL_115;
+    285              UCA3MCTLW  = UCA_MCTL_115;
    \   000018   B24051552806 MOV.W   #0x5551, &0x628
-    285              UCA3CTL1  &= ~UCSWRST;              // Release from software reset
+    286              UCA3CTL1  &= ~UCSWRST;              // Release from software reset
    \   00001E   D2C32006     BIC.B   #0x1, &0x620
-    286              UCA3IE    |= UCRXIE;
+    287              UCA3IE    |= UCRXIE;
    \   000022   92D33A06     BIS.W   #0x1, &0x63a
-    287              for(string_index = BEGINNING; string_index < BAUD_WORD_SIZE; string_index++)
+    288              for(string_index = BEGINNING; string_index < BAUD_WORD_SIZE; string_index++)
    \   000026   4E43         MOV.B   #0x0, R14
    \                     ??parse_test_0:
    \   000028   7E92         CMP.B   #0x8, R14
    \   00002A   212C         JC      ??parse_test_2
-    288                transmit_charA0(lower_baud[string_index]);
+    289                transmit_charA0(lower_baud[string_index]);
    \   00002C   1F42....     MOV.W   &??lower_baud, R15
    \   000030   4E4E         MOV.B   R14, R14
    \   000032   0F5E         ADD.W   R14, R15
@@ -963,25 +965,25 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
    \   000036   ........     CALLA   #transmit_charA0
    \   00003A   5E53         ADD.B   #0x1, R14
    \   00003C   F53F         JMP     ??parse_test_0
-    289              break;
-    290            case 'F': // 460800 baud
-    291              UCA3CTLW0 |= UCSWRST;               // Set software reset enable
+    290              break;
+    291            case 'F': // 460800 baud
+    292              UCA3CTLW0 |= UCSWRST;               // Set software reset enable
    \                     ??parse_test_5:
    \   00003E   92D32006     BIS.W   #0x1, &0x620
-    292              UCA3BRW = UCA_BRW_460;
+    293              UCA3BRW = UCA_BRW_460;
    \   000042   B24011002606 MOV.W   #0x11, &0x626
-    293              UCA3MCTLW = UCA_MCTL_460;
+    294              UCA3MCTLW = UCA_MCTL_460;
    \   000048   B240104A2806 MOV.W   #0x4a10, &0x628
-    294              UCA3CTL1  &= ~UCSWRST;              // Release from software reset
+    295              UCA3CTL1  &= ~UCSWRST;              // Release from software reset
    \   00004E   D2C32006     BIC.B   #0x1, &0x620
-    295              UCA3IE    |= UCRXIE;
+    296              UCA3IE    |= UCRXIE;
    \   000052   92D33A06     BIS.W   #0x1, &0x63a
-    296              for(string_index = BEGINNING; string_index < BAUD_WORD_SIZE; string_index++)
+    297              for(string_index = BEGINNING; string_index < BAUD_WORD_SIZE; string_index++)
    \   000056   4E43         MOV.B   #0x0, R14
    \                     ??parse_test_1:
    \   000058   7E92         CMP.B   #0x8, R14
    \   00005A   092C         JC      ??parse_test_2
-    297                transmit_charA0(higher_baud[string_index]);
+    298                transmit_charA0(higher_baud[string_index]);
    \   00005C   1F42....     MOV.W   &??higher_baud, R15
    \   000060   4E4E         MOV.B   R14, R14
    \   000062   0F5E         ADD.W   R14, R15
@@ -989,8 +991,8 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
    \   000066   ........     CALLA   #transmit_charA0
    \   00006A   5E53         ADD.B   #0x1, R14
    \   00006C   F53F         JMP     ??parse_test_1
-    298            }
-    299          }
+    299            }
+    300          }
    \                     ??parse_test_2:
    \   00006E   1001         RETA
    \   000070                REQUIRE _A_UCA3CTLW0_L
@@ -1009,32 +1011,32 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
    \                     ??lower_baud:
    \   000000                DS8 2
    \   000002                REQUIRE `?<Initializer for lower_baud>`
-    300          
-    301          #pragma vector = USCI_A0_VECTOR
+    301          
+    302          #pragma vector = USCI_A0_VECTOR
 
    \                                 In  segment ISR_CODE, align 2
-    302          __interrupt void USCI_A0_ISR(void){
+    303          __interrupt void USCI_A0_ISR(void){
    \                     USCI_A0_ISR:
    \   000000   0F12         PUSH.W  R15
-    303            switch(__even_in_range(UCA0IV, eight))
+    304            switch(__even_in_range(UCA0IV, eight))
    \   000002   1F42DE05     MOV.W   &0x5de, R15
    \   000006   2F93         CMP.W   #0x2, R15
    \   000008   0920         JNE     ??USCI_A0_ISR_1
-    304            {
-    305            case RXIFG:
-    306              if(UCA0RXBUF == '\0')
+    305            {
+    306            case RXIFG:
+    307              if(UCA0RXBUF == '\0')
    \   00000A   8293CC05     CMP.W   #0x0, &0x5cc
    \   00000E   0624         JEQ     ??USCI_A0_ISR_1
-    307                break;
-    308              // Transmit received character to IOT Module
-    309              while(UCA3STATW & UCBUSY);
+    308                break;
+    309              // Transmit received character to IOT Module
+    310              while(UCA3STATW & UCBUSY);
    \                     ??USCI_A0_ISR_0:
    \   000010   92B32A06     BIT.W   #0x1, &0x62a
    \   000014   FD2F         JC      ??USCI_A0_ISR_0
-    310              UCA3TXBUF = UCA0RXBUF;
+    311              UCA3TXBUF = UCA0RXBUF;
    \   000016   9242CC052E06 MOV.W   &0x5cc, &0x62e
-    311            }
-    312          }
+    312            }
+    313          }
    \                     ??USCI_A0_ISR_1:
    \   00001C   3F41         POP.W   R15
    \   00001E   0013         RETI
@@ -1042,28 +1044,28 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
    \   000020                REQUIRE _A_UCA3STATW_L
    \   000020                REQUIRE _A_UCA3TXBUF_L
    \   000020                REQUIRE _A_UCA0IV_L
-    313          
-    314          #pragma vector = USCI_A3_VECTOR
+    314          
+    315          #pragma vector = USCI_A3_VECTOR
 
    \                                 In  segment ISR_CODE, align 2
-    315          __interrupt void USCI_A3_ISR(void){
+    316          __interrupt void USCI_A3_ISR(void){
    \                     USCI_A3_ISR:
    \   000000   5F15         PUSHM.W #0x6, R15
-    316            uint8_t temp;
-    317            switch(__even_in_range(UCA3IV, eight))
+    317            uint8_t temp;
+    318            switch(__even_in_range(UCA3IV, eight))
    \   000002   1F423E06     MOV.W   &0x63e, R15
    \   000006   2F93         CMP.W   #0x2, R15
    \   000008   3C20         JNE     ??USCI_A3_ISR_0
-    318            {
-    319            case RXIFG:
-    320              //while(UCA0STATW & UCBUSY);
-    321              UCA0TXBUF = UCA3RXBUF;             // Echo character to USB
+    319            {
+    320            case RXIFG:
+    321              //while(UCA0STATW & UCBUSY);
+    322              UCA0TXBUF = UCA3RXBUF;             // Echo character to USB
    \   00000A   92422C06CE05 MOV.W   &0x62c, &0x5ce
-    322              
-    323              chars_to_read++;
+    323              
+    324              chars_to_read++;
    \   000010   D253....     ADD.B   #0x1, &chars_to_read
-    324              
-    325              chars_to_read %= DOUBLE_COMMAND_LENGTH;
+    325              
+    326              chars_to_read %= DOUBLE_COMMAND_LENGTH;
    \   000014   3A401800     MOV.W   #0x18, R10
    \   000018   5C42....     MOV.B   &chars_to_read, R12
    \   00001C   8C11         SXT     R12
@@ -1078,14 +1080,14 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
    \   000034   D282........ SUB.B   &__iar_HWMUL + 10, &chars_to_read // RESLO
    \   00003A   0343         NOP
    \   00003C   3241         POP.W   SR
-    326              temp = iot_tx_wr;
+    327              temp = iot_tx_wr;
    \   00003E   5B42....     MOV.B   &iot_tx_wr, R11
-    327              IOT_Char_Rx[temp] = UCA3RXBUF;     // Read character into interrupt buffer
+    328              IOT_Char_Rx[temp] = UCA3RXBUF;     // Read character into interrupt buffer
    \   000042   1E422C06     MOV.W   &0x62c, R14
    \   000046   4B4B         MOV.B   R11, R11
    \   000048   CB4E....     MOV.B   R14, IOT_Char_Rx(R11)
-    328              
-    329              if(++iot_tx_wr >= SMALL_RING_SIZE || UCA3RXBUF == '\n')
+    329              
+    330              if(++iot_tx_wr >= SMALL_RING_SIZE || UCA3RXBUF == '\n')
    \   00004C   5E42....     MOV.B   &iot_tx_wr, R14
    \   000050   5E53         ADD.B   #0x1, R14
    \   000052   C24E....     MOV.B   R14, &iot_tx_wr
@@ -1093,29 +1095,29 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
    \   00005A   042C         JC      ??USCI_A3_ISR_1
    \   00005C   B2900A002C06 CMP.W   #0xa, &0x62c
    \   000062   0F20         JNE     ??USCI_A3_ISR_0
-    330              {
-    331                // Reset interrupt buffer index if end reached
-    332                iot_tx_wr = BEGINNING;
+    331              {
+    332                // Reset interrupt buffer index if end reached
+    333                iot_tx_wr = BEGINNING;
    \                     ??USCI_A3_ISR_1:
    \   000064   C243....     MOV.B   #0x0, &iot_tx_wr
-    333                
-    334                if(IOT_Char_Rx[CHAR1] == ':' &&
-    335                   IOT_Char_Rx[CHAR2] == IP_LEAD_BYTE &&
-    336                   IOT_STATUS(SOFT_RESET))
+    334                
+    335                if(IOT_Char_Rx[CHAR1] == ':' &&
+    336                   IOT_Char_Rx[CHAR2] == IP_LEAD_BYTE &&
+    337                   IOT_STATUS(SOFT_RESET))
    \   000068   F2903A00.... CMP.B   #0x3a, &IOT_Char_Rx
    \   00006E   0920         JNE     ??USCI_A3_ISR_0
    \   000070   F2903100.... CMP.B   #0x31, &IOT_Char_Rx + 1
    \   000076   0520         JNE     ??USCI_A3_ISR_0
    \   000078   D2B3....     BIT.B   #0x1, &iot_status_reg
    \   00007C   0228         JNC     ??USCI_A3_ISR_0
-    337                {
-    338                  IOT_ENABLE(IP_READY);               // Notify main that IP address is received
+    338                {
+    339                  IOT_ENABLE(IP_READY);               // Notify main that IP address is received
    \   00007E   E2D3....     BIS.B   #0x2, &iot_status_reg
-    339                }
-    340              }
-    341              break;
-    342            }
-    343          }
+    340                }
+    341              }
+    342              break;
+    343            }
+    344          }
    \                     ??USCI_A3_ISR_0:
    \   000082   5A17         POPM.W  #0x6, R15
    \   000084   0013         RETI
@@ -1427,7 +1429,7 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
        1  left_pwm
        2  lower_baud
        1  main_ring_rd
-     706  parse_command
+     712  parse_command
      112  parse_test
       82  read_into_buffer
        1  right_direction
@@ -1440,7 +1442,7 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
       14  transmit_charA3
 
  
- 1 302 bytes in segment CODE
+ 1 308 bytes in segment CODE
     46 bytes in segment DATA16_AN
    325 bytes in segment DATA16_C
     31 bytes in segment DATA16_I
@@ -1449,7 +1451,7 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
      4 bytes in segment INTVEC
    166 bytes in segment ISR_CODE
  
- 1 468 bytes of CODE  memory
+ 1 474 bytes of CODE  memory
    356 bytes of CONST memory (+  4 bytes shared)
     72 bytes of DATA  memory (+ 46 bytes shared)
 
