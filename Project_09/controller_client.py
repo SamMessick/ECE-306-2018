@@ -126,7 +126,7 @@ except socket.error as err:
 #print("Awaiting connection from SPW IoT Module")
 #spwIoTsock.listen(1)
 #client, addr = spwIoTsock.accept()
-remote_ip = raw_input("Please enter a valid IP address: ")
+remote_ip = raw_input("Please enter the IP address displayed on your car: ")
 spwIoTsock.connect((remote_ip, port))
 print("Connection established. Got connection at", remote_ip)
 
@@ -137,12 +137,12 @@ status = getState()
 while True:
     while not status[BUTTON_SELECT]:
     
-		message = special_char + password;
+        message = special_char + password;
 		
         # -------------------------------'remote control' mode-------------------------------------- #
         try:
             time.sleep(status_update_delay)
-            status = getState()                    # update device state
+            status = getState()
             print status
 		
 
@@ -213,7 +213,7 @@ while True:
 
         # ------Wait for reconnect if connection fails------ #
         except socket.error:  
-            print("socket.error: connection lost. Awaiting recconect from SPW IoT Module") 
+            print("socket.error: connection disrupted. Awaiting recconect from SPW IoT Module") 
             try:
                 spwIoTsock.close()
                 spwIoTsock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)      
@@ -228,7 +228,7 @@ while True:
     # ---Back button pressed: send command for black line detection--- #
 	message = special_char + password + blk_line_keyword + command_tag
     spwIoTsock.sendall(message)
-	print("Controller client in 'no command' mode. Press START to reinitiate remote control.")
+    print("Controller client in 'no command' mode. Press START to reinitiate remote control.")
 	
 	# ---Disconnect from car--- #
     spwIoTsock.close()
@@ -239,7 +239,7 @@ while True:
         status = getState()
 	
 	# ---Reconnect to server socket after start button has been pressed--- #
-	spwIoTsock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    spwIoTsock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     spwIoTsock.connect((remote_ip, port))
     print("Connection reestablished. Initiating command transmission.")
 	
