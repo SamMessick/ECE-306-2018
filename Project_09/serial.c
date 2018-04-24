@@ -89,10 +89,9 @@ void check_for_input(void){
       for(string_index = BEGINNING; string_index < SOCKET_PING_SIZE; string_index++)
         transmit_charA3(sock_ping_command[string_index]);
       word1 = "   ncsu   ";
-      word2 = "Port:32000";
       word3 = IP_line1;
       word4 = IP_line2;
-      LCD_print(word1,word2,word3,word4);
+      LCD_print(word1," Waiting  ",word3,word4);
       iot_tx_wr = BEGINNING;
       IOT_DISABLE(IP_READY);
       IOT_DISABLE(SOFT_RESET);
@@ -133,7 +132,6 @@ void read_into_buffer(void){
 }
 
 void parse_command(void){
-  static uint8_t string_index;
   static char left_direction;
   static char right_direction;
   static uint8_t left_pwm;
@@ -149,6 +147,7 @@ void parse_command(void){
   
   if(password_attempt == COMMAND_PASS)
   {
+    IOT_ENABLE(COURSE_BEGIN);
     command_identifier = Main_Char_Rx[CHAR6];
     switch(command_identifier)
     {
@@ -177,12 +176,14 @@ void parse_command(void){
         {
         case RIGHT_FORWARD:
           Wheels_OFF();
+          word1 = " Forward  ";
           Left_Motor_ON_FORWARD(left_pwm);
           Right_Motor_ON_FORWARD(right_pwm);
           break;
           
         case RIGHT_REVERSE:
           Wheels_OFF();
+          word1 = "   Left   ";
           Left_Motor_ON_FORWARD(left_pwm);
           Right_Motor_ON_REVERSE(right_pwm);
         }break;
@@ -192,12 +193,14 @@ void parse_command(void){
         {
         case RIGHT_FORWARD:
           Wheels_OFF();
+          word1 = "  Right   ";
           Left_Motor_ON_REVERSE(left_pwm);
           Right_Motor_ON_FORWARD(right_pwm);
           break;
           
         case RIGHT_REVERSE:
           Wheels_OFF();
+          word1 = " Reverse  ";
           Left_Motor_ON_REVERSE(left_pwm);
           Right_Motor_ON_REVERSE(right_pwm);
         }
@@ -236,8 +239,14 @@ void parse_command(void){
       break;
       
     case BLACK_LINE_MODE:
-      P5OUT &= ~IOT_RESET;   // Disable IOT device
-      P8OUT |= IR_LED;       // Enable infrared LED for sensor readings
+      P5OUT &= ~IOT_RESET;    // Disable IOT device
+      P8OUT |= IR_LED;        // Enable infrared LED for sensor readings
+      IOT_ENABLE(AUTONOMOUS); // Enable autonomous motor updates
+      
+      // Black line routine: turn until black line found, turn on line
+      
+      drive_to_black_line();
+      turn(QUARTER_RIGHT);
       
       /* Goal of code: drive in large circle, disabling white detection for 5 seconds
        *               enable white detection
@@ -248,6 +257,15 @@ void parse_command(void){
        */
       break;
     case EXIT_LINE_MODE:
+      P5OUT |= IOT_RESET;
+      P8OUT &= ~IR_LED;
+      IOT_DISABLE(AUTONOMOUS);
+      
+      // Black line routine: drive forward for 5 seconds and stop
+      
+      turn(LEAVE_COURSE);
+      
+      break;
       /* Drive forward for 5 seconds and display project 10 complete on LCD. */
     }
   }

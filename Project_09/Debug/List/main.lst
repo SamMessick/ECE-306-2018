@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           24/Apr/2018  11:34:12
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           24/Apr/2018  15:09:22
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\main.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EW846E.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EW8CE7.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\main.c" -lC
 #        "C:\Users\shmes\Desktop\Escritorio
@@ -116,15 +116,20 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\mai
    \   00002C   0224         JEQ     ??main_1
      55                Init_IoT();
    \   00002E   ........     CALLA   #Init_IoT
-     56              
-     57              check_for_input();
+     56              if(IOT_STATUS(AUTONOMOUS))
    \                     ??main_1:
-   \   000032   ........     CALLA   #check_for_input
-   \   000036   F83F         JMP     ??main_0
-   \   000038   0343         NOP
-   \   00003A                REQUIRE _A_PM5CTL0_L
-     58            }
-     59          }
+   \   000032   C293....     CMP.B   #0x0, &iot_status_reg
+   \   000036   0234         JGE     ??main_2
+     57                print_detector_values();
+   \   000038   ........     CALLA   #print_detector_values
+     58              check_for_input();
+   \                     ??main_2:
+   \   00003C   ........     CALLA   #check_for_input
+   \   000040   F33F         JMP     ??main_0
+   \   000042   0343         NOP
+   \   000044                REQUIRE _A_PM5CTL0_L
+     59            }
+     60          }
 
    Maximum stack usage in bytes:
 
@@ -141,6 +146,7 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\mai
         4   -> Init_Timers
         4   -> check_for_input
         4   -> enable_display_update
+        4   -> print_detector_values
 
 
    Segment part sizes:
@@ -148,13 +154,13 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\mai
    Bytes  Function/Label
    -----  --------------
        2  _A_PM5CTL0_L
-      58  main
+      68  main
 
  
- 58 bytes in segment CODE
+ 68 bytes in segment CODE
   2 bytes in segment DATA16_AN
  
- 58 bytes of CODE memory
+ 68 bytes of CODE memory
   0 bytes of DATA memory (+ 2 bytes shared)
 
 Errors: none

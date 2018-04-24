@@ -43,6 +43,8 @@
 #define IP_READY             (0x02)
 #define CHECK_FOR_COMMAND    (0x04)
 #define COMMAND_EXECUTING    (0x08)
+#define AUTONOMOUS           (0x80)
+#define COURSE_BEGIN         (0x20)
 #define IOT_RESET_TIME       (250)
 #define IOT_INIT_TIME        (10000)
 #define SOCKET_INIT_SIZE     (18)

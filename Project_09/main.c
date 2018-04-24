@@ -53,7 +53,8 @@ void main(void){
     // assume held in Main_Char_Rx[]
     if(connection_lost)
       Init_IoT();
-    
+    if(IOT_STATUS(AUTONOMOUS))
+      print_detector_values();
     check_for_input();
   }
 }

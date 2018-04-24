@@ -815,7 +815,7 @@
                     <item>ADC_Left_Detector</item>
                     <item>TB0CCR4</item>
                     <item>TB0CCR6</item>
-                    <item></item>
+                    <item />
                 </expressions>
                 <col-names>
                     <item>Expression</item>

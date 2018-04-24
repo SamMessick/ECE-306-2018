@@ -227,69 +227,68 @@ void Right_Motor_ON_REVERSE(char speed){
     right_reverse_flag = true;                  // Prevent right motor from moving forward simultaneously
   }
 }
-/*
-void turn(int8_t degrees){
-  if(degrees IS_POSITIVE)
+
+void turn(uint8_t degrees){
+  if(degrees == LEAVE_COURSE)
   {
-  delay_time = LONG_DELAY;
-  Wheels_OFF();
-  waiting = true;
-  TA0CCTL2 |= CCIE;
-  while(waiting);
-  delay_time = SHORT_DELAY;
-  LCD_print("Driving from", "Black line", "          ", "          ");
-  Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
-  Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
-  waiting = true;
-  TA0CCTL2 |= CCIE;
-  while(waiting);
-  delay_time = SHORT_DELAY;
-  Wheels_OFF();
-  waiting = true;
-  TA0CCTL2 |= CCIE;
-  while(waiting);
-  delay_time = LONG_DELAY;
-  LCD_print("Turning in", "   Loop   ", "          ", "          ");
-  Left_Motor_ON_REVERSE(LEFT_SPIN_SPEED);
-  Right_Motor_ON_FORWARD(RIGHT_SPIN_SPEED);
-  waiting = true;
-  TA0CCTL2 |= CCIE;
-  while(waiting);
-  delay_time = SHORT_DELAY;
-  Wheels_OFF();
-  waiting = true;
-  TA0CCTL2 |= CCIE;
-  while(waiting);
-  waiting= true;
+    delay_time = LONG_DELAY;
+    Wheels_OFF();
+    waiting = true;
+    TA0CCTL2 |= CCIE;
+    while(waiting);
+    delay_time = EXIT_DELAY;
+    LCD_print(" Exiting  ", word2, word3, word4);
+    Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
+    Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
+    waiting = true;
+    TA0CCTL2 |= CCIE;
+    while(waiting);
+    Wheels_OFF();
+    TA0CCTL0 &= ~CCIE;
+    TA0CCTL1 &= ~CCIE;
+    LCD_print("P10 Finit ", word2, word3, word4);
+    waiting = true;
+    while(waiting);
   }
-  if(degrees IS_NEGATIVE)
+  else
   {
-  uint64_t i;  
-  TA0CCTL0 &= ~CCIE;
-  delay_time = SHORT_DELAY;
-  Wheels_OFF();
-  for(i = 0; i < 2000; i++);
-  delay_time = LONG_DELAY;
-  LCD_print("Turning in", "   Loop   ", "          ", "          ");
-  Left_Motor_ON_REVERSE(LEFT_SPIN_SPEED);
-  Right_Motor_ON_FORWARD(RIGHT_SPIN_SPEED);
-  for(i = 0; i < 300000; i++);
-  Wheels_OFF();
-  delay_time = HALF_SEC;
-  LCD_print("Driving in", "   Loop   ", "          ", "          ");
-  Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
-  Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
-  for(i = 0; i < 1000000; i++);
-  Wheels_OFF();
-  LCD_print("          ", "   Demo   ", " Complete ", "          ");
+    delay_time = LONG_DELAY;
+    Wheels_OFF();
+    waiting = true;
+    TA0CCTL2 |= CCIE;
+    while(waiting);
+    delay_time = SHORT_DELAY;
+    LCD_print("", word2, word3, word4);
+    Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
+    Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
+    waiting = true;
+    TA0CCTL2 |= CCIE;
+    while(waiting);
+    delay_time = SHORT_DELAY;
+    Wheels_OFF();
+    waiting = true;
+    TA0CCTL2 |= CCIE;
+    while(waiting);
+    delay_time = LONG_DELAY;
+    LCD_print("Turning in", word2, word3, word4);
+    Left_Motor_ON_REVERSE(LEFT_SPIN_SPEED);
+    Right_Motor_ON_FORWARD(RIGHT_SPIN_SPEED);
+    waiting = true;
+    TA0CCTL2 |= CCIE;
+    while(waiting);
+    delay_time = SHORT_DELAY;
+    Wheels_OFF();
+    waiting = true;
+    TA0CCTL2 |= CCIE;
+    while(waiting);
   }
 }
 void drive_to_black_line(void){
-  LCD_print("Driving to", "Black line", "          ", "          ");
+  LCD_print("Searching ", word2, word3, word4);
   Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
   Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
-  while(ADC_Left_Detector < ir_black_reading
-     && ADC_Right_Detector < ir_black_reading)
+  while(ADC_Left_Detector < IR_ACTIVE_READING
+     && ADC_Right_Detector < IR_ACTIVE_READING)
   {
     while(ADC12CTL0 & ADC12BUSY);
     ADC12IER0  |= (ADC12IE2     | // Enable interrupts for new sample results
@@ -302,8 +301,6 @@ void drive_to_black_line(void){
   TA0CCTL2 |= CCIE;
   while(waiting);
 }
-  
-*/
   
   
   

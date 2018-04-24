@@ -63,25 +63,33 @@ void handle_procedural_delay(void){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 //   Timer A0.0 interrupt routine  //
-// ------LCD Display Updater------ //
+// ------    Ping update    ------ //
 #pragma vector = TIMER0_A0_VECTOR
 __interrupt void Timer0_A0_ISR(void){
   uint16_t temp = delay_time;
   static uint8_t string_index;
+  static uint32_t time_ms;               // Total time elapsed during course run
   counter_A00++;                         // Increment counter by 1 msec for each 1 msec interrupt
-  /*
-  if(!(counter_A00 % temp) && IOT_STATUS(SOFT_RESET))            // Quarter-second elapsed
-  {
-    Wheels_OFF();
-    counter_A00 = COUNTER_RESET;         // Reset 1 msec interrupt counter
-    delay_time = COUNTER_RESET;
-    IOT_DISABLE(COMMAND_EXECUTING);
-    waiting = false;
-    TA0CCTL0 &= ~CCIE;
-  } */
+
   if(!(counter_A00 % temp))
+  {
     for(string_index = BEGINNING; string_index < SOCKET_PING_SIZE; string_index++)     // Ping host every period once established
         transmit_charA3(sock_ping_command[string_index]);
+  }
+  
+  if(IOT_STATUS(COURSE_BEGIN))
+  {
+    time_ms++;
+    if((time_ms % 200) == 0)  // two milliseconds elapsed
+    {
+      hex_to_dec(word2, time_ms);
+      word2[CHAR7] = word2[CHAR6];
+      word2[CHAR6] = word2[CHAR5];
+      word2[CHAR5] = word2[CHAR4];         // Shift digits over one to add decimal point
+      word2[CHAR4] = '.';
+      LCD_print(word1, word2, word3, word4);
+    }
+  }   
 }
 
 //   Timer A1 interrupt routines   //

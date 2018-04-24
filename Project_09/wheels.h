@@ -20,8 +20,21 @@
 #define R_PWM_MIN               (0)
 #define LEFT_FORWARD_SPEED      (235)
 #define RIGHT_FORWARD_SPEED     (145)
+#define LEFT_R_SEARCH_SPEED     (0)
+#define RIGHT_R_SEARCH_SPEED    (80)
+#define LEFT_L_SEARCH_SPEED     (120)
+#define RIGHT_L_SEARCH_SPEED    (0)
+#define LEFT_SPIN_SPEED         (253)
+#define RIGHT_SPIN_SPEED        (253)
+#define GOING_RIGHT             (1)
+#define GOING_LEFT              (0)
+#define IR_ACTIVE_READING       (1300)
 
 #define QUARTER_RIGHT            (90)
+#define LEAVE_COURSE             (45)
+
+#define SHORT_DELAY             (250)
+#define LONG_DELAY              (750)
 
 #ifndef PID_STRUCT
 #define PID_STRUCT

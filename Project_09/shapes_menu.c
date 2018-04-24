@@ -15,7 +15,44 @@ char* word1 = "          ";
 char* word2 = "          ";
 char* word3 = "          ";
 char* word4 = "          ";
+uint8_t last_dir = GOING_RIGHT;
 
+void print_detector_values(void)
+{
+  if(ADC_Left_Detector >= IR_ACTIVE_READING)
+    if(ADC_Right_Detector >= IR_ACTIVE_READING)
+    {
+      Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
+      Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
+    }
+    else
+    {
+      Left_Motor_ON_FORWARD(LEFT_R_SEARCH_SPEED);
+      Right_Motor_ON_FORWARD(RIGHT_R_SEARCH_SPEED);
+      last_dir = GOING_RIGHT;
+    }
+  else 
+    if(ADC_Right_Detector >= IR_ACTIVE_READING)
+    {
+      Left_Motor_ON_FORWARD(LEFT_L_SEARCH_SPEED);
+      Right_Motor_ON_FORWARD(RIGHT_L_SEARCH_SPEED);
+      last_dir = GOING_LEFT;
+    }
+    else 
+      if(last_dir == GOING_LEFT)
+      {
+        Left_Motor_ON_FORWARD(LEFT_R_SEARCH_SPEED);
+        Right_Motor_ON_FORWARD(RIGHT_R_SEARCH_SPEED);
+      }
+      else
+      {
+        Left_Motor_ON_FORWARD(LEFT_L_SEARCH_SPEED);
+        Right_Motor_ON_FORWARD(RIGHT_L_SEARCH_SPEED);
+      }
+  ADC12IER0  |= (ADC12IE2     | // Enable interrupts for new sample results
+                 ADC12IE4     |
+                 ADC12IE5);
+}
 
 void LCD_print(char first_line[COLUMN_NUM_COLUMNS], char second_line[COLUMN_NUM_COLUMNS], char third_line[COLUMN_NUM_COLUMNS], char fourth_line[COLUMN_NUM_COLUMNS]){
   strcpy(display_line[LINE1], first_line);

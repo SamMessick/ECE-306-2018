@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <settings>
     <DebugChecksum>
-        <Checksum>4081385363</Checksum>
+        <Checksum>1862160144</Checksum>
     </DebugChecksum>
     <Stack>
         <FillEnabled>0</FillEnabled>
@@ -60,7 +60,9 @@
     </PowerProbe>
     <Breakpoints>
         <Bp0>_ "STD_CODE" "{$PROJ_DIR$\iot.c}.10.1" 0 0 0 0 "" 0 ""</Bp0>
-        <Count>1</Count>
+        <Bp1>_ "STD_CODE" "{$PROJ_DIR$\main.c}.57.7" 1 0 0 0 "" 0 ""</Bp1>
+        <Bp2>_ "STD_CODE" "{$PROJ_DIR$\serial.c}.243.7" 1 0 0 0 "" 0 ""</Bp2>
+        <Count>3</Count>
     </Breakpoints>
     <FET>
         <Clock_mode>46</Clock_mode>

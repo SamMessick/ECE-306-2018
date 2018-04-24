@@ -39,7 +39,7 @@ BUTTON_SELECT = 11
 BUTTON_START  = 12
 
 # Control variables
-status_update_delay = .200             # delay time between commands
+status_update_delay = .100             # delay time between commands
 max_pwm        = 240.0                 # maximum pwm value (to transmit)
 min_pwm        = 5                     # minimum pwm value (to transmit)
 max_analog     = 1                     # maximum joystick reading
@@ -57,19 +57,19 @@ port           = 32000                 # Port of car server socket
 remote_ip      = ""                    # IP address of car server socket
 
 # Command string parameters
-message          = ""              # string for storing command
-special_char     = "*"
-password         = "8657"
-forward_keyword  = "KQ"
-reverse_keyword  = "MS"
-right_keyword    = "KS"
-left_keyword     = "MQ"
-a_keyword        = "A000"
-b_keyword        = "B000"
-y_keyword        = "Y000"
-x_keyword        = "X000"
-blk_line_keyword = "L000"
-exit_keyword     = "E000"
+message          = ""                  # string for storing command
+special_char     = "*"                 # for initiating command
+password         = "8657"              # for verifying command
+forward_keyword  = "KQ"                # for sending forward drive
+reverse_keyword  = "MS"                # for sending reverse drive
+right_keyword    = "KS"                # for sending right spin drive
+left_keyword     = "MQ"                # for sending left spin drive
+a_keyword        = "A000"              # for sending 'a' button pressed
+b_keyword        = "B000"              # for sending 'b' button pressed
+y_keyword        = "Y000"              # for sending 'y' button pressed
+x_keyword        = "X000"              # for sending 'x' button pressed
+blk_line_keyword = "L000"              # for sending car to search for black line
+exit_keyword     = "E000"              # for exiting black line
 command_tag      = "0\r\n"
 
 # Format decimal to string format xxx
