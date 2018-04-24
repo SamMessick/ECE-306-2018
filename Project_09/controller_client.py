@@ -190,18 +190,21 @@ while True:
 
         # ------Wait for reconnect if connection fails------ #
         except socket.error:  
-            print("Connection lost. Awaiting recconect from SPW IoT Module") 
+            print("socket.error: connection lost. Awaiting recconect from SPW IoT Module") 
             try:
                 spwIoTsock.close()
                 spwIoTsock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
                 spwIoTsock.connect((remote_ip, port))
-                print("Connection established. Got connection from", remote_ip)
+                print("Connection established. Connected client socket to", remote_ip)
             except socket.error:
-                print("Connection to IoT module lost. Please restart program.")
+                print("socket.error: connection to IoT module lost. Please restart program.")
                 sys.exit()
     
+	# -------------------------------'no command' mode-------------------------------------- #
+	
     # ---Back button pressed: send command for black line detection--- #
     spwIoTsock.sendall("*8657L0000\r\n")
+	print("Controller client in 'no command' mode. Press START to reinitiate remote control.")
 	
 	# ---Disconnect from car--- #
     spwIoTsock.close()
@@ -214,7 +217,7 @@ while True:
 	# ---Reconnect to server socket after start button has been pressed--- #
 	spwIoTsock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     spwIoTsock.connect((remote_ip, port))
-    print("Connection established. Got connection at", remote_ip)
+    print("Connection reestablished. Initiating command transmission.")
 	
 spwIoTsock.close();
 sys.exit()
