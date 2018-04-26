@@ -527,4 +527,5 @@ __interrupt void Port_5(void){
     }
     break;
   }
+  P5IFG = COUNTER_RESET;
 }

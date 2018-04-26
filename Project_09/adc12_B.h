@@ -16,7 +16,7 @@
 #define STABILIZE_REFERENCE {__delay_cycles(10000);}
 #define THUMB_ACTIVE_READING (1000)
 #define IR_BLACK_READING     (1300)
-#define IR_WHITE_READING     (200)
+#define IR_WHITE_READING     (1000)
 
 void Init_ADC(void);                             // Initialize Analog-to-Digital-Converter
 void calibrate_White(void);                      // Function for setting highest value for "white" in PID (via thumbwheel)

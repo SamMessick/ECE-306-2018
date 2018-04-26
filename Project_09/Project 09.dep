@@ -162,10 +162,6 @@
             </outputs>
             <inputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 37 50 88 27 39 63 84 26 90 58 72 0 83 20 80</file>
-                </tool>
-                <tool>
                     <name>ICC430</name>
                     <file> 0 88 37 84 26 50 63 27 90 72 58 20 80 83 39</file>
                 </tool>
