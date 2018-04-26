@@ -18,7 +18,7 @@
 #define L_PWM_MIN               (135)
 #define R_PWM_MAX               (140)
 #define R_PWM_MIN               (0)
-#define LEFT_FORWARD_SPEED      (235)
+#define LEFT_FORWARD_SPEED      (140)
 #define RIGHT_FORWARD_SPEED     (145)
 #define LEFT_R_SEARCH_SPEED     (0)
 #define RIGHT_R_SEARCH_SPEED    (80)

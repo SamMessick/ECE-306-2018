@@ -145,7 +145,7 @@
                     <item>right_direction</item>
                     <item>left_pwm</item>
                     <item>right_pwm</item>
-                    <item></item>
+                    <item />
                 </expressions>
                 <col-names>
                     <item>Expression</item>
