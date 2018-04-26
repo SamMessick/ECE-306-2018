@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           26/Apr/2018  11:28:31
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           26/Apr/2018  11:44:56
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\serial.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EW4769.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EW4FD0.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\serial.c" -lC
 #        "C:\Users\shmes\Desktop\Escritorio
@@ -1101,7 +1101,7 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
    \                     ??USCI_A3_ISR_1:
    \   000064   C243....     MOV.B   #0x0, &iot_tx_wr
     334                
-    335                if(IOT_Char_Rx[CHAR1] == ':' &&
+    335                if(IOT_Char_Rx[CHAR1] == ':' &&                   // If IoT has just exited a soft reset and sees IP address
     336                   IOT_Char_Rx[CHAR2] == IP_LEAD_BYTE &&
     337                   IOT_STATUS(SOFT_RESET))
    \   000068   F2903A00.... CMP.B   #0x3a, &IOT_Char_Rx
@@ -1111,7 +1111,7 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\ser
    \   000078   D2B3....     BIT.B   #0x1, &iot_status_reg
    \   00007C   0228         JNC     ??USCI_A3_ISR_0
     338                {
-    339                  IOT_ENABLE(IP_READY);               // Notify main that IP address is received
+    339                  IOT_ENABLE(IP_READY);                           // Notify main that IP address is received
    \   00007E   E2D3....     BIS.B   #0x2, &iot_status_reg
     340                }
     341              }

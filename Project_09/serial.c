@@ -332,11 +332,11 @@ __interrupt void USCI_A3_ISR(void){
       // Reset interrupt buffer index if end reached
       iot_tx_wr = BEGINNING;
       
-      if(IOT_Char_Rx[CHAR1] == ':' &&
+      if(IOT_Char_Rx[CHAR1] == ':' &&                   // If IoT has just exited a soft reset and sees IP address
          IOT_Char_Rx[CHAR2] == IP_LEAD_BYTE &&
          IOT_STATUS(SOFT_RESET))
       {
-        IOT_ENABLE(IP_READY);               // Notify main that IP address is received
+        IOT_ENABLE(IP_READY);                           // Notify main that IP address is received
       }
     }
     break;

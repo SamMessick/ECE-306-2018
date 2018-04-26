@@ -77,7 +77,6 @@ void turn(uint8_t degrees);
 void drive_to_black_line(void);
 void Init_PID(void);
 void pid_udpate_left(void);
-void pid_update_right(void);
 
 extern volatile uint8_t delay_continue;
 extern volatile uint16_t delay_time;

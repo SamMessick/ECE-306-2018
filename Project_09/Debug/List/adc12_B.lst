@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           26/Apr/2018  11:28:31
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           26/Apr/2018  11:44:55
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\adc12_B.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EW468A.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EW4F20.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\adc12_B.c" -lC
 #        "C:\Users\shmes\Desktop\Escritorio
@@ -351,8 +351,8 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\adc
    \                     ??calibrate_White_0:
    \   000004   C293....     CMP.B   #0x0, &calibrating
    \   000008   0324         JEQ     ??calibrate_White_1
-    154              updateDisplay();
-   \   00000A   ........     CALLA   #updateDisplay
+    154              update_ir_reading();
+   \   00000A   ........     CALLA   #update_ir_reading
    \   00000E   FA3F         JMP     ??calibrate_White_0
     155            
     156            ir_black_reading = ADC_Thumb;
@@ -372,8 +372,8 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\adc
    \                     ??calibrate_Black_0:
    \   000004   C293....     CMP.B   #0x0, &calibrating
    \   000008   0324         JEQ     ??calibrate_Black_1
-    163              updateDisplay();
-   \   00000A   ........     CALLA   #updateDisplay
+    163              update_ir_reading();
+   \   00000A   ........     CALLA   #update_ir_reading
    \   00000E   FA3F         JMP     ??calibrate_Black_0
     164          
     165            calibrated = true;
@@ -384,53 +384,46 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\adc
     167          
 
    \                                 In  segment CODE, align 2
-    168          void updateDisplay(void){ 
-   \                     updateDisplay:
-    169            if(calibrated)
-   \   000000   C293....     CMP.B   #0x0, &calibrated
-   \   000004   1124         JEQ     ??updateDisplay_1
-    170            {
+    168          void update_ir_reading(void){ 
+   \                     update_ir_reading:
+    169            //if(calibrated)
+    170            //{
     171              //word4 = "          ";
     172              hex_to_dec(word4, counter_A00);
-   \   000006   1E42....     MOV.W   &counter_A00, R14
-   \   00000A   0F43         MOV.W   #0x0, R15
-   \   00000C   1C42....     MOV.W   &word4, R12
-   \   000010   ........     CALLA   #hex_to_dec
+   \   000000   1E42....     MOV.W   &counter_A00, R14
+   \   000004   0F43         MOV.W   #0x0, R15
+   \   000006   1C42....     MOV.W   &word4, R12
+   \   00000A   ........     CALLA   #hex_to_dec
     173              LCD_print("Passing thr", "   Loop   ", "          ", word4);
-   \   000014   1F42....     MOV.W   &word4, R15
-   \   000018   3E40....     MOV.W   #`?<Constant "          ">`, R14
-   \   00001C   3D40....     MOV.W   #`?<Constant "   Loop   ">`, R13
-   \   000020   3C40....     MOV.W   #`?<Constant "Passing thr">`, R12
-   \   000024   ........     CALLA   #LCD_print
-    174            }
-    175            if(ir_ready_to_print)
-   \                     ??updateDisplay_1:
-   \   000028   C293....     CMP.B   #0x0, &ir_ready_to_print
-   \   00002C   0424         JEQ     ??updateDisplay_0
-    176            {
-    177              print_detector_values();
-   \   00002E   ........     CALLA   #print_detector_values
-    178              ir_ready_to_print = false;
-   \   000032   C243....     MOV.B   #0x0, &ir_ready_to_print
-    179            }
-    180            while(ADC12CTL0 & ADC12BUSY);
-   \                     ??updateDisplay_0:
-   \   000036   92B30008     BIT.W   #0x1, &0x800
-   \   00003A   FD2F         JC      ??updateDisplay_0
-    181            P8OUT &= ~(IR_LED);
-   \   00003C   D2C36302     BIC.B   #0x1, &0x263
-    182            
-    183            ADC12IER0  |= (ADC12IE2     | // Enable interrupts for new sample results
-    184                           ADC12IE4     |
-    185                           ADC12IE5);
-   \   000040   B2D034001208 BIS.W   #0x34, &0x812
-    186            P8OUT |= IR_LED;
-   \   000046   D2D36302     BIS.B   #0x1, &0x263
+   \   00000E   1F42....     MOV.W   &word4, R15
+   \   000012   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   000016   3D40....     MOV.W   #`?<Constant "   Loop   ">`, R13
+   \   00001A   3C40....     MOV.W   #`?<Constant "Passing thr">`, R12
+   \   00001E   ........     CALLA   #LCD_print
+    174            //}
+    175            //if(ir_ready_to_print)
+    176            //{
+    177            //  print_detector_values();
+    178            //  ir_ready_to_print = false;
+    179            //}
+    180            P8OUT |= IR_LED;
+   \   000022   D2D36302     BIS.B   #0x1, &0x263
+    181            while(ADC12CTL0 & ADC12BUSY);
+   \                     ??update_ir_reading_0:
+   \   000026   92B30008     BIT.W   #0x1, &0x800
+   \   00002A   FD2F         JC      ??update_ir_reading_0
+    182            P8OUT &= ~(IR_LED);
+   \   00002C   D2C36302     BIC.B   #0x1, &0x263
+    183            
+    184            ADC12IER0  |= (ADC12IE2     | // Enable interrupts for new sample results
+    185                           ADC12IE4     |
+    186                           ADC12IE5);
+   \   000030   B2D034001208 BIS.W   #0x34, &0x812
     187          }
-   \   00004A   1001         RETA
-   \   00004C                REQUIRE _A_ADC12CTL0_L
-   \   00004C                REQUIRE _A_PDOUT_L
-   \   00004C                REQUIRE _A_ADC12IER0_L
+   \   000036   1001         RETA
+   \   000038                REQUIRE _A_PDOUT_L
+   \   000038                REQUIRE _A_ADC12CTL0_L
+   \   000038                REQUIRE _A_ADC12IER0_L
 
    \                                 In  segment INTVEC, offset 0x5c, root
    \                     `??ADC12_ISR::??INTVEC 92`:
@@ -470,13 +463,12 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\adc
       4   ADC12_ISR
       4   Init_ADC
       4   calibrate_Black
-        4   -> updateDisplay
+        4   -> update_ir_reading
       4   calibrate_White
-        4   -> updateDisplay
-      4   updateDisplay
+        4   -> update_ir_reading
+      4   update_ir_reading
         4   -> LCD_print
         4   -> hex_to_dec
-        4   -> print_detector_values
 
 
    Segment part sizes:
@@ -514,10 +506,10 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\adc
        2  ir_black_reading
        2  ir_white_reading
        1  one_time
-      76  updateDisplay
+      56  update_ir_reading
 
  
- 214 bytes in segment CODE
+ 194 bytes in segment CODE
   24 bytes in segment DATA16_AN
   34 bytes in segment DATA16_C
    5 bytes in segment DATA16_I
@@ -526,7 +518,7 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\adc
    2 bytes in segment INTVEC
   26 bytes in segment ISR_CODE
  
- 240 bytes of CODE  memory
+ 220 bytes of CODE  memory
   39 bytes of CONST memory (+  2 bytes shared)
   13 bytes of DATA  memory (+ 24 bytes shared)
 

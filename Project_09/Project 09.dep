@@ -139,10 +139,6 @@
             </outputs>
             <inputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 72 27 21 30 63 90 88 22 84 26 45 32 4 81 15 50 58 39 0 6 12 3 5 37 83 20 80 2 42</file>
-                </tool>
-                <tool>
                     <name>ICC430</name>
                     <file> 2 88 37 84 26 50 6 0 63 27 90 72 58 20 80 83 39 4 12 32 21 15 45 30 3 81 5 42 22</file>
                 </tool>
@@ -192,10 +188,6 @@
                 </tool>
             </outputs>
             <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 27 84 0 39 88 63 37 90 58 72 6 50 26 83 20 80</file>
-                </tool>
                 <tool>
                     <name>ICC430</name>
                     <file> 6 88 37 84 26 50 0 63 27 90 72 58 20 80 83 39</file>
@@ -266,10 +258,6 @@
             </outputs>
             <inputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 27 63 84 26 90 12 3 15 0 50 88 58 39 6 32 37 72 83 20 80 21 45 30</file>
-                </tool>
-                <tool>
                     <name>ICC430</name>
                     <file> 30 3 6 88 37 84 26 50 0 63 27 90 72 58 20 80 83 39 12 32 21 15 45</file>
                 </tool>
@@ -293,10 +281,6 @@
             </outputs>
             <inputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 26 0 27 63 21 37 90 83 80 6 88 84 50 72 20 32 58 39</file>
-                </tool>
-                <tool>
                     <name>ICC430</name>
                     <file> 32 0 88 37 84 26 50 63 27 90 72 58 20 80 83 39 21 6</file>
                 </tool>
@@ -319,10 +303,6 @@
                 </tool>
             </outputs>
             <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 63 20 15 88 30 32 27 72 90 83 3 37 6 0 80 21 45 12 84 50 26 58 39 42</file>
-                </tool>
                 <tool>
                     <name>ICC430</name>
                     <file> 42 88 37 84 26 50 30 3 6 0 63 27 90 72 58 20 80 83 39 12 32 21 15 45</file>

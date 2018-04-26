@@ -21,7 +21,7 @@
 void Init_ADC(void);                             // Initialize Analog-to-Digital-Converter
 void calibrate_White(void);                      // Function for setting highest value for "white" in PID (via thumbwheel)
 void calibrate_Black(void);                      // Function for setting lowest value  for "black" in PID (via thumbwheel)
-void updateDisplay(void);                        // Function for printing ADC values for left detector to screen and updating ADC readings
+void update_ir_reading(void);                        // Function for printing ADC values for left detector to screen and updating ADC readings
 
 extern volatile uint16_t ADC_Thumb;              // ADC reading from Thumbwheel
 extern volatile uint16_t ADC_Right_Detector;     // ADC reading from right infrared detector

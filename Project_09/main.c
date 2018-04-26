@@ -52,9 +52,12 @@ void main(void){
     // Processing for IOT commands
     // assume held in Main_Char_Rx[]
     if(connection_lost)
-      Init_IoT();
+      Init_IoT();                            // Soft Reset IoT module and provide new IP address
     if(IOT_STATUS(AUTONOMOUS))
-      print_detector_values();
-    check_for_input();
+    {
+      update_ir_reading();
+      pid_udpate_left();                     // Update wheel speeds during autonomous driving
+    }
+    check_for_input();                       // Read in updates and commands from IoT module
   }
 }

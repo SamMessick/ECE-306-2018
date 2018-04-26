@@ -151,7 +151,7 @@ void calibrate_White(void){
   //word4 = "Cal. White";
   
   while(calibrating)
-    updateDisplay();
+    update_ir_reading();
   
   ir_black_reading = ADC_Thumb;
 }
@@ -160,28 +160,28 @@ void calibrate_Black(void){
   //word4 = "Cal. Black";
   
   while(calibrating)
-    updateDisplay();
+    update_ir_reading();
 
   calibrated = true;
 }
 
-void updateDisplay(void){ 
-  if(calibrated)
-  {
+void update_ir_reading(void){ 
+  //if(calibrated)
+  //{
     //word4 = "          ";
     hex_to_dec(word4, counter_A00);
     LCD_print("Passing thr", "   Loop   ", "          ", word4);
-  }
-  if(ir_ready_to_print)
-  {
-    print_detector_values();
-    ir_ready_to_print = false;
-  }
+  //}
+  //if(ir_ready_to_print)
+  //{
+  //  print_detector_values();
+  //  ir_ready_to_print = false;
+  //}
+  P8OUT |= IR_LED;
   while(ADC12CTL0 & ADC12BUSY);
   P8OUT &= ~(IR_LED);
   
   ADC12IER0  |= (ADC12IE2     | // Enable interrupts for new sample results
                  ADC12IE4     |
                  ADC12IE5);
-  P8OUT |= IR_LED;
 }
