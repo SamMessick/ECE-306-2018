@@ -35,6 +35,7 @@
 
 #define SHORT_DELAY             (250)
 #define LONG_DELAY              (750)
+#define EXIT_TIME               (5000)
 
 #ifndef PID_STRUCT
 #define PID_STRUCT
@@ -80,5 +81,6 @@ void pid_udpate_left(void);
 
 extern volatile uint8_t delay_continue;
 extern volatile uint16_t delay_time;
+extern volatile uint32_t time_ms;                     // Total time elapsed during course run
 extern uint8_t instruction_label_tmp;
 extern volatile uint8_t waiting;

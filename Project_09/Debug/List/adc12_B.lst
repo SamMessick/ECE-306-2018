@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           26/Apr/2018  11:44:55
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           26/Apr/2018  12:33:57
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\adc12_B.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EW4F20.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EW32C7.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\adc12_B.c" -lC
 #        "C:\Users\shmes\Desktop\Escritorio
@@ -322,108 +322,99 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\adc
    \                                 In  segment ISR_CODE, align 2
     140          __interrupt void ADC12_ISR(void){
    \                     ADC12_ISR:
-    141            ADC12IER0  &= ~(ADC12IE2     | // Disable interrupts for new sample results
-    142                           ADC12IE4     |
-    143                           ADC12IE5);
-   \   000000   B2F0CBFF1208 AND.W   #0xffcb, &0x812
-    144            ADC_Thumb = ADC12MEM0;
-   \   000006   92426008.... MOV.W   &0x860, &ADC_Thumb
-    145            ADC_Right_Detector = ADC12MEM1;
-   \   00000C   92426208.... MOV.W   &0x862, &ADC_Right_Detector
-    146            ADC_Left_Detector = ADC12MEM2;
-   \   000012   92426408.... MOV.W   &0x864, &ADC_Left_Detector
-    147          }
-   \   000018   0013         RETI
-   \   00001A                REQUIRE _A_ADC12IER0_L
-   \   00001A                REQUIRE _A_ADC12MEM0_L
-   \   00001A                REQUIRE _A_ADC12MEM1_L
-   \   00001A                REQUIRE _A_ADC12MEM2_L
-    148          
+    141            P8OUT &= ~(IR_LED);            // Turn off IR LED
+   \   000000   D2C36302     BIC.B   #0x1, &0x263
+    142            ADC12IER0  &= ~(ADC12IE2     | // Disable interrupts for new sample results
+    143                           ADC12IE4     |
+    144                           ADC12IE5);
+   \   000004   B2F0CBFF1208 AND.W   #0xffcb, &0x812
+    145            ADC_Thumb = ADC12MEM0;
+   \   00000A   92426008.... MOV.W   &0x860, &ADC_Thumb
+    146            ADC_Right_Detector = ADC12MEM1;
+   \   000010   92426208.... MOV.W   &0x862, &ADC_Right_Detector
+    147            ADC_Left_Detector = ADC12MEM2;
+   \   000016   92426408.... MOV.W   &0x864, &ADC_Left_Detector
+    148          }
+   \   00001C   0013         RETI
+   \   00001E                REQUIRE _A_PDOUT_L
+   \   00001E                REQUIRE _A_ADC12IER0_L
+   \   00001E                REQUIRE _A_ADC12MEM0_L
+   \   00001E                REQUIRE _A_ADC12MEM1_L
+   \   00001E                REQUIRE _A_ADC12MEM2_L
+    149          
 
    \                                 In  segment CODE, align 2
-    149          void calibrate_White(void){
+    150          void calibrate_White(void){
    \                     calibrate_White:
-    150            calibrating = true;
+    151            calibrating = true;
    \   000000   D243....     MOV.B   #0x1, &calibrating
-    151            //word4 = "Cal. White";
-    152            
-    153            while(calibrating)
+    152            //word4 = "Cal. White";
+    153            
+    154            while(calibrating)
    \                     ??calibrate_White_0:
    \   000004   C293....     CMP.B   #0x0, &calibrating
    \   000008   0324         JEQ     ??calibrate_White_1
-    154              update_ir_reading();
+    155              update_ir_reading();
    \   00000A   ........     CALLA   #update_ir_reading
    \   00000E   FA3F         JMP     ??calibrate_White_0
-    155            
-    156            ir_black_reading = ADC_Thumb;
+    156            
+    157            ir_black_reading = ADC_Thumb;
    \                     ??calibrate_White_1:
    \   000010   9242........ MOV.W   &ADC_Thumb, &ir_black_reading
-    157          }
+    158          }
    \   000016   1001         RETA
 
    \                                 In  segment CODE, align 2
-    158          void calibrate_Black(void){
+    159          void calibrate_Black(void){
    \                     calibrate_Black:
-    159            calibrating = true;
+    160            calibrating = true;
    \   000000   D243....     MOV.B   #0x1, &calibrating
-    160            //word4 = "Cal. Black";
-    161            
-    162            while(calibrating)
+    161            //word4 = "Cal. Black";
+    162            
+    163            while(calibrating)
    \                     ??calibrate_Black_0:
    \   000004   C293....     CMP.B   #0x0, &calibrating
    \   000008   0324         JEQ     ??calibrate_Black_1
-    163              update_ir_reading();
+    164              update_ir_reading();
    \   00000A   ........     CALLA   #update_ir_reading
    \   00000E   FA3F         JMP     ??calibrate_Black_0
-    164          
-    165            calibrated = true;
+    165          
+    166            calibrated = true;
    \                     ??calibrate_Black_1:
    \   000010   D243....     MOV.B   #0x1, &calibrated
-    166          }
+    167          }
    \   000014   1001         RETA
-    167          
+    168          
 
    \                                 In  segment CODE, align 2
-    168          void update_ir_reading(void){ 
+    169          void update_ir_reading(void){ 
    \                     update_ir_reading:
-    169            //if(calibrated)
-    170            //{
-    171              //word4 = "          ";
-    172              hex_to_dec(word4, counter_A00);
-   \   000000   1E42....     MOV.W   &counter_A00, R14
-   \   000004   0F43         MOV.W   #0x0, R15
-   \   000006   1C42....     MOV.W   &word4, R12
-   \   00000A   ........     CALLA   #hex_to_dec
-    173              LCD_print("Passing thr", "   Loop   ", "          ", word4);
-   \   00000E   1F42....     MOV.W   &word4, R15
-   \   000012   3E40....     MOV.W   #`?<Constant "          ">`, R14
-   \   000016   3D40....     MOV.W   #`?<Constant "   Loop   ">`, R13
-   \   00001A   3C40....     MOV.W   #`?<Constant "Passing thr">`, R12
-   \   00001E   ........     CALLA   #LCD_print
-    174            //}
-    175            //if(ir_ready_to_print)
-    176            //{
-    177            //  print_detector_values();
-    178            //  ir_ready_to_print = false;
-    179            //}
-    180            P8OUT |= IR_LED;
-   \   000022   D2D36302     BIS.B   #0x1, &0x263
-    181            while(ADC12CTL0 & ADC12BUSY);
+    170            //if(calibrated)
+    171            //{
+    172              //word4 = "          ";
+    173              //hex_to_dec(word4, counter_A00);
+    174              //LCD_print("Passing thr", "   Loop   ", "          ", word4);
+    175            //}
+    176            //if(ir_ready_to_print)
+    177            //{
+    178            //  print_detector_values();
+    179            //  ir_ready_to_print = false;
+    180            //}
+    181            P8OUT |= IR_LED;              // Turn on IR LED
+   \   000000   D2D36302     BIS.B   #0x1, &0x263
+    182            ADC12IER0  |= (ADC12IE2     | // Enable interrupts for new sample results
+    183                           ADC12IE4     |
+    184                           ADC12IE5);
+   \   000004   B2D034001208 BIS.W   #0x34, &0x812
+    185            while(ADC12CTL0 & ADC12BUSY); // Wait for new reading
    \                     ??update_ir_reading_0:
-   \   000026   92B30008     BIT.W   #0x1, &0x800
-   \   00002A   FD2F         JC      ??update_ir_reading_0
-    182            P8OUT &= ~(IR_LED);
-   \   00002C   D2C36302     BIC.B   #0x1, &0x263
-    183            
-    184            ADC12IER0  |= (ADC12IE2     | // Enable interrupts for new sample results
-    185                           ADC12IE4     |
-    186                           ADC12IE5);
-   \   000030   B2D034001208 BIS.W   #0x34, &0x812
-    187          }
-   \   000036   1001         RETA
-   \   000038                REQUIRE _A_PDOUT_L
-   \   000038                REQUIRE _A_ADC12CTL0_L
-   \   000038                REQUIRE _A_ADC12IER0_L
+   \   00000A   92B30008     BIT.W   #0x1, &0x800
+   \   00000E   FD2F         JC      ??update_ir_reading_0
+    186          }
+   \   000010   1001         RETA
+   \   000012                REQUIRE _A_PDOUT_L
+   \   000012                REQUIRE _A_ADC12IER0_L
+   \   000012                REQUIRE _A_ADC12CTL0_L
 
    \                                 In  segment INTVEC, offset 0x5c, root
    \                     `??ADC12_ISR::??INTVEC 92`:
@@ -441,21 +432,6 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\adc
    \                     `?<Initializer for ir_white_reading>`:
    \   000000   C800         DC16 200
 
-   \                                 In  segment DATA16_C, align 1, align-sorted
-   \                     `?<Constant "Passing thr">`:
-   \   000000   50617373696E DC8 "Passing thr"
-   \            672074687200
-
-   \                                 In  segment DATA16_C, align 1, align-sorted
-   \                     `?<Constant "   Loop   ">`:
-   \   000000   2020204C6F6F DC8 "   Loop   "
-   \            7020202000  
-
-   \                                 In  segment DATA16_C, align 1, align-sorted
-   \                     `?<Constant "          ">`:
-   \   000000   202020202020 DC8 "          "
-   \            2020202000  
-
    Maximum stack usage in bytes:
 
    CSTACK Function
@@ -467,21 +443,16 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\adc
       4   calibrate_White
         4   -> update_ir_reading
       4   update_ir_reading
-        4   -> LCD_print
-        4   -> hex_to_dec
 
 
    Segment part sizes:
 
    Bytes  Function/Label
    -----  --------------
-      11  ?<Constant "          ">
-      11  ?<Constant "   Loop   ">
-      12  ?<Constant "Passing thr">
        2  ?<Initializer for ir_black_reading>
        2  ?<Initializer for ir_white_reading>
        1  ?<Initializer for one_time>
-      26  ADC12_ISR
+      30  ADC12_ISR
        2  ADC12_ISR::??INTVEC 92
        2  ADC_Left_Detector
        2  ADC_Right_Detector
@@ -506,20 +477,19 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\adc
        2  ir_black_reading
        2  ir_white_reading
        1  one_time
-      56  update_ir_reading
+      18  update_ir_reading
 
  
- 194 bytes in segment CODE
+ 156 bytes in segment CODE
   24 bytes in segment DATA16_AN
-  34 bytes in segment DATA16_C
    5 bytes in segment DATA16_I
    5 bytes in segment DATA16_ID
    8 bytes in segment DATA16_Z
    2 bytes in segment INTVEC
-  26 bytes in segment ISR_CODE
+  30 bytes in segment ISR_CODE
  
- 220 bytes of CODE  memory
-  39 bytes of CONST memory (+  2 bytes shared)
+ 186 bytes of CODE  memory
+   5 bytes of CONST memory (+  2 bytes shared)
   13 bytes of DATA  memory (+ 24 bytes shared)
 
 Errors: none

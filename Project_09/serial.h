@@ -14,6 +14,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+/* TO REASSIGN */
+#define SECOND               (1000)
+
 // Serial settings
 #define BEGINNING            (0)
 #define COUNTER_RESET        (0)

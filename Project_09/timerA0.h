@@ -18,6 +18,7 @@
 #define TA0IV_1          (0x2)
 #define TA0IV_2          (0x4)
 #define COUNTER_RESET      (0)
+#define TWO_MS           (200)
 
 void Init_Timer_A0(void);
 void handle_procedural_delay(void);
@@ -29,4 +30,5 @@ extern volatile uint16_t counter_A00;
 extern uint16_t counter_A01;                 // Timer A1.1 interrupt occurences counter (range 0 - 1000)
 extern uint16_t counter_A02;                 // Timer A1.2 interrupt occurences counter (range 0 - 1000)
 extern volatile uint16_t delay_time;         // Timer A1.2 counter assignment -- receives input from main
+extern volatile uint32_t time_ms;                     // Total time elapsed during course run
 extern volatile uint8_t  ir_ready_to_print;

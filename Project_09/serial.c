@@ -95,7 +95,7 @@ void check_for_input(void){
       iot_tx_wr = BEGINNING;
       IOT_DISABLE(IP_READY);
       IOT_DISABLE(SOFT_RESET);
-      delay_time = 1000;
+      delay_time = SECOND;
       TA0CCTL0  |= CCIE;                   // Enable ping timer
     }
     if(IOT_STATUS(CHECK_FOR_COMMAND))
@@ -246,7 +246,7 @@ void parse_command(void){
       // Black line routine: turn until black line found, turn on line
       
       drive_to_black_line();
-      turn(QUARTER_RIGHT);
+      //turn(QUARTER_RIGHT);                 // Assume that car hasn't intercepted black line correctly
       
       /* Goal of code: drive in large circle, disabling white detection for 5 seconds
        *               enable white detection

@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           26/Apr/2018  11:44:56
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           26/Apr/2018  12:33:57
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\timerA0.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EW509E.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EW3464.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\timerA0.c" -lC
 #        "C:\Users\shmes\Desktop\Escritorio
@@ -117,123 +117,128 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\tim
    \                     delay_time:
    \   000000                DS8 2
 
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     18          volatile uint32_t time_ms;               // Total time elapsed during course run
+   \                     time_ms:
+   \   000000                DS8 4
+
    \                                 In  segment DATA16_Z, align 1, align-sorted
    \   000000                REQUIRE ?cstart_init_zero
-     18          volatile uint8_t  ir_ready_to_print;
+     19          volatile uint8_t  ir_ready_to_print;
    \                     ir_ready_to_print:
    \   000000                DS8 1
 
    \                                 In  segment DATA16_Z, align 1, align-sorted
    \   000000                REQUIRE ?cstart_init_zero
-     19          volatile uint8_t waiting;
+     20          volatile uint8_t waiting;
    \                     waiting:
    \   000000                DS8 1
-     20          
+     21          
 
    \                                 In  segment CODE, align 2
-     21          void Init_Timer_A0(void) {
+     22          void Init_Timer_A0(void) {
    \                     Init_Timer_A0:
-     22            // Initialize Timer A1 and activate display update
-     23            TA0CTL = TASSEL__ACLK;
+     23            // Initialize Timer A1 and activate display update
+     24            TA0CTL = TASSEL__ACLK;
    \   000000   B24000014003 MOV.W   #0x100, &0x340
-     24            TA0CTL |= (TACLR | MC_1 | ID_1);       // AClock source on up mode at 32 KHz
+     25            TA0CTL |= (TACLR | MC_1 | ID_1);       // AClock source on up mode at 32 KHz
    \   000006   B2D054004003 BIS.W   #0x54, &0x340
-     25            TA0CTL |= TAIDEX__1;                   
+     26            TA0CTL |= TAIDEX__1;                   
    \   00000C   924240034003 MOV.W   &0x340, &0x340
-     26            TA0CCR0 = MSEC;                        // interrupt time set to 1/1000 second
+     27            TA0CCR0 = MSEC;                        // interrupt time set to 1/1000 second
    \   000012   B24010005203 MOV.W   #0x10, &0x352
-     27            TA0CCR1 = MSEC;                        // interrupt time set to 1/1000 second
+     28            TA0CCR1 = MSEC;                        // interrupt time set to 1/1000 second
    \   000018   B24010005403 MOV.W   #0x10, &0x354
-     28            TA0CCR2 = MSEC;                        // interrupt time set to 1/1000 second
+     29            TA0CCR2 = MSEC;                        // interrupt time set to 1/1000 second
    \   00001E   B24010005603 MOV.W   #0x10, &0x356
-     29            
-     30            //TA0CCTL0 |= CCIE;
-     31            TA0CTL &= ~(TAIFG);                    // Clear Timer A1 interrupt flag and interrupt enable
+     30            
+     31            //TA0CCTL0 |= CCIE;
+     32            TA0CTL &= ~(TAIFG);                    // Clear Timer A1 interrupt flag and interrupt enable
    \   000024   92C34003     BIC.W   #0x1, &0x340
-     32          }
+     33          }
    \   000028   1001         RETA
    \   00002A                REQUIRE _A_TA0CTL_L
    \   00002A                REQUIRE _A_TA0CCR0_L
    \   00002A                REQUIRE _A_TA0CCR1_L
    \   00002A                REQUIRE _A_TA0CCR2_L
-     33          
-     34          ////////////////////////////////////
-     35          //Interrupt timer update functions//
-     36          /////////////////////////////////////////////////////////////////////////////////////////////////
+     34          
+     35          ////////////////////////////////////
+     36          //Interrupt timer update functions//
+     37          /////////////////////////////////////////////////////////////////////////////////////////////////
 
    \                                 In  segment CODE, align 2
-     37          void handle_quart_second_delay(void){
+     38          void handle_quart_second_delay(void){
    \                     handle_quart_second_delay:
-     38            // Debouncing delay for Buttons 1 and 2
-     39            counter_A01++;                         // Increment debounce counter by 1 msec
+     39            // Debouncing delay for Buttons 1 and 2
+     40            counter_A01++;                         // Increment debounce counter by 1 msec
    \   000000   9253....     ADD.W   #0x1, &counter_A01
-     40            if(!(counter_A01 % QUART_SEC))   // **If debounce counter has counter 250 msec
+     41            if(!(counter_A01 % QUART_SEC))   // **If debounce counter has counter 250 msec
    \   000004   3E400500     MOV.W   #0x5, R14
    \   000008   1C42....     MOV.W   &counter_A01, R12
    \   00000C   ........     CALLA   #?DivMod16u
    \   000010   0E93         CMP.W   #0x0, R14
    \   000012   0920         JNE     ??handle_quart_second_delay_0
-     41            {
-     42              TA0CCTL1 &= ~CCIE;                   //     Disable debounce delay routine        
+     42            {
+     43              TA0CCTL1 &= ~CCIE;                   //     Disable debounce delay routine        
    \   000014   B2C010004403 BIC.W   #0x10, &0x344
-     43              P3OUT    |= IOT_RESET;               //     Reenable IOT module
+     44              P3OUT    |= IOT_RESET;               //     Reenable IOT module
    \   00001A   D2D32202     BIS.B   #0x1, &0x222
-     44              counter_A01 = COUNTER_RESET;         //     reset timer A11 counter 
+     45              counter_A01 = COUNTER_RESET;         //     reset timer A11 counter 
    \   00001E   8243....     MOV.W   #0x0, &counter_A01
-     45              debounced = true;                    //     Allow switch to reactivate button interrupt routine
+     46              debounced = true;                    //     Allow switch to reactivate button interrupt routine
    \   000022   D243....     MOV.B   #0x1, &debounced
-     46              //defer_to_shape_menu();                       //     Update menu state machine
-     47            }
-     48          }
+     47              //defer_to_shape_menu();                       //     Update menu state machine
+     48            }
+     49          }
    \                     ??handle_quart_second_delay_0:
    \   000026   1001         RETA
    \   000028                REQUIRE _A_TA0CCTL1_L
    \   000028                REQUIRE _A_PBOUT_L
-     49          
+     50          
 
    \                                 In  segment CODE, align 2
-     50          void handle_procedural_delay(void){     
+     51          void handle_procedural_delay(void){     
    \                     handle_procedural_delay:
-     51            // General delay for menu state machine
-     52            counter_A02++;                         // Increment delay counter by 1msec
+     52            // General delay for menu state machine
+     53            counter_A02++;                         // Increment delay counter by 1msec
    \   000000   9253....     ADD.W   #0x1, &counter_A02
-     53            if(!(counter_A02 % delay_time))        // **If debounce counter has counter of delay_time msec
+     54            if(!(counter_A02 % delay_time))        // **If debounce counter has counter of delay_time msec
    \   000004   1E42....     MOV.W   &delay_time, R14
    \   000008   1C42....     MOV.W   &counter_A02, R12
    \   00000C   ........     CALLA   #?DivMod16u
    \   000010   0E93         CMP.W   #0x0, R14
    \   000012   0B20         JNE     ??handle_procedural_delay_0
-     54            {
-     55              TA0CCTL2 &= ~CCIE;                   //     Disable procedural delay routine                
+     55            {
+     56              TA0CCTL2 &= ~CCIE;                   //     Disable procedural delay routine                
    \   000014   B2C010004603 BIC.W   #0x10, &0x346
-     56              counter_A02 = COUNTER_RESET;         //     Reset timer A11 counter
+     57              counter_A02 = COUNTER_RESET;         //     Reset timer A11 counter
    \   00001A   8243....     MOV.W   #0x0, &counter_A02
-     57              delay_time  = COUNTER_RESET;         //     Reset delay_time to 0 msec
+     58              delay_time  = COUNTER_RESET;         //     Reset delay_time to 0 msec
    \   00001E   8243....     MOV.W   #0x0, &delay_time
-     58              Wheels_OFF();
+     59              Wheels_OFF();
    \   000022   ........     CALLA   #Wheels_OFF
-     59              waiting     = false;
+     60              waiting     = false;
    \   000026   C243....     MOV.B   #0x0, &waiting
-     60              //defer_to_shape_menu();                       //     Enable pending menu state machine instruction
-     61            }
-     62          }
+     61              //defer_to_shape_menu();                       //     Enable pending menu state machine instruction
+     62            }
+     63          }
    \                     ??handle_procedural_delay_0:
    \   00002A   1001         RETA
    \   00002C                REQUIRE _A_TA0CCTL2_L
-     63          //////////////////////////////////////////////////////////////////////////////////////////////////
-     64          
-     65          //   Timer A0.0 interrupt routine  //
-     66          // ------    Ping update    ------ //
-     67          #pragma vector = TIMER0_A0_VECTOR
+     64          //////////////////////////////////////////////////////////////////////////////////////////////////
+     65          
+     66          //   Timer A0.0 interrupt routine  //
+     67          // ------    Ping update    ------ //
+     68          #pragma vector = TIMER0_A0_VECTOR
 
    \                                 In  segment ISR_CODE, align 2
-     68          __interrupt void Timer0_A0_ISR(void){
+     69          __interrupt void Timer0_A0_ISR(void){
    \                     Timer0_A0_ISR:
    \   000000   5F15         PUSHM.W #0x6, R15
-     69            uint16_t temp = delay_time;
+     70            uint16_t temp = delay_time;
    \   000002   1A42....     MOV.W   &delay_time, R10
-     70            static uint8_t string_index;
-     71            static uint32_t time_ms;               // Total time elapsed during course run
+     71            static uint8_t string_index;
      72            counter_A00++;                         // Increment counter by 1 msec for each 1 msec interrupt
    \   000006   9253....     ADD.W   #0x1, &counter_A00
      73          
@@ -260,27 +265,27 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\tim
    \   00003A   F03F         JMP     ??Timer0_A0_ISR_0
      78            }
      79            
-     80            if(IOT_STATUS(COURSE_BEGIN))
+     80            if(IOT_STATUS(COURSE_BEGIN))               // If inside course, begin timer display on second LCD line
    \                     ??Timer0_A0_ISR_1:
    \   00003C   F2B02000.... BIT.B   #0x20, &iot_status_reg
    \   000042   3C28         JNC     ??Timer0_A0_ISR_2
      81            {
      82              time_ms++;
-   \   000044   9253....     ADD.W   #0x1, &??time_ms
-   \   000048   8263....     ADDC.W  #0x0, &??time_ms + 2
-     83              if((time_ms % 200) == 0)  // two milliseconds elapsed
-   \   00004C   3E40C800     MOV.W   #0xc8, R14
-   \   000050   0F43         MOV.W   #0x0, R15
-   \   000052   1C42....     MOV.W   &??time_ms, R12
-   \   000056   1D42....     MOV.W   &??time_ms + 2, R13
+   \   000044   9253....     ADD.W   #0x1, &time_ms
+   \   000048   8263....     ADDC.W  #0x0, &time_ms + 2
+     83              if((time_ms % TWO_MS) == COUNTER_RESET)  // two milliseconds elapsed
+   \   00004C   1C42....     MOV.W   &time_ms, R12
+   \   000050   1D42....     MOV.W   &time_ms + 2, R13
+   \   000054   3E40C800     MOV.W   #0xc8, R14
+   \   000058   0F43         MOV.W   #0x0, R15
    \   00005A   ........     CALLA   #?DivMod32u
    \   00005E   0D4E         MOV.W   R14, R13
    \   000060   ED0F         ADDA    R15, R13
    \   000062   2C20         JNE     ??Timer0_A0_ISR_2
      84              {
      85                hex_to_dec(word2, time_ms);
-   \   000064   1E42....     MOV.W   &??time_ms, R14
-   \   000068   1F42....     MOV.W   &??time_ms + 2, R15
+   \   000064   1E42....     MOV.W   &time_ms, R14
+   \   000068   1F42....     MOV.W   &time_ms + 2, R15
    \   00006C   1C42....     MOV.W   &word2, R12
    \   000070   ........     CALLA   #hex_to_dec
      86                word2[CHAR7] = word2[CHAR6];
@@ -291,7 +296,7 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\tim
    \   000082   1F42....     MOV.W   &word2, R15
    \   000086   1E42....     MOV.W   &word2, R14
    \   00008A   DE4F04000500 MOV.B   0x4(R15), 0x5(R14)
-     88                word2[CHAR5] = word2[CHAR4];         // Shift digits over one to add decimal point
+     88                word2[CHAR5] = word2[CHAR4];           // Shift digits over one to add decimal point
    \   000090   1F42....     MOV.W   &word2, R15
    \   000094   1E42....     MOV.W   &word2, R14
    \   000098   DE4F03000400 MOV.B   0x3(R15), 0x4(R14)
@@ -315,11 +320,6 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\tim
    \   000000                REQUIRE ?cstart_init_zero
    \                     ??string_index:
    \   000000                DS8 1
-
-   \                                 In  segment DATA16_Z, align 2, align-sorted
-   \   000000                REQUIRE ?cstart_init_zero
-   \                     ??time_ms:
-   \   000000                DS8 4
      94          
      95          //   Timer A1 interrupt routines   //
      96          //         **OVERFLOW**            //

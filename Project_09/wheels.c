@@ -229,26 +229,22 @@ void Right_Motor_ON_REVERSE(char speed){
 }
 
 void turn(uint8_t degrees){
+  uint32_t time_ms_temp;
+  
   if(degrees == LEAVE_COURSE)
   {
-    delay_time = LONG_DELAY;
-    Wheels_OFF();
-    waiting = true;
-    TA0CCTL2 |= CCIE;
-    while(waiting);
-    delay_time = EXIT_DELAY;
+    time_ms_temp = time_ms;
     LCD_print(" Exiting  ", word2, word3, word4);
     Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
     Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
+    while(time_ms - time_ms_temp < EXIT_TIME);     // Drive forward for x seconds
+
+    Wheels_OFF();                                  // Stop car
+    TA0CCTL0 &= ~CCIE;                             // Disable timer interrupts
+    TA0CCTL1 &= ~CCIE;                             // Disable button interrupts
+    LCD_print("P10 Finit ", word2, "  ^____^  ", "          ");
     waiting = true;
-    TA0CCTL2 |= CCIE;
-    while(waiting);
-    Wheels_OFF();
-    TA0CCTL0 &= ~CCIE;
-    TA0CCTL1 &= ~CCIE;
-    LCD_print("P10 Finit ", word2, word3, word4);
-    waiting = true;
-    while(waiting);
+    while(waiting);                                // Do nothing
   }
   else
   {
@@ -283,6 +279,7 @@ void turn(uint8_t degrees){
     while(waiting);
   }
 }
+
 void drive_to_black_line(void){
   LCD_print("Searching ", word2, word3, word4);
   Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);

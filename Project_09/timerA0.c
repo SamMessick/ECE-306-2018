@@ -15,6 +15,7 @@ uint16_t counter_A01;           // Timer A1.1 interrupt occurences counter (rang
 uint16_t counter_A02;           // Timer A1.2 interrupt occurences counter (range 0 - 1000)
 volatile uint16_t counter_A00;               // 1 msec counting interval for Timer A1.0
 volatile uint16_t delay_time;         // Timer A1.2 counter assignment -- receives input from main
+volatile uint32_t time_ms;               // Total time elapsed during course run
 volatile uint8_t  ir_ready_to_print;
 volatile uint8_t waiting;
 
@@ -68,7 +69,6 @@ void handle_procedural_delay(void){
 __interrupt void Timer0_A0_ISR(void){
   uint16_t temp = delay_time;
   static uint8_t string_index;
-  static uint32_t time_ms;               // Total time elapsed during course run
   counter_A00++;                         // Increment counter by 1 msec for each 1 msec interrupt
 
   if(!(counter_A00 % temp))
@@ -77,15 +77,15 @@ __interrupt void Timer0_A0_ISR(void){
         transmit_charA3(sock_ping_command[string_index]);
   }
   
-  if(IOT_STATUS(COURSE_BEGIN))
+  if(IOT_STATUS(COURSE_BEGIN))               // If inside course, begin timer display on second LCD line
   {
     time_ms++;
-    if((time_ms % 200) == 0)  // two milliseconds elapsed
+    if((time_ms % TWO_MS) == COUNTER_RESET)  // two milliseconds elapsed
     {
       hex_to_dec(word2, time_ms);
       word2[CHAR7] = word2[CHAR6];
       word2[CHAR6] = word2[CHAR5];
-      word2[CHAR5] = word2[CHAR4];         // Shift digits over one to add decimal point
+      word2[CHAR5] = word2[CHAR4];           // Shift digits over one to add decimal point
       word2[CHAR4] = '.';
       LCD_print(word1, word2, word3, word4);
     }

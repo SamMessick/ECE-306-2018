@@ -231,8 +231,8 @@ while True:
     spwIoTsock.sendall(message)
     print("Controller client in 'no command' mode. Press START to reinitiate remote control.")
 	
-	# ---Disconnect from car--- #
-    spwIoTsock.close()
+	# ---Disconnect from car--- #         DO NOT DISCONNECT; ensure that car gets enter black line mode command
+    #spwIoTsock.close()
 	
 	# ---Do not send commands until the start button is pressed--- #
     while not status[BUTTON_START]:
