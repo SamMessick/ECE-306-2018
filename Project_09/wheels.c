@@ -281,22 +281,20 @@ void turn(uint8_t degrees){
 }
 
 void drive_to_black_line(void){
-  LCD_print("Searching ", word2, word3, word4);
+  LCD_print("SearchingW", word2, word3, word4);
   Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
   Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
-  while(ADC_Left_Detector < IR_ACTIVE_READING
-     && ADC_Right_Detector < IR_ACTIVE_READING)
+  while(ADC_Left_Detector > ir_white_reading          // Drive to white surface
+     || ADC_Right_Detector > ir_white_reading)
   {
-    while(ADC12CTL0 & ADC12BUSY);
-    ADC12IER0  |= (ADC12IE2     | // Enable interrupts for new sample results
-                   ADC12IE4     |
-                   ADC12IE5);
+    update_ir_reading();
   }
-  Wheels_OFF();
-  delay_time = HALF_SEC;
-  waiting = true;
-  TA0CCTL2 |= CCIE;
-  while(waiting);
+  while(ADC_Left_Detector < ir_black_reading          // Drive to black line
+     && ADC_Right_Detector < ir_black_reading)
+  {
+    update_ir_reading();
+  }
+  Wheels_OFF();                                       // Stop car on black line
 }
   
   

@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           26/Apr/2018  12:33:57
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           26/Apr/2018  12:42:28
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\wheels.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EW34A5.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EW191.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\wheels.c" -lC
 #        "C:\Users\shmes\Desktop\Escritorio
@@ -50,16 +50,6 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\whe
       9          //===============================================================
      10          
      11          #include "wheels.h"
-
-   \                                 In  segment DATA16_AN, at 0x800
-   \   union <unnamed> _A_ADC12CTL0_L
-   \                     _A_ADC12CTL0_L:
-   \   000000                DS8 2
-
-   \                                 In  segment DATA16_AN, at 0x812
-   \   union <unnamed> _A_ADC12IER0_L
-   \                     _A_ADC12IER0_L:
-   \   000000                DS8 2
 
    \                                 In  segment DATA16_AN, at 0x342
    \   union <unnamed> _A_TA0CCTL0_L
@@ -670,11 +660,11 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\whe
    \                                 In  segment CODE, align 2
     283          void drive_to_black_line(void){
    \                     drive_to_black_line:
-    284            LCD_print("Searching ", word2, word3, word4);
+    284            LCD_print("SearchingW", word2, word3, word4);
    \   000000   1F42....     MOV.W   &word4, R15
    \   000004   1E42....     MOV.W   &word3, R14
    \   000008   1D42....     MOV.W   &word2, R13
-   \   00000C   3C40....     MOV.W   #`?<Constant "Searching ">`, R12
+   \   00000C   3C40....     MOV.W   #`?<Constant "SearchingW">`, R12
    \   000010   ........     CALLA   #LCD_print
     285            Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
    \   000014   7C40EB00     MOV.B   #0xeb, R12
@@ -682,42 +672,35 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\whe
     286            Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
    \   00001C   7C409100     MOV.B   #0x91, R12
    \   000020   ........     CALLA   #Right_Motor_ON_FORWARD
-    287            while(ADC_Left_Detector < IR_ACTIVE_READING
-    288               && ADC_Right_Detector < IR_ACTIVE_READING)
-   \                     ??drive_to_black_line_1:
-   \   000024   B2901405.... CMP.W   #0x514, &ADC_Left_Detector
-   \   00002A   0B2C         JC      ??drive_to_black_line_3
-   \   00002C   B2901405.... CMP.W   #0x514, &ADC_Right_Detector
-   \   000032   072C         JC      ??drive_to_black_line_3
-    289            {
-    290              while(ADC12CTL0 & ADC12BUSY);
+    287            while(ADC_Left_Detector > ir_white_reading          // Drive to white surface
+    288               || ADC_Right_Detector > ir_white_reading)
    \                     ??drive_to_black_line_0:
-   \   000034   92B30008     BIT.W   #0x1, &0x800
-   \   000038   FD2F         JC      ??drive_to_black_line_0
-    291              ADC12IER0  |= (ADC12IE2     | // Enable interrupts for new sample results
-    292                             ADC12IE4     |
-    293                             ADC12IE5);
-   \   00003A   B2D034001208 BIS.W   #0x34, &0x812
-   \   000040   F13F         JMP     ??drive_to_black_line_1
-    294            }
-    295            Wheels_OFF();
-   \                     ??drive_to_black_line_3:
-   \   000042   ........     CALLA   #Wheels_OFF
-    296            delay_time = HALF_SEC;
-   \   000046   B2400A00.... MOV.W   #0xa, &delay_time
-    297            waiting = true;
-   \   00004C   D243....     MOV.B   #0x1, &waiting
-    298            TA0CCTL2 |= CCIE;
-   \   000050   B2D010004603 BIS.W   #0x10, &0x346
-    299            while(waiting);
+   \   000024   9292........ CMP.W   &ADC_Left_Detector, &ir_white_reading
+   \   00002A   0428         JNC     ??drive_to_black_line_2
+   \   00002C   9292........ CMP.W   &ADC_Right_Detector, &ir_white_reading
+   \   000032   032C         JC      ??drive_to_black_line_1
+    289            {
+    290              update_ir_reading();
    \                     ??drive_to_black_line_2:
-   \   000056   C293....     CMP.B   #0x0, &waiting
-   \   00005A   FD23         JNE     ??drive_to_black_line_2
-    300          }
-   \   00005C   1001         RETA
-   \   00005E                REQUIRE _A_ADC12CTL0_L
-   \   00005E                REQUIRE _A_ADC12IER0_L
-   \   00005E                REQUIRE _A_TA0CCTL2_L
+   \   000034   ........     CALLA   #update_ir_reading
+   \   000038   F53F         JMP     ??drive_to_black_line_0
+    291            }
+    292            while(ADC_Left_Detector < ir_black_reading          // Drive to black line
+    293               && ADC_Right_Detector < ir_black_reading)
+   \                     ??drive_to_black_line_1:
+   \   00003A   9292........ CMP.W   &ir_black_reading, &ADC_Left_Detector
+   \   000040   072C         JC      ??drive_to_black_line_3
+   \   000042   9292........ CMP.W   &ir_black_reading, &ADC_Right_Detector
+   \   000048   032C         JC      ??drive_to_black_line_3
+    294            {
+    295              update_ir_reading();
+   \   00004A   ........     CALLA   #update_ir_reading
+   \   00004E   F53F         JMP     ??drive_to_black_line_1
+    296            }
+    297            Wheels_OFF();                                       // Stop car on black line
+   \                     ??drive_to_black_line_3:
+   \   000050   ........     BRA     #Wheels_OFF
+    298          }
 
    \                                 In  segment DATA16_C, align 1, align-sorted
    \                     `?<Constant "  White   ">`:
@@ -754,9 +737,11 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\whe
    \            6720696E00  
 
    \                                 In  segment DATA16_C, align 1, align-sorted
-   \                     `?<Constant "Searching ">`:
-   \   000000   536561726368 DC8 "Searching "
-   \            696E672000  
+   \                     `?<Constant "SearchingW">`:
+   \   000000   536561726368 DC8 "SearchingW"
+   \            696E675700  
+    299            
+    300            
     301            
     302            
     303            
@@ -764,33 +749,31 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\whe
     305            
     306            
     307            
-    308            
-    309            
-    310              //Backup Code 
-    311            /*
-    312            if(ADC_Left_Detector < ir_active_reading && ADC_Right_Detector > ir_active_reading)
-    313            {
-    314              left_pwm += 120;
-    315              if(left_pwm > L_PWM_MAX)
-    316              left_pwm = L_PWM_MAX;
-    317              Left_Motor_ON_FORWARD(left_pwm);
-    318              right_pwm -= 100;
-    319              if(right_pwm < R_PWM_MIN)
-    320              right_pwm = R_PWM_MIN;
-    321              Right_Motor_ON_FORWARD(right_pwm);
-    322            }
-    323            else
-    324            {
-    325              right_pwm += 160;
-    326              if(right_pwm > R_PWM_MAX)
-    327              right_pwm = R_PWM_MAX;
-    328              Right_Motor_ON_FORWARD(right_pwm);
-    329              left_pwm -= 120;
-    330              if(left_pwm < L_PWM_MIN)
-    331              left_pwm = L_PWM_MIN;
-    332              Left_Motor_ON_FORWARD(left_pwm);
-    333            }
-    334          */
+    308              //Backup Code 
+    309            /*
+    310            if(ADC_Left_Detector < ir_active_reading && ADC_Right_Detector > ir_active_reading)
+    311            {
+    312              left_pwm += 120;
+    313              if(left_pwm > L_PWM_MAX)
+    314              left_pwm = L_PWM_MAX;
+    315              Left_Motor_ON_FORWARD(left_pwm);
+    316              right_pwm -= 100;
+    317              if(right_pwm < R_PWM_MIN)
+    318              right_pwm = R_PWM_MIN;
+    319              Right_Motor_ON_FORWARD(right_pwm);
+    320            }
+    321            else
+    322            {
+    323              right_pwm += 160;
+    324              if(right_pwm > R_PWM_MAX)
+    325              right_pwm = R_PWM_MAX;
+    326              Right_Motor_ON_FORWARD(right_pwm);
+    327              left_pwm -= 120;
+    328              if(left_pwm < L_PWM_MIN)
+    329              left_pwm = L_PWM_MIN;
+    330              Left_Motor_ON_FORWARD(left_pwm);
+    331            }
+    332          */
 
    Maximum stack usage in bytes:
 
@@ -813,7 +796,8 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\whe
         4   -> LCD_print
         4   -> Left_Motor_ON_FORWARD
         4   -> Right_Motor_ON_FORWARD
-        4   -> Wheels_OFF
+        0   -> Wheels_OFF
+        4   -> update_ir_reading
       4   initialize_delay
       4   pid_udpate_left
         4   -> Left_Motor_ON_FORWARD
@@ -838,7 +822,7 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\whe
       11  ?<Constant " Exiting  ">
        1  ?<Constant "">
       11  ?<Constant "P10 Finit ">
-      11  ?<Constant "Searching ">
+      11  ?<Constant "SearchingW">
       11  ?<Constant "Turning in">
       14  Drive_Straight_Forward
        2  Init_PID
@@ -850,8 +834,6 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\whe
       28  Right_Motor_ON_FORWARD
       28  Right_Motor_ON_REVERSE
        8  Wheels_OFF
-       2  _A_ADC12CTL0_L
-       2  _A_ADC12IER0_L
        2  _A_TA0CCTL0_L
        2  _A_TA0CCTL1_L
        2  _A_TA0CCTL2_L
@@ -859,7 +841,7 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\whe
        2  _A_TB0CCR4_L
        2  _A_TB0CCR5_L
        2  _A_TB0CCR6_L
-      94  drive_to_black_line
+      84  drive_to_black_line
       12  initialize_delay
        1  instruction_label_tmp
       18  ld
@@ -875,14 +857,14 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\whe
       10  update_instruction_label
 
  
- 736 bytes in segment CODE
-  18 bytes in segment DATA16_AN
+ 726 bytes in segment CODE
+  14 bytes in segment DATA16_AN
   78 bytes in segment DATA16_C
   46 bytes in segment DATA16_Z
  
- 736 bytes of CODE  memory
+ 726 bytes of CODE  memory
   78 bytes of CONST memory
-  46 bytes of DATA  memory (+ 18 bytes shared)
+  46 bytes of DATA  memory (+ 14 bytes shared)
 
 Errors: none
 Warnings: none
