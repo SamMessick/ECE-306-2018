@@ -60,7 +60,6 @@ void pid_udpate_left(void){
   else 
     if(ADC_Right_Detector >= ir_black_reading)
     {
-  
       Left_Motor_ON_FORWARD(LEFT_L_SEARCH_SPEED);
       Right_Motor_ON_FORWARD(RIGHT_L_SEARCH_SPEED);
       LastDir = GOING_RIGHT;
@@ -70,13 +69,13 @@ void pid_udpate_left(void){
       word4 = "  White   ";
       if(LastDir == GOING_LEFT)
       {
-        Left_Motor_ON_FORWARD(LEFT_R_SEARCH_SPEED);
-        Right_Motor_ON_FORWARD(RIGHT_R_SEARCH_SPEED);
+        Left_Motor_ON_FORWARD(LEFT_L_SEARCH_SPEED);
+        Right_Motor_ON_FORWARD(RIGHT_L_SEARCH_SPEED);
       }
       else
       {
-        Left_Motor_ON_FORWARD(LEFT_L_SEARCH_SPEED);
-        Right_Motor_ON_FORWARD(RIGHT_L_SEARCH_SPEED);
+        Left_Motor_ON_FORWARD(LEFT_R_SEARCH_SPEED);
+        Right_Motor_ON_FORWARD(RIGHT_R_SEARCH_SPEED);
       }
     }
   /*
@@ -281,6 +280,7 @@ void turn(uint8_t degrees){
 }
 
 void drive_to_black_line(void){
+  Wheels_OFF();
   LCD_print("SearchingW", word2, word3, word4);
   Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
   Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
