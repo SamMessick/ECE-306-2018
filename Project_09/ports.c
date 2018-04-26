@@ -278,9 +278,6 @@ void Init_Port5(void) { // Initializes all pins on Port 5
   P5OUT  |= BUTTON2;                    // Configure pullup resistor
   P5DIR  &= ~BUTTON2;                   // Set direction to input
   P5REN  |= BUTTON2;                    // Enable pullup resistor
-  P5IE   |= BUTTON2;                    // Enable interrupts for Button2
-  P5IES  |= BUTTON2;                    // Interrupts occur on Hi/Lo edge
-  P5IFG  &= ~BUTTON2;                   // Button 2 IFG cleared
   // P5_6
   P5SEL0 &= ~BUTTON1;                   // Set to GP I/O
   P5SEL1 &= ~BUTTON1;                   // Set to GP I/O
@@ -522,22 +519,12 @@ __interrupt void Port_3(void){
 __interrupt void Port_5(void){
   switch(P5IFG & PORT5_INT_MASK)
   {
-  case P5IFG_BUTTON_2: // Right Button
+  case P5IFG_BUTTON_1: // Right Button
     if(debounced)                     // Has the switch had time to readjust?
     {
       P3OUT &= ~(IOT_RESET);               // Disable IOT_RESET pin for soft reset
       TA0CCTL1 |= CCIE;                   // Enable debounce timer
     }
     break;
-  case P5IFG_BUTTON_1: // Left Button
-    if(debounced)                     // Has the switch had time to readjust?
-    {
-      menu_counter++;
-      menu_counter %= MENU_NUM_OPTIONS;
-      print_baud_rate();
-      debounced = false;
-      TA0CCTL1 |= CCIE;                   // Enable debounce timer
-    }
   }
-  P5IFG = false;
 }

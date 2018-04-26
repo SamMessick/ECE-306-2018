@@ -42,7 +42,7 @@ void Init_PID(void){
   left_pwm = LEFT_FORWARD_SPEED;
 */
 }
-/*
+
 void pid_udpate_left(void){
   
   if(ADC_Left_Detector >= ir_black_reading)
@@ -55,7 +55,7 @@ void pid_udpate_left(void){
     {
       Left_Motor_ON_FORWARD(LEFT_R_SEARCH_SPEED);
       Right_Motor_ON_FORWARD(RIGHT_R_SEARCH_SPEED);
-      LastDir = LEFT;
+      LastDir = GOING_LEFT;
     }
   else 
     if(ADC_Right_Detector >= ir_black_reading)
@@ -63,12 +63,12 @@ void pid_udpate_left(void){
   
       Left_Motor_ON_FORWARD(LEFT_L_SEARCH_SPEED);
       Right_Motor_ON_FORWARD(RIGHT_L_SEARCH_SPEED);
-      LastDir = RIGHT;
+      LastDir = GOING_RIGHT;
     }
     else 
     {
       word4 = "  White   ";
-      if(LastDir == LEFT)
+      if(LastDir == GOING_LEFT)
       {
         Left_Motor_ON_FORWARD(LEFT_R_SEARCH_SPEED);
         Right_Motor_ON_FORWARD(RIGHT_R_SEARCH_SPEED);
@@ -79,7 +79,7 @@ void pid_udpate_left(void){
         Right_Motor_ON_FORWARD(RIGHT_L_SEARCH_SPEED);
       }
     }
-  
+  /*
   // Attempted PID
    Uses a PID with noise bands at ir_white_reading and 
    ir_black_reading, adjusting for changes to follow
@@ -150,9 +150,9 @@ void pid_udpate_left(void){
   Right_Motor_ON_FORWARD(right_pwm);
   
   ld.prev_error = error_l;
-
-}
 */
+}
+
 void initialize_delay(uint16_t delay){
   delay_time = delay;                          // send delay time to global accessible by timer A1
   TA0CCTL2 |= CCIE;                            // enable timer A1.2 to count time

@@ -24,7 +24,7 @@
         <Counter1>0000000000000000000000000000000000000000000000000000000000000000</Counter1>
     </EEM_Cycle_Counter_1>
     <DebugChecksum>
-        <Checksum>345007306</Checksum>
+        <Checksum>3772904981</Checksum>
     </DebugChecksum>
     <CallStack>
         <ShowArgs>0</ShowArgs>
@@ -42,11 +42,6 @@
         <LiveEnabled>0</LiveEnabled>
         <LiveFile>PowerLogLive.log</LiveFile>
     </PowerLog>
-    <LogFile>
-        <LoggingEnabled>_ 0</LoggingEnabled>
-        <LogFile>_ ""</LogFile>
-        <Category>_ 0</Category>
-    </LogFile>
     <TermIOLog>
         <LoggingEnabled>_ 0</LoggingEnabled>
         <LogFile>_ ""</LogFile>
@@ -85,6 +80,11 @@
         <all_registers>0</all_registers>
         <File_name />
     </Memory_Dump>
+    <LogFile>
+        <LoggingEnabled>_ 0</LoggingEnabled>
+        <LogFile>_ ""</LogFile>
+        <Category>_ 0</Category>
+    </LogFile>
     <Aliases>
         <Count>0</Count>
         <SuppressDialog>0</SuppressDialog>

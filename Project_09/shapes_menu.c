@@ -113,31 +113,3 @@ void hex_to_dec(char* output_line, uint32_t hexadecimal){
   output_line[COLUMN5] = Ten      + ASCII_NUM_SHIFT;
   output_line[COLUMN6] = One      + ASCII_NUM_SHIFT;
 }
-
-void print_baud_rate(){
-  uint32_t baud_rate;
-  
-  switch(menu_counter)
-  {           
-  case OPTION1:
-    baud_rate = LOWER_BAUD;
-    hex_to_dec(word3, baud_rate);
-    // Adjust baud rate
-    UCA3CTLW0 |= UCSWRST;               // Set software reset enable
-    UCA3BRW = UCA_BRW_115;
-    UCA3MCTLW  = UCA_MCTL_115;
-    UCA3CTL1  &= ~UCSWRST;              // Release from software reset
-    break;
-  case PENULT_OPTION:
-    baud_rate = HIGHER_BAUD;
-    hex_to_dec(word3, baud_rate);
-    // Adjust baud rate
-    UCA3CTLW0 |= UCSWRST;               // Set software reset enable
-    UCA3BRW = UCA_BRW_460;
-    UCA3MCTLW = UCA_MCTL_460;
-    UCA3CTL1  &= ~UCSWRST;              // Release from software reset
-    break;
-  }
-  //word2 = "          ";
-  LCD_print(word1,word2, word3,word4);
-}

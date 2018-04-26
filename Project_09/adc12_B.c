@@ -15,7 +15,8 @@ volatile uint16_t ADC_Thumb;
 volatile uint16_t ADC_Right_Detector;
 volatile uint16_t ADC_Left_Detector;
 uint8_t one_time = true;
-uint16_t ir_active_reading;
+uint16_t ir_black_reading = IR_BLACK_READING;
+uint16_t ir_white_reading = IR_WHITE_READING;
 uint8_t calibrated;
 volatile uint8_t calibrating;
 
@@ -152,7 +153,7 @@ void calibrate_White(void){
   while(calibrating)
     updateDisplay();
   
-  ir_active_reading = ADC_Thumb;
+  ir_black_reading = ADC_Thumb;
 }
 void calibrate_Black(void){
   calibrating = true;

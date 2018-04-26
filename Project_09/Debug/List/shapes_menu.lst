@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           24/Apr/2018  15:02:02
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           26/Apr/2018  11:28:31
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\shapes_menu.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EWD7F2.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EW47A8.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\shapes_menu.c" -lC
 #        "C:\Users\shmes\Desktop\Escritorio
@@ -54,21 +54,6 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\sha
    \                                 In  segment DATA16_AN, at 0x812
    \   union <unnamed> _A_ADC12IER0_L
    \                     _A_ADC12IER0_L:
-   \   000000                DS8 2
-
-   \                                 In  segment DATA16_AN, at 0x620
-   \   union <unnamed> _A_UCA3CTLW0_L
-   \                     _A_UCA3CTLW0_L:
-   \   000000                DS8 2
-
-   \                                 In  segment DATA16_AN, at 0x626
-   \   union <unnamed> _A_UCA3BRW_L
-   \                     _A_UCA3BRW_L:
-   \   000000                DS8 2
-
-   \                                 In  segment DATA16_AN, at 0x628
-   \   union <unnamed> _A_UCA3MCTLW_L
-   \                     _A_UCA3MCTLW_L:
    \   000000                DS8 2
      12          
 
@@ -384,80 +369,6 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\sha
     115          }
    \   0000C8   5617         POPM.W  #0x6, R11
    \   0000CA   1001         RETA
-    116          
-
-   \                                 In  segment CODE, align 2
-    117          void print_baud_rate(){
-   \                     print_baud_rate:
-   \   000000   1B15         PUSHM.W #0x2, R11
-    118            uint32_t baud_rate;
-    119            
-    120            switch(menu_counter)
-   \   000002   5E42....     MOV.B   &menu_counter, R14
-   \   000006   8E11         SXT     R14
-   \   000008   3EF3         AND.W   #0xffff, R14
-   \   00000A   4E83         SUB.B   #0x0, R14
-   \   00000C   0324         JEQ     ??print_baud_rate_1
-   \   00000E   5E83         SUB.B   #0x1, R14
-   \   000010   1424         JEQ     ??print_baud_rate_2
-   \   000012   273C         JMP     ??print_baud_rate_0
-    121            {           
-    122            case OPTION1:
-    123              baud_rate = LOWER_BAUD;
-   \                     ??print_baud_rate_1:
-   \   000014   3A4000C2     MOV.W   #0xc200, R10
-   \   000018   1B43         MOV.W   #0x1, R11
-    124              hex_to_dec(word3, baud_rate);
-   \   00001A   0E4A         MOV.W   R10, R14
-   \   00001C   0F4B         MOV.W   R11, R15
-   \   00001E   1C42....     MOV.W   &word3, R12
-   \   000022   ........     CALLA   #hex_to_dec
-    125              // Adjust baud rate
-    126              UCA3CTLW0 |= UCSWRST;               // Set software reset enable
-   \   000026   92D32006     BIS.W   #0x1, &0x620
-    127              UCA3BRW = UCA_BRW_115;
-   \   00002A   A2422606     MOV.W   #0x4, &0x626
-    128              UCA3MCTLW  = UCA_MCTL_115;
-   \   00002E   B24051552806 MOV.W   #0x5551, &0x628
-    129              UCA3CTL1  &= ~UCSWRST;              // Release from software reset
-   \   000034   D2C32006     BIC.B   #0x1, &0x620
-    130              break;
-   \   000038   143C         JMP     ??print_baud_rate_0
-    131            case PENULT_OPTION:
-    132              baud_rate = HIGHER_BAUD;
-   \                     ??print_baud_rate_2:
-   \   00003A   3A400008     MOV.W   #0x800, R10
-   \   00003E   3B400700     MOV.W   #0x7, R11
-    133              hex_to_dec(word3, baud_rate);
-   \   000042   0E4A         MOV.W   R10, R14
-   \   000044   0F4B         MOV.W   R11, R15
-   \   000046   1C42....     MOV.W   &word3, R12
-   \   00004A   ........     CALLA   #hex_to_dec
-    134              // Adjust baud rate
-    135              UCA3CTLW0 |= UCSWRST;               // Set software reset enable
-   \   00004E   92D32006     BIS.W   #0x1, &0x620
-    136              UCA3BRW = UCA_BRW_460;
-   \   000052   B24011002606 MOV.W   #0x11, &0x626
-    137              UCA3MCTLW = UCA_MCTL_460;
-   \   000058   B240104A2806 MOV.W   #0x4a10, &0x628
-    138              UCA3CTL1  &= ~UCSWRST;              // Release from software reset
-   \   00005E   D2C32006     BIC.B   #0x1, &0x620
-    139              break;
-    140            }
-    141            //word2 = "          ";
-    142            LCD_print(word1,word2, word3,word4);
-   \                     ??print_baud_rate_0:
-   \   000062   1F42....     MOV.W   &word4, R15
-   \   000066   1E42....     MOV.W   &word3, R14
-   \   00006A   1D42....     MOV.W   &word2, R13
-   \   00006E   1C42....     MOV.W   &word1, R12
-   \   000072   ........     CALLA   #LCD_print
-    143          }
-   \   000076   1A17         POPM.W  #0x2, R11
-   \   000078   1001         RETA
-   \   00007A                REQUIRE _A_UCA3CTLW0_L
-   \   00007A                REQUIRE _A_UCA3BRW_L
-   \   00007A                REQUIRE _A_UCA3MCTLW_L
 
    \                                 In  segment DATA16_ID, align 2, align-sorted
    \                     `?<Initializer for word1>`:
@@ -493,9 +404,6 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\sha
        12   -> strcpy
        12   -> update_string
      16   hex_to_dec
-      8   print_baud_rate
-        8   -> LCD_print
-        8   -> hex_to_dec
       4   print_detector_values
         4   -> Left_Motor_ON_FORWARD
         4   -> Right_Motor_ON_FORWARD
@@ -513,13 +421,9 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\sha
        2  ?<Initializer for word4>
      104  LCD_print
        2  _A_ADC12IER0_L
-       2  _A_UCA3BRW_L
-       2  _A_UCA3CTLW0_L
-       2  _A_UCA3MCTLW_L
      204  hex_to_dec
        1  last_dir
        1  menu_counter
-     122  print_baud_rate
      126  print_detector_values
        2  word1
        2  word2
@@ -527,16 +431,16 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\sha
        2  word4
 
  
- 556 bytes in segment CODE
-   8 bytes in segment DATA16_AN
+ 434 bytes in segment CODE
+   2 bytes in segment DATA16_AN
   11 bytes in segment DATA16_C
    9 bytes in segment DATA16_I
    9 bytes in segment DATA16_ID
    1 byte  in segment DATA16_Z
  
- 556 bytes of CODE  memory
+ 434 bytes of CODE  memory
   20 bytes of CONST memory
-  10 bytes of DATA  memory (+ 8 bytes shared)
+  10 bytes of DATA  memory (+ 2 bytes shared)
 
 Errors: none
 Warnings: none

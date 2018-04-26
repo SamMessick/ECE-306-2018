@@ -15,6 +15,8 @@
 #define ADC_RESET_STATE     (0)
 #define STABILIZE_REFERENCE {__delay_cycles(10000);}
 #define THUMB_ACTIVE_READING (1000)
+#define IR_BLACK_READING     (1300)
+#define IR_WHITE_READING     (200)
 
 void Init_ADC(void);                             // Initialize Analog-to-Digital-Converter
 void calibrate_White(void);                      // Function for setting highest value for "white" in PID (via thumbwheel)
@@ -25,7 +27,8 @@ extern volatile uint16_t ADC_Thumb;              // ADC reading from Thumbwheel
 extern volatile uint16_t ADC_Right_Detector;     // ADC reading from right infrared detector
 extern volatile uint16_t ADC_Left_Detector;      // ADC reading from left  infrared detector
 extern volatile uint8_t  ir_ready_to_print;      // Boolean allowing TimerA0.0 to trigger wheel PID update and ADC value printing
-extern uint16_t ir_active_reading;               // Value determining threshold for white/black in wheel PID
+extern uint16_t ir_black_reading;                // Value determining threshold for white/black in wheel PID
+extern uint16_t ir_white_reading;                // Value for finding black line course during autonomous navigation
 extern uint8_t  calibrated;                      // Boolean allowing for regular wheel PID updates to begin and ADC value printing to halt
 extern volatile uint8_t calibrating;             // Set false by a button press -- ends a calibrate_White and calibrate_Black functions
 

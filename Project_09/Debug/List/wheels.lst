@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           24/Apr/2018  15:00:20
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           26/Apr/2018  11:28:31
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\wheels.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EW48C5.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EW4896.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_09\wheels.c" -lC
 #        "C:\Users\shmes\Desktop\Escritorio
@@ -182,44 +182,84 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\whe
      43          */
      44          }
    \   000000   1001         RETA
-     45          /*
+     45          
+
+   \                                 In  segment CODE, align 2
      46          void pid_udpate_left(void){
+   \                     pid_udpate_left:
      47            
      48            if(ADC_Left_Detector >= ir_black_reading)
+   \   000000   9292........ CMP.W   &ir_black_reading, &ADC_Left_Detector
+   \   000006   1628         JNC     ??pid_udpate_left_0
      49              if(ADC_Right_Detector >= ir_black_reading)
+   \   000008   9292........ CMP.W   &ir_black_reading, &ADC_Right_Detector
+   \   00000E   0828         JNC     ??pid_udpate_left_1
      50              {
      51                Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
+   \   000010   7C40EB00     MOV.B   #0xeb, R12
+   \   000014   ........     CALLA   #Left_Motor_ON_FORWARD
      52                Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
+   \   000018   7C409100     MOV.B   #0x91, R12
+   \   00001C   ........     BRA     #Right_Motor_ON_FORWARD
      53              }
      54              else
      55              {
      56                Left_Motor_ON_FORWARD(LEFT_R_SEARCH_SPEED);
+   \                     ??pid_udpate_left_1:
+   \   000020   4C43         MOV.B   #0x0, R12
+   \   000022   ........     CALLA   #Left_Motor_ON_FORWARD
      57                Right_Motor_ON_FORWARD(RIGHT_R_SEARCH_SPEED);
-     58                LastDir = LEFT;
+   \   000026   7C405000     MOV.B   #0x50, R12
+   \   00002A   ........     CALLA   #Right_Motor_ON_FORWARD
+     58                LastDir = GOING_LEFT;
+   \   00002E   C243....     MOV.B   #0x0, &LastDir
+   \   000032   1001         RETA
      59              }
      60            else 
      61              if(ADC_Right_Detector >= ir_black_reading)
+   \                     ??pid_udpate_left_0:
+   \   000034   9292........ CMP.W   &ir_black_reading, &ADC_Right_Detector
+   \   00003A   0A28         JNC     ??pid_udpate_left_2
      62              {
      63            
      64                Left_Motor_ON_FORWARD(LEFT_L_SEARCH_SPEED);
+   \   00003C   7C407800     MOV.B   #0x78, R12
+   \   000040   ........     CALLA   #Left_Motor_ON_FORWARD
      65                Right_Motor_ON_FORWARD(RIGHT_L_SEARCH_SPEED);
-     66                LastDir = RIGHT;
+   \   000044   4C43         MOV.B   #0x0, R12
+   \   000046   ........     CALLA   #Right_Motor_ON_FORWARD
+     66                LastDir = GOING_RIGHT;
+   \   00004A   D243....     MOV.B   #0x1, &LastDir
+   \   00004E   1001         RETA
      67              }
      68              else 
      69              {
      70                word4 = "  White   ";
-     71                if(LastDir == LEFT)
+   \                     ??pid_udpate_left_2:
+   \   000050   B240........ MOV.W   #`?<Constant "  White   ">`, &word4
+     71                if(LastDir == GOING_LEFT)
+   \   000056   C293....     CMP.B   #0x0, &LastDir
+   \   00005A   0720         JNE     ??pid_udpate_left_3
      72                {
      73                  Left_Motor_ON_FORWARD(LEFT_R_SEARCH_SPEED);
+   \   00005C   4C43         MOV.B   #0x0, R12
+   \   00005E   ........     CALLA   #Left_Motor_ON_FORWARD
      74                  Right_Motor_ON_FORWARD(RIGHT_R_SEARCH_SPEED);
+   \   000062   7C405000     MOV.B   #0x50, R12
+   \   000066   ........     BRA     #Right_Motor_ON_FORWARD
      75                }
      76                else
      77                {
      78                  Left_Motor_ON_FORWARD(LEFT_L_SEARCH_SPEED);
+   \                     ??pid_udpate_left_3:
+   \   00006A   7C407800     MOV.B   #0x78, R12
+   \   00006E   ........     CALLA   #Left_Motor_ON_FORWARD
      79                  Right_Motor_ON_FORWARD(RIGHT_L_SEARCH_SPEED);
+   \   000072   4C43         MOV.B   #0x0, R12
+   \   000074   ........     BRA     #Right_Motor_ON_FORWARD
      80                }
      81              }
-     82            
+     82            /*
      83            // Attempted PID
      84             Uses a PID with noise bands at ir_white_reading and 
      85             ir_black_reading, adjusting for changes to follow
@@ -290,9 +330,9 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\whe
     150            Right_Motor_ON_FORWARD(right_pwm);
     151            
     152            ld.prev_error = error_l;
-    153          
+    153          */
     154          }
-    155          */
+    155          
 
    \                                 In  segment CODE, align 2
     156          void initialize_delay(uint16_t delay){
@@ -683,6 +723,11 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\whe
    \   00005E                REQUIRE _A_TA0CCTL2_L
 
    \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "  White   ">`:
+   \   000000   202057686974 DC8 "  White   "
+   \            6520202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
    \                     `?<Constant " Exiting  ">`:
    \   000000   204578697469 DC8 " Exiting  "
    \            6E67202000  
@@ -763,6 +808,10 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\whe
         4   -> Right_Motor_ON_FORWARD
         4   -> Wheels_OFF
       4   initialize_delay
+      4   pid_udpate_left
+        4   -> Left_Motor_ON_FORWARD
+        0   -> Right_Motor_ON_FORWARD
+        4   -> Right_Motor_ON_FORWARD
       6   turn
         6   -> LCD_print
         6   -> Left_Motor_ON_FORWARD
@@ -776,6 +825,7 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\whe
 
    Bytes  Function/Label
    -----  --------------
+      11  ?<Constant "  White   ">
       11  ?<Constant " Exiting  ">
        1  ?<Constant "">
       11  ?<Constant "P10 Finit ">
@@ -807,6 +857,7 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\whe
        1  left_forward_flag
        2  left_pwm
        1  left_reverse_flag
+     120  pid_udpate_left
       18  rd
        1  right_forward_flag
        2  right_pwm
@@ -815,13 +866,13 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_09\whe
       10  update_instruction_label
 
  
- 632 bytes in segment CODE
+ 752 bytes in segment CODE
   18 bytes in segment DATA16_AN
-  45 bytes in segment DATA16_C
+  56 bytes in segment DATA16_C
   46 bytes in segment DATA16_Z
  
- 632 bytes of CODE  memory
-  45 bytes of CONST memory
+ 752 bytes of CODE  memory
+  56 bytes of CONST memory
   46 bytes of DATA  memory (+ 18 bytes shared)
 
 Errors: none
