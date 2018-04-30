@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           30/Apr/2018  04:07:38
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           30/Apr/2018  10:54:26
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_10\timerA0.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EW4423.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EW9589.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_10\timerA0.c" -lC
 #        "C:\Users\shmes\Desktop\Escritorio
@@ -249,40 +249,42 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\tim
    \   000006   9253....     ADD.W   #0x1, &aux_time_ms
    \   00000A   8263....     ADDC.W  #0x0, &aux_time_ms + 2
      74            
-     75            if(!(counter_A00 % SECOND_MS))
+     75            if(!(counter_A00 % SECOND_MS) && !IOT_STATUS(SOFT_RESET))
    \   00000E   1C42....     MOV.W   &counter_A00, R12
    \   000012   3E40E803     MOV.W   #0x3e8, R14
    \   000016   ........     CALLA   #?DivMod16u
    \   00001A   0E93         CMP.W   #0x0, R14
-   \   00001C   1420         JNE     ??Timer0_A0_ISR_1
+   \   00001C   1720         JNE     ??Timer0_A0_ISR_1
+   \   00001E   D2B3....     BIT.B   #0x1, &iot_status_reg
+   \   000022   142C         JC      ??Timer0_A0_ISR_1
      76            {
      77              for(string_index = BEGINNING; string_index < SOCKET_PING_SIZE; string_index++)     // Ping host every period once established
-   \   00001E   C243....     MOV.B   #0x0, &??string_index
+   \   000024   C243....     MOV.B   #0x0, &??string_index
    \                     ??Timer0_A0_ISR_0:
-   \   000022   F2901600.... CMP.B   #0x16, &??string_index
-   \   000028   0C2C         JC      ??Timer0_A0_ISR_2
+   \   000028   F2901600.... CMP.B   #0x16, &??string_index
+   \   00002E   0C2C         JC      ??Timer0_A0_ISR_2
      78                  transmit_charA3(sock_ping_command[string_index]);
-   \   00002A   1E42....     MOV.W   &sock_ping_command, R14
-   \   00002E   5F42....     MOV.B   &??string_index, R15
-   \   000032   4F4F         MOV.B   R15, R15
-   \   000034   0E5F         ADD.W   R15, R14
-   \   000036   6C4E         MOV.B   @R14, R12
-   \   000038   ........     CALLA   #transmit_charA3
-   \   00003C   D253....     ADD.B   #0x1, &??string_index
-   \   000040   F03F         JMP     ??Timer0_A0_ISR_0
+   \   000030   1E42....     MOV.W   &sock_ping_command, R14
+   \   000034   5F42....     MOV.B   &??string_index, R15
+   \   000038   4F4F         MOV.B   R15, R15
+   \   00003A   0E5F         ADD.W   R15, R14
+   \   00003C   6C4E         MOV.B   @R14, R12
+   \   00003E   ........     CALLA   #transmit_charA3
+   \   000042   D253....     ADD.B   #0x1, &??string_index
+   \   000046   F03F         JMP     ??Timer0_A0_ISR_0
      79              counter_A00 = COUNTER_RESET;
    \                     ??Timer0_A0_ISR_2:
-   \   000042   8243....     MOV.W   #0x0, &counter_A00
+   \   000048   8243....     MOV.W   #0x0, &counter_A00
      80            }
      81            
      82            if(IOT_STATUS(COURSE_BEGIN))               // If inside course, begin timer display on second LCD line
    \                     ??Timer0_A0_ISR_1:
-   \   000046   F2B02000.... BIT.B   #0x20, &iot_status_reg
-   \   00004C   0428         JNC     ??Timer0_A0_ISR_3
+   \   00004C   F2B02000.... BIT.B   #0x20, &iot_status_reg
+   \   000052   0428         JNC     ??Timer0_A0_ISR_3
      83            {
      84              time_ms++;
-   \   00004E   9253....     ADD.W   #0x1, &time_ms
-   \   000052   8263....     ADDC.W  #0x0, &time_ms + 2
+   \   000054   9253....     ADD.W   #0x1, &time_ms
+   \   000058   8263....     ADDC.W  #0x0, &time_ms + 2
      85              /*
      86              if((time_ms % TWO_MS) == COUNTER_RESET)  // two milliseconds elapsed
      87              {
@@ -297,8 +299,8 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\tim
      96            }   
      97          }
    \                     ??Timer0_A0_ISR_3:
-   \   000056   3C17         POPM.W  #0x4, R15
-   \   000058   0013         RETI
+   \   00005C   3C17         POPM.W  #0x4, R15
+   \   00005E   0013         RETI
 
    \                                 In  segment DATA16_Z, align 1, align-sorted
    \   000000                REQUIRE ?cstart_init_zero
@@ -384,7 +386,7 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\tim
 
    Bytes  Function/Label
    -----  --------------
-      90  Timer0_A0_ISR
+      96  Timer0_A0_ISR
        2  Timer0_A0_ISR::??INTVEC 90
       48  Timer0_A1_ISR
        2  Timer0_A1_ISR::??INTVEC 88
@@ -414,9 +416,9 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\tim
   16 bytes in segment DATA16_AN
   19 bytes in segment DATA16_Z
    4 bytes in segment INTVEC
- 138 bytes in segment ISR_CODE
+ 144 bytes in segment ISR_CODE
  
- 264 bytes of CODE  memory
+ 270 bytes of CODE  memory
    0 bytes of CONST memory (+  4 bytes shared)
   19 bytes of DATA  memory (+ 16 bytes shared)
 

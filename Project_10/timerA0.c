@@ -72,7 +72,7 @@ __interrupt void Timer0_A0_ISR(void){
   counter_A00++;                         // Increment counter by 1 msec for each 1 msec interrupt
   aux_time_ms++;
   
-  if(!(counter_A00 % SECOND_MS))
+  if(!(counter_A00 % SECOND_MS) && !IOT_STATUS(SOFT_RESET))
   {
     for(string_index = BEGINNING; string_index < SOCKET_PING_SIZE; string_index++)     // Ping host every period once established
         transmit_charA3(sock_ping_command[string_index]);

@@ -11,7 +11,7 @@
 #include "timerB0.h"
 // Initialize motor PWM registers
 void init_Timer_B0(void){
-  TB0CTL    = TASSEL__ACLK;            // Select SMCLK for source
+  TB0CTL    = TASSEL__SMCLK;            // Select SMCLK for source
   TB0CTL   |= (MC_2|TBCLR);             // Continuous mode; clear Timer B0 register ]
   
 // Set all motor pins to Reset/Set mode, 0% duty cycle
