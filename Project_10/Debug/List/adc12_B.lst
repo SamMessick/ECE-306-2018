@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           30/Apr/2018  02:33:42
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           30/Apr/2018  04:07:37
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_10\adc12_B.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EW3B95.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EW41E7.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_10\adc12_B.c" -lC
 #        "C:\Users\shmes\Desktop\Escritorio
@@ -389,32 +389,25 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\adc
    \                                 In  segment CODE, align 2
     169          void update_ir_reading(void){ 
    \                     update_ir_reading:
-    170            //if(calibrated)
-    171            //{
-    172              //word4 = "          ";
-    173              //hex_to_dec(word4, counter_A00);
-    174              //LCD_print("Passing thr", "   Loop   ", "          ", word4);
-    175            //}
-    176            //if(ir_ready_to_print)
-    177            //{
-    178            //  print_detector_values();
-    179            //  ir_ready_to_print = false;
-    180            //}
-    181            P8OUT |= IR_LED;              // Turn on IR LED
-   \   000000   D2D36302     BIS.B   #0x1, &0x263
-    182            ADC12IER0  |= (ADC12IE2     | // Enable interrupts for new sample results
-    183                           ADC12IE4     |
-    184                           ADC12IE5);
-   \   000004   B2D034001208 BIS.W   #0x34, &0x812
-    185            while(ADC12CTL0 & ADC12BUSY); // Wait for new reading
+    170            if(IOT_STATUS(AUTONOMOUS))
+   \   000000   C293....     CMP.B   #0x0, &iot_status_reg
+   \   000004   0234         JGE     ??update_ir_reading_1
+    171              P8OUT |= IR_LED;              // Turn on IR LED
+   \   000006   D2D36302     BIS.B   #0x1, &0x263
+    172            ADC12IER0  |= (ADC12IE2     | // Enable interrupts for new sample results
+    173                           ADC12IE4     |
+    174                           ADC12IE5);
+   \                     ??update_ir_reading_1:
+   \   00000A   B2D034001208 BIS.W   #0x34, &0x812
+    175            while(ADC12CTL0 & ADC12BUSY); // Wait for new reading
    \                     ??update_ir_reading_0:
-   \   00000A   92B30008     BIT.W   #0x1, &0x800
-   \   00000E   FD2F         JC      ??update_ir_reading_0
-    186          }
-   \   000010   1001         RETA
-   \   000012                REQUIRE _A_PDOUT_L
-   \   000012                REQUIRE _A_ADC12IER0_L
-   \   000012                REQUIRE _A_ADC12CTL0_L
+   \   000010   92B30008     BIT.W   #0x1, &0x800
+   \   000014   FD2F         JC      ??update_ir_reading_0
+    176          }
+   \   000016   1001         RETA
+   \   000018                REQUIRE _A_PDOUT_L
+   \   000018                REQUIRE _A_ADC12IER0_L
+   \   000018                REQUIRE _A_ADC12CTL0_L
 
    \                                 In  segment INTVEC, offset 0x5c, root
    \                     `??ADC12_ISR::??INTVEC 92`:
@@ -477,10 +470,10 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\adc
        2  ir_black_reading
        2  ir_white_reading
        1  one_time
-      18  update_ir_reading
+      24  update_ir_reading
 
  
- 156 bytes in segment CODE
+ 162 bytes in segment CODE
   24 bytes in segment DATA16_AN
    5 bytes in segment DATA16_I
    5 bytes in segment DATA16_ID
@@ -488,7 +481,7 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\adc
    2 bytes in segment INTVEC
   30 bytes in segment ISR_CODE
  
- 186 bytes of CODE  memory
+ 192 bytes of CODE  memory
    5 bytes of CONST memory (+  2 bytes shared)
   13 bytes of DATA  memory (+ 24 bytes shared)
 

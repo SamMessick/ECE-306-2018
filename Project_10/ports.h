@@ -154,9 +154,6 @@ typedef enum{
   COLUMN_NUM_COLUMNS
 }Display_Column_t;
 
-#ifndef TIMER_INTV_ENUM
-#define TIMER_INTV_ENUM
-
 typedef enum{
   MSEC = (16),                   // 8 MHz / 8 / (1/50 ms) = 50,000
   SEC  = (32768),
@@ -171,8 +168,6 @@ typedef enum{
   QUART_SEC = (5),
   EXIT_DELAY = (5000)
 } timer_intv_t;
-
-#endif
 
 // enum for menu options
 typedef enum{
@@ -205,5 +200,4 @@ extern char* word4;
 
 /* Included from wheels.h */
 void initialize_delay(uint16_t delay);
-extern volatile uint8_t waiting;
 extern volatile uint8_t connection_lost;

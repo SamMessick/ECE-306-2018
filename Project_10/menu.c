@@ -15,6 +15,13 @@ char* word1 = "          ";
 char* word2 = "          ";
 char* word3 = "          ";
 char* word4 = "          ";
+uint8_t changed_options;                // Flag protecting against random menu bit setting
+uint8_t prev_menu_frame;                // Previous menu boolean (inner or outer menu)
+uint8_t prev_menu_option;               // Previous main menu selection
+uint8_t current_menu_option;            // Current  main menu selection
+uint8_t prev_sub_menu_option;           // Previous sub  menu selection
+uint8_t current_sub_menu_option;        // Current  sub  menu selection
+uint8_t reset_ADC_Thumb_min;            // Flag to reset text scrolling in Red and White Song
 
 user_settings_t device_settings = 
   {
@@ -27,9 +34,13 @@ user_settings_t device_settings =
   };
 
 void init_Menu(void){
+  //strcpy(device_settings.user_name, "Sam       ");
+  //strcpy(device_settings.wifi_ssid, "ncsu      ");
+  //*(device_settings.wifi_privacy_mode) = 0;
+  //strcpy(device_settings.wifi_ip_hostname, "ECE_306_06");
   LCD_print("          ", "          ", "          ", "          ");
-  dim_lcd(FULL_BRIGHTNESS);
-  delay(THREE_SECOND_MS);
+  P5OUT |= LCD_BACKLITE;
+  delay(SECOND_MS);
   
   lcd_BIG_mid();
   LCD_print("          ", " ^______^ ", "          ", "          ");
@@ -38,22 +49,26 @@ void init_Menu(void){
   delay(QUART_SECOND_MS);
   LCD_print("          ", " ^______^ ", "          ", "          ");
   delay(SECOND_MS);
+  P5OUT &= ~LCD_BACKLITE;
   
   lcd_4line();
   if(device_settings.user_name[CHAR1] == INVALID_PRESET); // have user print name (thumb to choose letter, right/left button to navigate)
   LCD_print("  Hello   ", "  there   ", device_settings.user_name, "----------");
-  
+  delay(SECOND_MS);
   if(device_settings.wifi_ssid[CHAR1] == INVALID_PRESET); // have user print ssid (thumb to choose letter, right/left button to navigate)
   LCD_print("You will  ", "connect to", device_settings.wifi_ssid, "----------");
+  delay(SECOND_MS);
   if(*(device_settings.wifi_privacy_mode) == (uint8_t)INVALID_PRESET); // have user print mode (thumb to choose mode; right/left button to navigate)
     if(*(device_settings.wifi_privacy_mode) == WPA_PERSONAL); // have user enter password if necessary
     LCD_print("Network ", " password:", device_settings.wifi_ssid, "----------");
+    delay(SECOND_MS);
   if(device_settings.wifi_ip_hostname[CHAR1] == INVALID_PRESET); // have user print hostname (thumb to choose letter, right/left button to navigate)
   LCD_print("My name is", "   now:   ", device_settings.wifi_ip_hostname, "----------");
+  delay(SECOND_MS);
   if(*(device_settings.lcd_brightness) == (uint16_t)INVALID_PRESET);          // have user adjust LCD brightness (thumb to choose brightness level)
   LCD_print(" That's a ", "  better  ", "lighting! ", "----------");
+  delay(SECOND_MS);
   
-  delay(THREE_SECOND_MS);
   lcd_BIG_mid();
   LCD_print("<<<<<<<<<<", " Let's go ", ">>>>>>>>>>", "          ");
   delay(THREE_SECOND_MS);
@@ -118,32 +133,4 @@ void hex_to_dec(char* output_line, uint32_t hexadecimal){
   output_line[COLUMN4] = Hundred  + ASCII_NUM_SHIFT;
   output_line[COLUMN5] = Ten      + ASCII_NUM_SHIFT;
   output_line[COLUMN6] = One      + ASCII_NUM_SHIFT;
-}
-
-void print_baud_rate(){
-  uint32_t baud_rate;
-  
-  switch(menu_counter)
-  {           
-  case OPTION1:
-    baud_rate = LOWER_BAUD;
-    hex_to_dec(word3, baud_rate);
-    // Adjust baud rate
-    UCA3CTLW0 |= UCSWRST;               // Set software reset enable
-    UCA3BRW = UCA_BRW_115;
-    UCA3MCTLW  = UCA_MCTL_115;
-    UCA3CTL1  &= ~UCSWRST;              // Release from software reset
-    break;
-  case PENULT_OPTION:
-    baud_rate = HIGHER_BAUD;
-    hex_to_dec(word3, baud_rate);
-    // Adjust baud rate
-    UCA3CTLW0 |= UCSWRST;               // Set software reset enable
-    UCA3BRW = UCA_BRW_460;
-    UCA3MCTLW = UCA_MCTL_460;
-    UCA3CTL1  &= ~UCSWRST;              // Release from software reset
-    break;
-  }
-  //word2 = "          ";
-  LCD_print(word1,word2, word3,word4);
 }

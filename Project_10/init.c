@@ -35,5 +35,4 @@ void init_Conditions(void){
 void init_Timers(void){
   init_Timer_B0();                     // Initialize motor PWM behavior
   init_Timer_A0();                     // Initialize delay behavior and LCD updates
-  init_Timer_A4();
 }

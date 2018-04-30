@@ -56,10 +56,10 @@ void init_IoT(void){
   P3IE      &= ~IOT_FACTORY;           // Begin reset hold
   P3OUT     &= ~IOT_RESET;
   IOT_ENABLE(SOFT_RESET);
-  word1 = " Scanning ";
+  word1 = "Connecting";
   word2 = "          ";
-  word3 = "          ";
-  word4 = "          ";
+  word3 = " to your  ";
+  word4 = " network  ";
   LCD_print(word1,word2,word3,word4);
   P3OUT     |=  IOT_RESET;             // Release reset hold -- wait for IoT connection initialization
   P3IE      |=  IOT_FACTORY;

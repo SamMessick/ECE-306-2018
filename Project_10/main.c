@@ -47,6 +47,7 @@ void main(void){
       update_ir_reading();
       pid_udpate_left();                     // Update wheel speeds during autonomous driving
     }
+
     check_for_input();                       // Read in updates and commands from IoT module
   }
 }

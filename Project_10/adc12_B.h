@@ -35,6 +35,17 @@ extern volatile uint8_t calibrating;             // Set false by a button press 
 /* From shapes_menu.c */
 #define ASCII_NUM_SHIFT      (48)
 
+// IoT Status management
+#define IOT_STATUS(x)        (iot_status_reg & x)
+#define IOT_ENABLE(x)        (iot_status_reg |= x)
+#define IOT_DISABLE(x)       (iot_status_reg &= ~x)
+#define SOFT_RESET           (0x01)
+#define IP_READY             (0x02)
+#define CHECK_FOR_COMMAND    (0x04)
+#define COMMAND_EXECUTING    (0x08)
+#define AUTONOMOUS           (0x80)
+extern volatile uint8_t iot_status_reg;
+
 void defer_to_shape_menu(void);                  // Pulls up degraded shape menu for printing ADC values
 void print_detector_values(void);                // prints ADC reading from left infrared detector to screen 
 extern char* word4;                              // provided for ADC writing "Cal. Black" or "Cal. White" to screen

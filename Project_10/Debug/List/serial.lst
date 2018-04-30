@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           30/Apr/2018  02:44:46
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           30/Apr/2018  04:07:38
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_10\serial.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EW5D15.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EW4307.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_10\serial.c" -lC
 #        "C:\Users\shmes\Desktop\Escritorio
@@ -313,14 +313,14 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\ser
    \   000008   D2C32202     BIC.B   #0x1, &0x222
      58            IOT_ENABLE(SOFT_RESET);
    \   00000C   D2D3....     BIS.B   #0x1, &iot_status_reg
-     59            word1 = " Scanning ";
-   \   000010   B240........ MOV.W   #`?<Constant " Scanning ">`, &word1
+     59            word1 = "Connecting";
+   \   000010   B240........ MOV.W   #`?<Constant "Connecting">`, &word1
      60            word2 = "          ";
    \   000016   B240........ MOV.W   #`?<Constant "          ">`, &word2
-     61            word3 = "          ";
-   \   00001C   B240........ MOV.W   #`?<Constant "          ">`, &word3
-     62            word4 = "          ";
-   \   000022   B240........ MOV.W   #`?<Constant "          ">`, &word4
+     61            word3 = " to your  ";
+   \   00001C   B240........ MOV.W   #`?<Constant " to your  ">`, &word3
+     62            word4 = " network  ";
+   \   000022   B240........ MOV.W   #`?<Constant " network  ">`, &word4
      63            LCD_print(word1,word2,word3,word4);
    \   000028   1F42....     MOV.W   &word4, R15
    \   00002C   1E42....     MOV.W   &word3, R14
@@ -1165,14 +1165,24 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\ser
    \            2E31340D0A00
 
    \                                 In  segment DATA16_C, align 1, align-sorted
-   \                     `?<Constant " Scanning ">`:
-   \   000000   205363616E6E DC8 " Scanning "
-   \            696E672000  
+   \                     `?<Constant "Connecting">`:
+   \   000000   436F6E6E6563 DC8 "Connecting"
+   \            74696E6700  
 
    \                                 In  segment DATA16_C, align 1, align-sorted
    \                     `?<Constant "          ">`:
    \   000000   202020202020 DC8 "          "
    \            2020202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant " to your  ">`:
+   \   000000   20746F20796F DC8 " to your  "
+   \            7572202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant " network  ">`:
+   \   000000   206E6574776F DC8 " network  "
+   \            726B202000  
 
    \                                 In  segment DATA16_C, align 1, align-sorted
    \                     `?<Constant "   ncsu   ">`:
@@ -1324,9 +1334,10 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\ser
       11  ?<Constant " Gotta go ">
       11  ?<Constant " I am the ">
       11  ?<Constant " I dream  ">
-      11  ?<Constant " Scanning ">
       11  ?<Constant " Waiting  ">
       11  ?<Constant " cheese...">
+      11  ?<Constant " network  ">
+      11  ?<Constant " to your  ">
       11  ?<Constant "----------">
        9  ?<Constant "115200\r\n">
        9  ?<Constant "460800\r\n">
@@ -1334,6 +1345,7 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\ser
       11  ?<Constant ">>>>>>>>>>">
       24  ?<Constant "AT+S.PING=152.1.14.14\r\n">
       19  ?<Constant "AT+S.SOCKD=32000\r\n">
+      11  ?<Constant "Connecting">
       11  ?<Constant "I can\'t do">
       11  ?<Constant "I\'m afraid">
       11  ?<Constant "MSP430  JR">
@@ -1407,7 +1419,7 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\ser
  
  1 264 bytes in segment CODE
     46 bytes in segment DATA16_AN
-   281 bytes in segment DATA16_C
+   303 bytes in segment DATA16_C
     31 bytes in segment DATA16_I
     31 bytes in segment DATA16_ID
     41 bytes in segment DATA16_Z
@@ -1415,7 +1427,7 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\ser
    166 bytes in segment ISR_CODE
  
  1 430 bytes of CODE  memory
-   312 bytes of CONST memory (+  4 bytes shared)
+   334 bytes of CONST memory (+  4 bytes shared)
     72 bytes of DATA  memory (+ 46 bytes shared)
 
 Errors: none

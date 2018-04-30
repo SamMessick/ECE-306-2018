@@ -167,18 +167,8 @@ void calibrate_Black(void){
 }
 
 void update_ir_reading(void){ 
-  //if(calibrated)
-  //{
-    //word4 = "          ";
-    //hex_to_dec(word4, counter_A00);
-    //LCD_print("Passing thr", "   Loop   ", "          ", word4);
-  //}
-  //if(ir_ready_to_print)
-  //{
-  //  print_detector_values();
-  //  ir_ready_to_print = false;
-  //}
-  P8OUT |= IR_LED;              // Turn on IR LED
+  if(IOT_STATUS(AUTONOMOUS))
+    P8OUT |= IR_LED;              // Turn on IR LED
   ADC12IER0  |= (ADC12IE2     | // Enable interrupts for new sample results
                  ADC12IE4     |
                  ADC12IE5);

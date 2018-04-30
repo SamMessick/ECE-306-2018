@@ -16,7 +16,7 @@ uint8_t backlite_status_reg;
 void init_Timer_A4(void){
 
   TA4CTL  = TASSEL__ACLK;               // Select SMCLK for source
-  TA4CTL |= (TACLR | MC_1 | ID_1);      // AClock source on up mode at 32 KHz
+  TA4CTL |= (TACLR | MC_2 | ID_1);      // AClock source on up mode at 32 KHz
   TA4CTL |= TAIDEX__1; 
   TA4CTL &= ~(TAIFG);                    // Clear Timer A1 interrupt flag and interrupt enable
   

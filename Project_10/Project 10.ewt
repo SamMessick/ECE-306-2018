@@ -2230,12 +2230,6 @@
         <name>$PROJ_DIR$\timerA0.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\timerA4.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\timerA4.h</name>
-    </file>
-    <file>
         <name>$PROJ_DIR$\timerB0.c</name>
     </file>
     <file>

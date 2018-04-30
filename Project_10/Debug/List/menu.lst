@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           30/Apr/2018  02:47:23
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           30/Apr/2018  04:07:38
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_10\menu.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EWC585.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EW42B7.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_10\menu.c" -lC
 #        "C:\Users\shmes\Desktop\Escritorio
@@ -51,19 +51,9 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\men
      10          
      11          #include "menu.h"
 
-   \                                 In  segment DATA16_AN, at 0x620
-   \   union <unnamed> _A_UCA3CTLW0_L
-   \                     _A_UCA3CTLW0_L:
-   \   000000                DS8 2
-
-   \                                 In  segment DATA16_AN, at 0x626
-   \   union <unnamed> _A_UCA3BRW_L
-   \                     _A_UCA3BRW_L:
-   \   000000                DS8 2
-
-   \                                 In  segment DATA16_AN, at 0x628
-   \   union <unnamed> _A_UCA3MCTLW_L
-   \                     _A_UCA3MCTLW_L:
+   \                                 In  segment DATA16_AN, at 0x242
+   \   union <unnamed> _A_PCOUT_L
+   \                     _A_PCOUT_L:
    \   000000                DS8 2
      12          
 
@@ -100,398 +90,386 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\men
    \                     word4:
    \   000000                DS8 2
    \   000002                REQUIRE `?<Initializer for word4>`
-     18          
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     18          uint8_t changed_options;                // Flag protecting against random menu bit setting
+   \                     changed_options:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     19          uint8_t prev_menu_frame;                // Previous menu boolean (inner or outer menu)
+   \                     prev_menu_frame:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     20          uint8_t prev_menu_option;               // Previous main menu selection
+   \                     prev_menu_option:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     21          uint8_t current_menu_option;            // Current  main menu selection
+   \                     current_menu_option:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     22          uint8_t prev_sub_menu_option;           // Previous sub  menu selection
+   \                     prev_sub_menu_option:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     23          uint8_t current_sub_menu_option;        // Current  sub  menu selection
+   \                     current_sub_menu_option:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     24          uint8_t reset_ADC_Thumb_min;            // Flag to reset text scrolling in Red and White Song
+   \                     reset_ADC_Thumb_min:
+   \   000000                DS8 1
+     25          
 
    \                                 In  segment DATA16_I, align 2, align-sorted
    \   000000                REQUIRE ?cstart_init_copy
-     19          user_settings_t device_settings = 
+     26          user_settings_t device_settings = 
    \                     device_settings:
    \   000000                DS8 12
    \   00000C                REQUIRE `?<Initializer for device_settings>`
-     20            {
-     21              .user_name = (char*)PRESET_USER_NAME,
-     22              .wifi_ssid = (char*)PRESET_WIFI_SSID,
-     23              .wifi_privacy_mode = (uint8_t*)PRESET_WIFI_PRIVACY_MODE,
-     24              .wifi_password = (char*)PRESET_WIFI_PASSWORD,
-     25              .wifi_ip_hostname = (char*)PRESET_WIFI_IP_HOSTNAME,
-     26              .lcd_brightness = (uint16_t*)PRESET_LCD_BRIGHTNESS,
-     27            };
-     28          
+     27            {
+     28              .user_name = (char*)PRESET_USER_NAME,
+     29              .wifi_ssid = (char*)PRESET_WIFI_SSID,
+     30              .wifi_privacy_mode = (uint8_t*)PRESET_WIFI_PRIVACY_MODE,
+     31              .wifi_password = (char*)PRESET_WIFI_PASSWORD,
+     32              .wifi_ip_hostname = (char*)PRESET_WIFI_IP_HOSTNAME,
+     33              .lcd_brightness = (uint16_t*)PRESET_LCD_BRIGHTNESS,
+     34            };
+     35          
 
    \                                 In  segment CODE, align 2
-     29          void init_Menu(void){
+     36          void init_Menu(void){
    \                     init_Menu:
-     30            LCD_print("          ", "          ", "          ", "          ");
+     37            //strcpy(device_settings.user_name, "Sam       ");
+     38            //strcpy(device_settings.wifi_ssid, "ncsu      ");
+     39            //*(device_settings.wifi_privacy_mode) = 0;
+     40            //strcpy(device_settings.wifi_ip_hostname, "ECE_306_06");
+     41            LCD_print("          ", "          ", "          ", "          ");
    \   000000   3F40....     MOV.W   #`?<Constant "          ">`, R15
    \   000004   3E40....     MOV.W   #`?<Constant "          ">`, R14
    \   000008   3D40....     MOV.W   #`?<Constant "          ">`, R13
    \   00000C   3C40....     MOV.W   #`?<Constant "          ">`, R12
    \   000010   ........     CALLA   #LCD_print
-     31            dim_lcd(FULL_BRIGHTNESS);
-   \   000014   3C43         MOV.W   #0xffff, R12
-   \   000016   0D43         MOV.W   #0x0, R13
-   \   000018   ........     CALLA   #dim_lcd
-     32            delay(THREE_SECOND_MS);
-   \   00001C   3C40B80B     MOV.W   #0xbb8, R12
-   \   000020   0D43         MOV.W   #0x0, R13
-   \   000022   ........     CALLA   #delay
-     33            
-     34            lcd_BIG_mid();
-   \   000026   ........     CALLA   #lcd_BIG_mid
-     35            LCD_print("          ", " ^______^ ", "          ", "          ");
-   \   00002A   3F40....     MOV.W   #`?<Constant "          ">`, R15
-   \   00002E   3E40....     MOV.W   #`?<Constant "          ">`, R14
-   \   000032   3D40....     MOV.W   #`?<Constant " ^______^ ">`, R13
-   \   000036   3C40....     MOV.W   #`?<Constant "          ">`, R12
-   \   00003A   ........     CALLA   #LCD_print
-     36            delay(SECOND_MS);
-   \   00003E   3C40E803     MOV.W   #0x3e8, R12
-   \   000042   0D43         MOV.W   #0x0, R13
-   \   000044   ........     CALLA   #delay
-     37            LCD_print("          ", " ^______- ", "          ", "          ");
-   \   000048   3F40....     MOV.W   #`?<Constant "          ">`, R15
-   \   00004C   3E40....     MOV.W   #`?<Constant "          ">`, R14
-   \   000050   3D40....     MOV.W   #`?<Constant " ^______- ">`, R13
-   \   000054   3C40....     MOV.W   #`?<Constant "          ">`, R12
-   \   000058   ........     CALLA   #LCD_print
-     38            delay(QUART_SECOND_MS);
-   \   00005C   3C40C800     MOV.W   #0xc8, R12
-   \   000060   0D43         MOV.W   #0x0, R13
-   \   000062   ........     CALLA   #delay
-     39            LCD_print("          ", " ^______^ ", "          ", "          ");
-   \   000066   3F40....     MOV.W   #`?<Constant "          ">`, R15
-   \   00006A   3E40....     MOV.W   #`?<Constant "          ">`, R14
-   \   00006E   3D40....     MOV.W   #`?<Constant " ^______^ ">`, R13
-   \   000072   3C40....     MOV.W   #`?<Constant "          ">`, R12
-   \   000076   ........     CALLA   #LCD_print
-     40            delay(SECOND_MS);
-   \   00007A   3C40E803     MOV.W   #0x3e8, R12
-   \   00007E   0D43         MOV.W   #0x0, R13
-   \   000080   ........     CALLA   #delay
-     41            
-     42            lcd_4line();
-   \   000084   ........     CALLA   #lcd_4line
-     43            if(device_settings.user_name[CHAR1] == INVALID_PRESET); // have user print name (thumb to choose letter, right/left button to navigate)
-     44            LCD_print("  Hello   ", "  there   ", device_settings.user_name, "----------");
-   \   000088   3F40....     MOV.W   #`?<Constant "----------">`, R15
-   \   00008C   1E42....     MOV.W   &device_settings, R14
-   \   000090   3D40....     MOV.W   #`?<Constant "  there   ">`, R13
-   \   000094   3C40....     MOV.W   #`?<Constant "  Hello   ">`, R12
-   \   000098   ........     CALLA   #LCD_print
-     45            
-     46            if(device_settings.wifi_ssid[CHAR1] == INVALID_PRESET); // have user print ssid (thumb to choose letter, right/left button to navigate)
-     47            LCD_print("You will  ", "connect to", device_settings.wifi_ssid, "----------");
-   \   00009C   3F40....     MOV.W   #`?<Constant "----------">`, R15
-   \   0000A0   1E42....     MOV.W   &device_settings + 2, R14
-   \   0000A4   3D40....     MOV.W   #`?<Constant "connect to">`, R13
-   \   0000A8   3C40....     MOV.W   #`?<Constant "You will  ">`, R12
-   \   0000AC   ........     CALLA   #LCD_print
-     48            if(*(device_settings.wifi_privacy_mode) == (uint8_t)INVALID_PRESET); // have user print mode (thumb to choose mode; right/left button to navigate)
-     49              if(*(device_settings.wifi_privacy_mode) == WPA_PERSONAL); // have user enter password if necessary
-     50              LCD_print("Network ", " password:", device_settings.wifi_ssid, "----------");
-   \   0000B0   3F40....     MOV.W   #`?<Constant "----------">`, R15
-   \   0000B4   1E42....     MOV.W   &device_settings + 2, R14
-   \   0000B8   3D40....     MOV.W   #`?<Constant " password:">`, R13
-   \   0000BC   3C40....     MOV.W   #`?<Constant "Network ">`, R12
-   \   0000C0   ........     CALLA   #LCD_print
-     51            if(device_settings.wifi_ip_hostname[CHAR1] == INVALID_PRESET); // have user print hostname (thumb to choose letter, right/left button to navigate)
-     52            LCD_print("My name is", "   now:   ", device_settings.wifi_ip_hostname, "----------");
-   \   0000C4   3F40....     MOV.W   #`?<Constant "----------">`, R15
-   \   0000C8   1E42....     MOV.W   &device_settings + 8, R14
-   \   0000CC   3D40....     MOV.W   #`?<Constant "   now:   ">`, R13
-   \   0000D0   3C40....     MOV.W   #`?<Constant "My name is">`, R12
-   \   0000D4   ........     CALLA   #LCD_print
-     53            if(*(device_settings.lcd_brightness) == (uint16_t)INVALID_PRESET);          // have user adjust LCD brightness (thumb to choose brightness level)
-     54            LCD_print(" That's a ", "  better  ", "lighting! ", "----------");
-   \   0000D8   3F40....     MOV.W   #`?<Constant "----------">`, R15
-   \   0000DC   3E40....     MOV.W   #`?<Constant "lighting! ">`, R14
-   \   0000E0   3D40....     MOV.W   #`?<Constant "  better  ">`, R13
-   \   0000E4   3C40....     MOV.W   #`?<Constant " That\\'s a ">`, R12
-   \   0000E8   ........     CALLA   #LCD_print
-     55            
-     56            delay(THREE_SECOND_MS);
-   \   0000EC   3C40B80B     MOV.W   #0xbb8, R12
-   \   0000F0   0D43         MOV.W   #0x0, R13
-   \   0000F2   ........     CALLA   #delay
-     57            lcd_BIG_mid();
-   \   0000F6   ........     CALLA   #lcd_BIG_mid
-     58            LCD_print("<<<<<<<<<<", " Let's go ", ">>>>>>>>>>", "          ");
-   \   0000FA   3F40....     MOV.W   #`?<Constant "          ">`, R15
-   \   0000FE   3E40....     MOV.W   #`?<Constant ">>>>>>>>>>">`, R14
-   \   000102   3D40....     MOV.W   #`?<Constant " Let\\'s go ">`, R13
-   \   000106   3C40....     MOV.W   #`?<Constant "<<<<<<<<<<">`, R12
-   \   00010A   ........     CALLA   #LCD_print
-     59            delay(THREE_SECOND_MS);
-   \   00010E   3C40B80B     MOV.W   #0xbb8, R12
-   \   000112   0D43         MOV.W   #0x0, R13
-   \   000114   ........     CALLA   #delay
-     60            lcd_4line();
-   \   000118   ........     BRA     #lcd_4line
-     61          }
-     62          
+     42            P5OUT |= LCD_BACKLITE;
+   \   000014   F2D080004202 BIS.B   #0x80, &0x242
+     43            delay(SECOND_MS);
+   \   00001A   3C40E803     MOV.W   #0x3e8, R12
+   \   00001E   0D43         MOV.W   #0x0, R13
+   \   000020   ........     CALLA   #delay
+     44            
+     45            lcd_BIG_mid();
+   \   000024   ........     CALLA   #lcd_BIG_mid
+     46            LCD_print("          ", " ^______^ ", "          ", "          ");
+   \   000028   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   00002C   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   000030   3D40....     MOV.W   #`?<Constant " ^______^ ">`, R13
+   \   000034   3C40....     MOV.W   #`?<Constant "          ">`, R12
+   \   000038   ........     CALLA   #LCD_print
+     47            delay(SECOND_MS);
+   \   00003C   3C40E803     MOV.W   #0x3e8, R12
+   \   000040   0D43         MOV.W   #0x0, R13
+   \   000042   ........     CALLA   #delay
+     48            LCD_print("          ", " ^______- ", "          ", "          ");
+   \   000046   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   00004A   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   00004E   3D40....     MOV.W   #`?<Constant " ^______- ">`, R13
+   \   000052   3C40....     MOV.W   #`?<Constant "          ">`, R12
+   \   000056   ........     CALLA   #LCD_print
+     49            delay(QUART_SECOND_MS);
+   \   00005A   3C40C800     MOV.W   #0xc8, R12
+   \   00005E   0D43         MOV.W   #0x0, R13
+   \   000060   ........     CALLA   #delay
+     50            LCD_print("          ", " ^______^ ", "          ", "          ");
+   \   000064   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   000068   3E40....     MOV.W   #`?<Constant "          ">`, R14
+   \   00006C   3D40....     MOV.W   #`?<Constant " ^______^ ">`, R13
+   \   000070   3C40....     MOV.W   #`?<Constant "          ">`, R12
+   \   000074   ........     CALLA   #LCD_print
+     51            delay(SECOND_MS);
+   \   000078   3C40E803     MOV.W   #0x3e8, R12
+   \   00007C   0D43         MOV.W   #0x0, R13
+   \   00007E   ........     CALLA   #delay
+     52            P5OUT &= ~LCD_BACKLITE;
+   \   000082   F2C080004202 BIC.B   #0x80, &0x242
+     53            
+     54            lcd_4line();
+   \   000088   ........     CALLA   #lcd_4line
+     55            if(device_settings.user_name[CHAR1] == INVALID_PRESET); // have user print name (thumb to choose letter, right/left button to navigate)
+     56            LCD_print("  Hello   ", "  there   ", device_settings.user_name, "----------");
+   \   00008C   3F40....     MOV.W   #`?<Constant "----------">`, R15
+   \   000090   1E42....     MOV.W   &device_settings, R14
+   \   000094   3D40....     MOV.W   #`?<Constant "  there   ">`, R13
+   \   000098   3C40....     MOV.W   #`?<Constant "  Hello   ">`, R12
+   \   00009C   ........     CALLA   #LCD_print
+     57            delay(SECOND_MS);
+   \   0000A0   3C40E803     MOV.W   #0x3e8, R12
+   \   0000A4   0D43         MOV.W   #0x0, R13
+   \   0000A6   ........     CALLA   #delay
+     58            if(device_settings.wifi_ssid[CHAR1] == INVALID_PRESET); // have user print ssid (thumb to choose letter, right/left button to navigate)
+     59            LCD_print("You will  ", "connect to", device_settings.wifi_ssid, "----------");
+   \   0000AA   3F40....     MOV.W   #`?<Constant "----------">`, R15
+   \   0000AE   1E42....     MOV.W   &device_settings + 2, R14
+   \   0000B2   3D40....     MOV.W   #`?<Constant "connect to">`, R13
+   \   0000B6   3C40....     MOV.W   #`?<Constant "You will  ">`, R12
+   \   0000BA   ........     CALLA   #LCD_print
+     60            delay(SECOND_MS);
+   \   0000BE   3C40E803     MOV.W   #0x3e8, R12
+   \   0000C2   0D43         MOV.W   #0x0, R13
+   \   0000C4   ........     CALLA   #delay
+     61            if(*(device_settings.wifi_privacy_mode) == (uint8_t)INVALID_PRESET); // have user print mode (thumb to choose mode; right/left button to navigate)
+     62              if(*(device_settings.wifi_privacy_mode) == WPA_PERSONAL); // have user enter password if necessary
+     63              LCD_print("Network ", " password:", device_settings.wifi_ssid, "----------");
+   \   0000C8   3F40....     MOV.W   #`?<Constant "----------">`, R15
+   \   0000CC   1E42....     MOV.W   &device_settings + 2, R14
+   \   0000D0   3D40....     MOV.W   #`?<Constant " password:">`, R13
+   \   0000D4   3C40....     MOV.W   #`?<Constant "Network ">`, R12
+   \   0000D8   ........     CALLA   #LCD_print
+     64              delay(SECOND_MS);
+   \   0000DC   3C40E803     MOV.W   #0x3e8, R12
+   \   0000E0   0D43         MOV.W   #0x0, R13
+   \   0000E2   ........     CALLA   #delay
+     65            if(device_settings.wifi_ip_hostname[CHAR1] == INVALID_PRESET); // have user print hostname (thumb to choose letter, right/left button to navigate)
+     66            LCD_print("My name is", "   now:   ", device_settings.wifi_ip_hostname, "----------");
+   \   0000E6   3F40....     MOV.W   #`?<Constant "----------">`, R15
+   \   0000EA   1E42....     MOV.W   &device_settings + 8, R14
+   \   0000EE   3D40....     MOV.W   #`?<Constant "   now:   ">`, R13
+   \   0000F2   3C40....     MOV.W   #`?<Constant "My name is">`, R12
+   \   0000F6   ........     CALLA   #LCD_print
+     67            delay(SECOND_MS);
+   \   0000FA   3C40E803     MOV.W   #0x3e8, R12
+   \   0000FE   0D43         MOV.W   #0x0, R13
+   \   000100   ........     CALLA   #delay
+     68            if(*(device_settings.lcd_brightness) == (uint16_t)INVALID_PRESET);          // have user adjust LCD brightness (thumb to choose brightness level)
+     69            LCD_print(" That's a ", "  better  ", "lighting! ", "----------");
+   \   000104   3F40....     MOV.W   #`?<Constant "----------">`, R15
+   \   000108   3E40....     MOV.W   #`?<Constant "lighting! ">`, R14
+   \   00010C   3D40....     MOV.W   #`?<Constant "  better  ">`, R13
+   \   000110   3C40....     MOV.W   #`?<Constant " That\\'s a ">`, R12
+   \   000114   ........     CALLA   #LCD_print
+     70            delay(SECOND_MS);
+   \   000118   3C40E803     MOV.W   #0x3e8, R12
+   \   00011C   0D43         MOV.W   #0x0, R13
+   \   00011E   ........     CALLA   #delay
+     71            
+     72            lcd_BIG_mid();
+   \   000122   ........     CALLA   #lcd_BIG_mid
+     73            LCD_print("<<<<<<<<<<", " Let's go ", ">>>>>>>>>>", "          ");
+   \   000126   3F40....     MOV.W   #`?<Constant "          ">`, R15
+   \   00012A   3E40....     MOV.W   #`?<Constant ">>>>>>>>>>">`, R14
+   \   00012E   3D40....     MOV.W   #`?<Constant " Let\\'s go ">`, R13
+   \   000132   3C40....     MOV.W   #`?<Constant "<<<<<<<<<<">`, R12
+   \   000136   ........     CALLA   #LCD_print
+     74            delay(THREE_SECOND_MS);
+   \   00013A   3C40B80B     MOV.W   #0xbb8, R12
+   \   00013E   0D43         MOV.W   #0x0, R13
+   \   000140   ........     CALLA   #delay
+     75            lcd_4line();
+   \   000144   ........     BRA     #lcd_4line
+   \   000148                REQUIRE _A_PCOUT_L
+     76          }
+     77          
 
    \                                 In  segment CODE, align 2
-     63          void LCD_print(char first_line[COLUMN_NUM_COLUMNS], char second_line[COLUMN_NUM_COLUMNS], char third_line[COLUMN_NUM_COLUMNS], char fourth_line[COLUMN_NUM_COLUMNS]){
+     78          void LCD_print(char first_line[COLUMN_NUM_COLUMNS], char second_line[COLUMN_NUM_COLUMNS], char third_line[COLUMN_NUM_COLUMNS], char fourth_line[COLUMN_NUM_COLUMNS]){
    \                     LCD_print:
    \   000000   3B15         PUSHM.W #0x4, R11
    \   000002   0A4C         MOV.W   R12, R10
    \   000004   0B4D         MOV.W   R13, R11
    \   000006   084E         MOV.W   R14, R8
    \   000008   094F         MOV.W   R15, R9
-     64            strcpy(display_line[LINE1], first_line);
+     79            strcpy(display_line[LINE1], first_line);
    \   00000A   0D4A         MOV.W   R10, R13
    \   00000C   3C40....     MOV.W   #display_line, R12
    \   000010   ........     CALLA   #strcpy
-     65            update_string(display_line[LINE1], LINE1);
+     80            update_string(display_line[LINE1], LINE1);
    \   000014   0D43         MOV.W   #0x0, R13
    \   000016   ........     CALLA   #update_string
-     66            strcpy(display_line[LINE2], second_line);
+     81            strcpy(display_line[LINE2], second_line);
    \   00001A   0D4B         MOV.W   R11, R13
    \   00001C   3C40....     MOV.W   #display_line + 11, R12
    \   000020   ........     CALLA   #strcpy
-     67            update_string(display_line[LINE2], LINE2);
+     82            update_string(display_line[LINE2], LINE2);
    \   000024   1D43         MOV.W   #0x1, R13
    \   000026   3C40....     MOV.W   #display_line + 11, R12
    \   00002A   ........     CALLA   #update_string
-     68            strcpy(display_line[LINE3], third_line);
+     83            strcpy(display_line[LINE3], third_line);
    \   00002E   0D48         MOV.W   R8, R13
    \   000030   3C40....     MOV.W   #display_line + 22, R12
    \   000034   ........     CALLA   #strcpy
-     69            update_string(display_line[LINE3], LINE3);
+     84            update_string(display_line[LINE3], LINE3);
    \   000038   2D43         MOV.W   #0x2, R13
    \   00003A   3C40....     MOV.W   #display_line + 22, R12
    \   00003E   ........     CALLA   #update_string
-     70            strcpy(display_line[LINE4], fourth_line);
+     85            strcpy(display_line[LINE4], fourth_line);
    \   000042   0D49         MOV.W   R9, R13
    \   000044   3C40....     MOV.W   #display_line + 33, R12
    \   000048   ........     CALLA   #strcpy
-     71            update_string(display_line[LINE4], LINE4);
+     86            update_string(display_line[LINE4], LINE4);
    \   00004C   3D400300     MOV.W   #0x3, R13
    \   000050   3C40....     MOV.W   #display_line + 33, R12
    \   000054   ........     CALLA   #update_string
-     72            display_changed = true; 
+     87            display_changed = true; 
    \   000058   D243....     MOV.B   #0x1, &display_changed
-     73            update_display  = true;
+     88            update_display  = true;
    \   00005C   D243....     MOV.B   #0x1, &update_display
-     74            Display_Process();                     // Refresh LCD screen
+     89            Display_Process();                     // Refresh LCD screen
    \   000060   ........     CALLA   #Display_Process
-     75          }
+     90          }
    \   000064   3817         POPM.W  #0x4, R11
    \   000066   1001         RETA
-     76          
+     91          
 
    \                                 In  segment CODE, align 2
-     77          void hex_to_dec(char* output_line, uint32_t hexadecimal){
+     92          void hex_to_dec(char* output_line, uint32_t hexadecimal){
    \                     hex_to_dec:
    \   000000   5B15         PUSHM.W #0x6, R11
-     78            uint8_t HThousand = COUNTER_RESET;      // Counts hundred thousands
+     93            uint8_t HThousand = COUNTER_RESET;      // Counts hundred thousands
    \   000002   4D43         MOV.B   #0x0, R13
-     79            uint8_t TThousand = COUNTER_RESET;      // Counts ten thousands
+     94            uint8_t TThousand = COUNTER_RESET;      // Counts ten thousands
    \   000004   4A43         MOV.B   #0x0, R10
-     80            uint8_t Thousand  = COUNTER_RESET;       // Counts thousands
+     95            uint8_t Thousand  = COUNTER_RESET;       // Counts thousands
    \   000006   4643         MOV.B   #0x0, R6
-     81            uint8_t Hundred   = COUNTER_RESET;        // Counts hundreds
+     96            uint8_t Hundred   = COUNTER_RESET;        // Counts hundreds
    \   000008   4B43         MOV.B   #0x0, R11
-     82            uint8_t Ten       = COUNTER_RESET;            // Counts tens
+     97            uint8_t Ten       = COUNTER_RESET;            // Counts tens
    \   00000A   4843         MOV.B   #0x0, R8
-     83            uint8_t One       = COUNTER_RESET;            // Counts ones
+     98            uint8_t One       = COUNTER_RESET;            // Counts ones
    \   00000C   4943         MOV.B   #0x0, R9
-     84            
-     85            while(hexadecimal >= HTHOUSAND)
+     99            
+    100            while(hexadecimal >= HTHOUSAND)
    \                     ??hex_to_dec_0:
    \   00000E   1F93         CMP.W   #0x1, R15
    \   000010   0A28         JNC     ??hex_to_dec_1
    \   000012   0320         JNE     ??hex_to_dec_6
    \   000014   3E90A086     CMP.W   #0x86a0, R14
    \   000018   0628         JNC     ??hex_to_dec_1
-     86            {
-     87              HThousand++;
+    101            {
+    102              HThousand++;
    \                     ??hex_to_dec_6:
    \   00001A   5D53         ADD.B   #0x1, R13
-     88              hexadecimal -= HTHOUSAND;
+    103              hexadecimal -= HTHOUSAND;
    \   00001C   3E506079     ADD.W   #0x7960, R14
    \   000020   3F60FEFF     ADDC.W  #0xfffe, R15
    \   000024   F43F         JMP     ??hex_to_dec_0
-     89            }
-     90            while(hexadecimal >= TTHOUSAND)
+    104            }
+    105            while(hexadecimal >= TTHOUSAND)
    \                     ??hex_to_dec_1:
    \   000026   0F93         CMP.W   #0x0, R15
    \   000028   0928         JNC     ??hex_to_dec_2
    \   00002A   0320         JNE     ??hex_to_dec_7
    \   00002C   3E901027     CMP.W   #0x2710, R14
    \   000030   0528         JNC     ??hex_to_dec_2
-     91            {
-     92              TThousand++;
+    106            {
+    107              TThousand++;
    \                     ??hex_to_dec_7:
    \   000032   5A53         ADD.B   #0x1, R10
-     93              hexadecimal -= TTHOUSAND;
+    108              hexadecimal -= TTHOUSAND;
    \   000034   3E50F0D8     ADD.W   #0xd8f0, R14
    \   000038   3F63         ADDC.W  #0xffff, R15
    \   00003A   F53F         JMP     ??hex_to_dec_1
-     94            }
-     95            while(hexadecimal >= THOUSAND)
+    109            }
+    110            while(hexadecimal >= THOUSAND)
    \                     ??hex_to_dec_2:
    \   00003C   0F93         CMP.W   #0x0, R15
    \   00003E   0928         JNC     ??hex_to_dec_3
    \   000040   0320         JNE     ??hex_to_dec_8
    \   000042   3E90E803     CMP.W   #0x3e8, R14
    \   000046   0528         JNC     ??hex_to_dec_3
-     96            {
-     97              Thousand++;
+    111            {
+    112              Thousand++;
    \                     ??hex_to_dec_8:
    \   000048   5653         ADD.B   #0x1, R6
-     98              hexadecimal -= THOUSAND;
+    113              hexadecimal -= THOUSAND;
    \   00004A   3E5018FC     ADD.W   #0xfc18, R14
    \   00004E   3F63         ADDC.W  #0xffff, R15
    \   000050   F53F         JMP     ??hex_to_dec_2
-     99            }
-    100            while(hexadecimal >= HUNDRED)
+    114            }
+    115            while(hexadecimal >= HUNDRED)
    \                     ??hex_to_dec_3:
    \   000052   0F93         CMP.W   #0x0, R15
    \   000054   0928         JNC     ??hex_to_dec_4
    \   000056   0320         JNE     ??hex_to_dec_9
    \   000058   3E906400     CMP.W   #0x64, R14
    \   00005C   0528         JNC     ??hex_to_dec_4
-    101            {
-    102              Hundred++;
+    116            {
+    117              Hundred++;
    \                     ??hex_to_dec_9:
    \   00005E   5B53         ADD.B   #0x1, R11
-    103              hexadecimal -= HUNDRED;
+    118              hexadecimal -= HUNDRED;
    \   000060   3E509CFF     ADD.W   #0xff9c, R14
    \   000064   3F63         ADDC.W  #0xffff, R15
    \   000066   F53F         JMP     ??hex_to_dec_3
-    104            }
-    105            while(hexadecimal >= TEN)
+    119            }
+    120            while(hexadecimal >= TEN)
    \                     ??hex_to_dec_4:
    \   000068   0F93         CMP.W   #0x0, R15
    \   00006A   0928         JNC     ??hex_to_dec_5
    \   00006C   0320         JNE     ??hex_to_dec_10
    \   00006E   3E900A00     CMP.W   #0xa, R14
    \   000072   0528         JNC     ??hex_to_dec_5
-    106            {
-    107              Ten++;
+    121            {
+    122              Ten++;
    \                     ??hex_to_dec_10:
    \   000074   5853         ADD.B   #0x1, R8
-    108              hexadecimal -= TEN;
+    123              hexadecimal -= TEN;
    \   000076   3E50F6FF     ADD.W   #0xfff6, R14
    \   00007A   3F63         ADDC.W  #0xffff, R15
    \   00007C   F53F         JMP     ??hex_to_dec_4
-    109            }
-    110            while(hexadecimal >= ONE)
+    124            }
+    125            while(hexadecimal >= ONE)
    \                     ??hex_to_dec_5:
    \   00007E   074E         MOV.W   R14, R7
    \   000080   E70F         ADDA    R15, R7
    \   000082   0424         JEQ     ??hex_to_dec_11
-    111            {
-    112              One++;
+    126            {
+    127              One++;
    \   000084   5953         ADD.B   #0x1, R9
-    113              hexadecimal--;
+    128              hexadecimal--;
    \   000086   3E53         ADD.W   #0xffff, R14
    \   000088   3F63         ADDC.W  #0xffff, R15
    \   00008A   F93F         JMP     ??hex_to_dec_5
-    114            }
-    115            output_line[COLUMN1] = HThousand + ASCII_NUM_SHIFT;
+    129            }
+    130            output_line[COLUMN1] = HThousand + ASCII_NUM_SHIFT;
    \                     ??hex_to_dec_11:
    \   00008C   474D         MOV.B   R13, R7
    \   00008E   77503000     ADD.B   #0x30, R7
    \   000092   CC470000     MOV.B   R7, 0(R12)
-    116            output_line[COLUMN2] = TThousand + ASCII_NUM_SHIFT;
+    131            output_line[COLUMN2] = TThousand + ASCII_NUM_SHIFT;
    \   000096   474A         MOV.B   R10, R7
    \   000098   77503000     ADD.B   #0x30, R7
    \   00009C   CC470100     MOV.B   R7, 0x1(R12)
-    117            output_line[COLUMN3] = Thousand + ASCII_NUM_SHIFT;
+    132            output_line[COLUMN3] = Thousand + ASCII_NUM_SHIFT;
    \   0000A0   4746         MOV.B   R6, R7
    \   0000A2   77503000     ADD.B   #0x30, R7
    \   0000A6   CC470200     MOV.B   R7, 0x2(R12)
-    118            output_line[COLUMN4] = Hundred  + ASCII_NUM_SHIFT;
+    133            output_line[COLUMN4] = Hundred  + ASCII_NUM_SHIFT;
    \   0000AA   474B         MOV.B   R11, R7
    \   0000AC   77503000     ADD.B   #0x30, R7
    \   0000B0   CC470300     MOV.B   R7, 0x3(R12)
-    119            output_line[COLUMN5] = Ten      + ASCII_NUM_SHIFT;
+    134            output_line[COLUMN5] = Ten      + ASCII_NUM_SHIFT;
    \   0000B4   4748         MOV.B   R8, R7
    \   0000B6   77503000     ADD.B   #0x30, R7
    \   0000BA   CC470400     MOV.B   R7, 0x4(R12)
-    120            output_line[COLUMN6] = One      + ASCII_NUM_SHIFT;
+    135            output_line[COLUMN6] = One      + ASCII_NUM_SHIFT;
    \   0000BE   4749         MOV.B   R9, R7
    \   0000C0   77503000     ADD.B   #0x30, R7
    \   0000C4   CC470500     MOV.B   R7, 0x5(R12)
-    121          }
+    136          }
    \   0000C8   5617         POPM.W  #0x6, R11
    \   0000CA   1001         RETA
-    122          
-
-   \                                 In  segment CODE, align 2
-    123          void print_baud_rate(){
-   \                     print_baud_rate:
-   \   000000   1B15         PUSHM.W #0x2, R11
-    124            uint32_t baud_rate;
-    125            
-    126            switch(menu_counter)
-   \   000002   5E42....     MOV.B   &menu_counter, R14
-   \   000006   8E11         SXT     R14
-   \   000008   3EF3         AND.W   #0xffff, R14
-   \   00000A   4E83         SUB.B   #0x0, R14
-   \   00000C   0324         JEQ     ??print_baud_rate_1
-   \   00000E   5E83         SUB.B   #0x1, R14
-   \   000010   1424         JEQ     ??print_baud_rate_2
-   \   000012   273C         JMP     ??print_baud_rate_0
-    127            {           
-    128            case OPTION1:
-    129              baud_rate = LOWER_BAUD;
-   \                     ??print_baud_rate_1:
-   \   000014   3A4000C2     MOV.W   #0xc200, R10
-   \   000018   1B43         MOV.W   #0x1, R11
-    130              hex_to_dec(word3, baud_rate);
-   \   00001A   0E4A         MOV.W   R10, R14
-   \   00001C   0F4B         MOV.W   R11, R15
-   \   00001E   1C42....     MOV.W   &word3, R12
-   \   000022   ........     CALLA   #hex_to_dec
-    131              // Adjust baud rate
-    132              UCA3CTLW0 |= UCSWRST;               // Set software reset enable
-   \   000026   92D32006     BIS.W   #0x1, &0x620
-    133              UCA3BRW = UCA_BRW_115;
-   \   00002A   A2422606     MOV.W   #0x4, &0x626
-    134              UCA3MCTLW  = UCA_MCTL_115;
-   \   00002E   B24051552806 MOV.W   #0x5551, &0x628
-    135              UCA3CTL1  &= ~UCSWRST;              // Release from software reset
-   \   000034   D2C32006     BIC.B   #0x1, &0x620
-    136              break;
-   \   000038   143C         JMP     ??print_baud_rate_0
-    137            case PENULT_OPTION:
-    138              baud_rate = HIGHER_BAUD;
-   \                     ??print_baud_rate_2:
-   \   00003A   3A400008     MOV.W   #0x800, R10
-   \   00003E   3B400700     MOV.W   #0x7, R11
-    139              hex_to_dec(word3, baud_rate);
-   \   000042   0E4A         MOV.W   R10, R14
-   \   000044   0F4B         MOV.W   R11, R15
-   \   000046   1C42....     MOV.W   &word3, R12
-   \   00004A   ........     CALLA   #hex_to_dec
-    140              // Adjust baud rate
-    141              UCA3CTLW0 |= UCSWRST;               // Set software reset enable
-   \   00004E   92D32006     BIS.W   #0x1, &0x620
-    142              UCA3BRW = UCA_BRW_460;
-   \   000052   B24011002606 MOV.W   #0x11, &0x626
-    143              UCA3MCTLW = UCA_MCTL_460;
-   \   000058   B240104A2806 MOV.W   #0x4a10, &0x628
-    144              UCA3CTL1  &= ~UCSWRST;              // Release from software reset
-   \   00005E   D2C32006     BIC.B   #0x1, &0x620
-    145              break;
-    146            }
-    147            //word2 = "          ";
-    148            LCD_print(word1,word2, word3,word4);
-   \                     ??print_baud_rate_0:
-   \   000062   1F42....     MOV.W   &word4, R15
-   \   000066   1E42....     MOV.W   &word3, R14
-   \   00006A   1D42....     MOV.W   &word2, R13
-   \   00006E   1C42....     MOV.W   &word1, R12
-   \   000072   ........     CALLA   #LCD_print
-    149          }
-   \   000076   1A17         POPM.W  #0x2, R11
-   \   000078   1001         RETA
-   \   00007A                REQUIRE _A_UCA3CTLW0_L
-   \   00007A                REQUIRE _A_UCA3BRW_L
-   \   00007A                REQUIRE _A_UCA3MCTLW_L
 
    \                                 In  segment DATA16_ID, align 2, align-sorted
    \                     `?<Initializer for word1>`:
@@ -616,13 +594,9 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\men
       4   init_Menu
         4   -> LCD_print
         4   -> delay
-        4   -> dim_lcd
         0   -> lcd_4line
         4   -> lcd_4line
         4   -> lcd_BIG_mid
-      8   print_baud_rate
-        8   -> LCD_print
-        8   -> hex_to_dec
 
 
    Segment part sizes:
@@ -653,30 +627,34 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\men
        2  ?<Initializer for word3>
        2  ?<Initializer for word4>
      104  LCD_print
-       2  _A_UCA3BRW_L
-       2  _A_UCA3CTLW0_L
-       2  _A_UCA3MCTLW_L
+       2  _A_PCOUT_L
+       1  changed_options
+       1  current_menu_option
+       1  current_sub_menu_option
       12  device_settings
      204  hex_to_dec
-     284  init_Menu
+     328  init_Menu
        1  menu_counter
-     122  print_baud_rate
+       1  prev_menu_frame
+       1  prev_menu_option
+       1  prev_sub_menu_option
+       1  reset_ADC_Thumb_min
        2  word1
        2  word2
        2  word3
        2  word4
 
  
- 714 bytes in segment CODE
-   6 bytes in segment DATA16_AN
+ 636 bytes in segment CODE
+   2 bytes in segment DATA16_AN
  196 bytes in segment DATA16_C
   20 bytes in segment DATA16_I
   20 bytes in segment DATA16_ID
-   1 byte  in segment DATA16_Z
+   8 bytes in segment DATA16_Z
  
- 714 bytes of CODE  memory
+ 636 bytes of CODE  memory
  216 bytes of CONST memory
-  21 bytes of DATA  memory (+ 6 bytes shared)
+  28 bytes of DATA  memory (+ 2 bytes shared)
 
 Errors: none
 Warnings: none

@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           30/Apr/2018  02:33:42
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           30/Apr/2018  02:52:50
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_10\timerA4.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EW3DD3.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EWC2E9.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_10\timerA4.c" -lC
 #        "C:\Users\shmes\Desktop\Escritorio
@@ -86,8 +86,8 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\tim
      17          
      18            TA4CTL  = TASSEL__ACLK;               // Select SMCLK for source
    \   000000   B2400001C007 MOV.W   #0x100, &0x7c0
-     19            TA4CTL |= (TACLR | MC_1 | ID_1);      // AClock source on up mode at 32 KHz
-   \   000006   B2D05400C007 BIS.W   #0x54, &0x7c0
+     19            TA4CTL |= (TACLR | MC_2 | ID_1);      // AClock source on up mode at 32 KHz
+   \   000006   B2D06400C007 BIS.W   #0x64, &0x7c0
      20            TA4CTL |= TAIDEX__1; 
    \   00000C   9242C007C007 MOV.W   &0x7c0, &0x7c0
      21            TA4CTL &= ~(TAIFG);                    // Clear Timer A1 interrupt flag and interrupt enable

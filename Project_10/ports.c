@@ -11,8 +11,7 @@
 #include "ports.h"
 
 volatile uint8_t debounced;
-uint8_t shape_routine_begin;
-volatile uint8_t connection_lost = false;
+volatile uint8_t connection_lost;
 
 void init_Port1(void){  // Initlizes all pins on Port 1
 //=========================================================================
@@ -281,10 +280,10 @@ void init_Port5(void) { // Initializes all pins on Port 5
   P5IES  |= BUTTON1;                    // Interrupts occur on Hi/Lo edge (press)
   P5IFG  &= ~BUTTON1;                   // Button 1 IFG cleared
   // P5_7
-  P5SEL0 &= ~LCD_BACKLITE;              // Set to Timer A4.1
-  P5SEL1 |= LCD_BACKLITE;               // Set to Timer A4.1
+  P5SEL0 &= ~LCD_BACKLITE;              // Set to GP I/O
+  P5SEL1 &= ~LCD_BACKLITE;              // Set to GP I/O
   P5OUT  &= ~LCD_BACKLITE;              // Set out value Low
-  P5DIR  |= LCD_BACKLITE;               // Set to Timer A4.1
+  P5DIR  |= LCD_BACKLITE;               // Set to output
 }
 ////////////////////////////////////////////////////////////////////////
 void init_Port6(void) { // Initializes all pins on Port 6
@@ -512,16 +511,15 @@ __interrupt void Port_3(void){
 __interrupt void Port_5(void){
   switch(P5IFG & PORT5_INT_MASK)
   {
-  case P5IFG_BUTTON_1: // Left Button
+  case P5IFG_BUTTON_1: // Right Button
     if(debounced)                     // Has the switch had time to readjust?
     {
-      P3OUT &= ~(IOT_RESET);               // Disable IOT_RESET pin for soft reset
+      P3OUT &= ~(IOT_RESET);              // Disable IOT_RESET pin for soft reset
       TA0CCTL1 |= CCIE;                   // Enable debounce timer
     }
     break;
-  case P5IFG_BUTTON_2: // Right Button
+  case P5IFG_BUTTON_2: // Left Button
     {
-      
     }
   }
   P5IFG = COUNTER_RESET;
