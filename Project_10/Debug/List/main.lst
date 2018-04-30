@@ -1,0 +1,162 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           30/Apr/2018  00:08:41
+# Copyright 1996-2017 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_10\main.c
+#    Command line  =  
+#        -f C:\Users\shmes\AppData\Local\Temp\EW6A96.tmp
+#        ("C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_10\main.c" -lC
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_10\Debug\List" -o
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_10\Debug\Obj" --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5994__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  Spanish_USA.1252
+#    List file     =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_10\Debug\List\main.lst
+#    Object file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_10\Debug\Obj\main.r43
+#
+###############################################################################
+
+C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\main.c
+      1          //------------------------------------------------------------------------------
+      2          //  File name: main.c
+      3          //  Description: This file contains the MSP430 Car's Operating System
+      4          //
+      5          //
+      6          //  Sam Messick
+      7          //  Jan 2018
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          #include "main.h"
+
+   \                                 In  segment DATA16_AN, at 0x130
+   \   union <unnamed> _A_PM5CTL0_L
+   \                     _A_PM5CTL0_L:
+   \   000000                DS8 2
+     12          
+
+   \                                 In  segment CODE, align 2
+     13          void main(void){
+   \                     main:
+     14          //------------------------------------------------------------------------------
+     15          // Main Program
+     16          // This is the main initialization of the car. Execution of code starts here.
+     17          // The operating system is Back Ground Fore Ground... but mainly Fore Ground lol
+     18          //
+     19          //------------------------------------------------------------------------------
+     20            
+     21            init_Ports();                        
+   \   000000   ........     CALLA   #init_Ports
+     22            ACTIVATE_PREVIOUS_PORT_SETTINGS;
+   \   000004   92C33001     BIC.W   #0x1, &0x130
+     23            
+     24            init_Clocks();                       
+   \   000008   ........     CALLA   #init_Clocks
+     25            init_Conditions();                   
+   \   00000C   ........     CALLA   #init_Conditions
+     26            Init_LCD();              // XXXXXXXXXXXXXXXXXX To fix: move to lowercase once source obtained XXXXXXXXXXXXXXXXXXXX                          
+   \   000010   ........     CALLA   #Init_LCD
+     27            init_Timers();                       
+   \   000014   ........     CALLA   #init_Timers
+     28            init_PID();
+   \   000018   ........     CALLA   #init_PID
+     29            init_ADC();
+   \   00001C   ........     CALLA   #init_ADC
+     30            init_Serial();
+   \   000020   ........     CALLA   #init_Serial
+     31            init_IoT();
+   \   000024   ........     CALLA   #init_IoT
+     32          
+     33          // Perform user-controlled initialization
+     34            
+     35            
+     36            //enable_display_update();
+     37          
+     38            // Loop infinitely through transmitting and receiving messages
+     39            for(;;)
+     40            {
+     41              
+     42              // Processing for IOT commands
+     43              // assume held in Main_Char_Rx[]
+     44              if(connection_lost)
+   \                     ??main_0:
+   \   000028   C293....     CMP.B   #0x0, &connection_lost
+   \   00002C   0224         JEQ     ??main_1
+     45                init_IoT();                            // Soft Reset IoT module and provide new IP address
+   \   00002E   ........     CALLA   #init_IoT
+     46              if(IOT_STATUS(AUTONOMOUS))
+   \                     ??main_1:
+   \   000032   C293....     CMP.B   #0x0, &iot_status_reg
+   \   000036   0434         JGE     ??main_2
+     47              {
+     48                update_ir_reading();
+   \   000038   ........     CALLA   #update_ir_reading
+     49                pid_udpate_left();                     // Update wheel speeds during autonomous driving
+   \   00003C   ........     CALLA   #pid_udpate_left
+     50              }
+     51              check_for_input();                       // Read in updates and commands from IoT module
+   \                     ??main_2:
+   \   000040   ........     CALLA   #check_for_input
+   \   000044   F13F         JMP     ??main_0
+   \   000046   0343         NOP
+   \   000048                REQUIRE _A_PM5CTL0_L
+     52            }
+     53          }
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   main
+        4   -> Init_LCD
+        4   -> check_for_input
+        4   -> init_ADC
+        4   -> init_Clocks
+        4   -> init_Conditions
+        4   -> init_IoT
+        4   -> init_PID
+        4   -> init_Ports
+        4   -> init_Serial
+        4   -> init_Timers
+        4   -> pid_udpate_left
+        4   -> update_ir_reading
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  _A_PM5CTL0_L
+      72  main
+
+ 
+ 72 bytes in segment CODE
+  2 bytes in segment DATA16_AN
+ 
+ 72 bytes of CODE memory
+  0 bytes of DATA memory (+ 2 bytes shared)
+
+Errors: none
+Warnings: none

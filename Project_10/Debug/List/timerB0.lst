@@ -1,0 +1,167 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           30/Apr/2018  00:07:50
+# Copyright 1996-2017 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_10\timerB0.c
+#    Command line  =  
+#        -f C:\Users\shmes\AppData\Local\Temp\EWA4E9.tmp
+#        ("C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_10\timerB0.c" -lC
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_10\Debug\List" -o
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_10\Debug\Obj" --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5994__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  Spanish_USA.1252
+#    List file     =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_10\Debug\List\timerB0.lst
+#    Object file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_10\Debug\Obj\timerB0.r43
+#
+###############################################################################
+
+C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\timerB0.c
+      1          //===============================================================
+      2          //  File Name: timerB0.c
+      3          //  Description: This file contains the functions needed for PWM
+      4          //                    operation with the left and right motors
+      5          //
+      6          //  Author: Sam Messick
+      7          //  Date Feb. 2018
+      8          //  Compiler Build with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      9          //===============================================================
+     10          
+     11          #include "timerB0.h"
+
+   \                                 In  segment DATA16_AN, at 0x3c0
+   \   union <unnamed> _A_TB0CTL_L
+   \                     _A_TB0CTL_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3c8
+   \   union <unnamed> _A_TB0CCTL3_L
+   \                     _A_TB0CCTL3_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3ca
+   \   union <unnamed> _A_TB0CCTL4_L
+   \                     _A_TB0CCTL4_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3cc
+   \   union <unnamed> _A_TB0CCTL5_L
+   \                     _A_TB0CCTL5_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3ce
+   \   union <unnamed> _A_TB0CCTL6_L
+   \                     _A_TB0CCTL6_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3d8
+   \   union <unnamed> _A_TB0CCR3_L
+   \                     _A_TB0CCR3_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3da
+   \   union <unnamed> _A_TB0CCR4_L
+   \                     _A_TB0CCR4_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3dc
+   \   union <unnamed> _A_TB0CCR5_L
+   \                     _A_TB0CCR5_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3de
+   \   union <unnamed> _A_TB0CCR6_L
+   \                     _A_TB0CCR6_L:
+   \   000000                DS8 2
+     12          // Initialize motor PWM registers
+
+   \                                 In  segment CODE, align 2
+     13          void init_Timer_B0(void){
+   \                     init_Timer_B0:
+     14            TB0CTL    = TASSEL__ACLK;            // Select SMCLK for source
+   \   000000   B2400001C003 MOV.W   #0x100, &0x3c0
+     15            TB0CTL   |= (MC_2|TBCLR);             // Continuous mode; clear Timer B0 register ]
+   \   000006   B2D02400C003 BIS.W   #0x24, &0x3c0
+     16            
+     17          // Set all motor pins to Reset/Set mode, 0% duty cycle
+     18            TB0CCTL3 |= OUTMOD_7;                 //  Reset/Set mode
+   \   00000C   B2D0E000C803 BIS.W   #0xe0, &0x3c8
+     19            TB0CCTL4 |= OUTMOD_7;                 
+   \   000012   B2D0E000CA03 BIS.W   #0xe0, &0x3ca
+     20            TB0CCTL5 |= OUTMOD_7;                 
+   \   000018   B2D0E000CC03 BIS.W   #0xe0, &0x3cc
+     21            TB0CCTL6 |= OUTMOD_7;
+   \   00001E   B2D0E000CE03 BIS.W   #0xe0, &0x3ce
+     22            TB0CCR3   = MOTOR_OFF;                //  Begin with motor off
+   \   000024   8243D803     MOV.W   #0x0, &0x3d8
+     23            TB0CCR4   = MOTOR_OFF;                
+   \   000028   8243DA03     MOV.W   #0x0, &0x3da
+     24            TB0CCR5   = MOTOR_OFF;                
+   \   00002C   8243DC03     MOV.W   #0x0, &0x3dc
+     25            TB0CCR6   = MOTOR_OFF;    
+   \   000030   8243DE03     MOV.W   #0x0, &0x3de
+     26          }  
+   \   000034   1001         RETA
+   \   000036                REQUIRE _A_TB0CTL_L
+   \   000036                REQUIRE _A_TB0CCTL3_L
+   \   000036                REQUIRE _A_TB0CCTL4_L
+   \   000036                REQUIRE _A_TB0CCTL5_L
+   \   000036                REQUIRE _A_TB0CCTL6_L
+   \   000036                REQUIRE _A_TB0CCR3_L
+   \   000036                REQUIRE _A_TB0CCR4_L
+   \   000036                REQUIRE _A_TB0CCR5_L
+   \   000036                REQUIRE _A_TB0CCR6_L
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   init_Timer_B0
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  _A_TB0CCR3_L
+       2  _A_TB0CCR4_L
+       2  _A_TB0CCR5_L
+       2  _A_TB0CCR6_L
+       2  _A_TB0CCTL3_L
+       2  _A_TB0CCTL4_L
+       2  _A_TB0CCTL5_L
+       2  _A_TB0CCTL6_L
+       2  _A_TB0CTL_L
+      54  init_Timer_B0
+
+ 
+ 54 bytes in segment CODE
+ 18 bytes in segment DATA16_AN
+ 
+ 54 bytes of CODE memory
+  0 bytes of DATA memory (+ 18 bytes shared)
+
+Errors: none
+Warnings: none

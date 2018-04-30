@@ -1,0 +1,446 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           30/Apr/2018  00:07:50
+# Copyright 1996-2017 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_10\shapes_menu.c
+#    Command line  =  
+#        -f C:\Users\shmes\AppData\Local\Temp\EWA36D.tmp
+#        ("C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_10\shapes_menu.c" -lC
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_10\Debug\List" -o
+#        "C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_10\Debug\Obj" --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5994__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  Spanish_USA.1252
+#    List file     =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_10\Debug\List\shapes_menu.lst
+#    Object file   =  
+#        C:\Users\shmes\Desktop\Escritorio
+#        Personal\Escuela\ECE\306\ECE306\Project_10\Debug\Obj\shapes_menu.r43
+#
+###############################################################################
+
+C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\shapes_menu.c
+      1          //===============================================================
+      2          //  File Name: shapes_menu.c
+      3          //  Description: This file contains the Initialization of all
+      4          //                    display values, and LCD menu functions
+      5          //
+      6          //  Author: Sam Messick
+      7          //  Date Feb. 2018
+      8          //  Compiler Build with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      9          //===============================================================
+     10          
+     11          #include "shapes_menu.h"
+
+   \                                 In  segment DATA16_AN, at 0x812
+   \   union <unnamed> _A_ADC12IER0_L
+   \                     _A_ADC12IER0_L:
+   \   000000                DS8 2
+     12          
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     13          int8_t menu_counter;
+   \                     menu_counter:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_I, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     14          char* word1 = "          ";
+   \                     word1:
+   \   000000                DS8 2
+   \   000002                REQUIRE `?<Initializer for word1>`
+
+   \                                 In  segment DATA16_I, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     15          char* word2 = "          ";
+   \                     word2:
+   \   000000                DS8 2
+   \   000002                REQUIRE `?<Initializer for word2>`
+
+   \                                 In  segment DATA16_I, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     16          char* word3 = "          ";
+   \                     word3:
+   \   000000                DS8 2
+   \   000002                REQUIRE `?<Initializer for word3>`
+
+   \                                 In  segment DATA16_I, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     17          char* word4 = "          ";
+   \                     word4:
+   \   000000                DS8 2
+   \   000002                REQUIRE `?<Initializer for word4>`
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     18          uint8_t last_dir = GOING_RIGHT;
+   \                     last_dir:
+   \   000000                DS8 1
+   \   000001                REQUIRE `?<Initializer for last_dir>`
+     19          
+
+   \                                 In  segment CODE, align 2
+     20          void print_detector_values(void)
+   \                     print_detector_values:
+     21          {
+     22            if(ADC_Left_Detector >= IR_ACTIVE_READING)
+   \   000000   B2901405.... CMP.W   #0x514, &ADC_Left_Detector
+   \   000006   1728         JNC     ??print_detector_values_1
+     23              if(ADC_Right_Detector >= IR_ACTIVE_READING)
+   \   000008   B2901405.... CMP.W   #0x514, &ADC_Right_Detector
+   \   00000E   0928         JNC     ??print_detector_values_2
+     24              {
+     25                Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
+   \   000010   7C40FA00     MOV.B   #0xfa, R12
+   \   000014   ........     CALLA   #Left_Motor_ON_FORWARD
+     26                Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
+   \   000018   7C40B400     MOV.B   #0xb4, R12
+   \   00001C   ........     CALLA   #Right_Motor_ON_FORWARD
+   \   000020   2A3C         JMP     ??print_detector_values_0
+     27              }
+     28              else
+     29              {
+     30                Left_Motor_ON_FORWARD(LEFT_R_SEARCH_SPEED);
+   \                     ??print_detector_values_2:
+   \   000022   7C403C00     MOV.B   #0x3c, R12
+   \   000026   ........     CALLA   #Left_Motor_ON_FORWARD
+     31                Right_Motor_ON_FORWARD(RIGHT_R_SEARCH_SPEED);
+   \   00002A   4C43         MOV.B   #0x0, R12
+   \   00002C   ........     CALLA   #Right_Motor_ON_FORWARD
+     32                last_dir = GOING_RIGHT;
+   \   000030   D243....     MOV.B   #0x1, &last_dir
+   \   000034   203C         JMP     ??print_detector_values_0
+     33              }
+     34            else 
+     35              if(ADC_Right_Detector >= IR_ACTIVE_READING)
+   \                     ??print_detector_values_1:
+   \   000036   B2901405.... CMP.W   #0x514, &ADC_Right_Detector
+   \   00003C   0A28         JNC     ??print_detector_values_3
+     36              {
+     37                Left_Motor_ON_FORWARD(LEFT_L_SEARCH_SPEED);
+   \   00003E   4C43         MOV.B   #0x0, R12
+   \   000040   ........     CALLA   #Left_Motor_ON_FORWARD
+     38                Right_Motor_ON_FORWARD(RIGHT_L_SEARCH_SPEED);
+   \   000044   7C402800     MOV.B   #0x28, R12
+   \   000048   ........     CALLA   #Right_Motor_ON_FORWARD
+     39                last_dir = GOING_LEFT;
+   \   00004C   C243....     MOV.B   #0x0, &last_dir
+   \   000050   123C         JMP     ??print_detector_values_0
+     40              }
+     41              else 
+     42                if(last_dir == GOING_LEFT)
+   \                     ??print_detector_values_3:
+   \   000052   C293....     CMP.B   #0x0, &last_dir
+   \   000056   0820         JNE     ??print_detector_values_4
+     43                {
+     44                  Left_Motor_ON_FORWARD(LEFT_R_SEARCH_SPEED);
+   \   000058   7C403C00     MOV.B   #0x3c, R12
+   \   00005C   ........     CALLA   #Left_Motor_ON_FORWARD
+     45                  Right_Motor_ON_FORWARD(RIGHT_R_SEARCH_SPEED);
+   \   000060   4C43         MOV.B   #0x0, R12
+   \   000062   ........     CALLA   #Right_Motor_ON_FORWARD
+   \   000066   073C         JMP     ??print_detector_values_0
+     46                }
+     47                else
+     48                {
+     49                  Left_Motor_ON_FORWARD(LEFT_L_SEARCH_SPEED);
+   \                     ??print_detector_values_4:
+   \   000068   4C43         MOV.B   #0x0, R12
+   \   00006A   ........     CALLA   #Left_Motor_ON_FORWARD
+     50                  Right_Motor_ON_FORWARD(RIGHT_L_SEARCH_SPEED);
+   \   00006E   7C402800     MOV.B   #0x28, R12
+   \   000072   ........     CALLA   #Right_Motor_ON_FORWARD
+     51                }
+     52            ADC12IER0  |= (ADC12IE2     | // Enable interrupts for new sample results
+     53                           ADC12IE4     |
+     54                           ADC12IE5);
+   \                     ??print_detector_values_0:
+   \   000076   B2D034001208 BIS.W   #0x34, &0x812
+     55          }
+   \   00007C   1001         RETA
+   \   00007E                REQUIRE _A_ADC12IER0_L
+     56          
+
+   \                                 In  segment CODE, align 2
+     57          void LCD_print(char first_line[COLUMN_NUM_COLUMNS], char second_line[COLUMN_NUM_COLUMNS], char third_line[COLUMN_NUM_COLUMNS], char fourth_line[COLUMN_NUM_COLUMNS]){
+   \                     LCD_print:
+   \   000000   3B15         PUSHM.W #0x4, R11
+   \   000002   0A4C         MOV.W   R12, R10
+   \   000004   0B4D         MOV.W   R13, R11
+   \   000006   084E         MOV.W   R14, R8
+   \   000008   094F         MOV.W   R15, R9
+     58            strcpy(display_line[LINE1], first_line);
+   \   00000A   0D4A         MOV.W   R10, R13
+   \   00000C   3C40....     MOV.W   #display_line, R12
+   \   000010   ........     CALLA   #strcpy
+     59            update_string(display_line[LINE1], LINE1);
+   \   000014   0D43         MOV.W   #0x0, R13
+   \   000016   ........     CALLA   #update_string
+     60            strcpy(display_line[LINE2], second_line);
+   \   00001A   0D4B         MOV.W   R11, R13
+   \   00001C   3C40....     MOV.W   #display_line + 11, R12
+   \   000020   ........     CALLA   #strcpy
+     61            update_string(display_line[LINE2], LINE2);
+   \   000024   1D43         MOV.W   #0x1, R13
+   \   000026   3C40....     MOV.W   #display_line + 11, R12
+   \   00002A   ........     CALLA   #update_string
+     62            strcpy(display_line[LINE3], third_line);
+   \   00002E   0D48         MOV.W   R8, R13
+   \   000030   3C40....     MOV.W   #display_line + 22, R12
+   \   000034   ........     CALLA   #strcpy
+     63            update_string(display_line[LINE3], LINE3);
+   \   000038   2D43         MOV.W   #0x2, R13
+   \   00003A   3C40....     MOV.W   #display_line + 22, R12
+   \   00003E   ........     CALLA   #update_string
+     64            strcpy(display_line[LINE4], fourth_line);
+   \   000042   0D49         MOV.W   R9, R13
+   \   000044   3C40....     MOV.W   #display_line + 33, R12
+   \   000048   ........     CALLA   #strcpy
+     65            update_string(display_line[LINE4], LINE4);
+   \   00004C   3D400300     MOV.W   #0x3, R13
+   \   000050   3C40....     MOV.W   #display_line + 33, R12
+   \   000054   ........     CALLA   #update_string
+     66            display_changed = true; 
+   \   000058   D243....     MOV.B   #0x1, &display_changed
+     67            update_display  = true;
+   \   00005C   D243....     MOV.B   #0x1, &update_display
+     68            Display_Process();                     // Refresh LCD screen
+   \   000060   ........     CALLA   #Display_Process
+     69          }
+   \   000064   3817         POPM.W  #0x4, R11
+   \   000066   1001         RETA
+     70          
+
+   \                                 In  segment CODE, align 2
+     71          void hex_to_dec(char* output_line, uint32_t hexadecimal){
+   \                     hex_to_dec:
+   \   000000   5B15         PUSHM.W #0x6, R11
+     72            uint8_t HThousand = COUNTER_RESET;      // Counts hundred thousands
+   \   000002   4D43         MOV.B   #0x0, R13
+     73            uint8_t TThousand = COUNTER_RESET;      // Counts ten thousands
+   \   000004   4A43         MOV.B   #0x0, R10
+     74            uint8_t Thousand  = COUNTER_RESET;       // Counts thousands
+   \   000006   4643         MOV.B   #0x0, R6
+     75            uint8_t Hundred   = COUNTER_RESET;        // Counts hundreds
+   \   000008   4B43         MOV.B   #0x0, R11
+     76            uint8_t Ten       = COUNTER_RESET;            // Counts tens
+   \   00000A   4843         MOV.B   #0x0, R8
+     77            uint8_t One       = COUNTER_RESET;            // Counts ones
+   \   00000C   4943         MOV.B   #0x0, R9
+     78            
+     79            while(hexadecimal >= HTHOUSAND)
+   \                     ??hex_to_dec_0:
+   \   00000E   1F93         CMP.W   #0x1, R15
+   \   000010   0A28         JNC     ??hex_to_dec_1
+   \   000012   0320         JNE     ??hex_to_dec_6
+   \   000014   3E90A086     CMP.W   #0x86a0, R14
+   \   000018   0628         JNC     ??hex_to_dec_1
+     80            {
+     81              HThousand++;
+   \                     ??hex_to_dec_6:
+   \   00001A   5D53         ADD.B   #0x1, R13
+     82              hexadecimal -= HTHOUSAND;
+   \   00001C   3E506079     ADD.W   #0x7960, R14
+   \   000020   3F60FEFF     ADDC.W  #0xfffe, R15
+   \   000024   F43F         JMP     ??hex_to_dec_0
+     83            }
+     84            while(hexadecimal >= TTHOUSAND)
+   \                     ??hex_to_dec_1:
+   \   000026   0F93         CMP.W   #0x0, R15
+   \   000028   0928         JNC     ??hex_to_dec_2
+   \   00002A   0320         JNE     ??hex_to_dec_7
+   \   00002C   3E901027     CMP.W   #0x2710, R14
+   \   000030   0528         JNC     ??hex_to_dec_2
+     85            {
+     86              TThousand++;
+   \                     ??hex_to_dec_7:
+   \   000032   5A53         ADD.B   #0x1, R10
+     87              hexadecimal -= TTHOUSAND;
+   \   000034   3E50F0D8     ADD.W   #0xd8f0, R14
+   \   000038   3F63         ADDC.W  #0xffff, R15
+   \   00003A   F53F         JMP     ??hex_to_dec_1
+     88            }
+     89            while(hexadecimal >= THOUSAND)
+   \                     ??hex_to_dec_2:
+   \   00003C   0F93         CMP.W   #0x0, R15
+   \   00003E   0928         JNC     ??hex_to_dec_3
+   \   000040   0320         JNE     ??hex_to_dec_8
+   \   000042   3E90E803     CMP.W   #0x3e8, R14
+   \   000046   0528         JNC     ??hex_to_dec_3
+     90            {
+     91              Thousand++;
+   \                     ??hex_to_dec_8:
+   \   000048   5653         ADD.B   #0x1, R6
+     92              hexadecimal -= THOUSAND;
+   \   00004A   3E5018FC     ADD.W   #0xfc18, R14
+   \   00004E   3F63         ADDC.W  #0xffff, R15
+   \   000050   F53F         JMP     ??hex_to_dec_2
+     93            }
+     94            while(hexadecimal >= HUNDRED)
+   \                     ??hex_to_dec_3:
+   \   000052   0F93         CMP.W   #0x0, R15
+   \   000054   0928         JNC     ??hex_to_dec_4
+   \   000056   0320         JNE     ??hex_to_dec_9
+   \   000058   3E906400     CMP.W   #0x64, R14
+   \   00005C   0528         JNC     ??hex_to_dec_4
+     95            {
+     96              Hundred++;
+   \                     ??hex_to_dec_9:
+   \   00005E   5B53         ADD.B   #0x1, R11
+     97              hexadecimal -= HUNDRED;
+   \   000060   3E509CFF     ADD.W   #0xff9c, R14
+   \   000064   3F63         ADDC.W  #0xffff, R15
+   \   000066   F53F         JMP     ??hex_to_dec_3
+     98            }
+     99            while(hexadecimal >= TEN)
+   \                     ??hex_to_dec_4:
+   \   000068   0F93         CMP.W   #0x0, R15
+   \   00006A   0928         JNC     ??hex_to_dec_5
+   \   00006C   0320         JNE     ??hex_to_dec_10
+   \   00006E   3E900A00     CMP.W   #0xa, R14
+   \   000072   0528         JNC     ??hex_to_dec_5
+    100            {
+    101              Ten++;
+   \                     ??hex_to_dec_10:
+   \   000074   5853         ADD.B   #0x1, R8
+    102              hexadecimal -= TEN;
+   \   000076   3E50F6FF     ADD.W   #0xfff6, R14
+   \   00007A   3F63         ADDC.W  #0xffff, R15
+   \   00007C   F53F         JMP     ??hex_to_dec_4
+    103            }
+    104            while(hexadecimal >= ONE)
+   \                     ??hex_to_dec_5:
+   \   00007E   074E         MOV.W   R14, R7
+   \   000080   E70F         ADDA    R15, R7
+   \   000082   0424         JEQ     ??hex_to_dec_11
+    105            {
+    106              One++;
+   \   000084   5953         ADD.B   #0x1, R9
+    107              hexadecimal--;
+   \   000086   3E53         ADD.W   #0xffff, R14
+   \   000088   3F63         ADDC.W  #0xffff, R15
+   \   00008A   F93F         JMP     ??hex_to_dec_5
+    108            }
+    109            output_line[COLUMN1] = HThousand + ASCII_NUM_SHIFT;
+   \                     ??hex_to_dec_11:
+   \   00008C   474D         MOV.B   R13, R7
+   \   00008E   77503000     ADD.B   #0x30, R7
+   \   000092   CC470000     MOV.B   R7, 0(R12)
+    110            output_line[COLUMN2] = TThousand + ASCII_NUM_SHIFT;
+   \   000096   474A         MOV.B   R10, R7
+   \   000098   77503000     ADD.B   #0x30, R7
+   \   00009C   CC470100     MOV.B   R7, 0x1(R12)
+    111            output_line[COLUMN3] = Thousand + ASCII_NUM_SHIFT;
+   \   0000A0   4746         MOV.B   R6, R7
+   \   0000A2   77503000     ADD.B   #0x30, R7
+   \   0000A6   CC470200     MOV.B   R7, 0x2(R12)
+    112            output_line[COLUMN4] = Hundred  + ASCII_NUM_SHIFT;
+   \   0000AA   474B         MOV.B   R11, R7
+   \   0000AC   77503000     ADD.B   #0x30, R7
+   \   0000B0   CC470300     MOV.B   R7, 0x3(R12)
+    113            output_line[COLUMN5] = Ten      + ASCII_NUM_SHIFT;
+   \   0000B4   4748         MOV.B   R8, R7
+   \   0000B6   77503000     ADD.B   #0x30, R7
+   \   0000BA   CC470400     MOV.B   R7, 0x4(R12)
+    114            output_line[COLUMN6] = One      + ASCII_NUM_SHIFT;
+   \   0000BE   4749         MOV.B   R9, R7
+   \   0000C0   77503000     ADD.B   #0x30, R7
+   \   0000C4   CC470500     MOV.B   R7, 0x5(R12)
+    115          }
+   \   0000C8   5617         POPM.W  #0x6, R11
+   \   0000CA   1001         RETA
+
+   \                                 In  segment DATA16_ID, align 2, align-sorted
+   \                     `?<Initializer for word1>`:
+   \   000000   ....         DC16 `?<Constant "          ">`
+
+   \                                 In  segment DATA16_ID, align 2, align-sorted
+   \                     `?<Initializer for word2>`:
+   \   000000   ....         DC16 `?<Constant "          ">`
+
+   \                                 In  segment DATA16_ID, align 2, align-sorted
+   \                     `?<Initializer for word3>`:
+   \   000000   ....         DC16 `?<Constant "          ">`
+
+   \                                 In  segment DATA16_ID, align 2, align-sorted
+   \                     `?<Initializer for word4>`:
+   \   000000   ....         DC16 `?<Constant "          ">`
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for last_dir>`:
+   \   000000   01           DC8 1
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "          ">`:
+   \   000000   202020202020 DC8 "          "
+   \            2020202000  
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+     12   LCD_print
+       12   -> Display_Process
+       12   -> strcpy
+       12   -> update_string
+     16   hex_to_dec
+      4   print_detector_values
+        4   -> Left_Motor_ON_FORWARD
+        4   -> Right_Motor_ON_FORWARD
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      11  ?<Constant "          ">
+       1  ?<Initializer for last_dir>
+       2  ?<Initializer for word1>
+       2  ?<Initializer for word2>
+       2  ?<Initializer for word3>
+       2  ?<Initializer for word4>
+     104  LCD_print
+       2  _A_ADC12IER0_L
+     204  hex_to_dec
+       1  last_dir
+       1  menu_counter
+     126  print_detector_values
+       2  word1
+       2  word2
+       2  word3
+       2  word4
+
+ 
+ 434 bytes in segment CODE
+   2 bytes in segment DATA16_AN
+  11 bytes in segment DATA16_C
+   9 bytes in segment DATA16_I
+   9 bytes in segment DATA16_ID
+   1 byte  in segment DATA16_Z
+ 
+ 434 bytes of CODE  memory
+  20 bytes of CONST memory
+  10 bytes of DATA  memory (+ 2 bytes shared)
+
+Errors: none
+Warnings: none
