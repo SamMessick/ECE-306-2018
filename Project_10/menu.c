@@ -27,34 +27,37 @@ user_settings_t device_settings =
   };
 
 void init_Menu(void){
+  LCD_print("          ", "          ", "          ", "          ");
   dim_lcd(FULL_BRIGHTNESS);
   delay(THREE_SECOND_MS);
   
   lcd_BIG_mid();
-  LCD_print("          ", "  ^______^  ", "          ", "          ");
+  LCD_print("          ", " ^______^ ", "          ", "          ");
   delay(SECOND_MS);
-  LCD_print("          ", "  ^______-  ", "          ", "          ");
+  LCD_print("          ", " ^______- ", "          ", "          ");
   delay(QUART_SECOND_MS);
-  LCD_print("          ", "  ^______^  ", "          ", "          ");
+  LCD_print("          ", " ^______^ ", "          ", "          ");
   delay(SECOND_MS);
   
   lcd_4line();
   if(device_settings.user_name[CHAR1] == INVALID_PRESET); // have user print name (thumb to choose letter, right/left button to navigate)
-  LCD_print("Hello     ", "there     ", device_settings.user_name, "----------");
+  LCD_print("  Hello   ", "  there   ", device_settings.user_name, "----------");
   
   if(device_settings.wifi_ssid[CHAR1] == INVALID_PRESET); // have user print ssid (thumb to choose letter, right/left button to navigate)
   LCD_print("You will  ", "connect to", device_settings.wifi_ssid, "----------");
   if(*(device_settings.wifi_privacy_mode) == (uint8_t)INVALID_PRESET); // have user print mode (thumb to choose mode; right/left button to navigate)
     if(*(device_settings.wifi_privacy_mode) == WPA_PERSONAL); // have user enter password if necessary
-    LCD_print(" Network  ", " password:", device_settings.wifi_ssid, "----------");
+    LCD_print("Network ", " password:", device_settings.wifi_ssid, "----------");
   if(device_settings.wifi_ip_hostname[CHAR1] == INVALID_PRESET); // have user print hostname (thumb to choose letter, right/left button to navigate)
-  LCD_print("ip_hostname ", "  set to  ", device_settings.wifi_ip_hostname, "----------");
+  LCD_print("My name is", "   now:   ", device_settings.wifi_ip_hostname, "----------");
   if(*(device_settings.lcd_brightness) == (uint16_t)INVALID_PRESET);          // have user adjust LCD brightness (thumb to choose brightness level)
-  LCD_print("  That's a  ", "  better  ", "lighting! ", "----------");
+  LCD_print(" That's a ", "  better  ", "lighting! ", "----------");
   
   delay(THREE_SECOND_MS);
   lcd_BIG_mid();
-  LCD_print("<<<<<<<<<<", "Let's go! ", ">>>>>>>>>>", "          ");
+  LCD_print("<<<<<<<<<<", " Let's go ", ">>>>>>>>>>", "          ");
+  delay(THREE_SECOND_MS);
+  lcd_4line();
 }
 
 void LCD_print(char first_line[COLUMN_NUM_COLUMNS], char second_line[COLUMN_NUM_COLUMNS], char third_line[COLUMN_NUM_COLUMNS], char fourth_line[COLUMN_NUM_COLUMNS]){

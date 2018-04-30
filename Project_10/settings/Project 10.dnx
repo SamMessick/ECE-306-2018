@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <settings>
     <DebugChecksum>
-        <Checksum>690439798</Checksum>
+        <Checksum>350002313</Checksum>
     </DebugChecksum>
     <Stack>
         <FillEnabled>0</FillEnabled>
@@ -29,6 +29,9 @@
     <CallStack>
         <ShowArgs>0</ShowArgs>
     </CallStack>
+    <Disassembly>
+        <MixedMode>1</MixedMode>
+    </Disassembly>
     <PowerLog>
         <Title_0>Energy</Title_0>
         <Symbol_0>0 4 0</Symbol_0>
@@ -77,7 +80,8 @@
         <LogFile>_ ""</LogFile>
     </TermIOLog>
     <Aliases>
-        <Count>0</Count>
+        <A0>_ "D:\Dropbox\NCSU\Current\Code Master\Project 02\LCD.c" ""</A0>
+        <Count>1</Count>
         <SuppressDialog>0</SuppressDialog>
     </Aliases>
     <PowerProbe>

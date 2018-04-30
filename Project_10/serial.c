@@ -19,7 +19,7 @@ char IP_line1[COLUMN_NUM_COLUMNS] = "          ";
 char IP_line2[COLUMN_NUM_COLUMNS] = "          ";
 char Main_Char_Rx[SMALL_RING_SIZE];
 char* sock_init_command = "AT+S.SOCKD=32000\r\n";
-char* sock_ping_command = "AT+S.PING=192.168.1.1\r\n";
+char* sock_ping_command = "AT+S.PING=152.1.14.14\r\n";
 
 void init_Serial(void){
   init_Serial_UCA0();
