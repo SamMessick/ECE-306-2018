@@ -9,10 +9,15 @@
 //===============================================================
 
 #include "msp430.h"
+#include "timerA0.h"
 #include <stdbool.h>
+#include <stdint.h>
 
 // Clocks initialization
 void init_Clocks(void);
+void delay(uint32_t delay_time_ms);
+
+#define COUNTER_RESET     (0)
 
 // Clock control register macros
 #define FLLN_BITS         (0x03ffu)

@@ -11,11 +11,12 @@
 
 #include "timerA0.h"
 
-uint16_t counter_A01;           // Timer A1.1 interrupt occurences counter (range 0 - 1000)
-uint16_t counter_A02;           // Timer A1.2 interrupt occurences counter (range 0 - 1000)
+uint16_t counter_A01;                        // Timer A1.1 interrupt occurences counter (range 0 - 1000)
+uint16_t counter_A02;                        // Timer A1.2 interrupt occurences counter (range 0 - 1000)
 volatile uint16_t counter_A00;               // 1 msec counting interval for Timer A1.0
-volatile uint16_t delay_time;         // Timer A1.2 counter assignment -- receives input from main
-volatile uint32_t time_ms;               // Total time elapsed during course run
+volatile uint16_t delay_time;                // Timer A1.2 counter assignment -- receives input from main
+volatile uint32_t time_ms;                   // Total time elapsed during course run
+volatile uint32_t aux_time_ms;               // Time elapsed used by delay functions in clocks.c
 volatile uint8_t  ir_ready_to_print;
 volatile uint8_t waiting;
 
@@ -67,14 +68,15 @@ void handle_procedural_delay(void){
 // ------    Ping update    ------ //
 #pragma vector = TIMER0_A0_VECTOR
 __interrupt void Timer0_A0_ISR(void){
-  uint16_t temp = delay_time;
   static uint8_t string_index;
   counter_A00++;                         // Increment counter by 1 msec for each 1 msec interrupt
-
-  if(!(counter_A00 % temp))
+  aux_time_ms++;
+  
+  if(!(counter_A00 % SECOND_MS))
   {
     for(string_index = BEGINNING; string_index < SOCKET_PING_SIZE; string_index++)     // Ping host every period once established
         transmit_charA3(sock_ping_command[string_index]);
+    counter_A00 = COUNTER_RESET;
   }
   
   if(IOT_STATUS(COURSE_BEGIN))               // If inside course, begin timer display on second LCD line

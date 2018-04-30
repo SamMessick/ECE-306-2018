@@ -16,6 +16,15 @@ char* word2 = "          ";
 char* word3 = "          ";
 char* word4 = "          ";
 
+user_settings_t device_settings = 
+  {
+    .user_name = (char*)PRESET_USER_NAME,
+    .wifi_ssid = (char*)PRESET_WIFI_SSID,
+    .wifi_privacy_mode = (uint8_t*)PRESET_WIFI_PRIVACY_MODE,
+    .wifi_password = (char*)PRESET_WIFI_PASSWORD,
+    .wifi_ip_hostname = (char*)PRESET_WIFI_IP_HOSTNAME,
+    .lcd_brightness = (uint16_t*)PRESET_LCD_BRIGHTNESS,
+  };
 
 void LCD_print(char first_line[COLUMN_NUM_COLUMNS], char second_line[COLUMN_NUM_COLUMNS], char third_line[COLUMN_NUM_COLUMNS], char fourth_line[COLUMN_NUM_COLUMNS]){
   strcpy(display_line[LINE1], first_line);

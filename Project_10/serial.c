@@ -95,7 +95,6 @@ void check_for_input(void){
       iot_tx_wr = BEGINNING;
       IOT_DISABLE(IP_READY);
       IOT_DISABLE(SOFT_RESET);
-      delay_time = SECOND;
       TA0CCTL0  |= CCIE;                   // Enable ping timer
     }
     if(IOT_STATUS(CHECK_FOR_COMMAND))

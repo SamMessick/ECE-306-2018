@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           30/Apr/2018  00:07:50
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           30/Apr/2018  01:52:12
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_10\clocks.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EWA24D.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EW3A4C.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_10\clocks.c" -lC
 #        "C:\Users\shmes\Desktop\Escritorio
@@ -74,6 +74,11 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\clo
    \                                 In  segment DATA16_AN, at 0x168
    \   union <unnamed> _A_CSCTL4_L
    \                     _A_CSCTL4_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x342
+   \   union <unnamed> _A_TA0CCTL0_L
+   \                     _A_TA0CCTL0_L:
    \   000000                DS8 2
 
    \                                 In  segment DATA16_AN, at 0x15c
@@ -161,12 +166,32 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\clo
    \   00004C                REQUIRE _A_CSCTL3_L
    \   00004C                REQUIRE _A_CSCTL4_L
      68          
-     69          
+
+   \                                 In  segment CODE, align 2
+     69          void delay(uint32_t delay_time_ms){
+   \                     delay:
+     70            TA0CCTL0 |= CCIE;                    // Ensure Timer interrupts are enabled
+   \   000000   B2D010004203 BIS.W   #0x10, &0x342
+     71            aux_time_ms = COUNTER_RESET;
+   \   000006   8243....     MOV.W   #0x0, &aux_time_ms
+   \   00000A   8243....     MOV.W   #0x0, &aux_time_ms + 2
+     72            while(aux_time_ms < delay_time_ms);
+   \                     ??delay_0:
+   \   00000E   829D....     CMP.W   R13, &aux_time_ms + 2
+   \   000012   FD2B         JNC     ??delay_0
+   \   000014   0320         JNE     ??delay_1
+   \   000016   829C....     CMP.W   R12, &aux_time_ms
+   \   00001A   F92B         JNC     ??delay_0
+     73          }
+   \                     ??delay_1:
+   \   00001C   1001         RETA
+   \   00001E                REQUIRE _A_TA0CCTL0_L
 
    Maximum stack usage in bytes:
 
    CSTACK Function
    ------ --------
+      4   delay
       4   init_Clocks
 
 
@@ -179,15 +204,17 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\clo
        2  _A_CSCTL2_L
        2  _A_CSCTL3_L
        2  _A_CSCTL4_L
+       2  _A_TA0CCTL0_L
        2  _A_WDTCTL_L
+      30  delay
       76  init_Clocks
 
  
- 76 bytes in segment CODE
- 12 bytes in segment DATA16_AN
+ 106 bytes in segment CODE
+  14 bytes in segment DATA16_AN
  
- 76 bytes of CODE memory
-  0 bytes of DATA memory (+ 12 bytes shared)
+ 106 bytes of CODE memory
+   0 bytes of DATA memory (+ 14 bytes shared)
 
 Errors: none
 Warnings: none

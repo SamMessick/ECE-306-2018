@@ -24,16 +24,18 @@ void main(void){
   init_Clocks();                       
   init_Conditions();                   
   Init_LCD();              // XXXXXXXXXXXXXXXXXX To fix: move to lowercase once source obtained XXXXXXXXXXXXXXXXXXXX                          
-  init_Timers();                       
-  init_PID();
+  init_Timers();            
   init_ADC();
   init_Serial();
+  //init_PID();
+  
+  // Begin user-controlled initialization
+  dim_lcd(FULL_BRIGHTNESS);
+  delay(THREE_SECOND_MS);
+  LCD_print("Hello     ", "there     ", "__________","          ");
+  
+  // Only begin with remote control
   init_IoT();
-
-// Perform user-controlled initialization
-  
-  
-  //enable_display_update();
 
   // Loop infinitely through transmitting and receiving messages
   for(;;)

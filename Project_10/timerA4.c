@@ -11,6 +11,7 @@
 #include "timerA4.h"
 
 uint16_t current_lcd_brightness;
+uint8_t backlite_status_reg;
 
 void init_Timer_A4(void){
 
@@ -23,7 +24,8 @@ void init_Timer_A4(void){
   TA4CCR1   = NO_LIGHTING;              //  Begin with backlite off
 }
 
-void dim_lcd(uint16_t preferred_brightness) {
+void dim_lcd(uint32_t preferred_brightness) {
+  current_lcd_brightness = preferred_brightness;
   TA4CCTL1 |= CCIE;
 }
 
@@ -32,15 +34,18 @@ void dim_lcd(uint16_t preferred_brightness) {
 // ---Backlite brightness adjustment--- //
 #pragma vector = TIMER4_A1_VECTOR
 __interrupt void Timer4_A1_ISR(void){
-  if(TA4CCR1 > current_lcd_brightness)  
-    while(TA4CCR1 != current_lcd_brightness)
+  
+  if(TA4CCR1 > current_lcd_brightness &&  
+     TA4CCR1 != current_lcd_brightness)
       --TA4CCR1;                  // Dim Backlite to preferred brightness
     
-  else if(TA4CCR1 < current_lcd_brightness)
-    while(TA4CCR1 != current_lcd_brightness)
+  else if(TA4CCR1 < current_lcd_brightness &&
+          TA4CCR1 != current_lcd_brightness)
       ++TA4CCR1;                 // Brighten Backlite to preferred brightness
   
   else
+  {
     DISABLE_BACKLITE_INTERRUPT;
-    
+    BACKLITE_DISABLE(BACKLITE_ADJUSTING);
+  }  
 }

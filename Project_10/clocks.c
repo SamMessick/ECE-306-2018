@@ -66,4 +66,8 @@ void init_Clocks(void){
 //------------------------------------------------------------------------------
 }
 
-
+void delay(uint32_t delay_time_ms){
+  TA0CCTL0 |= CCIE;                    // Ensure Timer interrupts are enabled
+  aux_time_ms = COUNTER_RESET;
+  while(aux_time_ms < delay_time_ms);
+}

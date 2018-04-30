@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           30/Apr/2018  00:07:50
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           30/Apr/2018  01:52:13
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_10\timerA4.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EWA46B.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EW3CA7.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_10\timerA4.c" -lC
 #        "C:\Users\shmes\Desktop\Escritorio
@@ -72,82 +72,91 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\tim
      13          uint16_t current_lcd_brightness;
    \                     current_lcd_brightness:
    \   000000                DS8 2
-     14          
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     14          uint8_t backlite_status_reg;
+   \                     backlite_status_reg:
+   \   000000                DS8 1
+     15          
 
    \                                 In  segment CODE, align 2
-     15          void init_Timer_A4(void){
+     16          void init_Timer_A4(void){
    \                     init_Timer_A4:
-     16          
-     17            TA4CTL  = TASSEL__ACLK;               // Select SMCLK for source
+     17          
+     18            TA4CTL  = TASSEL__ACLK;               // Select SMCLK for source
    \   000000   B2400001C007 MOV.W   #0x100, &0x7c0
-     18            TA4CTL |= (TACLR | MC_1 | ID_1);      // AClock source on up mode at 32 KHz
+     19            TA4CTL |= (TACLR | MC_1 | ID_1);      // AClock source on up mode at 32 KHz
    \   000006   B2D05400C007 BIS.W   #0x54, &0x7c0
-     19            TA4CTL |= TAIDEX__1; 
+     20            TA4CTL |= TAIDEX__1; 
    \   00000C   9242C007C007 MOV.W   &0x7c0, &0x7c0
-     20            TA4CTL &= ~(TAIFG);                    // Clear Timer A1 interrupt flag and interrupt enable
+     21            TA4CTL &= ~(TAIFG);                    // Clear Timer A1 interrupt flag and interrupt enable
    \   000012   92C3C007     BIC.W   #0x1, &0x7c0
-     21            
-     22            TA4CCTL1 |= OUTMOD_7;                 //  LCD backlite in Reset/Set mode
+     22            
+     23            TA4CCTL1 |= OUTMOD_7;                 //  LCD backlite in Reset/Set mode
    \   000016   B2D0E000C407 BIS.W   #0xe0, &0x7c4
-     23            TA4CCR1   = NO_LIGHTING;              //  Begin with backlite off
+     24            TA4CCR1   = NO_LIGHTING;              //  Begin with backlite off
    \   00001C   8243D407     MOV.W   #0x0, &0x7d4
-     24          }
+     25          }
    \   000020   1001         RETA
    \   000022                REQUIRE _A_TA4CTL_L
    \   000022                REQUIRE _A_TA4CCTL1_L
    \   000022                REQUIRE _A_TA4CCR1_L
-     25          
+     26          
 
    \                                 In  segment CODE, align 2
-     26          void dim_lcd(uint16_t preferred_brightness) {
+     27          void dim_lcd(uint32_t preferred_brightness) {
    \                     dim_lcd:
-     27            TA4CCTL1 |= CCIE;
-   \   000000   B2D01000C407 BIS.W   #0x10, &0x7c4
-     28          }
-   \   000006   1001         RETA
-   \   000008                REQUIRE _A_TA4CCTL1_L
-     29          
-     30          //   Timer A4 interrupt routines        //
-     31          //         **OVERFLOW**                 //
-     32          // ---Backlite brightness adjustment--- //
-     33          #pragma vector = TIMER4_A1_VECTOR
+     28            current_lcd_brightness = preferred_brightness;
+   \   000000   824C....     MOV.W   R12, &current_lcd_brightness
+     29            TA4CCTL1 |= CCIE;
+   \   000004   B2D01000C407 BIS.W   #0x10, &0x7c4
+     30          }
+   \   00000A   1001         RETA
+   \   00000C                REQUIRE _A_TA4CCTL1_L
+     31          
+     32          //   Timer A4 interrupt routines        //
+     33          //         **OVERFLOW**                 //
+     34          // ---Backlite brightness adjustment--- //
+     35          #pragma vector = TIMER4_A1_VECTOR
 
    \                                 In  segment ISR_CODE, align 2
-     34          __interrupt void Timer4_A1_ISR(void){
+     36          __interrupt void Timer4_A1_ISR(void){
    \                     Timer4_A1_ISR:
-     35            if(TA4CCR1 > current_lcd_brightness)  
+     37            
+     38            if(TA4CCR1 > current_lcd_brightness &&  
+     39               TA4CCR1 != current_lcd_brightness)
    \   000000   9292D407.... CMP.W   &0x7d4, &current_lcd_brightness
-   \   000006   072C         JC      ??Timer4_A1_ISR_2
-     36              while(TA4CCR1 != current_lcd_brightness)
-   \                     ??Timer4_A1_ISR_0:
+   \   000006   072C         JC      ??Timer4_A1_ISR_0
    \   000008   9292....D407 CMP.W   &current_lcd_brightness, &0x7d4
-   \   00000E   1124         JEQ     ??Timer4_A1_ISR_3
-     37                --TA4CCR1;                  // Dim Backlite to preferred brightness
+   \   00000E   0324         JEQ     ??Timer4_A1_ISR_0
+     40                --TA4CCR1;                  // Dim Backlite to preferred brightness
    \   000010   B253D407     ADD.W   #0xffff, &0x7d4
-   \   000014   F93F         JMP     ??Timer4_A1_ISR_0
-     38              
-     39            else if(TA4CCR1 < current_lcd_brightness)
-   \                     ??Timer4_A1_ISR_2:
+   \   000014   0013         RETI
+     41              
+     42            else if(TA4CCR1 < current_lcd_brightness &&
+     43                    TA4CCR1 != current_lcd_brightness)
+   \                     ??Timer4_A1_ISR_0:
    \   000016   9292....D407 CMP.W   &current_lcd_brightness, &0x7d4
-   \   00001C   072C         JC      ??Timer4_A1_ISR_4
-     40              while(TA4CCR1 != current_lcd_brightness)
-   \                     ??Timer4_A1_ISR_1:
+   \   00001C   072C         JC      ??Timer4_A1_ISR_1
    \   00001E   9292....D407 CMP.W   &current_lcd_brightness, &0x7d4
-   \   000024   0624         JEQ     ??Timer4_A1_ISR_3
-     41                ++TA4CCR1;                 // Brighten Backlite to preferred brightness
+   \   000024   0324         JEQ     ??Timer4_A1_ISR_1
+     44                ++TA4CCR1;                 // Brighten Backlite to preferred brightness
    \   000026   9253D407     ADD.W   #0x1, &0x7d4
-   \   00002A   F93F         JMP     ??Timer4_A1_ISR_1
-     42            
-     43            else
-     44              DISABLE_BACKLITE_INTERRUPT;
-   \                     ??Timer4_A1_ISR_4:
+   \   00002A   0013         RETI
+     45            
+     46            else
+     47            {
+     48              DISABLE_BACKLITE_INTERRUPT;
+   \                     ??Timer4_A1_ISR_1:
    \   00002C   B2C01000C407 BIC.W   #0x10, &0x7c4
-     45              
-     46          }
-   \                     ??Timer4_A1_ISR_3:
-   \   000032   0013         RETI
-   \   000034                REQUIRE _A_TA4CCR1_L
-   \   000034                REQUIRE _A_TA4CCTL1_L
+     49              BACKLITE_DISABLE(BACKLITE_ADJUSTING);
+   \   000032   D2C3....     BIC.B   #0x1, &backlite_status_reg
+     50            }  
+     51          }
+   \   000036   0013         RETI
+   \   000038                REQUIRE _A_TA4CCR1_L
+   \   000038                REQUIRE _A_TA4CCTL1_L
 
    \                                 In  segment INTVEC, offset 0x38, root
    \                     `??Timer4_A1_ISR::??INTVEC 56`:
@@ -166,25 +175,26 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\tim
 
    Bytes  Function/Label
    -----  --------------
-      52  Timer4_A1_ISR
+      56  Timer4_A1_ISR
        2  Timer4_A1_ISR::??INTVEC 56
        2  _A_TA4CCR1_L
        2  _A_TA4CCTL1_L
        2  _A_TA4CTL_L
+       1  backlite_status_reg
        2  current_lcd_brightness
-       8  dim_lcd
+      12  dim_lcd
       34  init_Timer_A4
 
  
- 42 bytes in segment CODE
+ 46 bytes in segment CODE
   6 bytes in segment DATA16_AN
-  2 bytes in segment DATA16_Z
+  3 bytes in segment DATA16_Z
   2 bytes in segment INTVEC
- 52 bytes in segment ISR_CODE
+ 56 bytes in segment ISR_CODE
  
- 94 bytes of CODE  memory
-  0 bytes of CONST memory (+ 2 bytes shared)
-  2 bytes of DATA  memory (+ 6 bytes shared)
+ 102 bytes of CODE  memory
+   0 bytes of CONST memory (+ 2 bytes shared)
+   3 bytes of DATA  memory (+ 6 bytes shared)
 
 Errors: none
 Warnings: none

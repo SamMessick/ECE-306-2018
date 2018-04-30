@@ -14,9 +14,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-/* TO REASSIGN */
-#define SECOND               (1000)
-
 // Serial settings
 #define BEGINNING            (0)
 #define COUNTER_RESET        (0)
@@ -37,8 +34,9 @@
 #define LOWER_BAUD           (115200)
 #define HIGHER_BAUD          (460800)
 
-// IP Status Verification
 #define IP_LEAD_BYTE         ('1')
+
+// IoT Status management
 #define IOT_STATUS(x)        (iot_status_reg & x)
 #define IOT_ENABLE(x)        (iot_status_reg |= x)
 #define IOT_DISABLE(x)       (iot_status_reg &= ~x)

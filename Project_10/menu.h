@@ -25,6 +25,29 @@
 #define TEN                  (10)
 #define ONE                  (1)
 
+// Device settings stored in struct referencing locations in .info FRAM
+#ifndef DEVICE_SETTINGS_AND_PRESETS
+#define DEVICE_SETTINGS_AND_PRESETS
+
+typedef struct { 
+  char*       user_name;
+  char*       wifi_ssid;
+  uint8_t*    wifi_privacy_mode;
+  char*       wifi_password;
+  char*       wifi_ip_hostname;
+  uint16_t*   lcd_brightness;
+} user_settings_t;
+
+#define PRESET_USER_NAME           (0x1800) 
+#define PRESET_WIFI_SSID           (0x1810) 
+#define PRESET_WIFI_PRIVACY_MODE   (0x1819) 
+#define PRESET_WIFI_PASSWORD       (0x1820) 
+#define PRESET_WIFI_IP_HOSTNAME    (0x1830) 
+#define PRESET_LCD_BRIGHTNESS      (0x1840)
+#define DEVICE_SETTINGS_SET(x, y)  (device_settings.x = y)
+                           
+#endif
+
 #define UCA_BRW_115          (4)
 #define UCA_BRW_460          (17)
 #define UCA_MCTL_115         (0x5551)
@@ -43,8 +66,9 @@ extern char *display[LINE_NUM_LINES];
 extern volatile unsigned char update_display;
 extern volatile unsigned int update_display_count;
 extern volatile unsigned char display_changed;
-extern int8_t menu_counter;            // displays which option has been chosen by the buttons
-extern uint8_t calibrated;             // boolean to determine whether black and white calibration have ocurred
+extern user_settings_t device_settings;           // persisting device settings stored in .info 
+extern int8_t menu_counter;                       // displays which option has been chosen by the buttons
+extern uint8_t calibrated;                        // boolean to determine whether black and white calibration have ocurred
 
 extern char* word1;
 extern char* word2;

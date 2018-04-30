@@ -13,19 +13,27 @@
 
 #define  ENABLE_BACKLITE_INTERRUPT  (TA4CCTL1 |= CCIE)
 #define  DISABLE_BACKLITE_INTERRUPT (TA4CCTL1 &= ~CCIE)
+
+// Backlite status register management
+#define BACKLITE_STATUS(x)        (backlite_status_reg & x)
+#define BACKLITE_ENABLE(x)        (backlite_status_reg |= x)
+#define BACKLITE_DISABLE(x)       (backlite_status_reg &= ~x)
+#define BACKLITE_ADJUSTING         (0x01)
+
 #ifndef  BACKLITE_BRIGHTNESS_LEVELS
 #define  BACKLITE_BRIGHTNESS_LEVELS
 
 typedef enum {
   NO_LIGHTING = 0,
-  QUART_LIGHTING = 0x4000,
-  HALF_LIGHTING  = 0x8000,
-  FULL_LIGHTING  = 0xFFFF
+  QUART_BRIGHTNESS = 0x4000,
+  HALF_BRIGHTNESS  = 0x8000,
+  FULL_BRIGHTNESS  = 0xFFFF
 } backlite_brightness_t;
 
 #endif
 
 void init_Timer_A4(void);
-void dim_lcd(uint16_t preferred_brightness);
+void dim_lcd(uint32_t preferred_brightness);
 
 extern uint16_t current_lcd_brightness;       // Preferred LCD brightness level
+extern uint8_t backlite_status_reg;
