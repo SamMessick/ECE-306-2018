@@ -10,7 +10,9 @@
 
 #include "LCD.h"
 #include "adc12_B.h"
+#include "clocks.h"
 #include "serial.h"
+#include "timerA4.h"
 #include "wheels.h"
 #include <string.h>
 #include <stdint.h>
@@ -44,7 +46,8 @@ typedef struct {
 #define PRESET_WIFI_PASSWORD       (0x1820) 
 #define PRESET_WIFI_IP_HOSTNAME    (0x1830) 
 #define PRESET_LCD_BRIGHTNESS      (0x1840)
-#define DEVICE_SETTINGS_SET(x, y)  (device_settings.x = y)
+#define INVALID_PRESET             (0xFF)
+#define WPA_PERSONAL               (2)
                            
 #endif
 
@@ -55,7 +58,7 @@ typedef struct {
 #define LOWER_BAUD           (115200)
 #define HIGHER_BAUD          (460800)
 
-
+void init_Menu(void);
 void LCD_print(char first_line[COLUMN_NUM_COLUMNS], char second_line[COLUMN_NUM_COLUMNS], char third_line[COLUMN_NUM_COLUMNS], char fourth_line[COLUMN_NUM_COLUMNS]);   // Prints 4 lines to LCD screen
 void hex_to_dec(char* output_line, uint32_t hexadecimal); // Converts hexadecimal to a 4-character decimal string for printing
 void update_string(char *string_data, int string);

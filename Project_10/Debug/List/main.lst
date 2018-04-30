@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           30/Apr/2018  01:52:13
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           30/Apr/2018  02:33:42
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_10\main.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EW3AFA.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EW3C45.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_10\main.c" -lC
 #        "C:\Users\shmes\Desktop\Escritorio
@@ -84,78 +84,46 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\mai
    \   000018   ........     CALLA   #init_ADC
      29            init_Serial();
    \   00001C   ........     CALLA   #init_Serial
-     30            //init_PID();
+     30            init_PID();
+   \   000020   ........     CALLA   #init_PID
      31            
-     32            // Begin user-controlled initialization
-     33            dim_lcd(FULL_BRIGHTNESS);
-   \   000020   3C43         MOV.W   #0xffff, R12
-   \   000022   0D43         MOV.W   #0x0, R13
-   \   000024   ........     CALLA   #dim_lcd
-     34            delay(THREE_SECOND_MS);
-   \   000028   3C40B80B     MOV.W   #0xbb8, R12
-   \   00002C   0D43         MOV.W   #0x0, R13
-   \   00002E   ........     CALLA   #delay
-     35            LCD_print("Hello     ", "there     ", "__________","          ");
-   \   000032   3F40....     MOV.W   #`?<Constant "          ">`, R15
-   \   000036   3E40....     MOV.W   #`?<Constant "__________">`, R14
-   \   00003A   3D40....     MOV.W   #`?<Constant "there     ">`, R13
-   \   00003E   3C40....     MOV.W   #`?<Constant "Hello     ">`, R12
-   \   000042   ........     CALLA   #LCD_print
-     36            
-     37            // Only begin with remote control
-     38            init_IoT();
-   \   000046   ........     CALLA   #init_IoT
-     39          
-     40            // Loop infinitely through transmitting and receiving messages
-     41            for(;;)
-     42            {
-     43              
-     44              // Processing for IOT commands
-     45              // assume held in Main_Char_Rx[]
-     46              if(connection_lost)
+     32            init_Menu();
+   \   000024   ........     CALLA   #init_Menu
+     33            
+     34            // Only begin with remote control
+     35            init_IoT();
+   \   000028   ........     CALLA   #init_IoT
+     36          
+     37            // Loop infinitely through transmitting and receiving messages
+     38            for(;;)
+     39            {
+     40              
+     41              // Processing for IOT commands
+     42              // assume held in Main_Char_Rx[]
+     43              if(connection_lost)
    \                     ??main_0:
-   \   00004A   C293....     CMP.B   #0x0, &connection_lost
-   \   00004E   0224         JEQ     ??main_1
-     47                init_IoT();                            // Soft Reset IoT module and provide new IP address
-   \   000050   ........     CALLA   #init_IoT
-     48              if(IOT_STATUS(AUTONOMOUS))
+   \   00002C   C293....     CMP.B   #0x0, &connection_lost
+   \   000030   0224         JEQ     ??main_1
+     44                init_IoT();                            // Soft Reset IoT module and provide new IP address
+   \   000032   ........     CALLA   #init_IoT
+     45              if(IOT_STATUS(AUTONOMOUS))
    \                     ??main_1:
-   \   000054   C293....     CMP.B   #0x0, &iot_status_reg
-   \   000058   0434         JGE     ??main_2
-     49              {
-     50                update_ir_reading();
-   \   00005A   ........     CALLA   #update_ir_reading
-     51                pid_udpate_left();                     // Update wheel speeds during autonomous driving
-   \   00005E   ........     CALLA   #pid_udpate_left
-     52              }
-     53              check_for_input();                       // Read in updates and commands from IoT module
+   \   000036   C293....     CMP.B   #0x0, &iot_status_reg
+   \   00003A   0434         JGE     ??main_2
+     46              {
+     47                update_ir_reading();
+   \   00003C   ........     CALLA   #update_ir_reading
+     48                pid_udpate_left();                     // Update wheel speeds during autonomous driving
+   \   000040   ........     CALLA   #pid_udpate_left
+     49              }
+     50              check_for_input();                       // Read in updates and commands from IoT module
    \                     ??main_2:
-   \   000062   ........     CALLA   #check_for_input
-   \   000066   F13F         JMP     ??main_0
-   \   000068   0343         NOP
-   \   00006A                REQUIRE _A_PM5CTL0_L
-     54            }
-     55          }
-
-   \                                 In  segment DATA16_C, align 1, align-sorted
-   \                     `?<Constant "Hello     ">`:
-   \   000000   48656C6C6F20 DC8 "Hello     "
-   \            2020202000  
-
-   \                                 In  segment DATA16_C, align 1, align-sorted
-   \                     `?<Constant "there     ">`:
-   \   000000   746865726520 DC8 "there     "
-   \            2020202000  
-
-   \                                 In  segment DATA16_C, align 1, align-sorted
-   \                     `?<Constant "__________">`:
-   \   000000   5F5F5F5F5F5F DC8 "__________"
-   \            5F5F5F5F00  
-
-   \                                 In  segment DATA16_C, align 1, align-sorted
-   \                     `?<Constant "          ">`:
-   \   000000   202020202020 DC8 "          "
-   \            2020202000  
+   \   000044   ........     CALLA   #check_for_input
+   \   000048   F13F         JMP     ??main_0
+   \   00004A   0343         NOP
+   \   00004C                REQUIRE _A_PM5CTL0_L
+     51            }
+     52          }
 
    Maximum stack usage in bytes:
 
@@ -163,14 +131,13 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\mai
    ------ --------
       4   main
         4   -> Init_LCD
-        4   -> LCD_print
         4   -> check_for_input
-        4   -> delay
-        4   -> dim_lcd
         4   -> init_ADC
         4   -> init_Clocks
         4   -> init_Conditions
         4   -> init_IoT
+        4   -> init_Menu
+        4   -> init_PID
         4   -> init_Ports
         4   -> init_Serial
         4   -> init_Timers
@@ -182,21 +149,15 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\mai
 
    Bytes  Function/Label
    -----  --------------
-      11  ?<Constant "          ">
-      11  ?<Constant "Hello     ">
-      11  ?<Constant "__________">
-      11  ?<Constant "there     ">
        2  _A_PM5CTL0_L
-     106  main
+      76  main
 
  
- 106 bytes in segment CODE
-   2 bytes in segment DATA16_AN
-  44 bytes in segment DATA16_C
+ 76 bytes in segment CODE
+  2 bytes in segment DATA16_AN
  
- 106 bytes of CODE  memory
-  44 bytes of CONST memory
-   0 bytes of DATA  memory (+ 2 bytes shared)
+ 76 bytes of CODE memory
+  0 bytes of DATA memory (+ 2 bytes shared)
 
 Errors: none
 Warnings: none

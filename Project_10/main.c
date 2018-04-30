@@ -27,12 +27,9 @@ void main(void){
   init_Timers();            
   init_ADC();
   init_Serial();
-  //init_PID();
+  init_PID();
   
-  // Begin user-controlled initialization
-  dim_lcd(FULL_BRIGHTNESS);
-  delay(THREE_SECOND_MS);
-  LCD_print("Hello     ", "there     ", "__________","          ");
+  init_Menu();
   
   // Only begin with remote control
   init_IoT();
