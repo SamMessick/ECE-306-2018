@@ -21,7 +21,7 @@
 #define V_DETECT_R           (0x10) // ADC for Right Detector
 #define V_DETECT_L           (0x20) // ADC for Left Detector
 #define SD_UCB0SIMO          (0x40) // SPI mode - slave in/master out for SD Card
-#define SD_UC0SOMI           (0x80) // SPI mode - slave out/master in for SD Card
+#define SD_UCB0SOMI           (0x80) // SPI mode - slave out/master in for SD Card
 
 // Port 2 Pins
 #define BCLUART_TXD          (0x01)
@@ -159,7 +159,7 @@ typedef enum{
   SEC  = (32768),
   FIVE_MSEC = (3270*5),
   CIR_SEC = (130),
-  TWO_SEC = (40),
+  TWO_SEC = (2000),
   THR_SEC = (60),
   FOR_SEC = (70),
   SIX_SEC = (120),

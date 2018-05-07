@@ -40,12 +40,12 @@ typedef struct {
   uint16_t*   lcd_brightness;
 } user_settings_t;
 
-#define PRESET_USER_NAME           (0x1800) 
-#define PRESET_WIFI_SSID           (0x1810) 
-#define PRESET_WIFI_PRIVACY_MODE   (0x1819) 
-#define PRESET_WIFI_PASSWORD       (0x1820) 
-#define PRESET_WIFI_IP_HOSTNAME    (0x1830) 
-#define PRESET_LCD_BRIGHTNESS      (0x1840)
+#define PRESET_USER_NAME           (0x1800) // 10 chars and null
+#define PRESET_WIFI_SSID           (0x180B) // 10 chars and null
+#define PRESET_WIFI_PRIVACY_MODE   (0x1817) // 1 char
+#define PRESET_WIFI_PASSWORD       (0x1818) // 10 chars and null
+#define PRESET_WIFI_IP_HOSTNAME    (0x1824) // 10 chars and null
+#define PRESET_LCD_BRIGHTNESS      (0x182F) // 1 char
 #define INVALID_PRESET             (0xFF)
 #define WPA_PERSONAL               (2)
                            

@@ -22,7 +22,7 @@ void init_Port1(void){  // Initlizes all pins on Port 1
 // V_DETECT_R           (0x10) // ADC for Right Detector
 // V_DETECT_L           (0x20) // ADC for Left Detector
 // SD_UCB0SIMO          (0x40) // SPI mode - slave in/master out for SD Card
-// SD_UC0SOMI           (0x80) // SPI mode - slave out/master in for SD Card
+// SD_UCB0SOMI          (0x80) // SPI mode - slave out/master in for SD Card
 //=========================================================================
   
   // Configure Port 1
@@ -56,8 +56,8 @@ void init_Port1(void){  // Initlizes all pins on Port 1
   P1SEL0 &= ~SD_UCB0SIMO;               // USCI_B1 MOSI pin
   P1SEL1 |= SD_UCB0SIMO;                // USCI_B1 MOSI pin
   // P1_7
-  P1SEL0 &= ~SD_UC0SOMI;                // USCI_B1 MISO pin
-  P1SEL1 |= SD_UC0SOMI;                 // USCI_B1 MISO pin
+  P1SEL0 &= ~SD_UCB0SOMI;                // USCI_B1 MISO pin
+  P1SEL1 |= SD_UCB0SOMI;                 // USCI_B1 MISO pin
 }
 ////////////////////////////////////////////////////////////////////////
 void init_Port2(void) { // Initlizes all pins on Port 2

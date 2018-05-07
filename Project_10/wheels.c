@@ -18,7 +18,7 @@ uint8_t left_reverse_flag;     // Is left motor rotating reverse?
 uint8_t right_forward_flag;    // Is right motor rotating forward?
 uint8_t right_reverse_flag;    // Is right motor rotating reverse?
 uint8_t instruction_label_tmp; // Global of current instruction step
-uint8_t LastDir;
+uint8_t LastDir = 3;
 
 //--------PID fields-----------//
 int16_t   right_pwm;
@@ -71,10 +71,15 @@ void pid_udpate_left(void){
         Left_Motor_ON_FORWARD(LEFT_R_SEARCH_SPEED);
         Right_Motor_ON_FORWARD(RIGHT_R_SEARCH_SPEED);
       }
-      else
+      else if(LastDir == GOING_LEFT)
       {
         Left_Motor_ON_FORWARD(LEFT_L_SEARCH_SPEED);
         Right_Motor_ON_FORWARD(RIGHT_L_SEARCH_SPEED);
+      }
+      else
+      {
+        Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
+        Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
       }
     }
   /*
@@ -281,11 +286,12 @@ void turn(uint8_t degrees){
 void drive_to_black_line(void){
   uint32_t time_ms_temp = time_ms;
   Wheels_OFF();
-  LCD_print("SearchingW", word2, word3, word4);
+  LCD_print("Searching", word2, word3, word4);
   
   Left_Motor_ON_FORWARD(LEFT_FORWARD_SPEED);
   Right_Motor_ON_FORWARD(RIGHT_FORWARD_SPEED);
-  while(time_ms - time_ms_temp < THREE_SEC);
+  while(time_ms - time_ms_temp < TWO_SEC);
+  LCD_print("SearchingW", word2, word3, word4);
   while(ADC_Left_Detector > ir_white_reading          // Drive to white surface
      || ADC_Right_Detector > ir_white_reading)
   {

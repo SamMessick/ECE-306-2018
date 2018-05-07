@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           30/Apr/2018  04:07:38
+# IAR C/C++ Compiler V7.11.1.983/W32 for MSP430           06/May/2018  22:52:33
 # Copyright 1996-2017 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.11
 #
@@ -16,7 +16,7 @@
 #        C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_10\ports.c
 #    Command line  =  
-#        -f C:\Users\shmes\AppData\Local\Temp\EW42E7.tmp
+#        -f C:\Users\shmes\AppData\Local\Temp\EW87AD.tmp
 #        ("C:\Users\shmes\Desktop\Escritorio
 #        Personal\Escuela\ECE\306\ECE306\Project_10\ports.c" -lC
 #        "C:\Users\shmes\Desktop\Escritorio
@@ -216,7 +216,7 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\por
      22          // V_DETECT_R           (0x10) // ADC for Right Detector
      23          // V_DETECT_L           (0x20) // ADC for Left Detector
      24          // SD_UCB0SIMO          (0x40) // SPI mode - slave in/master out for SD Card
-     25          // SD_UC0SOMI           (0x80) // SPI mode - slave out/master in for SD Card
+     25          // SD_UCB0SOMI          (0x80) // SPI mode - slave out/master in for SD Card
      26          //=========================================================================
      27            
      28            // Configure Port 1
@@ -270,9 +270,9 @@ C:\Users\shmes\Desktop\Escritorio Personal\Escuela\ECE\306\ECE306\Project_10\por
      57            P1SEL1 |= SD_UCB0SIMO;                // USCI_B1 MOSI pin
    \   000056   F2D040000C02 BIS.B   #0x40, &0x20c
      58            // P1_7
-     59            P1SEL0 &= ~SD_UC0SOMI;                // USCI_B1 MISO pin
+     59            P1SEL0 &= ~SD_UCB0SOMI;                // USCI_B1 MISO pin
    \   00005C   F2C080000A02 BIC.B   #0x80, &0x20a
-     60            P1SEL1 |= SD_UC0SOMI;                 // USCI_B1 MISO pin
+     60            P1SEL1 |= SD_UCB0SOMI;                 // USCI_B1 MISO pin
    \   000062   F2D080000C02 BIS.B   #0x80, &0x20c
      61          }
    \   000068   1001         RETA

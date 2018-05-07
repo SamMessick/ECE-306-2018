@@ -9,7 +9,6 @@
 //===============================================================
 
 #include "msp430.h"
-#include "shapes_menu.h"
 #include "serial.h"
 #include "LCD.h"
 #include <stdint.h>

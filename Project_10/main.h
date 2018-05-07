@@ -13,7 +13,6 @@
 #include "adc12_B.h"
 #include "clocks.h"
 #include "init.h"
-#include "iot.h"
 #include "LCD.h"
 #include "led.h"
 #include "menu.h"
