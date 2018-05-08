@@ -29,6 +29,7 @@
 // Serial Initialization
 #define UCA_BRW_115          (4)
 #define UCA_BRW_460          (17)
+#define UCA_BRW_8M           (0)
 #define UCA_MCTL_115         (0x5551)
 #define UCA_MCTL_460         (0x4A10)
 #define LOWER_BAUD           (115200)
@@ -119,14 +120,13 @@ typedef enum{
 void init_Serial(void);
 void init_Serial_UCA0(void);
 void init_Serial_UCA3(void);
+void init_Serial_UCB0(void);
 void init_IoT(void);
 void transmit_charA0(char character);
 void transmit_charA3(char character);
 void check_for_input(void);
 void read_into_buffer(void);
 void parse_command(void);
-void parse_second_command(void);
-void parse_test(void);
 void transmit_char(char character);
 
 void LCD_print(char first_line[COLUMN_NUM_COLUMNS], char second_line[COLUMN_NUM_COLUMNS], char third_line[COLUMN_NUM_COLUMNS], char fourth_line[COLUMN_NUM_COLUMNS]);   // Prints 4 lines to LCD screen

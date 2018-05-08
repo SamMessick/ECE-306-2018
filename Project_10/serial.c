@@ -3,6 +3,12 @@
 //  Description: This file contains the Initialization and
 //                    interrupts for serial I/O
 //
+//               Devices: 
+//                          UCA0: MSP430 to PC 
+//                          UCA3: MSP430 to SPW IOT module
+//                          UCB0: MSP430 to SD card reader
+//
+//
 //  Author: Sam Messick
 //  Date Mar. 2018
 //  Compiler Build with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
@@ -24,30 +30,53 @@ char* sock_ping_command = "AT+S.PING=152.1.14.14\r\n";
 void init_Serial(void){
   init_Serial_UCA0();
   init_Serial_UCA3();
+  init_Serial_UCB0();
 }
 
 void init_Serial_UCA0(void){
-  // Confiure UART 0    (port to PC)
+  // Confiure UART A0   (port to PC)
   UCA0CTLW0  = REGISTER_WORD_SIZE;    // Use word-size register (16-bit)
   UCA0CTLW0 |= UCSSEL__SMCLK;         // Set SMCLK as frequency source
   UCA0CTLW0 |= UCSWRST;               // Set software reset enable
   UCA0BRW    = UCA_BRW_115;           // ~115200 Baud
   UCA0MCTLW  = UCA_MCTL_115;
   UCA0CTL1  &= ~UCSWRST;              // Release from software reset
-  UCA0IE    |= UCRXIE;
+  UCA0IE    |= UCRXIE;                // Enable receive interrupts from PC
   UCA0IFG   &= ~(UCRXIFG);
 }
 
 void init_Serial_UCA3(void){ 
-  // Confiure UART 3    (port to IoT module)
+  // Confiure UART A3   (port to IoT module)
   UCA3CTLW0  = REGISTER_WORD_SIZE;    // Use word-size register (16-bit)
   UCA3CTLW0 |= UCSSEL__SMCLK;         // Set SMCLK as frequency source
   UCA3CTLW0 |= UCSWRST;               // Set software reset enable
   UCA3BRW    = UCA_BRW_115;           // ~115200 Baud
   UCA3MCTLW  = UCA_MCTL_115;
   UCA3CTL1  &= ~UCSWRST;              // Release from software reset
-  UCA3IE    |= UCRXIE;
+  UCA3IE    |= UCRXIE;                // Enable receive interrupts from IoT module
   UCA3IFG   &= ~(UCRXIFG);
+}
+
+void init_Serial_UCB0(void){
+  // UCMODE01     
+  //    ==> UCB0STE active High (slave transmit enable)
+  // Call UCSWRST ** enable interrupts too
+  // UCSTEM = 1    // 4-pin master mode, UCB0STE is a digital output
+                   // slave enable signal automatically generated
+  // Clear UCSWRST // RX/TX operations indicated by UCBUSY = 1
+  // Writing to the UCB0TXBUF will activate the bit clock generator/enable transmission
+  // The SPI receives data when a transmission is active (concurrently)
+  
+  
+  // Configure SPI B0   (port to SD card)
+  UCB0CTLW0  = REGISTER_WORD_SIZE;    // Use word-size register (16-bit)
+  UCB0CTLW0 |= UCSSEL__SMCLK;         // Set SMCLK as frequency source
+  UCB0CTLW0 |= UCMST;                 // Set to master mode
+  UCB0CTLW0 |= UCSWRST;               // Set software reset enable
+  UCA3BRW    = UCA_BRW_115;           // ~115200 Baud
+  UCB0CTL1  &= ~UCSWRST;              // Release from software reset
+  UCB0IE    |= UCRXIE;                // Enable receive interrupts from SD card
+  UCB0IFG   &= ~(UCRXIFG);
 }
 
 void init_IoT(void){
@@ -72,7 +101,7 @@ void transmit_charA3(char character){
 }
 
 void transmit_charA0(char character){
-  while (UCA0STATW & UCBUSY); // Transmit complete interrupt flag
+  while (UCA0STATW & UCBUSY); // Transmission or reception occuring
     UCA0TXBUF = character;
 }
 
@@ -97,15 +126,10 @@ void check_for_input(void){
       IOT_DISABLE(SOFT_RESET);
       TA0CCTL0  |= CCIE;                   // Enable ping timer
     }
-    if(IOT_STATUS(CHECK_FOR_COMMAND))
-      if(Main_Char_Rx[CHAR1] == COMMAND_START)
+    if(IOT_STATUS(CHECK_FOR_COMMAND)
+       && Main_Char_Rx[CHAR1] == COMMAND_START)
       {
         parse_command();
-        IOT_DISABLE(CHECK_FOR_COMMAND);
-      }
-      else if(Main_Char_Rx[CHAR1] == TEST_START)
-      {
-        parse_test();
         IOT_DISABLE(CHECK_FOR_COMMAND);
       }
     read_into_buffer();
@@ -267,33 +291,6 @@ void parse_command(void){
   //word1 = Main_Char_Rx;
 }
 
-void parse_test(void){
-  uint8_t string_index;
-  static char* higher_baud = "460800\r\n";
-  static char* lower_baud  = "115200\r\n";
-  
-  switch(Main_Char_Rx[CHAR2])
-  {
-  case 'S': // 115200 baud
-    UCA3CTLW0 |= UCSWRST;               // Set software reset enable
-    UCA3BRW = UCA_BRW_115;
-    UCA3MCTLW  = UCA_MCTL_115;
-    UCA3CTL1  &= ~UCSWRST;              // Release from software reset
-    UCA3IE    |= UCRXIE;
-    for(string_index = BEGINNING; string_index < BAUD_WORD_SIZE; string_index++)
-      transmit_charA0(lower_baud[string_index]);
-    break;
-  case 'F': // 460800 baud
-    UCA3CTLW0 |= UCSWRST;               // Set software reset enable
-    UCA3BRW = UCA_BRW_460;
-    UCA3MCTLW = UCA_MCTL_460;
-    UCA3CTL1  &= ~UCSWRST;              // Release from software reset
-    UCA3IE    |= UCRXIE;
-    for(string_index = BEGINNING; string_index < BAUD_WORD_SIZE; string_index++)
-      transmit_charA0(higher_baud[string_index]);
-  }
-}
-
 #pragma vector = USCI_A0_VECTOR
 __interrupt void USCI_A0_ISR(void){
   switch(__even_in_range(UCA0IV, eight))
@@ -313,7 +310,6 @@ __interrupt void USCI_A3_ISR(void){
   switch(__even_in_range(UCA3IV, eight))
   {
   case RXIFG:
-    //while(UCA0STATW & UCBUSY);
     UCA0TXBUF = UCA3RXBUF;             // Echo character to USB
     
     chars_to_read++;
@@ -334,6 +330,15 @@ __interrupt void USCI_A3_ISR(void){
         IOT_ENABLE(IP_READY);                           // Notify main that IP address is received
       }
     }
+    break;
+  }
+}
+
+#pragma vector = USCI_B0_VECTOR
+__interrupt void USCI_B0_ISR(void){
+  switch(__even_in_range(UCB0IV, eight))
+  {
+  case RXIFG:
     break;
   }
 }

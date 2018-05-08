@@ -53,23 +53,23 @@ void init_Port1(void){  // Initlizes all pins on Port 1
   P1SEL0 |= V_DETECT_L;                 // ADC input for Left Detector
   P1SEL1 |= V_DETECT_L;                 // ADC input for Left Detector
   // P1_6
-  P1SEL0 &= ~SD_UCB0SIMO;               // USCI_B1 MOSI pin
-  P1SEL1 |= SD_UCB0SIMO;                // USCI_B1 MOSI pin
+  P1SEL0 &= ~SD_UCB0SIMO;                // USCI_B0 MOSI pin (SD card)
+  P1SEL1 |= SD_UCB0SIMO;                 // USCI_B0 MOSI pin (SD card)
   // P1_7
-  P1SEL0 &= ~SD_UCB0SOMI;                // USCI_B1 MISO pin
-  P1SEL1 |= SD_UCB0SOMI;                 // USCI_B1 MISO pin
+  P1SEL0 &= ~SD_UCB0SOMI;                // USCI_B0 MISO pin (SD card)
+  P1SEL1 |= SD_UCB0SOMI;                 // USCI_B0 MISO pin (SD card)
 }
 ////////////////////////////////////////////////////////////////////////
 void init_Port2(void) { // Initlizes all pins on Port 2
 //=========================================================================
-// BCLUART_TXD          (0x01)
-// BCLUART_RXD          (0x02)
-// SD_SPICLK            (0x04)
-// P2_3                 (0x08) // Port 2 Pin 3
-// P2_4                 (0x10) // Port 2 Pin 4
-// J4_34                (0x20)
-// J4_35                (0x40)
-// P2_7                 (0x80) // Port 2 Pin 7
+// BCLUART_TXD          (0x01) // UART mode - transmit for LCD
+// BCLUART_RXD          (0x02) // UART mode - receive for LCD
+// SD_SPICLK            (0x04) // SPI mode - clock for SD card
+// P2_3                 (0x08) // UNUSED
+// P2_4                 (0x10) // UNUSED
+// J4_34                (0x20) // UNUSED
+// J4_35                (0x40) // UNUSED
+// P2_7                 (0x80) // UNUSED
 //=========================================================================
   // Configure Port 2
   // P2_0
@@ -83,8 +83,8 @@ void init_Port2(void) { // Initlizes all pins on Port 2
   P2OUT  &= ~BCLUART_RXD;                // Set out value Low [off]
   P2DIR  |= BCLUART_RXD;                 // Set direction to output
   // P2_2
-  P2SEL0 &= ~SD_SPICLK;                  // Set to GP I/O
-  P2SEL1 &= ~SD_SPICLK;                  // Set to GP I/O
+  P2SEL0 &= ~SD_SPICLK;                  // Set to UCB0CLK (SD_SPICLK)
+  P2SEL1 |= SD_SPICLK;                   // Set to UCB0CLK (SD_SPICLK)
   P2OUT  &= ~SD_SPICLK;                  // Set out value Low [off]
   P2DIR  |= SD_SPICLK;                   // Set direction to output
   // P2_3
@@ -116,10 +116,10 @@ void init_Port2(void) { // Initlizes all pins on Port 2
 ////////////////////////////////////////////////////////////////////////
 void init_Port3(char use_smclk) { // Initlizes all pins on Port 3
 //=========================================================================
-// IOT_RESET            (0x01) // RESET
-// IOT_STA_MINIAP       (0x02) // IOT_STA_MINIAP
-// IOT_FACTORY          (0x04) // IOT_FACTORY
-// IOT_WAKEUP           (0x08) // IOT_WAKEUP
+// IOT_RESET            (0x01) // Resets SPW IoT Module when high for 5 ms
+// IOT_STA_MINIAP       (0x02) // SPW IoT Access Point enable (low)
+// IOT_FACTORY          (0x04) // IoT connection status disconnect (low)
+// IOT_WAKEUP           (0x08) // IoT wakeup pin (high)
 // L_REVERSE            (0x10) // Left Reverse
 // L_FORWARD            (0x20) // Left Forward
 // R_REVERSE            (0x40) // Right Reverse
@@ -175,20 +175,20 @@ void init_Port3(char use_smclk) { // Initlizes all pins on Port 3
 ////////////////////////////////////////////////////////////////////////
 void init_Port4(void) { // Initlizes all pins on Port 4
 //=========================================================================
-// SD_CS                (0x01) // SD card clock signal
-// J4_31                (0x02) //
-// J4_32                (0x04) //
-// J4_33                (0x08) //
-// UCB1_CS_LCD          (0x10) //
+// SD_CS                (0x01) // SPI mode - chip select for SD card
+// J4_31                (0x02) // UNUSED
+// J4_32                (0x04) // UNUSED
+// J4_33                (0x08) // UNUSED
+// UCB1_CS_LCD          (0x10) // SPI mode - chip select for LCD
 // P4_5                 (0x20) // UNUSED
 // P4_6                 (0x40) // UNUSED
-// J3_29                (0x80) //
+// J3_29                (0x80) // UNUSED
 //=========================================================================
   // Configure Port 4
   // P4_0
   P4SEL0 &= ~SD_CS;                      // Set to GP I/O
   P4SEL1 &= ~SD_CS;                      // Set to GP I/O
-  P4OUT  &= ~SD_CS;                      // Set out value Low [off]
+  P4OUT  |= SD_CS;                       // Set out value High [on]
   P4DIR  |= SD_CS;                       // Set direction to output
   // P4_1
   P4SEL0 &= ~J4_31;                      // Set to GP I/O
@@ -231,12 +231,12 @@ void init_Port5(void) { // Initializes all pins on Port 5
 //=========================================================================
 // UCB1SIMO             (0x01) // UCB1SIMO
 // UCB1SOMI             (0x02) // UBC1SIMO
-// UCB1SCK              (0x04) // SPI mode - clock output - UCB1CLK
-// RESET_LCD            (0x08) // LCD Reset
+// UCB1SCK              (0x04) // SPI mode - clock output for LCD
+// RESET_LCD            (0x08) // LCD Reset (low)
 // P5_4                 (0x10) // UNUSED
-// BUTTON2              (0x20) // Button 2
-// BUTTON1              (0x40) // Button 1
-// LCD_BACKLITE         (0x80) // LCD Backlite
+// BUTTON2              (0x20) // Right Button on MSP430-Exp board
+// BUTTON1              (0x40) // Left Button on MSP430-Exp board
+// LCD_BACKLITE         (0x80) // LCD Backlight (active high)
 //=========================================================================
   // Configure Port 5
   // P5_0
@@ -344,7 +344,7 @@ void init_Port7(void) { // Initializes all pins on Port 7
 //=========================================================================
 // I2CSDA               (0x01) //
 // I2CSCL               (0x02) //
-// SD_DETECT            (0x04) //
+// SD_DETECT            (0x04) // Provides status of SD card for reading user data
 // J4_36                (0x08) // 
 // P7_4                 (0x10) // UNUSED
 // P7_5                 (0x20) // UNUSED
@@ -365,8 +365,9 @@ void init_Port7(void) { // Initializes all pins on Port 7
   // P7_2
   P7SEL0 &= ~SD_DETECT;                 // Set to GP I/O
   P7SEL1 &= ~SD_DETECT;                 // Set to GP I/O
-  P7OUT  &= ~SD_DETECT;                 // Set out value Low [off]
-  P7DIR  |= SD_DETECT;                  // Set direction to output
+  P7OUT  |= SD_DETECT;                  // Enable pullup resistor
+  P7DIR  &= ~SD_DETECT;                 // Set direction to input
+  P5REN  |= BUTTON1;                    // Enable pullup resistor
   // P7_3
   P7SEL0 &= ~J4_36;                     // Set to GP I/O
   P7SEL1 &= ~J4_36;                     // Set to GP I/O
